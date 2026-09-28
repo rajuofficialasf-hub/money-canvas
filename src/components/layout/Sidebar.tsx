@@ -31,7 +31,10 @@ import {
   HeartHandshake,
   Smartphone,
   ChevronRight,
+  ArrowUpCircle,
+  RefreshCw,
 } from 'lucide-react';
+import { useAppUpdate } from '../../lib/update-context';
 
 interface SidebarProps {
   currentView: string;
@@ -48,6 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user } = useAuth();
   const { systemAlerts } = useLedger();
+  const { checkForUpdate, isChecking, currentVersionName } = useAppUpdate();
 
   const unreadAlertsCount = systemAlerts.length;
 
@@ -465,6 +469,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Clean Footer Info Card */}
         <div className="border-t border-slate-900/80 pt-3 mt-2 space-y-2">
+          {/* App Auto Update Button in Sidebar */}
+          <button
+            onClick={() => checkForUpdate(true)}
+            disabled={isChecking}
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+          >
+            <div className="flex items-center gap-2">
+              {isChecking ? (
+                <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+              ) : (
+                <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+              )}
+              <span className="font-semibold">আপডেট চেক করুন</span>
+            </div>
+            <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+              {currentVersionName}
+            </span>
+          </button>
+
           <PWAInstallButton variant="sidebar" />
 
           <div className="rounded-xl bg-slate-900/40 p-2.5 border border-slate-800/60">

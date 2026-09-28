@@ -52,8 +52,7 @@ import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { BiometricLockScreen } from './components/auth/BiometricLockScreen';
 import { EnableBiometricPromptModal } from './components/auth/EnableBiometricPromptModal';
-import { AppUpdateModal } from './components/common/AppUpdateModal';
-import { checkForAppUpdate, isUpdateDismissed, AppUpdateInfo } from './lib/github-updater';
+import { UpdateProvider } from './lib/update-context';
 import { BiometricProvider } from './lib/biometric-context';
 import { useAuth } from './lib/auth-context';
 import { LanguageProvider, useLanguage } from './lib/language-context';
@@ -89,32 +88,12 @@ function AppContent() {
     typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : ''
   );
 
-  const [appUpdateInfo, setAppUpdateInfo] = useState<AppUpdateInfo | null>(null);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-
   // Auto open guide modal for new installs/users
   useEffect(() => {
     const hasSeen = localStorage.getItem('has_seen_wealthfolio_guide_v1');
     if (!hasSeen) {
       setIsGuideModalOpen(true);
     }
-  }, []);
-
-  // Silent GitHub Releases APK Auto-Update check (3.5s after launch)
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      try {
-        const info = await checkForAppUpdate(false);
-        if (info.hasUpdate && !isUpdateDismissed(info.latestVersion)) {
-          setAppUpdateInfo(info);
-          setIsUpdateModalOpen(true);
-        }
-      } catch (err) {
-        console.warn('Auto update check failed:', err);
-      }
-    }, 3500);
-
-    return () => clearTimeout(timer);
   }, []);
 
   // Global Keyboard Shortcuts (⌘K, ⌘N, ⌘T, ⌘L, ⌘B, ⌘/)
@@ -405,15 +384,6 @@ function AppContent() {
         {/* PWA New Code Update Notification Toast */}
         <PWAUpdateToast />
 
-        {/* GitHub Releases In-App Auto-Updater Modal */}
-        {appUpdateInfo && (
-          <AppUpdateModal
-            updateInfo={appUpdateInfo}
-            isOpen={isUpdateModalOpen}
-            onClose={() => setIsUpdateModalOpen(false)}
-          />
-        )}
-
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav
           aria-label="Mobile Bottom Navigation"
@@ -487,7 +457,9 @@ export default function App() {
         <LedgerProvider>
           <LanguageProvider>
             <FamilyProvider>
-              <AppContent />
+              <UpdateProvider>
+                <AppContent />
+              </UpdateProvider>
             </FamilyProvider>
           </LanguageProvider>
         </LedgerProvider>

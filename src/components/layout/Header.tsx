@@ -25,7 +25,10 @@ import {
   Trash2,
   Globe,
   Sparkles,
+  ArrowUpCircle,
+  RefreshCw,
 } from 'lucide-react';
+import { useAppUpdate } from '../../lib/update-context';
 
 interface HeaderProps {
   currentView: string;
@@ -54,6 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
   const { isBiometricEnabled, lockApp } = useBiometrics();
   const { systemAlerts, dismissAlert } = useLedger();
   const { language, setLanguage, t } = useLanguage();
+  const { checkForUpdate, isChecking, currentVersionName } = useAppUpdate();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isAlertsMenuOpen, setIsAlertsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -208,6 +212,22 @@ export const Header: React.FC<HeaderProps> = ({
           aria-label="Quick Search"
         >
           <Search className="h-4 w-4" />
+        </button>
+
+        {/* Quick App Update Check Button */}
+        <button
+          onClick={() => checkForUpdate(true)}
+          disabled={isChecking}
+          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+          title="অ্যাপের নতুন ভার্সন চেক করুন"
+        >
+          {isChecking ? (
+            <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+          ) : (
+            <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+          )}
+          <span className="font-mono text-[11px] font-bold text-emerald-400">{currentVersionName}</span>
+          <span className="hidden sm:inline text-[11px] font-medium text-emerald-300">আপডেট</span>
         </button>
 
         {/* Sync Status Badge (Compact & Clean) */}
@@ -487,6 +507,27 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <Sliders className="h-3.5 w-3.5 text-slate-400" />
                   <span>App Preferences</span>
+                </button>
+
+                <button
+                  onClick={() => {
+                    setIsProfileMenuOpen(false);
+                    checkForUpdate(true);
+                  }}
+                  disabled={isChecking}
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-950/30 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    {isChecking ? (
+                      <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                    ) : (
+                      <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+                    )}
+                    <span>Check for Updates</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-emerald-400/90 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                    {currentVersionName}
+                  </span>
                 </button>
 
                 {isBiometricEnabled && (

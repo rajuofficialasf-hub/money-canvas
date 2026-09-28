@@ -31,16 +31,12 @@ import {
   GITHUB_REPO_OWNER,
   GITHUB_REPO_NAME,
 } from '../../lib/app-version';
-import { checkForAppUpdate, AppUpdateInfo } from '../../lib/github-updater';
-import { AppUpdateModal } from '../common/AppUpdateModal';
+import { useAppUpdate } from '../../lib/update-context';
 
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { user, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData } = useAuth();
   const { language, setLanguage, isBn, toggleLanguage, t } = useLanguage();
-  const [checkingUpdate, setCheckingUpdate] = useState(false);
-  const [updateStatusMsg, setUpdateStatusMsg] = useState<string | null>(null);
-  const [manualUpdateInfo, setManualUpdateInfo] = useState<AppUpdateInfo | null>(null);
-  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const { checkForUpdate, isChecking: checkingUpdate, currentVersionName } = useAppUpdate();
   const {
     isSupported,
     isAvailable,
@@ -538,45 +534,11 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
               </div>
             </div>
 
-            {updateStatusMsg && (
-              <div className="p-2.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs flex items-center gap-2 animate-in fade-in">
-                <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-                <span>{updateStatusMsg}</span>
-              </div>
-            )}
-
             <div className="flex flex-wrap gap-2 pt-1">
               <button
                 type="button"
                 disabled={checkingUpdate}
-                onClick={async () => {
-                  setCheckingUpdate(true);
-                  setUpdateStatusMsg(null);
-                  try {
-                    // Also check service worker if available
-                    if ('serviceWorker' in navigator) {
-                      const regs = await navigator.serviceWorker.getRegistrations();
-                      for (const reg of regs) {
-                        await reg.update();
-                      }
-                    }
-
-                    const info = await checkForAppUpdate(true);
-                    setCheckingUpdate(false);
-
-                    if (info.hasUpdate) {
-                      setManualUpdateInfo(info);
-                      setIsUpdateModalOpen(true);
-                      setUpdateStatusMsg(`নতুন সংস্করণ ${info.releaseTitle || 'v' + info.latestVersion} পাওয়া গেছে!`);
-                    } else {
-                      setUpdateStatusMsg(`🎉 চমৎকার! আপনি অ্যাপটির সর্বশেষ সংস্করণ (${CURRENT_APP_VERSION_NAME}) ব্যবহার করছেন। কোনো আপডেট বাকি নেই।`);
-                      setTimeout(() => setUpdateStatusMsg(null), 6000);
-                    }
-                  } catch (err) {
-                    setCheckingUpdate(false);
-                    setUpdateStatusMsg('আপডেট চেক করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।');
-                  }
-                }}
+                onClick={() => checkForUpdate(true)}
                 className="px-3.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
               >
                 {checkingUpdate ? (
@@ -615,16 +577,6 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 <span>ক্যাশ রিফ্রেশ</span>
               </button>
             </div>
-
-            {/* Modal if manually triggered and update found */}
-            {manualUpdateInfo && (
-              <AppUpdateModal
-                updateInfo={manualUpdateInfo}
-                isOpen={isUpdateModalOpen}
-                onClose={() => setIsUpdateModalOpen(false)}
-                isManualCheck={true}
-              />
-            )}
           </div>
 
           {/* App User Guide & Walkthrough Card */}
