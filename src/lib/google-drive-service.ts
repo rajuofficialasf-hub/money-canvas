@@ -50,12 +50,21 @@ export async function uploadBackupToGoogleDrive(
     });
 
     if (!res.ok) {
-      // Fallback: If appDataFolder fails due to scope mismatch, try saving to Drive root
-      if (!existingFile && res.status === 403) {
+      const errText = await res.text();
+      console.error('Drive AppData upload failed:', res.status, errText);
+
+      // Fallback: If appDataFolder fails due to scope mismatch or 403/404, try saving to Drive root
+      if (!existingFile && (res.status === 403 || res.status === 404)) {
         return uploadToDriveRoot(accessToken, bundle);
       }
-      const errText = await res.text();
-      return { success: false, error: `Drive API Error (${res.status}): ${errText}` };
+      let msg = errText;
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed.error?.message) {
+          msg = parsed.error.message;
+        }
+      } catch {}
+      return { success: false, error: `Drive API Error (${res.status}): ${msg}` };
     }
 
     const responseData = await res.json();
@@ -111,7 +120,19 @@ async function uploadToDriveRoot(accessToken: string, bundle: BackupBundle) {
     });
 
     if (!res.ok) {
-      return { success: false, error: 'Failed to upload to Drive Root' };
+      const errText = await res.text();
+      console.error('Drive Root upload failed:', res.status, errText);
+      let msg = errText;
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed.error?.message) {
+          msg = parsed.error.message;
+        }
+      } catch {}
+      return {
+        success: false,
+        error: `Google Drive Error (${res.status}): ${msg}. Google Cloud Console-এ Google Drive API Enable করা থাকতে হবে এবং ড্রাইভ পারমিশন থাকতে হবে।`,
+      };
     }
 
     const data = await res.json();

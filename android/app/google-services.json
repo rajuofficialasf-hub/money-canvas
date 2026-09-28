@@ -43,6 +43,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "258283545047-ajra2foihumpno9o31aph28equ06a7gc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneycanvas.app",
+            "certificate_hash": "eef745c25d366e33de663e5604c993a97831c22c"
+          }
+        },
+        {
           "client_id": "258283545047-eb3s23lg8jmnlhfdctfd2gvqpcc4gt6m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
