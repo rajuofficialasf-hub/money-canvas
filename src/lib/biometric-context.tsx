@@ -1,9 +1,18 @@
-import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  ReactNode,
+} from 'react';
 import {
   BiometricAuth,
   BiometryType,
   BiometryError,
   BiometryErrorType,
+  AndroidBiometryStrength,
   getBiometryName,
 } from '@aparajita/capacitor-biometric-auth';
 import { Capacitor } from '@capacitor/core';
@@ -169,12 +178,17 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setAuthError(null);
 
       try {
+        // Standard biometric authentication
+        // On Android, we explicitly pass androidBiometryStrength: AndroidBiometryStrength.weak
+        // and allowDeviceCredential: false with a cancel button.
+        // This avoids Android 11+ IllegalArgumentException (BIOMETRIC_WEAK | DEVICE_CREDENTIAL is not allowed)
         await BiometricAuth.authenticate({
           reason: customReason || 'Scan your fingerprint or biometric credential to unlock Money Canvas.',
           androidTitle: 'Money Canvas Security',
           androidSubtitle: 'Use your fingerprint or face to verify your identity',
           cancelTitle: 'Cancel',
-          allowDeviceCredential: true,
+          allowDeviceCredential: false,
+          androidBiometryStrength: AndroidBiometryStrength.weak,
         });
 
         // If it resolved without throwing, authentication succeeded!
@@ -182,28 +196,57 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setAuthError(null);
         return { success: true };
       } catch (err: any) {
+        const errCode = err?.code || (err instanceof BiometryError ? err.code : '');
+
+        // If user or system cancelled, dismiss gracefully without displaying red error
+        if (
+          errCode === BiometryErrorType.userCancel ||
+          errCode === 'userCancel' ||
+          errCode === BiometryErrorType.systemCancel ||
+          errCode === 'systemCancel' ||
+          errCode === BiometryErrorType.appCancel ||
+          errCode === 'appCancel' ||
+          String(err?.message || '').toLowerCase().includes('cancel')
+        ) {
+          setAuthError(null);
+          return { success: false, error: 'Authentication was cancelled.' };
+        }
+
         let msg = 'Biometric verification failed.';
 
-        if (err instanceof BiometryError || err?.code) {
-          switch (err.code) {
-            case BiometryErrorType.userCancel:
-            case 'userCancel':
-              msg = 'Authentication was cancelled.';
-              break;
-            case BiometryErrorType.biometryLockout:
-            case 'biometryLockout':
-              msg = 'Biometrics locked due to too many attempts. Please use your device PIN or pattern.';
-              break;
-            case BiometryErrorType.authenticationFailed:
-            case 'authenticationFailed':
-              msg = 'Biometric credential not recognized. Please try again.';
-              break;
-            case BiometryErrorType.biometryNotEnrolled:
-            case 'biometryNotEnrolled':
-              msg = 'No fingerprint or biometric credentials are enrolled on this device.';
-              break;
-            default:
-              msg = err?.message || 'Biometric authentication failed.';
+        if (errCode === BiometryErrorType.biometryLockout || errCode === 'biometryLockout') {
+          // If biometric is locked out, try with Device Credential (PIN / Pattern) using STRONG strength
+          try {
+            await BiometricAuth.authenticate({
+              reason: 'Biometrics locked out. Please enter your device PIN or pattern.',
+              androidTitle: 'Money Canvas Security',
+              androidSubtitle: 'Enter your device screen lock PIN, pattern, or password',
+              allowDeviceCredential: true,
+              androidBiometryStrength: AndroidBiometryStrength.strong,
+            });
+            setIsAppLocked(false);
+            setAuthError(null);
+            return { success: true };
+          } catch {
+            msg = 'Biometrics locked due to too many attempts. Please unlock with your device PIN or pattern.';
+          }
+        } else if (errCode === BiometryErrorType.authenticationFailed || errCode === 'authenticationFailed') {
+          msg = 'Biometric credential not recognized. Please try again.';
+        } else if (errCode === BiometryErrorType.biometryNotEnrolled || errCode === 'biometryNotEnrolled') {
+          // Fallback to device credential if no biometrics enrolled
+          try {
+            await BiometricAuth.authenticate({
+              reason: 'Unlock Money Canvas using your screen lock PIN, pattern, or password.',
+              androidTitle: 'Money Canvas Security',
+              androidSubtitle: 'Enter your device PIN or pattern',
+              allowDeviceCredential: true,
+              androidBiometryStrength: AndroidBiometryStrength.strong,
+            });
+            setIsAppLocked(false);
+            setAuthError(null);
+            return { success: true };
+          } catch {
+            msg = 'No biometric credential or screen lock enrolled on this device.';
           }
         } else if (err?.message) {
           msg = err.message;
