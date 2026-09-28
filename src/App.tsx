@@ -52,6 +52,8 @@ import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { BiometricLockScreen } from './components/auth/BiometricLockScreen';
 import { EnableBiometricPromptModal } from './components/auth/EnableBiometricPromptModal';
+import { AppUpdateModal } from './components/common/AppUpdateModal';
+import { checkForAppUpdate, isUpdateDismissed, AppUpdateInfo } from './lib/github-updater';
 import { BiometricProvider } from './lib/biometric-context';
 import { useAuth } from './lib/auth-context';
 import { LanguageProvider, useLanguage } from './lib/language-context';
@@ -83,52 +85,12 @@ function AppContent() {
     return false;
   });
 
-  const pathname = typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : '';
+  const [pathname, setPathname] = useState(() =>
+    typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : ''
+  );
 
-  // 1. Direct Public Routes (accessible without authentication/onboarding)
-  if (pathname === '/privacy' || pathname === '/privacy-policy') {
-    return (
-      <PrivacyPolicyView
-        onBack={() => {
-          window.location.href = '/';
-        }}
-      />
-    );
-  }
-
-  if (pathname === '/terms' || pathname === '/terms-of-service') {
-    return (
-      <TermsOfServiceView
-        onBack={() => {
-          window.location.href = '/';
-        }}
-      />
-    );
-  }
-
-  if (pathname === '/landing') {
-    return (
-      <PublicLandingView
-        onLaunchApp={() => {
-          setWebShowApp(true);
-          localStorage.setItem('mc_enter_app', 'true');
-        }}
-      />
-    );
-  }
-
-  // 2. On Web browsers: If user has not onboarded and hasn't clicked Launch App,
-  // show public landing page outlining app purpose & features (avoids Google "behind login page" flag)
-  if (!Capacitor.isNativePlatform() && !hasCompletedOnboarding && !webShowApp) {
-    return (
-      <PublicLandingView
-        onLaunchApp={() => {
-          setWebShowApp(true);
-          localStorage.setItem('mc_enter_app', 'true');
-        }}
-      />
-    );
-  }
+  const [appUpdateInfo, setAppUpdateInfo] = useState<AppUpdateInfo | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
 
   // Auto open guide modal for new installs/users
   useEffect(() => {
@@ -136,6 +98,23 @@ function AppContent() {
     if (!hasSeen) {
       setIsGuideModalOpen(true);
     }
+  }, []);
+
+  // Silent GitHub Releases APK Auto-Update check (3.5s after launch)
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      try {
+        const info = await checkForAppUpdate(false);
+        if (info.hasUpdate && !isUpdateDismissed(info.latestVersion)) {
+          setAppUpdateInfo(info);
+          setIsUpdateModalOpen(true);
+        }
+      } catch (err) {
+        console.warn('Auto update check failed:', err);
+      }
+    }, 3500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Global Keyboard Shortcuts (⌘K, ⌘N, ⌘T, ⌘L, ⌘B, ⌘/)
@@ -168,6 +147,60 @@ function AppContent() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  const handleLaunchApp = () => {
+    try {
+      localStorage.setItem('mc_enter_app', 'true');
+    } catch {}
+    setWebShowApp(true);
+    if (typeof window !== 'undefined' && window.location.pathname === '/landing') {
+      try {
+        window.history.pushState({}, '', '/');
+      } catch {}
+      setPathname('/');
+    }
+  };
+
+  // 1. Direct Public Routes (accessible without authentication/onboarding)
+  if (pathname === '/privacy' || pathname === '/privacy-policy') {
+    return (
+      <PrivacyPolicyView
+        onBack={() => {
+          if (typeof window !== 'undefined') {
+            try {
+              window.history.pushState({}, '', '/');
+            } catch {}
+            setPathname('/');
+          }
+        }}
+      />
+    );
+  }
+
+  if (pathname === '/terms' || pathname === '/terms-of-service') {
+    return (
+      <TermsOfServiceView
+        onBack={() => {
+          if (typeof window !== 'undefined') {
+            try {
+              window.history.pushState({}, '', '/');
+            } catch {}
+            setPathname('/');
+          }
+        }}
+      />
+    );
+  }
+
+  if (pathname === '/landing') {
+    return <PublicLandingView onLaunchApp={handleLaunchApp} />;
+  }
+
+  // 2. On Web browsers: If user has not onboarded and hasn't clicked Launch App,
+  // show public landing page outlining app purpose & features (avoids Google "behind login page" flag)
+  if (!Capacitor.isNativePlatform() && !hasCompletedOnboarding && !webShowApp) {
+    return <PublicLandingView onLaunchApp={handleLaunchApp} />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-emerald-500/20 selection:text-emerald-300 pb-24 lg:pb-0">
@@ -371,6 +404,15 @@ function AppContent() {
 
         {/* PWA New Code Update Notification Toast */}
         <PWAUpdateToast />
+
+        {/* GitHub Releases In-App Auto-Updater Modal */}
+        {appUpdateInfo && (
+          <AppUpdateModal
+            updateInfo={appUpdateInfo}
+            isOpen={isUpdateModalOpen}
+            onClose={() => setIsUpdateModalOpen(false)}
+          />
+        )}
 
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav
