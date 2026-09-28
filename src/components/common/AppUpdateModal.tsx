@@ -8,13 +8,14 @@ import {
   ExternalLink,
   ShieldCheck,
   PackageCheck,
-  AlertCircle,
+  Smartphone,
 } from 'lucide-react';
 import {
   AppUpdateInfo,
   dismissUpdate,
   openUpdateUrl,
 } from '../../lib/github-updater';
+import { Capacitor } from '@capacitor/core';
 
 interface AppUpdateModalProps {
   updateInfo: AppUpdateInfo;
@@ -27,9 +28,9 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
   updateInfo,
   isOpen,
   onClose,
-  isManualCheck = false,
 }) => {
   const [downloadStarted, setDownloadStarted] = useState(false);
+  const isNative = Capacitor.isNativePlatform();
 
   if (!isOpen) return null;
 
@@ -87,8 +88,17 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
           {/* Header Badge & Title */}
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-bold tracking-wide">
-              <Sparkles className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />
-              <span>নতুন সংস্করণ উপলব্ধ (Update Available)</span>
+              {isNative ? (
+                <>
+                  <Sparkles className="h-3.5 w-3.5 text-emerald-400 animate-pulse" />
+                  <span>নতুন সংস্করণ উপলব্ধ (Update Available)</span>
+                </>
+              ) : (
+                <>
+                  <Smartphone className="h-3.5 w-3.5 text-emerald-400" />
+                  <span>Money Canvas অ্যান্ড্রয়েড অ্যাপ (Official APK)</span>
+                </>
+              )}
             </div>
 
             <h2
@@ -98,15 +108,23 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
               <span>Money Canvas {updateInfo.releaseTitle || `v${updateInfo.latestVersion}`}</span>
             </h2>
 
-            {/* Version Diff Pill */}
+            {/* Version Diff / Info Pill */}
             <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-              <span className="px-2.5 py-1 rounded-lg bg-slate-800/90 text-slate-400 font-mono border border-slate-700">
-                বর্তমান: <span className="text-slate-300 font-bold">v{updateInfo.currentVersion}</span>
-              </span>
-              <span className="text-slate-500">➔</span>
-              <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/40">
-                নতুন: v{updateInfo.latestVersion}
-              </span>
+              {isNative ? (
+                <>
+                  <span className="px-2.5 py-1 rounded-lg bg-slate-800/90 text-slate-400 font-mono border border-slate-700">
+                    বর্তমান: <span className="text-slate-300 font-bold">v{updateInfo.currentVersion}</span>
+                  </span>
+                  <span className="text-slate-500">➔</span>
+                  <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/40">
+                    নতুন: v{updateInfo.latestVersion}
+                  </span>
+                </>
+              ) : (
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 font-mono font-bold border border-emerald-500/40">
+                  সর্বশেষ রিলিজ: v{updateInfo.latestVersion}
+                </span>
+              )}
               {updateInfo.apkSizeFormatted && (
                 <span className="px-2 py-1 rounded-lg bg-sky-500/15 text-sky-300 font-mono text-[11px] border border-sky-500/30">
                   সাইজ: {updateInfo.apkSizeFormatted}
@@ -148,7 +166,15 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
           <div className="rounded-xl bg-emerald-950/30 border border-emerald-500/30 p-3 flex items-start gap-2.5 text-xs text-emerald-200">
             <ShieldCheck className="h-4.5 w-4.5 text-emerald-400 shrink-0 mt-0.5" />
             <p className="leading-snug">
-              <strong className="text-emerald-300 font-semibold">আপনার ডাটা ১০০% সুরক্ষিত:</strong> অ্যাপটি আপডেট করলে আপনার বিদ্যমান কোনো একাউন্ট, লেনদেন বা সেটিংস মুছে যাবে না। সরাসরি ইনস্টল/আপডেট হবে।
+              {isNative ? (
+                <>
+                  <strong className="text-emerald-300 font-semibold">আপনার ডাটা ১০০% সুরক্ষিত:</strong> অ্যাপটি আপডেট করলে আপনার বিদ্যমান কোনো একাউন্ট, লেনদেন বা সেটিংস মুছে যাবে না। সরাসরি ইনস্টল/আপডেট হবে।
+                </>
+              ) : (
+                <>
+                  <strong className="text-emerald-300 font-semibold">ফুল ডিভাইস ক্লাউড সিঙ্ক:</strong> অ্যান্ড্রয়েড ফোনে অ্যাপটি ইনস্টল করে একই গুগল একাউন্টে লগইন করুন। আপনার সমস্ত ডাটা ব্রাউজার এবং মোবাইল ফোনে রিয়েল-টাইমে স্বয়ংক্রিয়ভাবে সিঙ্ক থাকবে।
+                </>
+              )}
             </p>
           </div>
 
@@ -159,7 +185,9 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
               <div>
                 <p className="font-semibold text-sky-300">ডাউনলোড শুরু হয়েছে!</p>
                 <p className="text-[11px] text-sky-200/90 mt-0.5">
-                  ডাউনলোড সম্পূর্ণ হলে আপনার ফোনের নোটিফিকেশন বার থেকে APK ফাইলে ট্যাপ করে <strong>'Update'</strong> চাপুন।
+                  {isNative
+                    ? 'ডাউনলোড সম্পূর্ণ হলে আপনার ফোনের নোটিফিকেশন বার থেকে APK ফাইলে ট্যাপ করে \'Update\' চাপুন।'
+                    : 'ডাউনলোড সম্পূর্ণ হলে আপনার ফোনের নোটিফিকেশন বার বা ডাউনলোড ফোল্ডার থেকে APK ফাইলে ট্যাপ করে \'Install\' বা \'Update\' চাপুন।'}
                 </p>
               </div>
             </div>
@@ -172,7 +200,7 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
               onClick={handleDismiss}
               className="w-full sm:w-1/3 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700/80 border border-slate-700 text-slate-300 text-xs font-semibold transition-colors cursor-pointer text-center"
             >
-              পরে মনে করান
+              {isNative ? 'পরে মনে করান' : 'বন্ধ করুন'}
             </button>
 
             <button
@@ -181,7 +209,13 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
               className="w-full sm:w-2/3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-emerald-500/20 active:scale-[0.98] cursor-pointer"
             >
               <Download className="h-4 w-4 stroke-[2.5]" />
-              <span>{downloadStarted ? 'পুনরায় ডাউনলোড করুন' : 'এখনই আপডেট করুন (Update Now)'}</span>
+              <span>
+                {downloadStarted
+                  ? 'পুনরায় ডাউনলোড করুন'
+                  : isNative
+                  ? 'এখনই আপডেট করুন (Update Now)'
+                  : 'APK ডাউনলোড করুন (Download APK)'}
+              </span>
             </button>
           </div>
         </div>

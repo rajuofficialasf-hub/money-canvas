@@ -2,7 +2,7 @@
  * Money Canvas - Application Version Configuration
  */
 
-export const CURRENT_APP_VERSION = '1.0.3';
+export const CURRENT_APP_VERSION = '1.0.4';
 export const CURRENT_APP_VERSION_NAME = `v${CURRENT_APP_VERSION}`;
 export const GITHUB_REPO_OWNER = 'rajuofficialasf-hub';
 export const GITHUB_REPO_NAME = 'money-canvas';

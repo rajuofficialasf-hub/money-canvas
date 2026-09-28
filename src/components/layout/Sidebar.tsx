@@ -33,8 +33,10 @@ import {
   ChevronRight,
   ArrowUpCircle,
   RefreshCw,
+  Download,
 } from 'lucide-react';
 import { useAppUpdate } from '../../lib/update-context';
+import { Capacitor } from '@capacitor/core';
 
 interface SidebarProps {
   currentView: string;
@@ -51,7 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user } = useAuth();
   const { systemAlerts } = useLedger();
-  const { checkForUpdate, isChecking, currentVersionName } = useAppUpdate();
+  const { checkForUpdate, downloadApp, isChecking, currentVersionName } = useAppUpdate();
 
   const unreadAlertsCount = systemAlerts.length;
 
@@ -469,24 +471,46 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Clean Footer Info Card */}
         <div className="border-t border-slate-900/80 pt-3 mt-2 space-y-2">
-          {/* App Auto Update Button in Sidebar */}
-          <button
-            onClick={() => checkForUpdate(true)}
-            disabled={isChecking}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
-          >
-            <div className="flex items-center gap-2">
-              {isChecking ? (
-                <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
-              ) : (
-                <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
-              )}
-              <span className="font-semibold">আপডেট চেক করুন</span>
-            </div>
-            <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
-              {currentVersionName}
-            </span>
-          </button>
+          {/* App Auto Update / Download Android App in Sidebar */}
+          {Capacitor.isNativePlatform() ? (
+            <button
+              onClick={() => checkForUpdate(true)}
+              disabled={isChecking}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+            >
+              <div className="flex items-center gap-2">
+                {isChecking ? (
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                ) : (
+                  <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+                )}
+                <span className="font-semibold">আপডেট চেক করুন</span>
+              </div>
+              <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                {currentVersionName}
+              </span>
+            </button>
+          ) : (
+            <button
+              onClick={() => downloadApp()}
+              disabled={isChecking}
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500/15 to-teal-500/15 hover:from-emerald-500/25 hover:to-teal-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+              title="অ্যান্ড্রয়েড ফোন বা ট্যাবলেটে ব্যবহারের জন্য অ্যাপ ডাউনলোড করুন"
+            >
+              <div className="flex items-center gap-2">
+                {isChecking ? (
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                ) : (
+                  <Smartphone className="h-3.5 w-3.5 text-emerald-400" />
+                )}
+                <span className="font-semibold text-white">Download App</span>
+              </div>
+              <span className="flex items-center gap-1 font-mono text-[10px] text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30 font-bold">
+                <Download className="h-2.5 w-2.5" />
+                <span>APK</span>
+              </span>
+            </button>
+          )}
 
           <PWAInstallButton variant="sidebar" />
 

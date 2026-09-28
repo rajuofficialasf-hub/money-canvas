@@ -24,7 +24,9 @@ import {
   Sparkles,
   ArrowUpCircle,
   ExternalLink,
+  Download,
 } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 import {
   CURRENT_APP_VERSION_NAME,
   GITHUB_RELEASES_URL,
@@ -36,7 +38,7 @@ import { useAppUpdate } from '../../lib/update-context';
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { user, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData } = useAuth();
   const { language, setLanguage, isBn, toggleLanguage, t } = useLanguage();
-  const { checkForUpdate, isChecking: checkingUpdate, currentVersionName } = useAppUpdate();
+  const { checkForUpdate, downloadApp, isChecking: checkingUpdate, currentVersionName } = useAppUpdate();
   const {
     isSupported,
     isAvailable,
@@ -535,6 +537,24 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
             </div>
 
             <div className="flex flex-wrap gap-2 pt-1">
+              {!Capacitor.isNativePlatform() && (
+                <button
+                  type="button"
+                  disabled={checkingUpdate}
+                  onClick={() => downloadApp()}
+                  className="px-3.5 py-2 rounded-lg bg-gradient-to-r from-emerald-500/25 to-teal-500/25 hover:from-emerald-500/35 hover:to-teal-500/35 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center gap-2 transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+                  title="অ্যান্ড্রয়েড ফোন বা ট্যাবলেটের জন্য APK ডাউনলোড করুন"
+                >
+                  {checkingUpdate ? (
+                    <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                  ) : (
+                    <Smartphone className="h-3.5 w-3.5 text-emerald-400" />
+                  )}
+                  <span>Download Android App (APK)</span>
+                  <Download className="h-3 w-3 text-emerald-400" />
+                </button>
+              )}
+
               <button
                 type="button"
                 disabled={checkingUpdate}

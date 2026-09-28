@@ -9,6 +9,7 @@ import {
   GITHUB_RELEASES_URL,
   compareSemver,
 } from './app-version';
+import { Capacitor } from '@capacitor/core';
 
 export interface AppUpdateInfo {
   hasUpdate: boolean;
@@ -196,12 +197,29 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
 }
 
 /**
- * Open APK download link or release URL in system browser
+ * Open APK download link or release URL in system browser / web downloader
  */
 export function openUpdateUrl(url: string): void {
-  if (!url) return;
-  // Use window.open with _system for Capacitor / mobile browsers
-  if (typeof window !== 'undefined') {
+  if (!url || typeof window === 'undefined') return;
+
+  if (Capacitor.isNativePlatform()) {
+    // In native Android, launch the system browser to trigger APK download
     window.open(url, '_system');
+  } else {
+    // In web browsers, create an anchor element to download cleanly
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    if (url.toLowerCase().endsWith('.apk')) {
+      link.setAttribute('download', '');
+    }
+    document.body.appendChild(link);
+    link.click();
+    setTimeout(() => {
+      if (document.body.contains(link)) {
+        document.body.removeChild(link);
+      }
+    }, 150);
   }
 }

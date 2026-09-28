@@ -3,10 +3,12 @@ import {
   checkForAppUpdate,
   isUpdateDismissed,
   AppUpdateInfo,
+  openUpdateUrl,
 } from './github-updater';
-import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME } from './app-version';
+import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_RELEASES_URL } from './app-version';
 import { AppUpdateModal } from '../components/common/AppUpdateModal';
 import { CheckCircle2, AlertCircle, RefreshCw, Sparkles, X } from 'lucide-react';
+import { Capacitor } from '@capacitor/core';
 
 interface ToastState {
   message: string;
@@ -15,6 +17,7 @@ interface ToastState {
 
 interface UpdateContextType {
   checkForUpdate: (force?: boolean) => Promise<void>;
+  downloadApp: () => Promise<void>;
   isChecking: boolean;
   appUpdateInfo: AppUpdateInfo | null;
   isUpdateModalOpen: boolean;
@@ -83,8 +86,39 @@ export const UpdateProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Silent check 3.5 seconds after app launch
+  // Download Android APK app (especially for web users)
+  const downloadApp = async () => {
+    try {
+      setIsChecking(true);
+      let info = appUpdateInfo;
+      if (!info || !info.apkDownloadUrl) {
+        info = await checkForAppUpdate(true);
+        setAppUpdateInfo(info);
+      }
+      setIsUpdateModalOpen(true);
+      if (info.apkDownloadUrl) {
+        openUpdateUrl(info.apkDownloadUrl);
+        showToast('অ্যান্ড্রয়েড অ্যাপ APK ডাউনলোড শুরু হয়েছে!', 'success');
+      } else {
+        openUpdateUrl(info.releasePageUrl || GITHUB_RELEASES_URL);
+        showToast('রিলিজ পেজ খোলা হয়েছে। সেখান থেকে APK ডাউনলোড করুন।', 'info');
+      }
+    } catch (err) {
+      console.warn('Download app failed:', err);
+      showToast('অ্যাপ ডাউনলোড লিংক পেতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
+  // Silent check 3.5 seconds after app launch (ONLY for Native Android APK!)
   useEffect(() => {
+    // In web browsers, updates are handled automatically by the Service Worker / PWA.
+    // Never auto-popup native Android APK installer modals on web browsers!
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
     const timer = setTimeout(async () => {
       try {
         const info = await checkForAppUpdate(false);
@@ -104,6 +138,7 @@ export const UpdateProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     <UpdateContext.Provider
       value={{
         checkForUpdate,
+        downloadApp,
         isChecking,
         appUpdateInfo,
         isUpdateModalOpen,
