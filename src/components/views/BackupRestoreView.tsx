@@ -110,9 +110,13 @@ export const BackupRestoreView: React.FC = () => {
       });
     } else {
       await updateUserDriveSyncStatus('error');
+      let errorText = result.error || 'Failed to save backup to Google Drive.';
+      if (errorText.toLowerCase().includes('insufficient') || errorText.includes('403')) {
+        errorText = 'গুগল ড্রাইভ পারমিশন প্রয়োজন: অনুগ্রহ করে একবার Sign Out করে পুনরায় Google দিয়ে Sign In করুন এবং ড্রাইভ অ্যাক্সেসের অনুমতি (Allow) দিন।';
+      }
       setDriveMsg({
         type: 'error',
-        text: result.error || 'Failed to save backup to Google Drive.',
+        text: errorText,
       });
     }
   };

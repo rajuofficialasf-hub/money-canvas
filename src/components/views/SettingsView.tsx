@@ -23,13 +23,24 @@ import {
   RefreshCw,
   Sparkles,
   ArrowUpCircle,
+  ExternalLink,
 } from 'lucide-react';
+import {
+  CURRENT_APP_VERSION_NAME,
+  GITHUB_RELEASES_URL,
+  GITHUB_REPO_OWNER,
+  GITHUB_REPO_NAME,
+} from '../../lib/app-version';
+import { checkForAppUpdate, AppUpdateInfo } from '../../lib/github-updater';
+import { AppUpdateModal } from '../common/AppUpdateModal';
 
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { user, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData } = useAuth();
   const { language, setLanguage, isBn, toggleLanguage, t } = useLanguage();
   const [checkingUpdate, setCheckingUpdate] = useState(false);
   const [updateStatusMsg, setUpdateStatusMsg] = useState<string | null>(null);
+  const [manualUpdateInfo, setManualUpdateInfo] = useState<AppUpdateInfo | null>(null);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const {
     isSupported,
     isAvailable,
@@ -495,33 +506,35 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
           </div>
 
           {/* Application Updates & Version Status Card */}
-          <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-5 space-y-3">
+          <div className="rounded-xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/20 via-slate-900/60 to-slate-950 p-5 space-y-4 shadow-lg shadow-emerald-950/20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
                 <Sparkles className="h-4 w-4" />
-                <span>অ্যাপ আপডেট ও ভার্সন স্ট্যাটাস (App Updates)</span>
+                <span>অ্যাপ আপডেট ও সংস্করণ সেন্টার (App Updates & Releases)</span>
               </div>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
-                PWA Live Sync
+                GitHub Live Release
               </span>
             </div>
             
             <p className="text-[11px] text-slate-300 leading-relaxed">
-              <strong>কিভাবে আপডেট কাজ করে:</strong> আপনি বা ডেভেলপার সার্ভারে নতুন কোড বিল্ড ও আপডেট করার সাথে সাথে ইনস্টল করা PWA অ্যাপটি ব্যাকগ্রাউন্ডে Service Worker-এর মাধ্যমে স্বয়ংক্রিয়ভাবে নতুন আপডেট ক্যাশ করে এবং ইনস্ট্যান্ট নোটিফিকেশন প্রদর্শন করে।
+              <strong>১০০% স্বয়ংক্রিয় আপডেট:</strong> যখনই আপনি বা টিম GitHub-এ নতুন APK রিলিজ প্রকাশ করবেন, ইনস্টল করা অ্যাপটি সরাসরি আপডেট শনাক্ত করবে এবং ব্যবহারকারীকে ১-ক্লিকে নতুন সংস্করণ ইনস্টল করার সুযোগ দেবে।
             </p>
 
-            <div className="bg-slate-950/70 p-3 rounded-lg border border-slate-800 text-[11px] font-mono space-y-1">
-              <div className="flex justify-between text-slate-400">
-                <span>Current Release:</span>
-                <span className="text-emerald-400 font-bold">v2.5.0 (Latest Production)</span>
+            <div className="bg-slate-950/70 p-3.5 rounded-lg border border-slate-800 text-[11px] font-mono space-y-1.5">
+              <div className="flex justify-between items-center text-slate-400">
+                <span>বর্তমান সংস্করণ (Installed):</span>
+                <span className="text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                  {CURRENT_APP_VERSION_NAME}
+                </span>
               </div>
               <div className="flex justify-between text-slate-400">
-                <span>Update Mechanism:</span>
-                <span className="text-sky-300">PWA Auto-Update + Service Worker</span>
+                <span>আপডেট ইঞ্জিন:</span>
+                <span className="text-sky-300">GitHub Releases API + In-App Updater</span>
               </div>
               <div className="flex justify-between text-slate-400">
-                <span>Offline Cache:</span>
-                <span className="text-slate-300">Enabled (Active)</span>
+                <span>রিপোজিটরি:</span>
+                <span className="text-slate-300">{GITHUB_REPO_OWNER}/{GITHUB_REPO_NAME}</span>
               </div>
             </div>
 
@@ -540,20 +553,28 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   setCheckingUpdate(true);
                   setUpdateStatusMsg(null);
                   try {
+                    // Also check service worker if available
                     if ('serviceWorker' in navigator) {
                       const regs = await navigator.serviceWorker.getRegistrations();
                       for (const reg of regs) {
                         await reg.update();
                       }
                     }
-                    setTimeout(() => {
-                      setCheckingUpdate(false);
-                      setUpdateStatusMsg('অ্যাপটি সর্বশেষ ভার্সনে আপডেট রয়েছে (Up to date)। নতুন আপডেট থাকলে স্বয়ংক্রিয় নোটিফিকেশন আসবে।');
-                      setTimeout(() => setUpdateStatusMsg(null), 5000);
-                    }, 1200);
-                  } catch {
+
+                    const info = await checkForAppUpdate(true);
                     setCheckingUpdate(false);
-                    setUpdateStatusMsg('সর্বশেষ ভার্সন সক্রিয় রয়েছে।');
+
+                    if (info.hasUpdate) {
+                      setManualUpdateInfo(info);
+                      setIsUpdateModalOpen(true);
+                      setUpdateStatusMsg(`নতুন সংস্করণ ${info.releaseTitle || 'v' + info.latestVersion} পাওয়া গেছে!`);
+                    } else {
+                      setUpdateStatusMsg(`🎉 চমৎকার! আপনি অ্যাপটির সর্বশেষ সংস্করণ (${CURRENT_APP_VERSION_NAME}) ব্যবহার করছেন। কোনো আপডেট বাকি নেই।`);
+                      setTimeout(() => setUpdateStatusMsg(null), 6000);
+                    }
+                  } catch (err) {
+                    setCheckingUpdate(false);
+                    setUpdateStatusMsg('আপডেট চেক করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।');
                   }
                 }}
                 className="px-3.5 py-2 rounded-lg bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
@@ -565,6 +586,16 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 )}
                 <span>{checkingUpdate ? 'চেক করা হচ্ছে...' : 'আপডেট চেক করুন (Check Update)'}</span>
               </button>
+
+              <a
+                href={GITHUB_RELEASES_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <ExternalLink className="h-3.5 w-3.5 text-slate-400" />
+                <span>GitHub রিলিজ পেজ</span>
+              </a>
 
               <button
                 type="button"
@@ -578,12 +609,22 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     window.location.reload();
                   }
                 }}
-                className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-slate-300 text-xs flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <RefreshCw className="h-3.5 w-3.5 text-slate-400" />
-                <span>ফোর্স রিলোড / ক্যাশ রিফ্রেশ</span>
+                <RefreshCw className="h-3.5 w-3.5 text-slate-500" />
+                <span>ক্যাশ রিফ্রেশ</span>
               </button>
             </div>
+
+            {/* Modal if manually triggered and update found */}
+            {manualUpdateInfo && (
+              <AppUpdateModal
+                updateInfo={manualUpdateInfo}
+                isOpen={isUpdateModalOpen}
+                onClose={() => setIsUpdateModalOpen(false)}
+                isManualCheck={true}
+              />
+            )}
           </div>
 
           {/* App User Guide & Walkthrough Card */}

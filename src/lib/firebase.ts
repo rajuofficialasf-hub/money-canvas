@@ -17,7 +17,9 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 // Initialize Auth with Google provider
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
-// Use standard non-sensitive scopes (email, profile, openid) - requires no Google verification
+// Request Google Drive scopes for backup & restore
+googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
+googleProvider.addScope('https://www.googleapis.com/auth/drive.appdata');
 
 // Initialize Firestore
 export const db = getFirestore(app, firebaseConfigJson.firestoreDatabaseId || '(default)');
