@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="scBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050811" />
+      <stop offset="40%" stop-color="#0b1328" />
+      <stop offset="100%" stop-color="#021f17" />
+    </linearGradient>
+    <linearGradient id="phoneBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+    <filter id="phoneShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="25" stdDeviation="35" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
+    <filter id="scGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Wallpaper -->
+  <rect width="1080" height="1920" fill="url(#scBgGrad)" />
+
+  <!-- Background Lighting Radiance -->
+  <circle cx="540" cy="300" r="400" fill="#10b981" opacity="0.09" filter="url(#scGlow)" />
+  <circle cx="850" cy="1400" r="350" fill="#0284c7" opacity="0.06" filter="url(#scGlow)" />
+
+  <!-- TOP PROMOTIONAL HEADER (Google Play Style - 100% English) -->
+  <g transform="translate(540, 110)" text-anchor="middle">
+    <!-- Category Badge -->
+    <rect x="-140" y="0" width="280" height="42" rx="21" fill="#0f172a" stroke="#10b981" stroke-width="1.8" />
+    <text x="0" y="27" font-family="'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="15" fill="#10b981" letter-spacing="2">BUDGETS &amp; ZAKAT</text>
+
+    <!-- Main Headline English -->
+    <text x="0" y="105" font-family="'Segoe UI', Roboto, -apple-system, sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="-0.5">
+      Smart Budget Variance &amp; Shariah Zakat Calculator
+    </text>
+
+    <!-- Subtitle English -->
+    <text x="0" y="150" font-family="'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="23" fill="#94a3b8">
+      Category Envelopes, Nisab Calculation &amp; 100% Offline Vault
+    </text>
+  </g>
+
+  <!-- SMARTPHONE DEVICE MOCKUP (Centered, 1080 Width Layout) -->
+  <g transform="translate(130, 310)" filter="url(#phoneShadow)">
+    <!-- Outer Phone Chassis -->
+    <rect x="0" y="0" width="820" height="1540" rx="64" fill="#0f172a" stroke="url(#phoneBorder)" stroke-width="12" />
+    <rect x="6" y="6" width="808" height="1528" rx="58" fill="none" stroke="#020617" stroke-width="6" />
+
+    <!-- Screen Bezel Clip -->
+    <g transform="translate(16, 16)">
+      <clipPath id="screenClip">
+        <rect width="788" height="1508" rx="48" />
+      </clipPath>
+
+      <g clip-path="url(#screenClip)">
+        <!-- Phone Screen Background -->
+        <rect width="788" height="1508" fill="#090d16" />
+
+        <!-- Status Bar -->
+        <g transform="translate(36, 26)">
+          <text x="0" y="14" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">9:41</text>
+          <!-- Dynamic Island Notch -->
+          <rect x="250" y="-8" width="150" height="28" rx="14" fill="#020617" />
+          <circle cx="370" cy="6" r="5" fill="#1e293b" />
+          <!-- Icons -->
+          <g transform="translate(680, 0)" fill="#ffffff">
+            <path d="M0 12 L4 12 L4 2 L0 2 Z M6 12 L10 12 L10 4 L6 4 Z M12 12 L16 12 L16 7 L12 7 Z" />
+            <rect x="22" y="2" width="22" height="11" rx="3" fill="none" stroke="#ffffff" stroke-width="1.5" />
+            <rect x="24" y="4" width="14" height="7" rx="1.5" fill="#34d399" />
+          </g>
+        </g>
+
+        <!-- In-Screen App Content -->
+        <g transform="translate(30, 80)">
+          
+    <!-- Top Header -->
+    <g transform="translate(0, 0)">
+      <text x="0" y="24" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="20" fill="#ffffff">Budget &amp; Zakat Analytics</text>
+      <text x="0" y="48" font-family="'Segoe UI', sans-serif" font-size="13" fill="#10b981">Category Budget Tracking &amp; Precise Shariah-Compliant Zakat Assessment</text>
+    </g>
+
+    <!-- Monthly Budget Summary Card -->
+    <g transform="translate(0, 70)">
+      <rect width="728" height="240" rx="22" fill="#0f1d32" stroke="#10b981" stroke-width="1.8" stroke-opacity="0.7" />
+      
+      <g transform="translate(28, 28)">
+        <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="12" font-weight="600" fill="#94a3b8">MONTHLY BUDGET PROGRESS (September 2026)</text>
+        <text x="0" y="60" font-family="'Segoe UI', sans-serif" font-size="38" font-weight="800" fill="#ffffff">৳ 42,150 <tspan font-size="22" font-weight="500" fill="#94a3b8">/ ৳ 65,000</tspan></text>
+        
+        <rect x="480" y="24" width="180" height="38" rx="19" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-opacity="0.5" />
+        <text x="570" y="48" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#34d399">65% of Budget Used</text>
+
+        <!-- Big Master Budget Progress Bar -->
+        <g transform="translate(0, 95)">
+          <rect width="665" height="16" rx="8" fill="#1e293b" />
+          <rect width="430" height="16" rx="8" fill="#10b981" />
+        </g>
+
+        <!-- Sub categories variance -->
+        <g transform="translate(0, 135)">
+          <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="12" fill="#cbd5e1">Food &amp; Groceries: ৳ 15,200 / 20,000 (76%)</text>
+          <text x="350" y="16" font-family="'Segoe UI', sans-serif" font-size="12" fill="#cbd5e1">Utilities &amp; Bills: ৳ 5,000 / 8,000 (62%)</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Shariah Zakat Calculator Card -->
+    <g transform="translate(0, 340)">
+      <text x="0" y="20" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="800" fill="#ffffff">Shariah Zakat Assessment (Haul 1-Year Completed)</text>
+
+      <g transform="translate(0, 35)">
+        <rect width="728" height="330" rx="20" fill="#0f172a" stroke="#f59e0b" stroke-width="1.8" stroke-opacity="0.7" />
+        
+        <g transform="translate(26, 26)">
+          <!-- Nisab Threshold Banner -->
+          <rect width="670" height="50" rx="12" fill="#1e293b" />
+          <circle cx="25" cy="25" r="12" fill="#f59e0b" />
+          <text x="25" y="30" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="12" fill="#ffffff">⚖</text>
+          <text x="48" y="30" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="13" fill="#fbbf24">Current Nisab Threshold (Silver 52.5 Tola): ৳ 120,000 (Threshold Exceeded)</text>
+
+          <!-- Zakatable Asset Items -->
+          <g transform="translate(0, 75)">
+            <g transform="translate(0, 0)">
+              <text x="0" y="18" font-family="'Segoe UI', sans-serif" font-size="14" fill="#cbd5e1">Cash in Hand &amp; Bank Deposits</text>
+              <text x="660" y="18" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">৳ 850,000</text>
+            </g>
+            <line x1="0" y1="32" x2="670" y2="32" stroke="#1e293b" />
+
+            <g transform="translate(0, 48)">
+              <text x="0" y="18" font-family="'Segoe UI', sans-serif" font-size="14" fill="#cbd5e1">Gold &amp; Silver Jewellery (Above personal use)</text>
+              <text x="660" y="18" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">৳ 200,000</text>
+            </g>
+            <line x1="0" y1="80" x2="670" y2="80" stroke="#1e293b" />
+
+            <g transform="translate(0, 96)">
+              <text x="0" y="18" font-family="'Segoe UI', sans-serif" font-size="14" fill="#cbd5e1">DSE Stocks &amp; Business Capital</text>
+              <text x="660" y="18" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">৳ 224,000</text>
+            </g>
+            <line x1="0" y1="128" x2="670" y2="128" stroke="#1e293b" />
+          </g>
+
+          <!-- Payable Zakat Result Box -->
+          <g transform="translate(0, 225)">
+            <rect width="670" height="60" rx="12" fill="#047857" fill-opacity="0.25" stroke="#10b981" stroke-width="1.5" />
+            <text x="24" y="38" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="16" fill="#34d399">Total Payable Zakat (at 2.5%):</text>
+            <text x="645" y="38" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="900" font-size="24" fill="#34d399">৳ 31,850</text>
+          </g>
+        </g>
+      </g>
+    </g>
+
+    <!-- Offline Privacy & Security Guarantee -->
+    <g transform="translate(0, 715)">
+      <rect width="728" height="95" rx="18" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+      <g transform="translate(24, 24)">
+        <circle cx="24" cy="24" r="22" fill="#10b981" fill-opacity="0.15" />
+        <path d="M24 12 L34 16 L34 26 C34 32 24 37 24 37 C24 37 14 32 14 26 L14 16 Z" fill="#10b981" />
+        <text x="64" y="20" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="15" fill="#ffffff">100% Privacy &amp; Local-First Database</text>
+        <text x="64" y="42" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Your financial data is stored locally on your device and never uploaded to any remote server.</text>
+      </g>
+    </g>
+  
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

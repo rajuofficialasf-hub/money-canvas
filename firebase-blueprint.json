@@ -1,0 +1,49 @@
+{
+  "entities": {
+    "users": {
+      "title": "User Profiles",
+      "description": "Registered app users profile and login tracking for admin analytics",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "User Firebase UID"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "User profile avatar photo URL"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "user"],
+          "description": "User role in system"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Account registration timestamp"
+        },
+        "lastLoginAt": {
+          "type": "string",
+          "description": "Last sign-in timestamp"
+        },
+        "lastDriveBackupAt": {
+          "type": "string",
+          "description": "Last Google Drive backup timestamp"
+        },
+        "driveBackupStatus": {
+          "type": "string",
+          "description": "Current backup status"
+        }
+      },
+      "required": ["uid", "displayName", "email", "role", "createdAt", "lastLoginAt"]
+    }
+  }
+}

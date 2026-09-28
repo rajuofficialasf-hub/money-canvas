@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+}
+
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    padding-top: var(--sat);
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  aside, header, button, .no-print {
+    display: none !important;
+  }
+  .flex-1 {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .bg-slate-900, .bg-slate-900\/60, .bg-slate-950, .bg-slate-900\/40 {
+    background: white !important;
+    color: black !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+  }
+  .text-white, .text-slate-100, .text-slate-200, .text-slate-300, .text-slate-400 {
+    color: #1e293b !important;
+  }
+  .text-emerald-400, .text-emerald-300, .text-emerald-500 {
+    color: #047857 !important;
+  }
+  .border-slate-800, .border-slate-700, .border-slate-900 {
+    border-color: #cbd5e1 !important;
+  }
+}
+

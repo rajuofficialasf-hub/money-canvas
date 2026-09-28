@@ -1,0 +1,92 @@
+{
+  "project_info": {
+    "project_number": "258283545047",
+    "project_id": "gen-lang-client-0907015441",
+    "storage_bucket": "gen-lang-client-0907015441.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258283545047:android:58c0aee31520e84ec02b92",
+        "android_client_info": {
+          "package_name": "com.aistudio.myfinance.qvrxtp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258283545047-k6hlu0v0dpan031gv49rkdn39gtmdfvc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aistudio.myfinance.qvrxtp",
+            "certificate_hash": "ef4fa2735f9d662bc117edd4e6110dc6fcd33c9f"
+          }
+        },
+        {
+          "client_id": "258283545047-pkneisnv0la8me5poafj3h8vhm0iqogl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aistudio.myfinance.qvrxtp",
+            "certificate_hash": "8e04d8d16358934a9cf95722583ef4e85605aefd"
+          }
+        },
+        {
+          "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ9bStnjLZ7n5oMN2-cE8tChaL4QeR5sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258283545047:android:72af32b85e077f9ac02b92",
+        "android_client_info": {
+          "package_name": "com.moneycanvas.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258283545047-eb3s23lg8jmnlhfdctfd2gvqpcc4gt6m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneycanvas.app",
+            "certificate_hash": "8e04d8d16358934a9cf95722583ef4e85605aefd"
+          }
+        },
+        {
+          "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQ9bStnjLZ7n5oMN2-cE8tChaL4QeR5sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="scBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050811" />
+      <stop offset="40%" stop-color="#0b1328" />
+      <stop offset="100%" stop-color="#021f17" />
+    </linearGradient>
+    <linearGradient id="phoneBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+    <filter id="phoneShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="25" stdDeviation="35" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
+    <filter id="scGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Wallpaper -->
+  <rect width="1080" height="1920" fill="url(#scBgGrad)" />
+
+  <!-- Background Lighting Radiance -->
+  <circle cx="540" cy="300" r="400" fill="#38bdf8" opacity="0.09" filter="url(#scGlow)" />
+  <circle cx="850" cy="1400" r="350" fill="#0284c7" opacity="0.06" filter="url(#scGlow)" />
+
+  <!-- TOP PROMOTIONAL HEADER (Google Play Style - 100% English) -->
+  <g transform="translate(540, 110)" text-anchor="middle">
+    <!-- Category Badge -->
+    <rect x="-140" y="0" width="280" height="42" rx="21" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8" />
+    <text x="0" y="27" font-family="'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="15" fill="#38bdf8" letter-spacing="2">AUTOMATION &amp; LEDGER</text>
+
+    <!-- Main Headline English -->
+    <text x="0" y="105" font-family="'Segoe UI', Roboto, -apple-system, sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="-0.5">
+      Instant SMS Auto-Parsing &amp; Double-Entry Ledger
+    </text>
+
+    <!-- Subtitle English -->
+    <text x="0" y="150" font-family="'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="23" fill="#94a3b8">
+      Automate Transactions with Audit-Grade Accounting Standards
+    </text>
+  </g>
+
+  <!-- SMARTPHONE DEVICE MOCKUP (Centered, 1080 Width Layout) -->
+  <g transform="translate(130, 310)" filter="url(#phoneShadow)">
+    <!-- Outer Phone Chassis -->
+    <rect x="0" y="0" width="820" height="1540" rx="64" fill="#0f172a" stroke="url(#phoneBorder)" stroke-width="12" />
+    <rect x="6" y="6" width="808" height="1528" rx="58" fill="none" stroke="#020617" stroke-width="6" />
+
+    <!-- Screen Bezel Clip -->
+    <g transform="translate(16, 16)">
+      <clipPath id="screenClip">
+        <rect width="788" height="1508" rx="48" />
+      </clipPath>
+
+      <g clip-path="url(#screenClip)">
+        <!-- Phone Screen Background -->
+        <rect width="788" height="1508" fill="#090d16" />
+
+        <!-- Status Bar -->
+        <g transform="translate(36, 26)">
+          <text x="0" y="14" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">9:41</text>
+          <!-- Dynamic Island Notch -->
+          <rect x="250" y="-8" width="150" height="28" rx="14" fill="#020617" />
+          <circle cx="370" cy="6" r="5" fill="#1e293b" />
+          <!-- Icons -->
+          <g transform="translate(680, 0)" fill="#ffffff">
+            <path d="M0 12 L4 12 L4 2 L0 2 Z M6 12 L10 12 L10 4 L6 4 Z M12 12 L16 12 L16 7 L12 7 Z" />
+            <rect x="22" y="2" width="22" height="11" rx="3" fill="none" stroke="#ffffff" stroke-width="1.5" />
+            <rect x="24" y="4" width="14" height="7" rx="1.5" fill="#34d399" />
+          </g>
+        </g>
+
+        <!-- In-Screen App Content -->
+        <g transform="translate(30, 80)">
+          
+    <!-- Top Header -->
+    <g transform="translate(0, 0)">
+      <text x="0" y="24" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="20" fill="#ffffff">Automated SMS Parser</text>
+      <text x="0" y="48" font-family="'Segoe UI', sans-serif" font-size="13" fill="#38bdf8">bKash, Nagad, City, BRAC &amp; EBL Bank SMS Support</text>
+    </g>
+
+    <!-- Interactive SMS Parser Showcase Card -->
+    <g transform="translate(0, 70)">
+      <rect width="728" height="300" rx="22" fill="#0c172a" stroke="#38bdf8" stroke-width="2" />
+      
+      <!-- Simulated Incoming SMS Bubble -->
+      <g transform="translate(24, 24)">
+        <rect width="680" height="95" rx="14" fill="#1e293b" />
+        <circle cx="28" cy="28" r="16" fill="#be185d" />
+        <text x="28" y="33" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="11" fill="#ffffff">bK</text>
+        <text x="56" y="26" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="13" fill="#f43f5e">bKash Notification · Just Now</text>
+        <text x="56" y="48" font-family="monospace" font-size="12" fill="#e2e8f0">You have received Tk 15,000.00 from 01711XXXXXX. Fee Tk 0.00. TrxID 9K8L2M3P</text>
+      </g>
+
+      <!-- Auto Parsed Result -->
+      <g transform="translate(24, 140)">
+        <rect width="680" height="135" rx="14" fill="#06201b" stroke="#10b981" stroke-width="1.5" />
+        <g transform="translate(20, 24)">
+          <circle cx="16" cy="16" r="14" fill="#10b981" />
+          <path d="M10 16 L14 20 L22 12" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" />
+          <text x="42" y="21" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#34d399">Automatically Recognized Double-Entry Journal</text>
+
+          <g transform="translate(0, 42)" font-family="monospace" font-size="13">
+            <rect width="310" height="36" rx="6" fill="#0f172a" />
+            <text x="12" y="23" fill="#38bdf8">DEBIT: [Assets] bKash Wallet</text>
+            <text x="220" y="23" font-weight="700" fill="#34d399">৳ 15,000</text>
+
+            <rect x="330" y="0" width="310" height="36" rx="6" fill="#0f172a" />
+            <text x="342" y="23" fill="#f59e0b">CREDIT: [Income] Freelance/Bonus</text>
+            <text x="550" y="23" font-weight="700" fill="#34d399">৳ 15,000</text>
+          </g>
+
+          <!-- Status badge -->
+          <text x="0" y="105" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Equation Status: <tspan fill="#34d399" font-weight="700">Balanced (Debits = Credits) ✓</tspan></text>
+        </g>
+      </g>
+    </g>
+
+    <!-- General Ledger Audit Trail Table -->
+    <g transform="translate(0, 395)">
+      <text x="0" y="20" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="800" fill="#ffffff">General Ledger &amp; Trial Balance</text>
+
+      <g transform="translate(0, 35)">
+        <rect width="728" height="520" rx="20" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+        
+        <!-- Table Header -->
+        <rect width="728" height="45" rx="20" fill="#1e293b" />
+        <text x="24" y="28" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="12" fill="#94a3b8">Date / Description</text>
+        <text x="260" y="28" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="12" fill="#94a3b8">Account Head</text>
+        <text x="490" y="28" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="12" fill="#94a3b8">Debit (Dr.)</text>
+        <text x="630" y="28" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="12" fill="#94a3b8">Credit (Cr.)</text>
+
+        <!-- Row 1 -->
+        <g transform="translate(24, 75)">
+          <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#ffffff">Today · House Rent Payment</text>
+          <text x="0" y="34" font-family="'Segoe UI', sans-serif" font-size="11" fill="#64748b">Txn Ref #L-9842</text>
+          <text x="236" y="24" font-family="monospace" font-size="12" fill="#cbd5e1">Rent Expense</text>
+          <text x="466" y="24" font-family="monospace" font-size="13" font-weight="700" fill="#f43f5e">৳ 25,000</text>
+          <text x="606" y="24" font-family="monospace" font-size="13" fill="#64748b">—</text>
+        </g>
+        <line x1="24" y1="125" x2="704" y2="125" stroke="#1e293b" stroke-width="1" />
+
+        <!-- Row 2 -->
+        <g transform="translate(24, 150)">
+          <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#ffffff">Today · City Bank Payment</text>
+          <text x="0" y="34" font-family="'Segoe UI', sans-serif" font-size="11" fill="#64748b">Txn Ref #L-9843</text>
+          <text x="236" y="24" font-family="monospace" font-size="12" fill="#cbd5e1">City Bank Savings</text>
+          <text x="466" y="24" font-family="monospace" font-size="13" fill="#64748b">—</text>
+          <text x="606" y="24" font-family="monospace" font-size="13" font-weight="700" fill="#38bdf8">৳ 25,000</text>
+        </g>
+        <line x1="24" y1="200" x2="704" y2="200" stroke="#1e293b" stroke-width="1" />
+
+        <!-- Row 3 -->
+        <g transform="translate(24, 225)">
+          <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="700" fill="#ffffff">Yesterday · Stock Dividend</text>
+          <text x="0" y="34" font-family="'Segoe UI', sans-serif" font-size="11" fill="#64748b">Txn Ref #L-9844</text>
+          <text x="236" y="24" font-family="monospace" font-size="12" fill="#cbd5e1">Dividend Income</text>
+          <text x="466" y="24" font-family="monospace" font-size="13" fill="#64748b">—</text>
+          <text x="606" y="24" font-family="monospace" font-size="13" font-weight="700" fill="#34d399">৳ 8,400</text>
+        </g>
+        <line x1="24" y1="275" x2="704" y2="275" stroke="#1e293b" stroke-width="1" />
+
+        <!-- Summary Footer -->
+        <g transform="translate(24, 300)">
+          <rect width="680" height="55" rx="10" fill="#1e293b" />
+          <text x="20" y="33" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="13" fill="#34d399">Invariant Check: Debits = Credits (৳ 153,400)</text>
+          <text x="500" y="33" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="12" fill="#38bdf8">AUDIT PASS ✓</text>
+        </g>
+      </g>
+    </g>
+  
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

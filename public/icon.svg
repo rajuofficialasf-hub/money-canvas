@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#022c22" />
+    </linearGradient>
+    <linearGradient id="emeraldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="amberGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background with rounded squircles -->
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect width="504" height="504" x="4" y="4" rx="108" fill="none" stroke="#10b981" stroke-width="4" stroke-opacity="0.35" />
+
+  <!-- Outer Shield Ring -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#1e293b" stroke-width="8" />
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#10b981" stroke-width="6" stroke-dasharray="16 24" stroke-opacity="0.6" />
+
+  <!-- Center Double Entry Scales & Taka Symbol -->
+  <g filter="url(#glow)">
+    <!-- Taka Symbol (৳) Silhouette / Stylized Core -->
+    <path d="M220 150 C200 150 170 170 170 210 C170 245 195 270 230 275 L230 360 C230 370 238 378 248 378 C258 378 266 370 266 360 L266 276 C295 272 320 250 320 215 C320 175 285 150 250 150 Z M225 186 C240 186 265 190 265 215 C265 238 245 242 230 242 C205 242 205 218 205 212 C205 192 215 186 225 186 Z" fill="url(#emeraldGlow)" />
+    
+    <!-- Crossbar of Taka / Balance beam -->
+    <rect x="150" y="210" width="160" height="12" rx="6" fill="#34d399" opacity="0.9" />
+    <circle cx="150" cy="216" r="14" fill="#10b981" />
+    <circle cx="310" cy="216" r="14" fill="#f59e0b" />
+    
+    <!-- Hanging ledger trays -->
+    <path d="M150 225 L130 270 L170 270 Z" fill="#047857" opacity="0.8" />
+    <path d="M310 225 L290 270 L330 270 Z" fill="#b45309" opacity="0.8" />
+  </g>
+
+  <!-- Subtitle Tag -->
+  <text x="256" y="430" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="800" font-size="28" fill="#10b981" letter-spacing="4">FINOS MASTER</text>
+  <text x="256" y="456" text-anchor="middle" font-family="monospace" font-weight="600" font-size="14" fill="#64748b" letter-spacing="2">DOUBLE-ENTRY ৳ BDT</text>
+</svg>

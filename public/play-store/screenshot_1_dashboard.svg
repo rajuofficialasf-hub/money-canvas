@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920">
+  <defs>
+    <linearGradient id="scBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050811" />
+      <stop offset="40%" stop-color="#0b1328" />
+      <stop offset="100%" stop-color="#021f17" />
+    </linearGradient>
+    <linearGradient id="phoneBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+    <filter id="phoneShadow" x="-20%" y="-10%" width="140%" height="130%">
+      <feDropShadow dx="0" dy="25" stdDeviation="35" flood-color="#000000" flood-opacity="0.8" />
+    </filter>
+    <filter id="scGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Wallpaper -->
+  <rect width="1080" height="1920" fill="url(#scBgGrad)" />
+
+  <!-- Background Lighting Radiance -->
+  <circle cx="540" cy="300" r="400" fill="#10b981" opacity="0.09" filter="url(#scGlow)" />
+  <circle cx="850" cy="1400" r="350" fill="#0284c7" opacity="0.06" filter="url(#scGlow)" />
+
+  <!-- TOP PROMOTIONAL HEADER (Google Play Style - 100% English) -->
+  <g transform="translate(540, 110)" text-anchor="middle">
+    <!-- Category Badge -->
+    <rect x="-140" y="0" width="280" height="42" rx="21" fill="#0f172a" stroke="#10b981" stroke-width="1.8" />
+    <text x="0" y="27" font-family="'Segoe UI', Roboto, sans-serif" font-weight="800" font-size="15" fill="#10b981" letter-spacing="2">DASHBOARD &amp; WEALTH</text>
+
+    <!-- Main Headline English -->
+    <text x="0" y="105" font-family="'Segoe UI', Roboto, -apple-system, sans-serif" font-weight="900" font-size="42" fill="#ffffff" letter-spacing="-0.5">
+      Complete Financial Overview at a Glance
+    </text>
+
+    <!-- Subtitle English -->
+    <text x="0" y="150" font-family="'Segoe UI', Roboto, sans-serif" font-weight="600" font-size="23" fill="#94a3b8">
+      Track Net Worth, Real-Time Cash Flow &amp; Multi-Accounts
+    </text>
+  </g>
+
+  <!-- SMARTPHONE DEVICE MOCKUP (Centered, 1080 Width Layout) -->
+  <g transform="translate(130, 310)" filter="url(#phoneShadow)">
+    <!-- Outer Phone Chassis -->
+    <rect x="0" y="0" width="820" height="1540" rx="64" fill="#0f172a" stroke="url(#phoneBorder)" stroke-width="12" />
+    <rect x="6" y="6" width="808" height="1528" rx="58" fill="none" stroke="#020617" stroke-width="6" />
+
+    <!-- Screen Bezel Clip -->
+    <g transform="translate(16, 16)">
+      <clipPath id="screenClip">
+        <rect width="788" height="1508" rx="48" />
+      </clipPath>
+
+      <g clip-path="url(#screenClip)">
+        <!-- Phone Screen Background -->
+        <rect width="788" height="1508" fill="#090d16" />
+
+        <!-- Status Bar -->
+        <g transform="translate(36, 26)">
+          <text x="0" y="14" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">9:41</text>
+          <!-- Dynamic Island Notch -->
+          <rect x="250" y="-8" width="150" height="28" rx="14" fill="#020617" />
+          <circle cx="370" cy="6" r="5" fill="#1e293b" />
+          <!-- Icons -->
+          <g transform="translate(680, 0)" fill="#ffffff">
+            <path d="M0 12 L4 12 L4 2 L0 2 Z M6 12 L10 12 L10 4 L6 4 Z M12 12 L16 12 L16 7 L12 7 Z" />
+            <rect x="22" y="2" width="22" height="11" rx="3" fill="none" stroke="#ffffff" stroke-width="1.5" />
+            <rect x="24" y="4" width="14" height="7" rx="1.5" fill="#34d399" />
+          </g>
+        </g>
+
+        <!-- In-Screen App Content -->
+        <g transform="translate(30, 80)">
+          
+    <!-- App Header inside Phone -->
+    <g transform="translate(0, 0)">
+      <circle cx="24" cy="24" r="24" fill="#10b981" fill-opacity="0.2" />
+      <path d="M16 24 L22 30 L32 18" stroke="#34d399" stroke-width="3" fill="none" stroke-linecap="round" />
+      <text x="60" y="20" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#ffffff">Money Canvas</text>
+      <text x="60" y="38" font-family="'Segoe UI', sans-serif" font-size="12" fill="#10b981">Personal Finance &amp; Ledger OS</text>
+
+      <rect x="620" y="8" width="105" height="34" rx="17" fill="#1e293b" />
+      <text x="672" y="30" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="12" fill="#38bdf8">BDT ৳</text>
+    </g>
+
+    <!-- Master Net Worth Hero Card -->
+    <g transform="translate(0, 70)">
+      <rect width="728" height="260" rx="24" fill="#0f1d32" stroke="#1e3a5f" stroke-width="2" />
+      <rect width="728" height="260" rx="24" fill="none" stroke="#10b981" stroke-width="2" stroke-opacity="0.4" />
+      
+      <g transform="translate(32, 32)">
+        <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="13" font-weight="600" fill="#94a3b8" letter-spacing="1">TOTAL NET WORTH</text>
+        <text x="0" y="68" font-family="'Segoe UI', sans-serif" font-size="44" font-weight="800" fill="#ffffff">৳ 1,584,250</text>
+        
+        <rect x="460" y="32" width="200" height="38" rx="19" fill="#10b981" fill-opacity="0.2" stroke="#10b981" stroke-opacity="0.5" />
+        <text x="560" y="56" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#34d399">+12.8% ↗ This Month</text>
+
+        <!-- Sparkline Chart -->
+        <path d="M0 135 C80 120, 160 145, 260 100 C360 55, 460 90, 560 50 C610 30, 640 40, 664 25" 
+              fill="none" stroke="#10b981" stroke-width="4" stroke-linecap="round" />
+        <circle cx="664" cy="25" r="6" fill="#34d399" />
+
+        <!-- Sub metrics -->
+        <g transform="translate(0, 165)">
+          <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Monthly Income: <tspan fill="#34d399" font-weight="700">+৳ 120,000</tspan></text>
+          <text x="320" y="16" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Monthly Expenses: <tspan fill="#f43f5e" font-weight="700">-৳ 42,150</tspan></text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Quick Action Transfer Buttons -->
+    <g transform="translate(0, 360)">
+      <rect x="0" y="0" width="168" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+      <text x="84" y="36" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#ffffff">+ Expense</text>
+
+      <rect x="186" y="0" width="168" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+      <text x="270" y="36" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#34d399">+ Income</text>
+
+      <rect x="372" y="0" width="168" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+      <text x="456" y="36" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#38bdf8">↔ Transfer</text>
+
+      <rect x="558" y="0" width="170" height="60" rx="16" fill="#10b981" fill-opacity="0.15" stroke="#10b981" stroke-width="1.5" />
+      <text x="643" y="36" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="14" fill="#34d399">💬 SMS Parse</text>
+    </g>
+
+    <!-- Account Balances Carousel Cards -->
+    <g transform="translate(0, 450)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="800" fill="#ffffff">Account Balances</text>
+      
+      <!-- Bank Account Card -->
+      <g transform="translate(0, 35)">
+        <rect width="350" height="140" rx="18" fill="#0f172a" stroke="#1e3a5f" stroke-width="1.5" />
+        <g transform="translate(20, 24)">
+          <text x="0" y="14" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#38bdf8">Bank Accounts (City &amp; BRAC)</text>
+          <text x="0" y="46" font-family="'Segoe UI', sans-serif" font-size="26" font-weight="800" fill="#ffffff">৳ 650,000</text>
+          <text x="0" y="74" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Active · Reconciled today</text>
+        </g>
+      </g>
+
+      <!-- bKash / Mobile Wallet Card -->
+      <g transform="translate(378, 35)">
+        <rect width="350" height="140" rx="18" fill="#0f172a" stroke="#be185d" stroke-width="1.5" stroke-opacity="0.5" />
+        <g transform="translate(20, 24)">
+          <text x="0" y="14" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="700" fill="#f43f5e">bKash &amp; Mobile Wallets</text>
+          <text x="0" y="46" font-family="'Segoe UI', sans-serif" font-size="26" font-weight="800" fill="#ffffff">৳ 214,250</text>
+          <text x="0" y="74" font-family="'Segoe UI', sans-serif" font-size="12" fill="#94a3b8">Instant SMS sync enabled</text>
+        </g>
+      </g>
+    </g>
+
+    <!-- Recent Double-Entry Ledger Transactions -->
+    <g transform="translate(0, 660)">
+      <text x="0" y="16" font-family="'Segoe UI', sans-serif" font-size="16" font-weight="800" fill="#ffffff">Recent Transactions (Double-Entry)</text>
+      
+      <!-- Txn 1 -->
+      <g transform="translate(0, 35)">
+        <rect width="728" height="85" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+        <circle cx="45" cy="42" r="22" fill="#10b981" fill-opacity="0.15" />
+        <text x="45" y="48" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#34d399">↓</text>
+        <text x="85" y="34" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="16" fill="#ffffff">Monthly Salary Credit</text>
+        <text x="85" y="56" font-family="monospace" font-size="12" fill="#94a3b8">Dr. City Bank | Cr. Salary Income</text>
+        <text x="680" y="44" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#34d399">+৳ 120,000</text>
+      </g>
+
+      <!-- Txn 2 -->
+      <g transform="translate(0, 135)">
+        <rect width="728" height="85" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+        <circle cx="45" cy="42" r="22" fill="#f43f5e" fill-opacity="0.15" />
+        <text x="45" y="48" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#f43f5e">↑</text>
+        <text x="85" y="34" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="16" fill="#ffffff">Shwapno Supermarket Grocery</text>
+        <text x="85" y="56" font-family="monospace" font-size="12" fill="#94a3b8">Dr. Groceries | Cr. bKash Personal</text>
+        <text x="680" y="44" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#f43f5e">-৳ 4,650</text>
+      </g>
+
+      <!-- Txn 3 -->
+      <g transform="translate(0, 235)">
+        <rect width="728" height="85" rx="16" fill="#0f172a" stroke="#1e293b" stroke-width="1.5" />
+        <circle cx="45" cy="42" r="22" fill="#38bdf8" fill-opacity="0.15" />
+        <text x="45" y="48" text-anchor="middle" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#38bdf8">⇄</text>
+        <text x="85" y="34" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="16" fill="#ffffff">DPS Monthly Deposit</text>
+        <text x="85" y="56" font-family="monospace" font-size="12" fill="#94a3b8">Dr. DPS 5-Yr Asset | Cr. BRAC Bank</text>
+        <text x="680" y="44" text-anchor="end" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="18" fill="#38bdf8">৳ 10,000</text>
+      </g>
+    </g>
+
+    <!-- Bottom Mobile Nav Bar -->
+    <g transform="translate(0, 1020)">
+      <rect width="728" height="75" rx="24" fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+      <g transform="translate(72, 38)" text-anchor="middle">
+        <circle cx="0" cy="-5" r="16" fill="#10b981" fill-opacity="0.2" />
+        <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14" fill="#34d399">⊞</text>
+        <text x="0" y="22" font-family="'Segoe UI', sans-serif" font-weight="700" font-size="10" fill="#34d399">Dashboard</text>
+      </g>
+      <g transform="translate(216, 38)" text-anchor="middle">
+        <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14" fill="#94a3b8">☰</text>
+        <text x="0" y="22" font-family="'Segoe UI', sans-serif" font-weight="600" font-size="10" fill="#94a3b8">Ledger</text>
+      </g>
+      <g transform="translate(364, 38)" text-anchor="middle">
+        <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14" fill="#94a3b8">📈</text>
+        <text x="0" y="22" font-family="'Segoe UI', sans-serif" font-weight="600" font-size="10" fill="#94a3b8">Investments</text>
+      </g>
+      <g transform="translate(510, 38)" text-anchor="middle">
+        <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14" fill="#94a3b8">🎯</text>
+        <text x="0" y="22" font-family="'Segoe UI', sans-serif" font-weight="600" font-size="10" fill="#94a3b8">Budgets</text>
+      </g>
+      <g transform="translate(654, 38)" text-anchor="middle">
+        <text x="0" y="0" font-family="'Segoe UI', sans-serif" font-weight="800" font-size="14" fill="#94a3b8">⚙</text>
+        <text x="0" y="22" font-family="'Segoe UI', sans-serif" font-weight="600" font-size="10" fill="#94a3b8">Settings</text>
+      </g>
+    </g>
+  
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
