@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Coins,
   Gift,
@@ -232,6 +232,13 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   );
   const [ipoNotes, setIpoNotes] = useState<string>('');
   const [ipoError, setIpoError] = useState<string | null>(null);
+
+  // Synchronize IPO broker account when brokerAccounts loads
+  useEffect(() => {
+    if (!ipoBrokerAcc && brokerAccounts.length > 0) {
+      setIpoBrokerAcc(brokerAccounts[0].id);
+    }
+  }, [brokerAccounts, ipoBrokerAcc]);
 
   const ipoTotalAmount = useMemo(() => {
     return round2((ipoLotSize || 0) * (ipoOfferPrice || 0));
@@ -734,7 +741,92 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             </div>
           </div>
 
-          <div className="overflow-x-auto scrollbar-thin">
+          {/* Mobile Card List (visible on screens < 640px) */}
+          <div className="block sm:hidden divide-y divide-gray-100">
+            {ipoApplications.length === 0 ? (
+              <div className="py-8 text-center text-gray-500 text-xs p-4">
+                No IPO applications found. Click &quot;Apply IPO&quot; above to submit a new subscription.
+              </div>
+            ) : (
+              ipoApplications.map((ipo) => {
+                const brokerAcc = brokerAccounts.find((b) => b.id === ipo.brokerAccountId);
+
+                return (
+                  <div key={ipo.id} className="p-4 space-y-3 bg-white">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <div className="font-bold text-gray-900 font-mono text-sm">{ipo.symbol}</div>
+                        <div className="text-xs text-gray-600">{ipo.companyName}</div>
+                        <div className="text-[11px] text-gray-400 mt-0.5">
+                          BO: {brokerAcc?.accountName || ipo.brokerAccountId} · {ipo.applicationDate}
+                        </div>
+                      </div>
+                      <div>
+                        {ipo.status === 'applied' && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-100 text-amber-800">
+                            <Clock className="w-3 h-3 mr-1" /> Pending
+                          </span>
+                        )}
+                        {ipo.status === 'allotted' && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800">
+                            <CheckCircle2 className="w-3 h-3 mr-1" /> Allotted
+                          </span>
+                        )}
+                        {ipo.status === 'partially_allotted' && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-blue-100 text-blue-800">
+                            Partial
+                          </span>
+                        )}
+                        {ipo.status === 'refunded' && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-gray-100 text-gray-800">
+                            Refunded
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2 p-2.5 bg-gray-50 rounded-lg text-xs font-mono">
+                      <div>
+                        <div className="text-[10px] text-gray-500 uppercase">Lot Size</div>
+                        <div className="font-semibold text-gray-900">{ipo.lotSize} sh</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-gray-500 uppercase">Offer Price</div>
+                        <div className="font-semibold text-gray-900">৳{ipo.offerPrice.toFixed(2)}</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-gray-500 uppercase">Total Blocked</div>
+                        <div className="font-bold text-indigo-700">৳{ipo.totalAmount.toLocaleString()}</div>
+                      </div>
+                    </div>
+
+                    {/* Outcome display */}
+                    {ipo.status !== 'applied' && (
+                      <div className="text-xs p-2 bg-emerald-50/60 border border-emerald-200/60 rounded-lg flex items-center justify-between">
+                        <span className="text-gray-600">Allotment Outcome:</span>
+                        <span className="font-bold text-emerald-700 font-mono">
+                          {ipo.allottedShares ? `${ipo.allottedShares} shares` : '0 shares'}
+                          {ipo.refundAmount ? ` (৳${ipo.refundAmount.toLocaleString()} refunded)` : ''}
+                        </span>
+                      </div>
+                    )}
+
+                    {ipo.status === 'applied' && (
+                      <button
+                        onClick={() => openSettleModal(ipo)}
+                        className="w-full py-2 px-3 text-xs font-medium rounded-lg text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-center transition-colors"
+                      >
+                        Settle Outcome (লটারি রেজাল্ট / অ্যালটমেন্ট)
+                      </button>
+                    )}
+                  </div>
+                );
+              })
+            )}
+          </div>
+
+          {/* Desktop Table (hidden on mobile, visible on sm+) */}
+          <div className="hidden sm:block overflow-x-auto scrollbar-thin">
             <table className="w-full text-left border-collapse text-sm min-w-[800px]">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -753,7 +845,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                 {ipoApplications.length === 0 ? (
                   <tr>
                     <td colSpan={9} className="py-8 text-center text-gray-500">
-                      No IPO applications found. Click "Apply IPO" to submit a new subscription.
+                      No IPO applications found. Click &quot;Apply IPO&quot; to submit a new subscription.
                     </td>
                   </tr>
                 ) : (
@@ -1282,57 +1374,91 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               )}
 
               <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Broker Account
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-semibold text-slate-300">
+                    Beneficiary Owner (BO) Account *
+                  </label>
+                  <span className="text-[11px] font-mono text-indigo-400">
+                    Avail Cash: ৳{availableBrokerCash.toLocaleString()}
+                  </span>
+                </div>
                 <select
                   value={ipoBrokerAcc}
                   onChange={(e) => setIpoBrokerAcc(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
                   required
                 >
-                  {brokerAccounts.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {b.accountName} (Available: ৳{availableBrokerCash.toLocaleString()})
-                    </option>
-                  ))}
+                  {brokerAccounts.map((b) => {
+                    const cash = brokerCashBalances.find((bc) => bc.brokerAccountId === b.id)?.cashBalance || 0;
+                    return (
+                      <option key={b.id} value={b.id}>
+                        {b.accountName} (BO: {b.boId}) — Cash: ৳{cash.toLocaleString()}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Company Name
+                    Company Name *
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. Techno Drugs Ltd"
                     value={ipoCompany}
                     onChange={(e) => setIpoCompany(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
+                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
                     required
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    DSE Symbol / Ticker
+                    DSE Symbol / Ticker *
                   </label>
                   <input
                     type="text"
                     placeholder="e.g. TECHNODRUG"
                     value={ipoSymbol}
                     onChange={(e) => setIpoSymbol(e.target.value.toUpperCase())}
-                    className="w-full px-3 py-2 text-sm font-mono uppercase rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
+                    className="w-full px-3 py-2 text-base sm:text-sm font-mono uppercase rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
                     required
                   />
                 </div>
               </div>
 
+              {/* Quick Lot Presets */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] text-slate-400 font-mono">Quick Preset:</span>
+                <button
+                  type="button"
+                  onClick={() => { setIpoLotSize(500); setIpoOfferPrice(10); }}
+                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+                >
+                  500 sh @ ৳10 (৳5,000)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setIpoLotSize(1000); setIpoOfferPrice(10); }}
+                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+                >
+                  1,000 sh @ ৳10 (৳10,000)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setIpoLotSize(2000); setIpoOfferPrice(10); }}
+                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+                >
+                  2,000 sh @ ৳10 (৳20,000)
+                </button>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Lot Size (Shares)
+                    Lot Size (Shares) *
                   </label>
                   <input
                     type="number"
@@ -1340,14 +1466,14 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                     step="1"
                     value={ipoLotSize}
                     onChange={(e) => setIpoLotSize(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
+                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
                     required
                   />
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Offer Price (৳)
+                    Offer Price (৳) *
                   </label>
                   <input
                     type="number"
@@ -1355,7 +1481,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                     step="0.1"
                     value={ipoOfferPrice}
                     onChange={(e) => setIpoOfferPrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
+                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
                     required
                   />
                 </div>
@@ -1364,13 +1490,13 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Application Date
+                    Application Date *
                   </label>
                   <input
                     type="date"
                     value={ipoAppDate}
                     onChange={(e) => setIpoAppDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
+                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
                     required
                   />
                 </div>
@@ -1379,11 +1505,21 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
                     Total Required Subscription
                   </label>
-                  <div className="px-3 py-2 text-sm font-mono font-bold bg-slate-950 border border-slate-800 rounded-lg text-indigo-400">
+                  <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-slate-950 border border-slate-800 rounded-lg text-indigo-400">
                     ৳{ipoTotalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
                 </div>
               </div>
+
+              {/* Insufficient Cash Warning */}
+              {availableBrokerCash < ipoTotalAmount && (
+                <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs text-amber-300 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
+                  <span>
+                    অপর্যাপ্ত ব্যালেন্স: নির্বাচিত বিও অ্যাকাউন্টে উপলব্ধ ক্যাশ ৳{availableBrokerCash.toLocaleString()}, কিন্তু সাবস্ক্রিপশন প্রয়োজন ৳{ipoTotalAmount.toLocaleString()}। আবেদন করার আগে বিও অ্যাকাউন্টে টাকা ডিপোজিট করুন।
+                  </span>
+                </div>
+              )}
 
               <div>
                 <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -1394,23 +1530,24 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                   placeholder="e.g. General public quota application"
                   value={ipoNotes}
                   onChange={(e) => setIpoNotes(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
+                  className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => setShowIpoModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+                  className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
+                  disabled={availableBrokerCash < ipoTotalAmount}
+                  className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
                 >
-                  Apply &amp; Block Funds
+                  Apply &amp; Block Funds (৳{ipoTotalAmount.toLocaleString()})
                 </button>
               </div>
             </form>
@@ -1531,17 +1668,17 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => setSettlingIpo(null)}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+                  className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
+                  className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
                 >
                   Confirm Settlement
                 </button>

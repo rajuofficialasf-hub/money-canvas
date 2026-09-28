@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './auth-context';
 import {
   Account,
@@ -121,6 +121,7 @@ interface LedgerContextType {
   netWorthSnapshots: NetWorthSnapshot[];
   zakatSettings: ZakatSettings;
   accountBalances: AccountBalanceView[];
+  getAccountBalance: (accountId: string) => number;
   isLoading: boolean;
   createAccount: (input: NewAccountInput) => { account: Account; transaction?: Transaction };
   postTransaction: (input: NewTransactionInput) => { success: boolean; transaction?: Transaction; error?: string };
@@ -590,18 +591,22 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return [];
   });
 
-  // Phase 5: Stocks Master Catalog State (Completely user-driven, clean by default)
+  // Phase 5: Stocks Master Catalog State (Reference DSE securities catalog)
   const [stocks, setStocks] = useState<Stock[]>(() => {
     try {
       const stored = localStorage.getItem(STOCKS_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
       }
     } catch (e) {
       console.warn('Failed reading stocks from localStorage', e);
     }
-    return [];
+    return DEFAULT_DSE_SECURITIES.map((s) => ({
+      ...s,
+      id: `stock-${s.symbol.toLowerCase()}`,
+      createdAt: new Date().toISOString(),
+    }));
   });
 
   // Phase 5: Stock Transactions State
@@ -852,6 +857,18 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [accounts, transactions, transactionLines]);
 
   /**
+   * Authoritative Account Balance Helper
+   * Returns current real-time balance of any account
+   */
+  const getAccountBalance = useCallback(
+    (accountId: string): number => {
+      const row = accountBalances.find((b) => b.accountId === accountId);
+      return row ? row.currentBalance : 0;
+    },
+    [accountBalances]
+  );
+
+  /**
    * Action: Create Custom User Category (Income or Expense)
    */
   const createCategory = (input: NewCategoryInput): Category => {
@@ -973,6 +990,34 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return { success: false, error: validation.errors.join('; ') };
     }
 
+    // Business Logic Guard: Block negative balance drawdowns on liquid asset accounts
+    if (input.type !== 'opening_balance' && input.type !== 'adjustment') {
+      const accountNetDeltas = new Map<string, number>();
+      for (const line of input.lines) {
+        if (line.lineType === 'account' && line.accountId) {
+          const cur = accountNetDeltas.get(line.accountId) || 0;
+          accountNetDeltas.set(line.accountId, cur + line.amount);
+        }
+      }
+
+      for (const [accId, delta] of accountNetDeltas.entries()) {
+        if (delta < -0.001) {
+          const targetAcc = accounts.find((a) => a.id === accId);
+          if (targetAcc && ['cash', 'bank', 'mobile_wallet'].includes(targetAcc.accountType)) {
+            const currentBal = getAccountBalance(accId);
+            const deficit = round2(currentBal + delta);
+            if (deficit < -0.001) {
+              const needed = round2(-delta);
+              return {
+                success: false,
+                error: `অপর্যাপ্ত ব্যালেন্স: "${targetAcc.name}" অ্যাকাউন্টে পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBal.toLocaleString()}, লেনদেনের জন্য প্রয়োজন: ৳${needed.toLocaleString()})। লেনদেন সম্পন্ন করতে অনুগ্রহ করে আগে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${targetAcc.name}" (Available: ৳${currentBal.toLocaleString()}, Required: ৳${needed.toLocaleString()}). Please deposit funds into this account first.`,
+              };
+            }
+          }
+        }
+      }
+    }
+
     const txId = `tx-${Date.now()}`;
     const newTx: Transaction = {
       id: txId,
@@ -1063,6 +1108,14 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const sourceAcc = accounts.find((a) => a.id === input.sourceAccountId);
     if (!sourceAcc) {
       return { success: false, error: 'Source funding account not found.' };
+    }
+
+    const currentBalance = getAccountBalance(sourceAcc.id);
+    if (['cash', 'bank', 'mobile_wallet'].includes(sourceAcc.accountType) && currentBalance < input.principalAmount) {
+      return {
+        success: false,
+        error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc.name}" অ্যাকাউন্টে ফিক্সড ডিপোজিট (FD) খোলার মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, এফডিআর মূলধন: ৳${input.principalAmount.toLocaleString()})। ফিক্সড ডিপোজিট খোলার পূর্বে অনুগ্রহ করে সোর্স অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${sourceAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${input.principalAmount.toLocaleString()}). Please deposit money into your account first before opening FD.`,
+      };
     }
 
     const fdAccountId = `acc-fd-${Date.now()}`;
@@ -1585,6 +1638,14 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const sourceAcc = accounts.find((a) => a.id === input.sourceAccountId);
     if (!sourceAcc) return { success: false, error: 'Funding source account not found.' };
 
+    const currentBalance = getAccountBalance(sourceAcc.id);
+    if (['cash', 'bank', 'mobile_wallet'].includes(sourceAcc.accountType) && currentBalance < input.monthlyInstallment) {
+      return {
+        success: false,
+        error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc.name}" অ্যাকাউন্টে ডিপিএস (DPS) ১ম কিস্তির জন্য পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, ১ম কিস্তির পরিমাণ: ৳${input.monthlyInstallment.toLocaleString()})। ডিপিএস খোলার পূর্বে অনুগ্রহ করে সোর্স অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${sourceAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${input.monthlyInstallment.toLocaleString()}). Please deposit money into your account first before opening DPS.`,
+      };
+    }
+
     const dpsAccountId = `acc-dps-${Date.now()}`;
     const dpsId = `dps-${Date.now()}`;
 
@@ -1713,6 +1774,17 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
     if (!inst) return { success: false, error: 'Installment not found.' };
     if (inst.status === 'paid') return { success: false, error: 'Installment is already paid.' };
+
+    const sourceAcc = accounts.find((a) => a.id === sourceAccountId);
+    if (!sourceAcc) return { success: false, error: 'Payment source account not found.' };
+
+    const currentBalance = getAccountBalance(sourceAccountId);
+    if (['cash', 'bank', 'mobile_wallet'].includes(sourceAcc.accountType) && currentBalance < inst.expectedAmount) {
+      return {
+        success: false,
+        error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc.name}" অ্যাকাউন্টে ডিপিএস কিস্তি দেওয়ার মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, কিস্তির পরিমাণ: ৳${inst.expectedAmount.toLocaleString()})। কিস্তি পরিশোধের পূর্বে অনুগ্রহ করে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${sourceAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${inst.expectedAmount.toLocaleString()}). Please deposit money into this account first before paying installment.`,
+      };
+    }
 
     const todayStr = new Date().toISOString().split('T')[0];
     const txId = `tx-dps-pay-${Date.now()}`;
@@ -1872,8 +1944,26 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createDebt = (input: NewDebtInput) => {
     const debtId = `debt-${Date.now()}`;
     const isLent = input.direction === 'lent';
-    const accId = `acc-${isLent ? 'rec' : 'pay'}-${Date.now()}`;
     const todayStr = new Date().toISOString().split('T')[0];
+
+    // Business Logic Guard: When lending money, check source account balance
+    if (isLent) {
+      const sourceAcc = accounts.find((a) => a.id === input.sourceOrDestAccountId);
+      if (!sourceAcc) {
+        return { success: false, error: 'Source funding account not found.' };
+      }
+      if (['cash', 'bank', 'mobile_wallet'].includes(sourceAcc.accountType)) {
+        const currentBalance = getAccountBalance(sourceAcc.id);
+        if (currentBalance < input.initialAmount) {
+          return {
+            success: false,
+            error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc.name}" অ্যাকাউন্টে ঋণ/ধার দেওয়ার মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, ধারের পরিমাণ: ৳${input.initialAmount.toLocaleString()})। টাকা ধার দেওয়ার পূর্বে অনুগ্রহ করে অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${sourceAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${input.initialAmount.toLocaleString()}). Please deposit money into this account first before lending.`,
+          };
+        }
+      }
+    }
+
+    const accId = `acc-${isLent ? 'rec' : 'pay'}-${Date.now()}`;
 
     const debtAccount: Account = {
       id: accId,
@@ -1954,6 +2044,24 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const todayStr = new Date().toISOString().split('T')[0];
     const isLent = debt.direction === 'lent';
+
+    // Business Logic Guard: When repaying borrowed debt, check settlement account balance
+    if (!isLent) {
+      const settleAcc = accounts.find((a) => a.id === settlementAccountId);
+      if (!settleAcc) {
+        return { success: false, error: 'Settlement payment account not found.' };
+      }
+      if (['cash', 'bank', 'mobile_wallet'].includes(settleAcc.accountType)) {
+        const currentBalance = getAccountBalance(settlementAccountId);
+        if (currentBalance < amount) {
+          return {
+            success: false,
+            error: `অপর্যাপ্ত ব্যালেন্স: "${settleAcc.name}" অ্যাকাউন্টে ঋণ পরিশোধের মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, পরিশোধের পরিমাণ: ৳${amount.toLocaleString()})। ঋণ পরিশোধের পূর্বে অনুগ্রহ করে অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${settleAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${amount.toLocaleString()}). Please deposit money into this account first before repaying debt.`,
+          };
+        }
+      }
+    }
+
     const txId = `tx-settle-${Date.now()}`;
 
     // If lent: Bank/Cash gets +amount, Receivable gets -amount
@@ -2128,6 +2236,17 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!scheduleItem) return { success: false, error: 'Schedule installment not found' };
     if (scheduleItem.status === 'paid') return { success: false, error: 'Installment already paid' };
 
+    const payAcc = accounts.find((a) => a.id === paymentAccountId);
+    if (!payAcc) return { success: false, error: 'Payment account not found' };
+
+    const currentBalance = getAccountBalance(paymentAccountId);
+    if (['cash', 'bank', 'mobile_wallet'].includes(payAcc.accountType) && currentBalance < scheduleItem.scheduledEmiAmount) {
+      return {
+        success: false,
+        error: `অপর্যাপ্ত ব্যালেন্স: "${payAcc.name}" অ্যাকাউন্টে ঋণের ইএমআই দেওয়ার মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, ইএমআই: ৳${scheduleItem.scheduledEmiAmount.toLocaleString()})। ইএমআই পরিশোধের পূর্বে অনুগ্রহ করে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${payAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${scheduleItem.scheduledEmiAmount.toLocaleString()}). Please deposit money into this account first before paying EMI.`,
+      };
+    }
+
     const todayStr = new Date().toISOString().split('T')[0];
     const txId = `tx-emi-${Date.now()}`;
 
@@ -2203,6 +2322,26 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Register Physical Asset (e.g. Real Estate, Vehicle, Gold)
    */
   const createPhysicalAsset = (input: NewPhysicalAssetInput) => {
+    // Business Logic Guard: When paying cash or downpayment, check funding account balance
+    if (input.fundingAccountId) {
+      const fundAcc = accounts.find((a) => a.id === input.fundingAccountId);
+      if (fundAcc && ['cash', 'bank', 'mobile_wallet'].includes(fundAcc.accountType)) {
+        const requiredCash = input.fundingMethod === 'full_cash'
+          ? input.purchasePrice
+          : (input.fundingMethod === 'cash_plus_loan' ? (input.cashDownpayment || 0) : 0);
+
+        if (requiredCash > 0) {
+          const currentBalance = getAccountBalance(fundAcc.id);
+          if (currentBalance < requiredCash) {
+            return {
+              success: false,
+              error: `অপর্যাপ্ত ব্যালেন্স: "${fundAcc.name}" অ্যাকাউন্টে সম্পদ ক্রয়ের জন্য পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, প্রয়োজনীয় ক্যাশ: ৳${requiredCash.toLocaleString()})। সম্পদ ক্রয়ের পূর্বে অনুগ্রহ করে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${fundAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${requiredCash.toLocaleString()}). Please deposit money into this account first before purchasing asset.`,
+            };
+          }
+        }
+      }
+    }
+
     const assetId = `asset-${Date.now()}`;
     const assetAccId = `acc-asset-${Date.now()}`;
     const todayStr = input.purchaseDate || new Date().toISOString().split('T')[0];
@@ -2447,6 +2586,17 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Disburse Zakat (Posts expense to Zakat category)
    */
   const disburseZakat = (amount: number, sourceAccountId: string, note?: string) => {
+    const sourceAcc = accounts.find((a) => a.id === sourceAccountId);
+    if (!sourceAcc) return { success: false, error: 'Source account not found' };
+
+    const currentBalance = getAccountBalance(sourceAccountId);
+    if (['cash', 'bank', 'mobile_wallet'].includes(sourceAcc.accountType) && currentBalance < amount) {
+      return {
+        success: false,
+        error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc.name}" অ্যাকাউন্টে যাকাত দেওয়ার মতো পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, যাকাত: ৳${amount.toLocaleString()})। যাকাত বিতরণের পূর্বে অনুগ্রহ করে অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। / Insufficient funds in "${sourceAcc.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${amount.toLocaleString()}). Please deposit money into this account first before disbursing zakat.`,
+      };
+    }
+
     const todayStr = new Date().toISOString().split('T')[0];
     const txId = `tx-zakat-${Date.now()}`;
 
@@ -2558,6 +2708,25 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const isDirectExternal = !input.sourceBankAccountId || input.sourceBankAccountId === 'direct_deposit' || input.sourceBankAccountId === 'external_cash';
     const sourceAccount = accounts.find((a) => a.id === input.sourceBankAccountId);
+
+    // Business Logic Guard: When transferring from bank/cash account, verify sufficient balance
+    if (!isDirectExternal) {
+      if (!sourceAccount) {
+        return {
+          success: false,
+          error: 'অনুগ্রহ করে একটি বৈধ সোর্স ব্যাংক বা ক্যাশ অ্যাকাউন্ট নির্বাচন করুন। / Please select a valid source bank account.',
+        };
+      }
+      if (['cash', 'bank', 'mobile_wallet'].includes(sourceAccount.accountType)) {
+        const currentBalance = getAccountBalance(sourceAccount.id);
+        if (currentBalance < input.amount) {
+          return {
+            success: false,
+            error: `অপর্যাপ্ত ব্যালেন্স: "${sourceAccount.name}" অ্যাকাউন্টে পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${currentBalance.toLocaleString()}, বিও অ্যাকাউন্টে ট্রান্সফার করতে চাওয়া হয়েছে: ৳${input.amount.toLocaleString()})। বিও অ্যাকাউন্টে ফান্ড পাঠানোর পূর্বে অনুগ্রহ করে আগে এই ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। অথবা 'Direct Cash (Fresh Capital)' নির্বাচন করুন। / Insufficient funds in "${sourceAccount.name}" (Available: ৳${currentBalance.toLocaleString()}, Required: ৳${input.amount.toLocaleString()}). Please deposit money into your bank account first before transferring to BO account, or select Direct Cash (Fresh Capital).`,
+          };
+        }
+      }
+    }
 
     const lines: TransactionLine[] = [];
     if (isDirectExternal || !sourceAccount) {
@@ -3891,6 +4060,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         netWorthSnapshots,
         zakatSettings,
         accountBalances,
+        getAccountBalance,
         isLoading,
         createAccount,
         postTransaction,

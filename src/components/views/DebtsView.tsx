@@ -23,6 +23,7 @@ export const DebtsView: React.FC = () => {
     debts,
     accounts,
     accountBalances,
+    getAccountBalance,
     createDebt,
     settleDebt,
     updateDebtStatus,
@@ -539,7 +540,7 @@ export const DebtsView: React.FC = () => {
                   >
                     {liquidAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
-                        {acc.name} ({acc.accountType})
+                        {acc.name} ({acc.accountType}) — ৳{getAccountBalance(acc.id).toLocaleString()}
                       </option>
                     ))}
                   </select>
@@ -665,7 +666,7 @@ export const DebtsView: React.FC = () => {
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
+                      {acc.name} ({acc.accountType}) — ৳{getAccountBalance(acc.id).toLocaleString()}
                     </option>
                   ))}
                 </select>

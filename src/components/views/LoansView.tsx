@@ -26,6 +26,7 @@ export const LoansView: React.FC = () => {
     loanSchedules,
     accounts,
     accountBalances,
+    getAccountBalance,
     createLoan,
     payLoanEmi,
   } = useLedger();
@@ -680,7 +681,7 @@ export const LoansView: React.FC = () => {
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
+                      {acc.name} ({acc.accountType}) — ৳{getAccountBalance(acc.id).toLocaleString()}
                     </option>
                   ))}
                 </select>

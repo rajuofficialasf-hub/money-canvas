@@ -30,6 +30,8 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
     brokerCashTransactions,
     brokerCashBalances,
     accounts,
+    accountBalances,
+    getAccountBalance,
     createBroker,
     createBrokerAccount,
     depositBrokerCash,
@@ -140,6 +142,18 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
     if (isNaN(amt) || amt <= 0) {
       setDepositError('Deposit amount must be greater than zero.');
       return;
+    }
+
+    const isDirectExternal = targetBankId === 'direct_deposit' || targetBankId === 'external_cash';
+    if (!isDirectExternal) {
+      const sourceAcc = accounts.find((a) => a.id === targetBankId);
+      const available = getAccountBalance(targetBankId);
+      if (available < amt) {
+        setDepositError(
+          `অপর্যাপ্ত ব্যালেন্স: "${sourceAcc?.name || 'ব্যাংক'}" অ্যাকাউন্টে পর্যাপ্ত টাকা নেই (বর্তমান ব্যালেন্স: ৳${available.toLocaleString()}, প্রয়োজন: ৳${amt.toLocaleString()})। বিও অ্যাকাউন্টে টাকা পাঠানোর পূর্বে অনুগ্রহ করে আগে আপনার ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। অথবা 'Direct Cash' সিলেক্ট করুন। / Insufficient funds in "${sourceAcc?.name || 'Bank'}" (Available: ৳${available.toLocaleString()}, Required: ৳${amt.toLocaleString()}). Please deposit money into your bank account first before transferring to BO account.`
+        );
+        return;
+      }
     }
 
     const res = depositBrokerCash({
@@ -658,9 +672,16 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Funding Source (Bank Account or Direct Cash) *
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-medium text-slate-300">
+                    Funding Source (Bank Account or Direct Cash) *
+                  </label>
+                  {depositBankAccountId !== 'direct_deposit' && (
+                    <span className="text-[11px] font-mono text-emerald-400">
+                      Balance: ৳{getAccountBalance(depositBankAccountId).toLocaleString()}
+                    </span>
+                  )}
+                </div>
                 <select
                   value={depositBankAccountId}
                   onChange={(e) => setDepositBankAccountId(e.target.value)}
@@ -668,15 +689,44 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                   className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
                 >
                   <option value="direct_deposit">Direct Cash / Counter Deposit / External (Fresh Capital)</option>
-                  {liquidAccounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
-                    </option>
-                  ))}
+                  {liquidAccounts.map((acc) => {
+                    const bal = getAccountBalance(acc.id);
+                    return (
+                      <option key={acc.id} value={acc.id}>
+                        {acc.name} ({acc.accountType}) — ৳{bal.toLocaleString()}
+                      </option>
+                    );
+                  })}
                 </select>
                 <p className="text-[11px] text-slate-500 mt-1">
                   Direct Cash directly increases your total wealth &amp; BO ledger. Bank transfer moves funds from your bank.
                 </p>
+
+                {/* Insufficient Funds Guidance Banner */}
+                {(() => {
+                  const isBankSelected = depositBankAccountId !== 'direct_deposit' && depositBankAccountId !== 'external_cash';
+                  const selectedBankAcc = accounts.find((a) => a.id === depositBankAccountId);
+                  const selectedBankBal = selectedBankAcc ? getAccountBalance(selectedBankAcc.id) : 0;
+                  const parsedDepAmt = typeof depositAmount === 'number' ? depositAmount : parseFloat(depositAmount as string) || 0;
+                  const isBankInsufficient = isBankSelected && parsedDepAmt > selectedBankBal;
+
+                  if (!isBankInsufficient) return null;
+
+                  return (
+                    <div className="mt-2.5 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 space-y-1.5 animate-in fade-in">
+                      <div className="flex items-center gap-1.5 font-semibold text-amber-200">
+                        <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই (Insufficient Funds)</span>
+                      </div>
+                      <div className="text-[11px] text-slate-300 leading-relaxed">
+                        "{selectedBankAcc?.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold font-mono text-amber-400">৳{selectedBankBal.toLocaleString()}</span>, কিন্তু আপনি <span className="font-bold font-mono text-white">৳{parsedDepAmt.toLocaleString()}</span> ট্রান্সফার করতে চেয়েছেন।
+                      </div>
+                      <div className="text-[11px] text-emerald-300 font-medium bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-lg">
+                        💡 <span className="font-bold">করণীয়:</span> বিও অ্যাকাউন্টে টাকা পাঠানোর পূর্বে অনুগ্রহ করে প্রথমে আপনার ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। অথবা নগদ অর্থ জমা দেওয়ার জন্য উপরের ড্রপডাউনে <span className="underline font-bold text-emerald-200">'Direct Cash (Fresh Capital)'</span> নির্বাচন করুন।
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               <div>

@@ -36,7 +36,7 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isSupported, setIsSupported] = useState<boolean>(false);
   const [isAvailable, setIsAvailable] = useState<boolean>(false);
   const [biometryType, setBiometryType] = useState<BiometryType>(BiometryType.none);
-  const [biometryTypeName, setBiometryTypeName] = useState<string>('বায়োমেট্রিক');
+  const [biometryTypeName, setBiometryTypeName] = useState<string>('Biometrics');
   const [isBiometricEnabled, setIsBiometricEnabled] = useState<boolean>(() => {
     try {
       return localStorage.getItem(BIOMETRIC_ENABLED_KEY) === 'true';
@@ -58,19 +58,19 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const authInProgressRef = useRef(false);
 
-  // Helper to get friendly Bengali/English label for biometry type
+  // Helper to get friendly English label for biometry type
   const getFriendlyBiometryName = (type: BiometryType): string => {
     switch (type) {
       case BiometryType.fingerprintAuthentication:
       case BiometryType.touchId:
-        return 'ফিঙ্গারপ্রিন্ট (Fingerprint)';
+        return 'Fingerprint';
       case BiometryType.faceAuthentication:
       case BiometryType.faceId:
-        return 'ফেস আইডি (Face ID)';
+        return 'Face ID';
       case BiometryType.irisAuthentication:
-        return 'আইরিস স্ক্যান (Iris)';
+        return 'Iris';
       default:
-        return 'বায়োমেট্রিক (Biometrics)';
+        return 'Biometrics';
     }
   };
 
@@ -87,7 +87,7 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setBiometryTypeName(getFriendlyBiometryName(result.biometryType));
       } else {
         const engName = getBiometryName(result.biometryType);
-        setBiometryTypeName(engName || 'বায়োমেট্রিক');
+        setBiometryTypeName(engName || 'Biometrics');
       }
 
       return available;
@@ -97,7 +97,7 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (!Capacitor.isNativePlatform()) {
         setIsSupported(true);
         setIsAvailable(true);
-        setBiometryTypeName('বায়োমেট্রিক (Web / Device PIN)');
+        setBiometryTypeName('Biometrics (Device PIN / Fingerprint)');
         return true;
       }
       setIsSupported(false);
@@ -161,7 +161,7 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const authenticate = useCallback(
     async (customReason?: string): Promise<{ success: boolean; error?: string }> => {
       if (authInProgressRef.current) {
-        return { success: false, error: 'প্রমাণীকরণ প্রক্রিয়া ইতোমধ্যে সক্রিয় আছে।' };
+        return { success: false, error: 'Authentication is already in progress.' };
       }
 
       authInProgressRef.current = true;
@@ -170,10 +170,10 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       try {
         await BiometricAuth.authenticate({
-          reason: customReason || 'মানি ক্যানভাস নিরাপদে আনলক করতে আপনার ফিঙ্গারপ্রিন্ট বা ফেস আইডি স্ক্যান করুন।',
-          androidTitle: 'মানি ক্যানভাস বায়োমেট্রিক সিকিউরিটি',
-          androidSubtitle: 'আপনার ফিঙ্গারপ্রিন্ট বা ফেস আইডি ব্যবহার করুন',
-          cancelTitle: 'বাতিল করুন',
+          reason: customReason || 'Scan your fingerprint or biometric credential to unlock Money Canvas.',
+          androidTitle: 'Money Canvas Security',
+          androidSubtitle: 'Use your fingerprint or face to verify your identity',
+          cancelTitle: 'Cancel',
           allowDeviceCredential: true,
         });
 
@@ -182,28 +182,28 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setAuthError(null);
         return { success: true };
       } catch (err: any) {
-        let msg = 'বায়োমেট্রিক যাচাই সম্পন্ন হয়নি।';
+        let msg = 'Biometric verification failed.';
 
         if (err instanceof BiometryError || err?.code) {
           switch (err.code) {
             case BiometryErrorType.userCancel:
             case 'userCancel':
-              msg = 'যাচাই প্রক্রিয়া বাতিল করা হয়েছে।';
+              msg = 'Authentication was cancelled.';
               break;
             case BiometryErrorType.biometryLockout:
             case 'biometryLockout':
-              msg = 'অতিরিক্ত ভুল চেষ্টার কারণে বায়োমেট্রিক সাময়িকভাবে লক হয়েছে। ডিভাইসের পিন বা প্যাটার্ন ব্যবহার করুন।';
+              msg = 'Biometrics locked due to too many attempts. Please use your device PIN or pattern.';
               break;
             case BiometryErrorType.authenticationFailed:
             case 'authenticationFailed':
-              msg = 'ফিঙ্গারপ্রিন্ট বা ফেস মিলছে না। আবার চেষ্টা করুন।';
+              msg = 'Biometric credential not recognized. Please try again.';
               break;
             case BiometryErrorType.biometryNotEnrolled:
             case 'biometryNotEnrolled':
-              msg = 'ডিভাইসে কোনো ফিঙ্গারপ্রিন্ট বা ফেস আইডি এনরোল করা নেই।';
+              msg = 'No fingerprint or biometric credentials are enrolled on this device.';
               break;
             default:
-              msg = err?.message || 'বায়োমেট্রিক প্রমাণীকরণ ব্যর্থ হয়েছে।';
+              msg = err?.message || 'Biometric authentication failed.';
           }
         } else if (err?.message) {
           msg = err.message;
@@ -221,7 +221,7 @@ export const BiometricProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   // Enable biometric feature (requires a successful scan first)
   const enableBiometric = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
-    const res = await authenticate('বায়োমেট্রিক অ্যাপ লক সক্রিয় করতে আপনার ফিঙ্গারপ্রিন্ট বা ফেস আইডি নিশ্চিত করুন।');
+    const res = await authenticate('Scan your fingerprint or face to enable biometric app lock.');
     if (res.success) {
       try {
         localStorage.setItem(BIOMETRIC_ENABLED_KEY, 'true');

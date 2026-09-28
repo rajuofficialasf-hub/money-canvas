@@ -488,53 +488,65 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
         </div>
 
         {/* Global Export & Action Bar */}
-        <div className="flex items-center gap-2 flex-wrap">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
           {activeTab === 'tax' && (
             <button
               onClick={handleExportTaxPdf}
-              className="px-3.5 py-1.5 bg-rose-600/90 hover:bg-rose-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-rose-950 transition-colors"
+              className="px-2.5 sm:px-3.5 py-1.5 bg-rose-600/90 hover:bg-rose-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-rose-950 transition-colors"
               title="Generate NBR Schedule of Capital Gains PDF"
             >
-              <FileText className="h-3.5 w-3.5" />
-              <span>Download NBR Tax PDF</span>
+              <FileText className="h-3.5 w-3.5 shrink-0" />
+              <span>
+                <span className="sm:hidden">Tax PDF</span>
+                <span className="hidden sm:inline">Download NBR Tax PDF</span>
+              </span>
             </button>
           )}
 
           {activeTab === 'statements' && statementSubTab === 'balance_sheet' && (
             <button
               onClick={handleExportBalanceSheetPdf}
-              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+              className="px-2.5 sm:px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
               title="Generate Balance Sheet PDF Statement"
             >
-              <FileText className="h-3.5 w-3.5" />
-              <span>Download Balance Sheet PDF</span>
+              <FileText className="h-3.5 w-3.5 shrink-0" />
+              <span>
+                <span className="sm:hidden">Balance Sheet PDF</span>
+                <span className="hidden sm:inline">Download Balance Sheet PDF</span>
+              </span>
             </button>
           )}
 
           {activeTab === 'statements' && statementSubTab === 'pnl' && (
             <button
               onClick={handleExportIncomeStatementPdf}
-              className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+              className="px-2.5 sm:px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
               title="Generate Income Statement (P&L) PDF"
             >
-              <FileText className="h-3.5 w-3.5" />
-              <span>Download P&L PDF</span>
+              <FileText className="h-3.5 w-3.5 shrink-0" />
+              <span>
+                <span className="sm:hidden">P&L PDF</span>
+                <span className="hidden sm:inline">Download P&L PDF</span>
+              </span>
             </button>
           )}
 
           <button
             onClick={handlePrint}
-            className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-2.5 sm:px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
-            <Printer className="h-3.5 w-3.5 text-slate-400" />
+            <Printer className="h-3.5 w-3.5 text-slate-400 shrink-0" />
             <span>Print</span>
           </button>
           <button
             onClick={handleExportFullJsonBackup}
-            className="px-3 py-1.5 bg-indigo-950/60 border border-indigo-700/60 hover:border-indigo-500 text-indigo-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-2.5 sm:px-3 py-1.5 bg-indigo-950/60 border border-indigo-700/60 hover:border-indigo-500 text-indigo-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
-            <Download className="h-3.5 w-3.5 text-indigo-400" />
-            <span>JSON Backup</span>
+            <Download className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
+            <span>
+              <span className="sm:hidden">JSON</span>
+              <span className="hidden sm:inline">JSON Backup</span>
+            </span>
           </button>
           <button
             onClick={() => {
@@ -548,10 +560,13 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                 handleExportTaxCsv();
               }
             }}
-            className="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
+            className="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
           >
-            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
-            <span>Export CSV</span>
+            <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+            <span>
+              <span className="sm:hidden">CSV</span>
+              <span className="hidden sm:inline">Export CSV</span>
+            </span>
           </button>
         </div>
       </div>
@@ -637,53 +652,62 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
       </div>
 
       {/* Main Navigation Tabs */}
-      <div className="flex border-b border-slate-800 gap-2">
+      <div className="flex border-b border-slate-800 gap-1 sm:gap-2 overflow-x-auto scrollbar-none whitespace-nowrap -mx-4 px-4 sm:mx-0 sm:px-0">
         <button
           onClick={() => setActiveTab('tax')}
-          className={`px-4 py-2.5 text-xs font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-3 sm:px-4 py-2.5 text-xs font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 shrink-0 transition-colors ${
             activeTab === 'tax'
               ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Receipt className="h-4 w-4" />
-          <span>Capital Gains & NBR Tax</span>
+          <Receipt className="h-4 w-4 shrink-0" />
+          <span>
+            <span className="sm:hidden">Tax Engine</span>
+            <span className="hidden sm:inline">Capital Gains & NBR Tax</span>
+          </span>
         </button>
 
         <button
           onClick={() => setActiveTab('sectors')}
-          className={`px-4 py-2.5 text-xs font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-3 sm:px-4 py-2.5 text-xs font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 shrink-0 transition-colors ${
             activeTab === 'sectors'
               ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <PieChart className="h-4 w-4" />
-          <span>Sector Allocation & Risk</span>
+          <PieChart className="h-4 w-4 shrink-0" />
+          <span>
+            <span className="sm:hidden">Sectors & Risk</span>
+            <span className="hidden sm:inline">Sector Allocation & Risk</span>
+          </span>
         </button>
 
         <button
           onClick={() => setActiveTab('statements')}
-          className={`px-4 py-2.5 text-xs font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-3 sm:px-4 py-2.5 text-xs font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 shrink-0 transition-colors ${
             activeTab === 'statements'
               ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Scale className="h-4 w-4" />
+          <Scale className="h-4 w-4 shrink-0" />
           <span>Financial Statements</span>
         </button>
 
         <button
           onClick={() => setActiveTab('export')}
-          className={`px-4 py-2.5 text-xs font-semibold flex items-center gap-2 border-b-2 transition-colors ${
+          className={`px-3 sm:px-4 py-2.5 text-xs font-semibold flex items-center gap-1.5 sm:gap-2 border-b-2 shrink-0 transition-colors ${
             activeTab === 'export'
               ? 'border-emerald-500 text-emerald-400 bg-emerald-500/10'
               : 'border-transparent text-slate-400 hover:text-slate-200'
           }`}
         >
-          <Download className="h-4 w-4" />
-          <span>Export & Audit Center</span>
+          <Download className="h-4 w-4 shrink-0" />
+          <span>
+            <span className="sm:hidden">Export Center</span>
+            <span className="hidden sm:inline">Export & Audit Center</span>
+          </span>
         </button>
       </div>
 
@@ -1128,44 +1152,46 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
       {activeTab === 'statements' && (
         <div className="space-y-6">
           {/* Sub-tab switcher */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto scrollbar-none w-full sm:w-auto">
               <button
                 onClick={() => setStatementSubTab('balance_sheet')}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                className={`px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-colors ${
                   statementSubTab === 'balance_sheet'
                     ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-950'
                     : 'bg-slate-900 text-slate-400 hover:text-white'
                 }`}
               >
-                Balance Sheet (Statement of Financial Position)
+                <span className="sm:hidden">Balance Sheet</span>
+                <span className="hidden sm:inline">Balance Sheet (Financial Position)</span>
               </button>
               <button
                 onClick={() => setStatementSubTab('pnl')}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
+                className={`px-3 sm:px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-colors ${
                   statementSubTab === 'pnl'
                     ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-950'
                     : 'bg-slate-900 text-slate-400 hover:text-white'
                 }`}
               >
-                Income Statement (P&L · Lock 6 Offsets)
+                <span className="sm:hidden">Income Statement</span>
+                <span className="hidden sm:inline">Income Statement (P&L)</span>
               </button>
             </div>
 
             {statementSubTab === 'balance_sheet' ? (
               <button
                 onClick={handleExportBalanceSheetCsv}
-                className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+                className="w-full sm:w-auto justify-center px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors shrink-0"
               >
-                <Download className="h-3.5 w-3.5 text-emerald-400" />
+                <Download className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                 <span>Export Balance Sheet</span>
               </button>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
                 <select
                   value={pnlDateRange}
                   onChange={(e) => setPnlDateRange(e.target.value as any)}
-                  className="px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:flex-initial"
                 >
                   <option value="month">This Month</option>
                   <option value="quarter">This Quarter</option>
@@ -1174,9 +1200,9 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                 </select>
                 <button
                   onClick={handleExportPnlCsv}
-                  className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors shrink-0"
                 >
-                  <Download className="h-3.5 w-3.5 text-emerald-400" />
+                  <Download className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                   <span>Export P&L</span>
                 </button>
               </div>
@@ -1187,19 +1213,19 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           {statementSubTab === 'balance_sheet' && (
             <div className="space-y-6">
               {/* Assets & Liabilities 2-column view */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Left: ASSETS */}
                 <div className="space-y-4">
-                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 sm:p-4">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3 gap-2">
                       <div>
                         <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
                           Assets & Resources
                         </h3>
                         <p className="text-[11px] text-slate-400">Current & Non-Current Investments</p>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-emerald-400 font-mono">
+                      <div className="text-right shrink-0">
+                        <div className="text-base sm:text-lg font-bold text-emerald-400 font-mono">
                           ৳{balanceSheet.totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">100.0% of Assets</div>
@@ -1215,16 +1241,16 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                         </div>
                         <div className="space-y-2">
                           {balanceSheet.currentAssetCategories.map((cat) => (
-                            <div key={cat.categoryName} className="bg-slate-950 p-3 rounded-lg border border-slate-800/80">
+                            <div key={cat.categoryName} className="bg-slate-950 p-2.5 sm:p-3 rounded-lg border border-slate-800/80">
                               <div className="flex justify-between text-xs font-semibold text-white">
                                 <span>{cat.categoryName}</span>
-                                <span className="font-mono text-emerald-400">৳{cat.totalAmount.toLocaleString()}</span>
+                                <span className="font-mono text-emerald-400 shrink-0">৳{cat.totalAmount.toLocaleString()}</span>
                               </div>
                               <div className="mt-1.5 space-y-1 text-[11px] text-slate-400">
                                 {cat.items.map((item) => (
-                                  <div key={item.id} className="flex justify-between">
-                                    <span className="truncate max-w-[200px]">{item.name}</span>
-                                    <span className="font-mono text-slate-300">৳{item.amount.toLocaleString()}</span>
+                                  <div key={item.id} className="flex items-center justify-between gap-2 py-0.5">
+                                    <span className="truncate flex-1 min-w-0">{item.name}</span>
+                                    <span className="font-mono text-slate-300 shrink-0">৳{item.amount.toLocaleString()}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1241,16 +1267,16 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                         </div>
                         <div className="space-y-2">
                           {balanceSheet.nonCurrentAssetCategories.map((cat) => (
-                            <div key={cat.categoryName} className="bg-slate-950 p-3 rounded-lg border border-slate-800/80">
+                            <div key={cat.categoryName} className="bg-slate-950 p-2.5 sm:p-3 rounded-lg border border-slate-800/80">
                               <div className="flex justify-between text-xs font-semibold text-white">
                                 <span>{cat.categoryName}</span>
-                                <span className="font-mono text-emerald-400">৳{cat.totalAmount.toLocaleString()}</span>
+                                <span className="font-mono text-emerald-400 shrink-0">৳{cat.totalAmount.toLocaleString()}</span>
                               </div>
                               <div className="mt-1.5 space-y-1 text-[11px] text-slate-400">
                                 {cat.items.map((item) => (
-                                  <div key={item.id} className="flex justify-between">
-                                    <span className="truncate max-w-[200px]">{item.name}</span>
-                                    <span className="font-mono text-slate-300">৳{item.amount.toLocaleString()}</span>
+                                  <div key={item.id} className="flex items-center justify-between gap-2 py-0.5">
+                                    <span className="truncate flex-1 min-w-0">{item.name}</span>
+                                    <span className="font-mono text-slate-300 shrink-0">৳{item.amount.toLocaleString()}</span>
                                   </div>
                                 ))}
                               </div>
@@ -1264,16 +1290,16 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
 
                 {/* Right: LIABILITIES & EQUITY */}
                 <div className="space-y-4">
-                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 sm:p-4">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-3 gap-2">
                       <div>
                         <h3 className="text-sm font-bold text-white uppercase tracking-wider font-mono">
-                          Liabilities & Net Worth (Equity)
+                          Liabilities & Net Worth
                         </h3>
                         <p className="text-[11px] text-slate-400">Lock 1: Canonical Negative Balances</p>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-bold text-white font-mono">
+                      <div className="text-right shrink-0">
+                        <div className="text-base sm:text-lg font-bold text-white font-mono">
                           ৳{(balanceSheet.netWorth + balanceSheet.totalLiabilities).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </div>
                         <div className="text-[10px] text-slate-500 font-mono">Total Claims</div>
@@ -1289,19 +1315,19 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                         </div>
                         <div className="space-y-2">
                           {balanceSheet.liabilityCategories.map((cat) => (
-                            <div key={cat.categoryName} className="bg-slate-950 p-3 rounded-lg border border-slate-800/80">
+                            <div key={cat.categoryName} className="bg-slate-950 p-2.5 sm:p-3 rounded-lg border border-slate-800/80">
                               <div className="flex justify-between text-xs font-semibold text-white">
                                 <span>{cat.categoryName}</span>
-                                <span className="font-mono text-rose-400">৳{cat.totalAmount.toLocaleString()}</span>
+                                <span className="font-mono text-rose-400 shrink-0">৳{cat.totalAmount.toLocaleString()}</span>
                               </div>
                               <div className="mt-1.5 space-y-1 text-[11px] text-slate-400">
                                 {cat.items.length === 0 ? (
                                   <div className="text-[11px] text-slate-600 italic">No open obligations</div>
                                 ) : (
                                   cat.items.map((item) => (
-                                    <div key={item.id} className="flex justify-between">
-                                      <span className="truncate max-w-[200px]">{item.name}</span>
-                                      <span className="font-mono text-slate-300">৳{item.amount.toLocaleString()}</span>
+                                    <div key={item.id} className="flex items-center justify-between gap-2 py-0.5">
+                                      <span className="truncate flex-1 min-w-0">{item.name}</span>
+                                      <span className="font-mono text-slate-300 shrink-0">৳{item.amount.toLocaleString()}</span>
                                     </div>
                                   ))
                                 )}
@@ -1312,17 +1338,17 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                       </div>
 
                       {/* Net Worth / Owner Equity Section */}
-                      <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-4">
-                        <div className="flex items-center justify-between">
+                      <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-3 sm:p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                           <div>
                             <div className="text-xs font-bold text-emerald-300 uppercase tracking-wider font-mono">
                               Net Worth (Owner's Equity)
                             </div>
-                            <div className="text-[11px] text-emerald-400/80 mt-0.5">
+                            <div className="text-[10px] sm:text-[11px] text-emerald-400/80 mt-0.5">
                               Assets (৳{balanceSheet.totalAssets.toLocaleString()}) - Liabilities (৳{balanceSheet.totalLiabilities.toLocaleString()})
                             </div>
                           </div>
-                          <div className="text-xl font-bold text-emerald-400 font-mono">
+                          <div className="text-lg sm:text-xl font-bold text-emerald-400 font-mono shrink-0">
                             ৳{balanceSheet.netWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                           </div>
                         </div>
@@ -1333,7 +1359,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                             <span className="font-bold text-emerald-300">{balanceSheet.solvencyRatio.toFixed(1)}%</span>
                           </div>
                           <div className="text-right">
-                            <span className="text-slate-400">Balanced Equation: </span>
+                            <span className="text-slate-400">Equation: </span>
                             <span className="font-bold text-emerald-400 font-mono">
                               {balanceSheet.isBalanced ? '✓ Balanced' : 'Reconciling'}
                             </span>
@@ -1350,39 +1376,39 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           {/* Sub-Tab 2: Income Statement (P&L) */}
           {statementSubTab === 'pnl' && (
             <div className="space-y-6">
-              <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-5">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+              <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-3.5 sm:p-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-3 mb-4 gap-2">
                   <div>
                     <h3 className="text-sm font-bold text-white">
                       Statement of Comprehensive Income (Profit & Loss)
                     </h3>
-                    <p className="text-xs text-slate-400 mt-0.5">
+                    <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
                       Period: <span className="font-mono text-emerald-400">{incomeStatement.startDate}</span> to{' '}
                       <span className="font-mono text-emerald-400">{incomeStatement.endDate}</span> · Lock 6 Refund Rules Active
                     </p>
                   </div>
-                  <div className="text-right">
+                  <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start">
                     <div className="text-xs text-slate-400">Savings Rate</div>
-                    <div className="text-lg font-bold text-indigo-400 font-mono">
+                    <div className="text-base sm:text-lg font-bold text-indigo-400 font-mono">
                       {incomeStatement.savingsRatePct.toFixed(1)}%
                     </div>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                   {/* Income column */}
                   <div className="space-y-3">
                     <div className="flex justify-between items-center text-xs font-bold text-emerald-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-2">
                       <span>Income & Revenue</span>
-                      <span>৳{incomeStatement.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="shrink-0">৳{incomeStatement.totalIncome.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
 
                     {incomeStatement.incomeCategories.map((c) => (
-                      <div key={c.categoryName} className="flex justify-between items-center text-xs py-1">
-                        <span className="text-slate-300">{c.categoryName}</span>
-                        <div className="flex items-center gap-3 font-mono">
+                      <div key={c.categoryName} className="flex justify-between items-center text-xs py-1 gap-2">
+                        <span className="text-slate-300 truncate flex-1 min-w-0">{c.categoryName}</span>
+                        <div className="flex items-center gap-2 sm:gap-3 font-mono shrink-0">
                           <span className="text-white">৳{c.netAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                          <span className="text-[11px] text-slate-500 w-10 text-right">{c.percentage.toFixed(0)}%</span>
+                          <span className="text-[10px] sm:text-[11px] text-slate-500 w-8 sm:w-10 text-right">{c.percentage.toFixed(0)}%</span>
                         </div>
                       </div>
                     ))}
@@ -1392,16 +1418,16 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   <div className="space-y-3">
                     <div className="flex justify-between items-center text-xs font-bold text-rose-400 uppercase tracking-wider font-mono border-b border-slate-800 pb-2">
                       <span>Expenses (Lock 6 Offsets Applied)</span>
-                      <span>৳{incomeStatement.totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                      <span className="shrink-0">৳{incomeStatement.totalExpenses.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                     </div>
 
                     {incomeStatement.expenseCategories.map((c) => (
                       <div key={c.categoryName} className="space-y-0.5 py-1">
-                        <div className="flex justify-between items-center text-xs">
-                          <span className="text-slate-300">{c.categoryName}</span>
-                          <div className="flex items-center gap-3 font-mono">
+                        <div className="flex justify-between items-center text-xs gap-2">
+                          <span className="text-slate-300 truncate flex-1 min-w-0">{c.categoryName}</span>
+                          <div className="flex items-center gap-2 sm:gap-3 font-mono shrink-0">
                             <span className="text-white">৳{c.netAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                            <span className="text-[11px] text-slate-500 w-10 text-right">{c.percentage.toFixed(0)}%</span>
+                            <span className="text-[10px] sm:text-[11px] text-slate-500 w-8 sm:w-10 text-right">{c.percentage.toFixed(0)}%</span>
                           </div>
                         </div>
                         {c.refundOffsets > 0 && (
@@ -1415,16 +1441,16 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                 </div>
 
                 {/* Net Operating Surplus Banner */}
-                <div className="mt-6 pt-4 border-t border-slate-800 flex justify-between items-center bg-slate-950 p-4 rounded-xl">
+                <div className="mt-6 pt-4 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-slate-950 p-3.5 sm:p-4 rounded-xl">
                   <div>
                     <div className="text-xs font-bold text-white uppercase tracking-wider font-mono">
                       Net Operating Surplus / (Deficit)
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">
+                    <div className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5">
                       Total Income (৳{incomeStatement.totalIncome.toLocaleString()}) - Total Expenses (৳{incomeStatement.totalExpenses.toLocaleString()})
                     </div>
                   </div>
-                  <div className={`text-2xl font-bold font-mono ${incomeStatement.netSurplus >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                  <div className={`text-xl sm:text-2xl font-bold font-mono shrink-0 ${incomeStatement.netSurplus >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                     {incomeStatement.netSurplus >= 0 ? '+' : ''}৳{incomeStatement.netSurplus.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
                 </div>

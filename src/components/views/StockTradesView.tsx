@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { StockTransaction, StockTransactionType, Stock } from '../../types/accounting';
 import { calculateTradeValues } from '../../lib/accounting-engine';
@@ -48,6 +48,9 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
   const [selectedStockFilter, setSelectedStockFilter] = useState<string>('all');
   const [selectedTypeFilter, setSelectedTypeFilter] = useState<string>('all');
 
+  // Popular high-liquidity DSE stocks for quick 1-tap selection on mobile/desktop
+  const POPULAR_DSE_TICKERS = ['GP', 'BATBC', 'SQURPHARMA', 'BRACBANK', 'ROBI', 'BEXIMCO', 'WALTONHIL', 'RENATA', 'CITYBANK'];
+
   // Trade Form State
   const [tradeType, setTradeType] = useState<StockTransactionType>('buy');
   const [selectedStockId, setSelectedStockId] = useState<string>(
@@ -72,6 +75,37 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
   const [tradeReference, setTradeReference] = useState('');
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  // Held stocks in selected BO account
+  const holdingsInSelectedBo = useMemo(() => {
+    return stockHoldings.filter(
+      (h) => h.brokerAccountId === selectedBoAccountId && h.quantity > 0
+    );
+  }, [stockHoldings, selectedBoAccountId]);
+
+  // Synchronize selectedStockId and tickerSearchInput when initialStockId or stocks change
+  useEffect(() => {
+    if (initialStockId) {
+      const st = stocks.find((s) => s.id === initialStockId);
+      if (st) {
+        setSelectedStockId(st.id);
+        setTickerSearchInput(st.symbol);
+        setPrice(st.currentPrice);
+        setIsTradeModalOpen(true);
+      }
+    } else if (!selectedStockId && stocks.length > 0) {
+      setSelectedStockId(stocks[0].id);
+      setTickerSearchInput(stocks[0].symbol);
+      setPrice(stocks[0].currentPrice);
+    }
+  }, [initialStockId, stocks, selectedStockId]);
+
+  // Synchronize BO account if empty
+  useEffect(() => {
+    if (!selectedBoAccountId && brokerAccounts.length > 0) {
+      setSelectedBoAccountId(brokerAccounts[0].id);
+    }
+  }, [brokerAccounts, selectedBoAccountId]);
 
   // Selected Stock & BO Details
   const activeStock = stocks.find((s) => s.id === selectedStockId);
@@ -157,16 +191,33 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
     }
   };
 
-  // Automatically adjust default AIT tax when toggling between buy/sell
+  // Automatically adjust default AIT tax and stock selection when toggling between buy/sell
   const handleTradeTypeToggle = (type: StockTransactionType) => {
     setTradeType(type);
     if (type === 'sell') {
-      // DSE Advance Income Tax is typically 0.05% of gross trade value
       const gross = numQty * numPrice;
-      const defaultTax = Math.round(gross * 0.003 * 100) / 100; // approximate DSE AIT / Hawla
+      const defaultTax = Math.round(gross * 0.003 * 100) / 100;
       setTaxAmount(defaultTax);
+
+      // Auto-select first held stock if current stock is not held in this BO
+      const isCurrentlyHeld = holdingsInSelectedBo.some((h) => h.stockId === selectedStockId);
+      if (!isCurrentlyHeld && holdingsInSelectedBo.length > 0) {
+        const firstHeld = holdingsInSelectedBo[0];
+        setSelectedStockId(firstHeld.stockId);
+        const s = stocks.find((st) => st.id === firstHeld.stockId);
+        if (s) {
+          setTickerSearchInput(s.symbol);
+          setPrice(s.currentPrice);
+        }
+        setQuantity(firstHeld.quantity);
+      }
     } else {
       setTaxAmount(0);
+      if ((!selectedStockId || !stocks.some(s => s.id === selectedStockId)) && stocks.length > 0) {
+        setSelectedStockId(stocks[0].id);
+        setTickerSearchInput(stocks[0].symbol);
+        setPrice(stocks[0].currentPrice);
+      }
     }
   };
 
@@ -535,106 +586,315 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                 </select>
               </div>
 
-              {/* Security / Stock Selector - Searchable input that opens virtual keyboard on click */}
-              <div className="relative">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-medium text-slate-300">
-                    Security / Ticker *
-                  </label>
-                  {tradeType === 'sell' && (
-                    <span className="text-[11px] font-mono text-amber-400">
-                      Shares Held in BO: {availableSharesToSell.toLocaleString()}
+              {/* Security / Stock Selector */}
+              {tradeType === 'sell' ? (
+                /* SELL ORDER: HOLDINGS SELECTOR */
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-slate-300">
+                      Select Stock to Sell (হোল্ডিংস থেকে নির্বাচন করুন) *
+                    </label>
+                    <span className="text-[11px] font-mono text-amber-400 font-semibold">
+                      Shares Held: {availableSharesToSell.toLocaleString()}
                     </span>
-                  )}
-                </div>
+                  </div>
 
-                <div className="relative flex items-center">
-                  <input
-                    type="text"
-                    required
-                    placeholder="Type ticker symbol e.g. GP, BATBC, BEXIMCO..."
-                    autoCapitalize="characters"
-                    autoComplete="off"
-                    value={tickerSearchInput}
-                    onChange={(e) => {
-                      const val = e.target.value.toUpperCase();
-                      setTickerSearchInput(val);
-                      setIsTickerDropdownOpen(true);
-                      const exact = stocks.find((s) => s.symbol.toUpperCase() === val.trim());
-                      if (exact) {
-                        setSelectedStockId(exact.id);
-                        setPrice(exact.currentPrice);
-                      }
-                    }}
-                    onFocus={() => setIsTickerDropdownOpen(true)}
-                    className="w-full pl-3 pr-16 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono uppercase tracking-wider focus:outline-none focus:border-emerald-500"
-                  />
-
-                  <div className="absolute right-1.5 flex items-center gap-1">
-                    {tickerSearchInput && (
+                  {holdingsInSelectedBo.length === 0 ? (
+                    <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 space-y-1">
+                      <div className="font-semibold flex items-center gap-1.5">
+                        <AlertCircle className="h-4 w-4 shrink-0 text-amber-400" />
+                        <span>এই বিও অ্যাকাউন্টে কোনো শেয়ার হোল্ডিং নেই</span>
+                      </div>
+                      <p className="text-[11px] text-slate-400">
+                        শেয়ার বিক্রয় করার জন্য নির্বাচিত বিও অ্যাকাউন্টে শেয়ার থাকতে হবে। আপনি প্রথমে &apos;BUY ORDER&apos; দিয়ে শেয়ার কিনতে পারেন।
+                      </p>
                       <button
                         type="button"
-                        onClick={() => {
-                          setTickerSearchInput('');
-                          setIsTickerDropdownOpen(true);
-                        }}
-                        className="p-1 text-slate-500 hover:text-slate-300 rounded"
-                        title="Clear ticker search"
+                        onClick={() => handleTradeTypeToggle('buy')}
+                        className="mt-1 text-xs text-emerald-400 font-semibold underline hover:text-emerald-300"
                       >
-                        <X className="h-3 w-3" />
+                        → Switch to Buy Order (বাই অর্ডারে যান)
                       </button>
+                    </div>
+                  ) : (
+                    <>
+                      {/* Held Stocks Quick-Pick Badges */}
+                      <div className="flex flex-wrap gap-1.5">
+                        {holdingsInSelectedBo.map((h) => {
+                          const st = stocks.find((s) => s.id === h.stockId);
+                          const isSel = h.stockId === selectedStockId;
+                          return (
+                            <button
+                              key={h.stockId}
+                              type="button"
+                              onClick={() => {
+                                setSelectedStockId(h.stockId);
+                                if (st) {
+                                  setTickerSearchInput(st.symbol);
+                                  setPrice(st.currentPrice);
+                                  handleFetchLiveTradePrice(st.symbol);
+                                }
+                                setQuantity(h.quantity);
+                              }}
+                              className={`px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-all flex items-center gap-1.5 border ${
+                                isSel
+                                  ? 'bg-rose-500/20 border-rose-500 text-rose-300 shadow-sm'
+                                  : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                              }`}
+                            >
+                              <span className="font-bold text-white">{st?.symbol || 'STOCK'}</span>
+                              <span className="text-[10px] text-slate-400">({h.quantity} sh)</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Dropdown for held stocks */}
+                      <select
+                        value={selectedStockId}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedStockId(val);
+                          const st = stocks.find((s) => s.id === val);
+                          if (st) {
+                            setTickerSearchInput(st.symbol);
+                            setPrice(st.currentPrice);
+                            handleFetchLiveTradePrice(st.symbol);
+                          }
+                          const h = holdingsInSelectedBo.find((hld) => hld.stockId === val);
+                          if (h) setQuantity(h.quantity);
+                        }}
+                        className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-rose-500 font-mono"
+                      >
+                        {holdingsInSelectedBo.map((h) => {
+                          const st = stocks.find((s) => s.id === h.stockId);
+                          return (
+                            <option key={h.stockId} value={h.stockId}>
+                              {st?.symbol} — {st?.companyName} ({h.quantity} shares · WAC: ৳{h.weightedAverageCost.toFixed(2)})
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </>
+                  )}
+                </div>
+              ) : (
+                /* BUY ORDER: SEARCHABLE INPUT + QUICK CHIPS + SELECT */
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-semibold text-slate-300">
+                      Security / Ticker Symbol *
+                    </label>
+                    {activeStock && (
+                      <span className="text-[11px] font-mono text-emerald-400 font-semibold">
+                        LTP: ৳{activeStock.currentPrice}
+                      </span>
                     )}
-                    <button
-                      type="button"
-                      onClick={() => setIsTickerDropdownOpen(!isTickerDropdownOpen)}
-                      className="p-1 text-slate-400 hover:text-white rounded"
-                      title="Toggle securities list"
+                  </div>
+
+                  {/* Popular DSE Tickers 1-Tap Chips */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-[10px] font-mono uppercase text-slate-500">Popular:</span>
+                    {POPULAR_DSE_TICKERS.map((sym) => {
+                      const st = stocks.find((s) => s.symbol.toUpperCase() === sym);
+                      const isSel = activeStock?.symbol.toUpperCase() === sym;
+                      return (
+                        <button
+                          key={sym}
+                          type="button"
+                          onClick={() => {
+                            if (st) {
+                              selectStockByObj(st);
+                            } else {
+                              setTickerSearchInput(sym);
+                              setIsTickerDropdownOpen(true);
+                            }
+                          }}
+                          className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-colors ${
+                            isSel
+                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500'
+                              : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
+                          }`}
+                        >
+                          {sym}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  {/* Searchable input */}
+                  <div className="relative">
+                    <div className="relative flex items-center">
+                      <input
+                        type="text"
+                        required
+                        placeholder="Type ticker symbol e.g. GP, BATBC, SQURPHARMA..."
+                        autoCapitalize="characters"
+                        autoComplete="off"
+                        value={tickerSearchInput}
+                        onChange={(e) => {
+                          const val = e.target.value.toUpperCase();
+                          setTickerSearchInput(val);
+                          setIsTickerDropdownOpen(true);
+                          const exact = stocks.find((s) => s.symbol.toUpperCase() === val.trim());
+                          if (exact) {
+                            setSelectedStockId(exact.id);
+                            setPrice(exact.currentPrice);
+                          }
+                        }}
+                        onFocus={() => setIsTickerDropdownOpen(true)}
+                        className="w-full pl-3 pr-16 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono uppercase tracking-wider focus:outline-none focus:border-emerald-500"
+                      />
+
+                      <div className="absolute right-1.5 flex items-center gap-1">
+                        {tickerSearchInput && (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setTickerSearchInput('');
+                              setIsTickerDropdownOpen(true);
+                            }}
+                            className="p-1 text-slate-500 hover:text-slate-300 rounded"
+                            title="Clear ticker search"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setIsTickerDropdownOpen(!isTickerDropdownOpen)}
+                          className="p-1 text-slate-400 hover:text-white rounded"
+                          title="Toggle securities list"
+                        >
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Dropdown Options */}
+                    {isTickerDropdownOpen && (
+                      <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-50 divide-y divide-slate-800/60">
+                        {filteredStocksForTrade.length === 0 ? (
+                          <div className="p-3 text-center text-xs text-slate-400">
+                            No matched security found for &quot;{tickerSearchInput}&quot;
+                          </div>
+                        ) : (
+                          filteredStocksForTrade.map((s) => {
+                            const isSelected = s.id === selectedStockId;
+                            return (
+                              <button
+                                key={s.id}
+                                type="button"
+                                onClick={() => selectStockByObj(s)}
+                                className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs transition-colors hover:bg-slate-800/80 ${
+                                  isSelected ? 'bg-emerald-500/10 text-emerald-300 font-medium' : 'text-slate-300'
+                                }`}
+                              >
+                                <div>
+                                  <span className="font-mono font-bold text-white mr-2">{s.symbol}</span>
+                                  <span className="text-[11px] text-slate-400 truncate">{s.companyName}</span>
+                                </div>
+                                <span className="font-mono text-emerald-400 text-[11px] shrink-0 ml-2">
+                                  LTP: ৳{s.currentPrice}
+                                </span>
+                              </button>
+                            );
+                          })
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Native dropdown selector (Mobile Friendly Fallback) */}
+                  <div>
+                    <label className="block text-[11px] text-slate-400 mb-1">
+                      Or select from DSE Securities list:
+                    </label>
+                    <select
+                      value={selectedStockId}
+                      onChange={(e) => handleStockChange(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
                     >
-                      <ChevronDown className="h-3.5 w-3.5" />
-                    </button>
+                      {stocks.map((s) => (
+                        <option key={s.id} value={s.id}>
+                          {s.symbol} — {s.companyName} (৳{s.currentPrice})
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
+              )}
 
-                {/* Dropdown Options */}
-                {isTickerDropdownOpen && (
-                  <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl shadow-2xl z-50 divide-y divide-slate-800/60">
-                    {filteredStocksForTrade.length === 0 ? (
-                      <div className="p-3 text-center text-xs text-slate-400">
-                        No matched security found for &quot;{tickerSearchInput}&quot;
-                      </div>
-                    ) : (
-                      filteredStocksForTrade.map((s) => {
-                        const isSelected = s.id === selectedStockId;
-                        return (
-                          <button
-                            key={s.id}
-                            type="button"
-                            onClick={() => selectStockByObj(s)}
-                            className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs transition-colors hover:bg-slate-800/80 ${
-                              isSelected ? 'bg-emerald-500/10 text-emerald-300 font-medium' : 'text-slate-300'
-                            }`}
-                          >
-                            <div>
-                              <span className="font-mono font-bold text-white mr-2">{s.symbol}</span>
-                              <span className="text-[11px] text-slate-400 truncate">{s.companyName}</span>
-                            </div>
-                            <span className="font-mono text-emerald-400 text-[11px] shrink-0 ml-2">
-                              LTP: ৳{s.currentPrice}
-                            </span>
-                          </button>
-                        );
-                      })
+              {/* Active Stock Information Card */}
+              {activeStock && (
+                <div className="p-2.5 bg-slate-950/80 border border-slate-800/80 rounded-lg flex items-center justify-between text-xs">
+                  <div>
+                    <div className="font-bold text-white font-mono flex items-center gap-1.5">
+                      <span>{activeStock.symbol}</span>
+                      <span className="text-[10px] text-slate-400 font-normal truncate max-w-[150px] sm:max-w-xs">
+                        {activeStock.companyName}
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-slate-500">
+                      Sector: {activeStock.sector} · Cat: {activeStock.category || 'A'}
+                    </div>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <div className="font-mono text-emerald-400 font-bold">
+                      LTP: ৳{activeStock.currentPrice}
+                    </div>
+                    {livePriceFeedback && (
+                      <div className="text-[10px] text-sky-400 animate-pulse">{livePriceFeedback}</div>
                     )}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               {/* Quantity & Price */}
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Quantity (Shares) *
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-slate-300">
+                      Quantity (Shares) *
+                    </label>
+                    {tradeType === 'sell' && availableSharesToSell > 0 ? (
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(availableSharesToSell)}
+                          className="text-[10px] text-rose-400 hover:text-rose-300 font-mono underline"
+                        >
+                          All ({availableSharesToSell})
+                        </button>
+                        <span className="text-slate-600">·</span>
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(Math.floor(availableSharesToSell / 2))}
+                          className="text-[10px] text-rose-400 hover:text-rose-300 font-mono underline"
+                        >
+                          50%
+                        </button>
+                      </div>
+                    ) : tradeType === 'buy' ? (
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(100)}
+                          className="text-[10px] text-emerald-400 hover:text-emerald-300 font-mono underline"
+                        >
+                          100
+                        </button>
+                        <span className="text-slate-600">·</span>
+                        <button
+                          type="button"
+                          onClick={() => setQuantity(500)}
+                          className="text-[10px] text-emerald-400 hover:text-emerald-300 font-mono underline"
+                        >
+                          500
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                   <input
                     type="number"
                     step="1"
@@ -827,21 +1087,21 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
               </div>
 
               {/* Submit Buttons */}
-              <div className="flex items-center justify-end gap-2 pt-3">
+              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
                 <button
                   type="button"
                   onClick={() => setIsTradeModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
+                  className="w-full sm:w-auto px-4 py-2.5 text-xs text-slate-400 hover:text-white rounded-lg border border-slate-800 sm:border-transparent text-center"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={
-                    (tradeType === 'buy' && availableCash < liveValues.netValue) ||
-                    (tradeType === 'sell' && availableSharesToSell < numQty)
+                    (tradeType === 'buy' && (availableCash < liveValues.netValue || !selectedStockId)) ||
+                    (tradeType === 'sell' && (availableSharesToSell < numQty || availableSharesToSell <= 0 || !selectedStockId))
                   }
-                  className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                  className={`w-full sm:w-auto px-5 py-2.5 rounded-lg text-xs font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed text-center ${
                     tradeType === 'buy'
                       ? 'bg-emerald-600 hover:bg-emerald-500 text-white'
                       : 'bg-rose-600 hover:bg-rose-500 text-white'

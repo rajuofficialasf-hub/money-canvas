@@ -477,8 +477,8 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // Reset to default sample family state
   const resetFamilyLedgerData = useCallback(() => {
     const initial = {
-      familyName: 'The Rahman Family Household',
-      familyNameBn: 'রহমান পরিবার — যৌথ সংসার তহবিল',
+      familyName: 'My Family Household',
+      familyNameBn: 'আমার পরিবার — যৌথ সংসার তহবিল',
       currency: 'BDT' as const,
       members: DEFAULT_MEMBERS,
       jointAccounts: DEFAULT_JOINT_ACCOUNTS,

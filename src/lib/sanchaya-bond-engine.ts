@@ -311,7 +311,8 @@ export function generateUpcomingSchedule(
  */
 export function calculatePreMatureEncashment(
   item: SanchayaBondItem,
-  encashmentDateStr: string
+  encashmentDateStr: string,
+  isBn: boolean = true
 ): {
   investedDays: number;
   completedYears: number;
@@ -333,19 +334,27 @@ export function calculatePreMatureEncashment(
 
   if (completedYears < 1) {
     applicableRate = 0;
-    notes = '১ বছর পূর্ণ না হওয়ায় কোনো মুনাফা প্রযোজ্য নয়। ইতোপূর্বে উত্তোলিত মুনাফা মূলধন থেকে কর্তন করা হবে।';
+    notes = isBn
+      ? '১ বছর পূর্ণ না হওয়ায় কোনো মুনাফা প্রযোজ্য নয়। ইতোপূর্বে উত্তোলিত মুনাফা মূলধন থেকে কর্তন করা হবে।'
+      : 'Less than 1 year completed: No profit is applicable. Any previously withdrawn profits will be deducted from principal refund.';
   } else if (item.schemeType === 'poribar') {
     const matched = PORIBAR_ENCASHMENT_RULES.find((r) => r.completedYears === Math.min(completedYears, 5));
     applicableRate = matched ? matched.applicableRatePct : 9.50;
-    notes = `পরিবার সঞ্চয়পত্র ${completedYears} বছর পূর্ণ হওয়ায় ${applicableRate}% হারে মুনাফা পুনর্নির্ধারণ করা হয়েছে।`;
+    notes = isBn
+      ? `পরিবার সঞ্চয়পত্র ${completedYears} বছর পূর্ণ হওয়ায় ${applicableRate}% হারে মুনাফা পুনর্নির্ধারণ করা হয়েছে।`
+      : `Poribar Sanchayapatra completed ${completedYears} years: profit rate recalculated at ${applicableRate}%.`;
   } else if (item.schemeType === 'three_month') {
     const matched = THREE_MONTH_ENCASHMENT_RULES.find((r) => r.completedYears === Math.min(completedYears, 3));
     applicableRate = matched ? matched.applicableRatePct : 10.00;
-    notes = `৩-মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র ${completedYears} বছর পূর্ণ হওয়ায় ${applicableRate}% হারে মুনাফা প্রযোজ্য।`;
+    notes = isBn
+      ? `৩-মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র ${completedYears} বছর পূর্ণ হওয়ায় ${applicableRate}% হারে মুনাফা প্রযোজ্য।`
+      : `3-Month Sanchayapatra completed ${completedYears} years: profit applicable at ${applicableRate}%.`;
   } else {
     // Standard rule: 1-2% deduction from coupon
     applicableRate = Math.max(0, item.interestRate - 1.5);
-    notes = `মেয়াদপূর্ব নগদায়নের জন্য নির্ধারিত হারে রিডিউসড মুনাফা গণনা করা হয়েছে।`;
+    notes = isBn
+      ? 'মেয়াদপূর্ব নগদায়নের জন্য নির্ধারিত হারে রিডিউসড মুনাফা গণনা করা হয়েছে।'
+      : 'Reduced penalty profit rate applied for pre-mature encashment.';
   }
 
   // Profit eligible based on applicable rate
@@ -370,103 +379,7 @@ export function calculatePreMatureEncashment(
 }
 
 /**
- * Initial Default Portfolio for Demo & First Run
+ * Default Initial Portfolio (Clean by default for real user usage)
  */
-export const DEFAULT_SANCHAYA_BONDS: SanchayaBondItem[] = [
-  {
-    id: 'sb-001',
-    userId: 'user-default',
-    category: 'sanchayapatra',
-    schemeType: 'poribar',
-    title: 'পরিবার সঞ্চয়পত্র — সোনালী ব্যাংক',
-    certificateNumber: 'PS-8921094',
-    issuer: 'Sonali Bank PLC',
-    issueOfficeBranch: 'Motijheel Corporate Branch, Dhaka',
-    purchaseDate: '2024-03-15',
-    tenureYears: 5,
-    maturityDate: '2029-03-15',
-    principalAmount: 1000000,
-    interestRate: 11.52,
-    payoutFrequency: 'monthly',
-    taxDeductionRate: 10,
-    isTaxRebateEligible: true,
-    nomineeName: 'নাজনীন সুলতানা (স্ত্রী)',
-    nomineeRelation: 'Spouse',
-    notes: 'মাসিক মুনাফা সরাসরি সোনালী ব্যাংক সেভিংস একাউন্টে ইএফটি মারফত জমা হয়।',
-    status: 'active',
-    totalProfitReceivedToDate: 125000,
-    createdAt: '2024-03-15T10:00:00.000Z',
-  },
-  {
-    id: 'sb-002',
-    userId: 'user-default',
-    category: 'sanchayapatra',
-    schemeType: 'three_month',
-    title: '৩-মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র — জাতীয় সঞ্চয় ব্যুরো',
-    certificateNumber: 'TM-441829',
-    issuer: 'National Savings Directorate',
-    issueOfficeBranch: 'Dhanmondi Savings Bureau, Dhaka',
-    purchaseDate: '2024-06-10',
-    tenureYears: 3,
-    maturityDate: '2027-06-10',
-    principalAmount: 500000,
-    interestRate: 11.04,
-    payoutFrequency: 'quarterly',
-    taxDeductionRate: 5, // 5% for up to 5L
-    isTaxRebateEligible: true,
-    nomineeName: 'মাহমুদুর রহমান (পুত্র)',
-    nomineeRelation: 'Son',
-    notes: 'প্রতি ৩ মাস পর পর মুনাফা উত্তোলনযোগ্য।',
-    status: 'active',
-    totalProfitReceivedToDate: 52440,
-    createdAt: '2024-06-10T10:00:00.000Z',
-  },
-  {
-    id: 'sb-003',
-    userId: 'user-default',
-    category: 'treasury_bond',
-    schemeType: 'treasury_bond_10y',
-    title: 'বাংলাদেশ ব্যাংক ১০ বছর ট্রেজারি বন্ড (BGTB 2034)',
-    certificateNumber: 'BGTB-10Y-2034-082',
-    issuer: 'Bangladesh Bank',
-    issueOfficeBranch: 'Treasury & Public Debt Department',
-    purchaseDate: '2024-01-20',
-    tenureYears: 10,
-    maturityDate: '2034-01-20',
-    principalAmount: 500000,
-    interestRate: 12.10,
-    payoutFrequency: 'semi_annually',
-    taxDeductionRate: 5,
-    isTaxRebateEligible: true,
-    nomineeName: 'নাজনীন সুলতানা',
-    nomineeRelation: 'Spouse',
-    notes: 'সেমি-অ্যানুয়াল কুপন (Semi-Annual Coupon) প্রতি বছর জানুয়ারি ও জুলাই মাসে ব্যাংক অ্যাকাউন্টে জমা হয়।',
-    status: 'active',
-    totalProfitReceivedToDate: 60500,
-    createdAt: '2024-01-20T10:00:00.000Z',
-  },
-  {
-    id: 'sb-004',
-    userId: 'user-default',
-    category: 'islamic_sukuk',
-    schemeType: 'govt_ijarah_sukuk',
-    title: 'বাংলাদেশ সরকার ইসলামিক ইজারা সুকুক (Ijarah Sukuk)',
-    certificateNumber: 'BB-SUKUK-IJ-04',
-    issuer: 'Bangladesh Bank (SPV)',
-    issueOfficeBranch: 'Islamic Banking & Debt Dept.',
-    purchaseDate: '2024-04-12',
-    tenureYears: 5,
-    maturityDate: '2029-04-12',
-    principalAmount: 200000,
-    interestRate: 9.80,
-    payoutFrequency: 'semi_annually',
-    taxDeductionRate: 5,
-    isTaxRebateEligible: true,
-    nomineeName: 'নাজনীন সুলতানা',
-    nomineeRelation: 'Spouse',
-    notes: 'শরীয়াহ সম্মত সুকুক। নিরাপদ সরকারি অবকাঠামো প্রকল্পের ভাড়াভিত্তিক মুনাফা।',
-    status: 'active',
-    totalProfitReceivedToDate: 19600,
-    createdAt: '2024-04-12T10:00:00.000Z',
-  },
-];
+export const DEFAULT_SANCHAYA_BONDS: SanchayaBondItem[] = [];
+
