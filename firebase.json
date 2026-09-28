@@ -13,7 +13,10 @@
       }
     ]
   },
-  "firestore": {
-    "rules": "firestore.rules"
-  }
+  "firestore": [
+    {
+      "database": "ai-studio-personalfinancei-5091c720-c7f9-4583-a361-51d6e9cd0050",
+      "rules": "firestore.rules"
+    }
+  ]
 }

@@ -16,6 +16,11 @@ service cloud.firestore {
       allow get, list: if isAuthenticated();
       allow create, update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
       allow delete: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+
+      // Multi-device cloud sync: Users can read and write their own financial ledger documents
+      match /{allSubcollections=**} {
+        allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      }
     }
 
     match /{document=**} {

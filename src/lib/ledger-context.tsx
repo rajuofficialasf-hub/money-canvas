@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from './auth-context';
 import {
   Account,
@@ -70,6 +70,11 @@ import {
   createAuditEntry,
   evaluateSystemAlerts,
 } from './audit-and-alerts';
+import {
+  saveLedgerToFirestore,
+  fetchLedgerFromFirestore,
+  subscribeToCloudLedger,
+} from './cloud-sync-service';
 import {
   fetchDseMarketQuotes,
   parseDseCsvPriceFile,
@@ -228,6 +233,13 @@ interface LedgerContextType {
   exportFullBackup: () => BackupBundle;
   restoreFromBackup: (bundle: BackupBundle) => { success: boolean; error?: string };
   resetTenantLedger: () => void;
+
+  // Real-Time Cloud Sync (Mobile <-> Web)
+  cloudSyncStatus: 'idle' | 'syncing' | 'synced' | 'error';
+  lastCloudSyncAt: string | null;
+  cloudSyncError: string | null;
+  syncWithCloud: () => Promise<{ success: boolean; error?: string }>;
+  restoreFromCloud: () => Promise<{ success: boolean; error?: string }>;
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
@@ -252,8 +264,22 @@ const DEFAULT_CATEGORIES: Category[] = [
 ];
 
 export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+  const { user, firebaseUser } = useAuth();
   const userId = user.id;
+
+  // Real-Time Cloud Sync State
+  const [cloudSyncStatus, setCloudSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
+  const [lastCloudSyncAt, setLastCloudSyncAt] = useState<string | null>(() => {
+    try {
+      return localStorage.getItem(`pfos_${userId}_last_cloud_sync`) || null;
+    } catch {
+      return null;
+    }
+  });
+  const [cloudSyncError, setCloudSyncError] = useState<string | null>(null);
+  const lastSyncedChecksumRef = useRef<string>('');
+  const currentLoadedUserIdRef = useRef<string>(userId);
+  const isInitialMountRef = useRef<boolean>(true);
 
   // Local Storage Keys scoped by active tenant user id
   const ACCOUNTS_KEY = `pfos_${userId}_accounts`;
@@ -4038,6 +4064,361 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     window.location.reload();
   };
 
+  // Load local storage for target user
+  const loadLocalTenantData = useCallback((targetUserId: string) => {
+    try {
+      const storedAcc = localStorage.getItem(`pfos_${targetUserId}_accounts`);
+      if (storedAcc) setAccounts(JSON.parse(storedAcc));
+      else setAccounts([]);
+
+      const storedCat = localStorage.getItem(`pfos_${targetUserId}_categories`);
+      if (storedCat) setCategories(JSON.parse(storedCat));
+      else setCategories(DEFAULT_CATEGORIES);
+
+      const storedTx = localStorage.getItem(`pfos_${targetUserId}_transactions`);
+      if (storedTx) setTransactions(JSON.parse(storedTx));
+      else setTransactions([]);
+
+      const storedLines = localStorage.getItem(`pfos_${targetUserId}_lines`);
+      if (storedLines) setTransactionLines(JSON.parse(storedLines));
+      else setTransactionLines([]);
+
+      const storedFd = localStorage.getItem(`pfos_${targetUserId}_fds`);
+      if (storedFd) setFixedDeposits(JSON.parse(storedFd));
+      else setFixedDeposits([]);
+
+      const storedBudgets = localStorage.getItem(`pfos_${targetUserId}_budgets`);
+      if (storedBudgets) setBudgets(JSON.parse(storedBudgets));
+      else setBudgets([]);
+
+      const storedRecurring = localStorage.getItem(`pfos_${targetUserId}_recurring`);
+      if (storedRecurring) setRecurringTransactions(JSON.parse(storedRecurring));
+      else setRecurringTransactions([]);
+
+      const storedGoals = localStorage.getItem(`pfos_${targetUserId}_goals`);
+      if (storedGoals) setFinancialGoals(JSON.parse(storedGoals));
+      else setFinancialGoals([]);
+
+      const storedGoalContribs = localStorage.getItem(`pfos_${targetUserId}_goal_contribs`);
+      if (storedGoalContribs) setGoalContributions(JSON.parse(storedGoalContribs));
+      else setGoalContributions([]);
+
+      const storedDps = localStorage.getItem(`pfos_${targetUserId}_dps`);
+      if (storedDps) setDpsAccounts(JSON.parse(storedDps));
+      else setDpsAccounts([]);
+
+      const storedDpsInst = localStorage.getItem(`pfos_${targetUserId}_dps_installments`);
+      if (storedDpsInst) setDpsInstallments(JSON.parse(storedDpsInst));
+      else setDpsInstallments([]);
+
+      const storedDebts = localStorage.getItem(`pfos_${targetUserId}_debts`);
+      if (storedDebts) setDebts(JSON.parse(storedDebts));
+      else setDebts([]);
+
+      const storedLoans = localStorage.getItem(`pfos_${targetUserId}_loans`);
+      if (storedLoans) setLoans(JSON.parse(storedLoans));
+      else setLoans([]);
+
+      const storedSchedules = localStorage.getItem(`pfos_${targetUserId}_loan_schedules`);
+      if (storedSchedules) setLoanSchedules(JSON.parse(storedSchedules));
+      else setLoanSchedules([]);
+
+      const storedAssets = localStorage.getItem(`pfos_${targetUserId}_assets`);
+      if (storedAssets) setPhysicalAssets(JSON.parse(storedAssets));
+      else setPhysicalAssets([]);
+
+      const storedLiab = localStorage.getItem(`pfos_${targetUserId}_liabilities`);
+      if (storedLiab) setStaticLiabilities(JSON.parse(storedLiab));
+      else setStaticLiabilities([]);
+
+      const storedNw = localStorage.getItem(`pfos_${targetUserId}_net_worth_snapshots`);
+      if (storedNw) setNetWorthSnapshots(JSON.parse(storedNw));
+      else setNetWorthSnapshots([]);
+
+      const storedZakat = localStorage.getItem(`pfos_${targetUserId}_zakat_settings`);
+      if (storedZakat) setZakatSettings(JSON.parse(storedZakat));
+
+      const storedBrokers = localStorage.getItem(`pfos_${targetUserId}_brokers`);
+      if (storedBrokers) setBrokers(JSON.parse(storedBrokers));
+
+      const storedBo = localStorage.getItem(`pfos_${targetUserId}_broker_accounts`);
+      if (storedBo) setBrokerAccounts(JSON.parse(storedBo));
+      else setBrokerAccounts([]);
+
+      const storedCashTx = localStorage.getItem(`pfos_${targetUserId}_broker_cash_txs`);
+      if (storedCashTx) setBrokerCashTransactions(JSON.parse(storedCashTx));
+      else setBrokerCashTransactions([]);
+
+      const storedStocks = localStorage.getItem(`pfos_${targetUserId}_stocks`);
+      if (storedStocks) setStocks(JSON.parse(storedStocks));
+
+      const storedStockTx = localStorage.getItem(`pfos_${targetUserId}_stock_txs`);
+      if (storedStockTx) setStockTransactions(JSON.parse(storedStockTx));
+      else setStockTransactions([]);
+
+      const storedStockHist = localStorage.getItem(`pfos_${targetUserId}_stock_price_hist`);
+      if (storedStockHist) setStockPriceHistory(JSON.parse(storedStockHist));
+      else setStockPriceHistory([]);
+
+      const storedDividends = localStorage.getItem(`pfos_${targetUserId}_dividends`);
+      if (storedDividends) setDividends(JSON.parse(storedDividends));
+      else setDividends([]);
+
+      const storedCorp = localStorage.getItem(`pfos_${targetUserId}_corporate_actions`);
+      if (storedCorp) setCorporateActions(JSON.parse(storedCorp));
+      else setCorporateActions([]);
+
+      const storedIpo = localStorage.getItem(`pfos_${targetUserId}_ipo_applications`);
+      if (storedIpo) setIpoApplications(JSON.parse(storedIpo));
+      else setIpoApplications([]);
+
+      const storedAudit = localStorage.getItem(`pfos_${targetUserId}_audit_logs`);
+      if (storedAudit) setAuditLogs(JSON.parse(storedAudit));
+      else setAuditLogs([]);
+    } catch (e) {
+      console.warn('Error loading local tenant data:', e);
+    }
+  }, []);
+
+  // Hydrate local data whenever active user profile changes
+  useEffect(() => {
+    if (currentLoadedUserIdRef.current !== userId) {
+      currentLoadedUserIdRef.current = userId;
+      loadLocalTenantData(userId);
+    }
+  }, [userId, loadLocalTenantData]);
+
+  // Firestore Cloud Check & Automatic Multi-Device Hydration on Login
+  useEffect(() => {
+    if (!firebaseUser?.uid) return;
+
+    let isCancelled = false;
+
+    const checkAndSyncCloud = async () => {
+      setCloudSyncStatus('syncing');
+      try {
+        const cloudResult = await fetchLedgerFromFirestore(firebaseUser.uid);
+        if (isCancelled) return;
+
+        if (cloudResult.success && cloudResult.bundle) {
+          const cloudBundle = cloudResult.bundle;
+          const cloudRecordCount = Object.values(cloudBundle.metadata?.recordCounts || {}).reduce((a, b) => a + b, 0);
+
+          // Local record count
+          const localCount = accounts.length + transactions.length;
+
+          // If local has 0 accounts (e.g. freshly signed-in browser), restore from Cloud!
+          if (accounts.length === 0) {
+            console.log('Multi-device sync: Hydrating empty browser session with Cloud Ledger data...');
+            restoreFromBackup(cloudBundle);
+            setCloudSyncStatus('synced');
+            setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
+            lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
+            try {
+              localStorage.setItem(`pfos_${userId}_last_cloud_sync`, cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
+            } catch {}
+            return;
+          }
+
+          // If both have records, check timestamps & counts
+          const cloudTime = new Date(cloudBundle.metadata.exportedAt).getTime();
+          const localSavedTime = lastCloudSyncAt ? new Date(lastCloudSyncAt).getTime() : 0;
+
+          if (cloudTime > localSavedTime && cloudRecordCount >= localCount) {
+            console.log('Multi-device sync: Cloud has newer data, updating browser state...');
+            restoreFromBackup(cloudBundle);
+            setCloudSyncStatus('synced');
+            setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
+            lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
+          } else {
+            // Local has newer/more records, push to cloud
+            const localBundle = exportFullBackup();
+            lastSyncedChecksumRef.current = localBundle.metadata.checksum || '';
+            await saveLedgerToFirestore(firebaseUser.uid, localBundle);
+            setCloudSyncStatus('synced');
+            setLastCloudSyncAt(localBundle.metadata.exportedAt);
+          }
+        } else {
+          // Cloud has no ledger yet, push local if local has data
+          if (accounts.length > 0 || transactions.length > 0) {
+            const localBundle = exportFullBackup();
+            lastSyncedChecksumRef.current = localBundle.metadata.checksum || '';
+            const saveRes = await saveLedgerToFirestore(firebaseUser.uid, localBundle);
+            if (saveRes.success) {
+              setCloudSyncStatus('synced');
+              setLastCloudSyncAt(saveRes.syncedAt || localBundle.metadata.exportedAt);
+            }
+          } else {
+            setCloudSyncStatus('idle');
+          }
+        }
+      } catch (err: any) {
+        console.warn('Initial cloud sync check error:', err);
+        setCloudSyncStatus('error');
+        setCloudSyncError(err?.message || 'Cloud check failed');
+      }
+    };
+
+    checkAndSyncCloud();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [firebaseUser?.uid]);
+
+  // Real-Time Cloud Subscription for Instant Multi-Device Sync (Phone <-> Browser)
+  useEffect(() => {
+    if (!firebaseUser?.uid) return;
+
+    const unsubscribe = subscribeToCloudLedger(
+      firebaseUser.uid,
+      (remoteBundle, syncedAt) => {
+        if (!remoteBundle?.metadata) return;
+
+        // Skip our own recent outgoing save
+        if (remoteBundle.metadata.checksum && remoteBundle.metadata.checksum === lastSyncedChecksumRef.current) {
+          return;
+        }
+
+        console.log('Real-time remote cloud update received, syncing local ledger...');
+        lastSyncedChecksumRef.current = remoteBundle.metadata.checksum || '';
+        restoreFromBackup(remoteBundle);
+        setCloudSyncStatus('synced');
+        setLastCloudSyncAt(syncedAt);
+        try {
+          localStorage.setItem(`pfos_${userId}_last_cloud_sync`, syncedAt);
+        } catch {}
+      },
+      (err) => {
+        console.warn('Real-time cloud sync subscription warning:', err);
+      }
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [firebaseUser?.uid, userId]);
+
+  // Debounced Auto-Sync to Cloud on Local Changes
+  useEffect(() => {
+    if (isInitialMountRef.current) {
+      isInitialMountRef.current = false;
+      return;
+    }
+
+    if (!firebaseUser?.uid) return;
+
+    const timer = setTimeout(async () => {
+      try {
+        setCloudSyncStatus('syncing');
+        const bundle = exportFullBackup();
+        lastSyncedChecksumRef.current = bundle.metadata.checksum || '';
+        const res = await saveLedgerToFirestore(firebaseUser.uid, bundle);
+        if (res.success) {
+          setCloudSyncStatus('synced');
+          setLastCloudSyncAt(res.syncedAt || bundle.metadata.exportedAt);
+          setCloudSyncError(null);
+          try {
+            localStorage.setItem(`pfos_${userId}_last_cloud_sync`, res.syncedAt || bundle.metadata.exportedAt);
+          } catch {}
+        } else {
+          setCloudSyncStatus('error');
+          setCloudSyncError(res.error || 'Failed to sync with cloud');
+        }
+      } catch (err: any) {
+        setCloudSyncStatus('error');
+        setCloudSyncError(err?.message || 'Auto sync error');
+      }
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [
+    accounts,
+    transactions,
+    transactionLines,
+    fixedDeposits,
+    budgets,
+    recurringTransactions,
+    financialGoals,
+    goalContributions,
+    dpsAccounts,
+    dpsInstallments,
+    debts,
+    loans,
+    loanSchedules,
+    physicalAssets,
+    staticLiabilities,
+    netWorthSnapshots,
+    zakatSettings,
+    brokers,
+    brokerAccounts,
+    brokerCashTransactions,
+    stocks,
+    stockTransactions,
+    stockPriceHistory,
+    benchmarkIndexPrices,
+    dividends,
+    corporateActions,
+    ipoApplications,
+  ]);
+
+  // Explicit Manual Cloud Sync function
+  const syncWithCloud = async (): Promise<{ success: boolean; error?: string }> => {
+    if (!firebaseUser?.uid) {
+      return { success: false, error: 'Sign in with Google to sync with cloud.' };
+    }
+    setCloudSyncStatus('syncing');
+    setCloudSyncError(null);
+    try {
+      const bundle = exportFullBackup();
+      lastSyncedChecksumRef.current = bundle.metadata.checksum || '';
+      const res = await saveLedgerToFirestore(firebaseUser.uid, bundle);
+      if (res.success) {
+        setCloudSyncStatus('synced');
+        setLastCloudSyncAt(res.syncedAt || bundle.metadata.exportedAt);
+        try {
+          localStorage.setItem(`pfos_${userId}_last_cloud_sync`, res.syncedAt || bundle.metadata.exportedAt);
+        } catch {}
+        return { success: true };
+      }
+      setCloudSyncStatus('error');
+      setCloudSyncError(res.error || 'Failed to sync with cloud');
+      return { success: false, error: res.error };
+    } catch (err: any) {
+      setCloudSyncStatus('error');
+      setCloudSyncError(err?.message || 'Failed to sync with cloud');
+      return { success: false, error: err?.message };
+    }
+  };
+
+  // Explicit Manual Cloud Restore function
+  const restoreFromCloud = async (): Promise<{ success: boolean; error?: string }> => {
+    if (!firebaseUser?.uid) {
+      return { success: false, error: 'Sign in with Google to load cloud backup.' };
+    }
+    setCloudSyncStatus('syncing');
+    try {
+      const res = await fetchLedgerFromFirestore(firebaseUser.uid);
+      if (res.success && res.bundle) {
+        lastSyncedChecksumRef.current = res.bundle.metadata.checksum || '';
+        restoreFromBackup(res.bundle);
+        setCloudSyncStatus('synced');
+        setLastCloudSyncAt(res.syncedAt || res.bundle.metadata.exportedAt);
+        try {
+          localStorage.setItem(`pfos_${userId}_last_cloud_sync`, res.syncedAt || res.bundle.metadata.exportedAt);
+        } catch {}
+        return { success: true };
+      }
+      setCloudSyncStatus('error');
+      setCloudSyncError(res.error || 'No cloud backup found');
+      return { success: false, error: res.error || 'No cloud backup found' };
+    } catch (err: any) {
+      setCloudSyncStatus('error');
+      setCloudSyncError(err?.message || 'Failed to restore from cloud');
+      return { success: false, error: err?.message };
+    }
+  };
+
   return (
     <LedgerContext.Provider
       value={{
@@ -4153,6 +4534,13 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         exportFullBackup,
         restoreFromBackup,
         resetTenantLedger,
+
+        // Real-Time Cloud Sync
+        cloudSyncStatus,
+        lastCloudSyncAt,
+        cloudSyncError,
+        syncWithCloud,
+        restoreFromCloud,
       }}
     >
       {children}

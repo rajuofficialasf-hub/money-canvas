@@ -1,27 +1,42 @@
 import { BackupBundle } from '../types/accounting';
 
-const DRIVE_FILE_NAME = 'wealthfolio_ledger_backup.json';
+export const PRIMARY_DRIVE_FILE_NAME = 'money_canvas_ledger_backup.json';
+export const LEGACY_DRIVE_FILE_NAME = 'wealthfolio_ledger_backup.json';
+
+export interface GoogleDriveFindResult {
+  found: boolean;
+  fileId?: string;
+  fileName?: string;
+  modifiedTime?: string;
+  isAuthError?: boolean;
+  error?: string;
+}
 
 /**
- * Uploads or updates the BackupBundle file in the user's Google Drive (appDataFolder or root with drive.file scope)
+ * Uploads or updates the BackupBundle file in the user's Google Drive.
+ * Files are saved in the user's Google Drive so both Mobile App (Capacitor)
+ * and Web Browser can access and share the same backup file.
  */
 export async function uploadBackupToGoogleDrive(
   accessToken: string,
   bundle: BackupBundle
-): Promise<{ success: boolean; fileId?: string; lastBackupAt?: string; error?: string }> {
+): Promise<{ success: boolean; fileId?: string; lastBackupAt?: string; error?: string; isAuthError?: boolean }> {
   try {
     if (!accessToken) {
-      return { success: false, error: 'Google OAuth Access Token is missing' };
+      return { success: false, isAuthError: true, error: 'Google OAuth Access Token is missing. Please sign in with Google.' };
     }
 
-    // 1. Search if backup file already exists in Drive
-    const existingFile = await findBackupInGoogleDrive(accessToken);
+    // 1. Search if backup file already exists in Drive (checking both current and legacy names)
+    const existingSearch = await findBackupInGoogleDrive(accessToken);
+
+    if (existingSearch.isAuthError) {
+      return { success: false, isAuthError: true, error: existingSearch.error || 'Google session expired. Please sign in again.' };
+    }
 
     const fileMetadata = {
-      name: DRIVE_FILE_NAME,
+      name: PRIMARY_DRIVE_FILE_NAME,
       mimeType: 'application/json',
-      description: 'Wealthfolio Personal Finance & Ledger Auto Backup',
-      parents: existingFile ? undefined : ['appDataFolder'], // Save to AppData folder for security
+      description: 'Money Canvas Financial Ledger Backup (Cross-Device Sync)',
     };
 
     const fileData = JSON.stringify(bundle, null, 2);
@@ -29,8 +44,8 @@ export async function uploadBackupToGoogleDrive(
     let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
     let method = 'POST';
 
-    if (existingFile?.fileId) {
-      url = `https://www.googleapis.com/upload/drive/v3/files/${existingFile.fileId}?uploadType=multipart`;
+    if (existingSearch.found && existingSearch.fileId) {
+      url = `https://www.googleapis.com/upload/drive/v3/files/${existingSearch.fileId}?uploadType=multipart`;
       method = 'PATCH';
     }
 
@@ -51,12 +66,16 @@ export async function uploadBackupToGoogleDrive(
 
     if (!res.ok) {
       const errText = await res.text();
-      console.error('Drive AppData upload failed:', res.status, errText);
+      console.error('Drive upload failed:', res.status, errText);
 
-      // Fallback: If appDataFolder fails due to scope mismatch or 403/404, try saving to Drive root
-      if (!existingFile && (res.status === 403 || res.status === 404)) {
-        return uploadToDriveRoot(accessToken, bundle);
+      if (res.status === 401) {
+        return {
+          success: false,
+          isAuthError: true,
+          error: 'Google login session expired. Please sign out and sign in with Google again.',
+        };
       }
+
       let msg = errText;
       try {
         const parsed = JSON.parse(errText);
@@ -64,7 +83,11 @@ export async function uploadBackupToGoogleDrive(
           msg = parsed.error.message;
         }
       } catch {}
-      return { success: false, error: `Drive API Error (${res.status}): ${msg}` };
+
+      return {
+        success: false,
+        error: `Drive API Error (${res.status}): ${msg}. Google Cloud Console-এ Google Drive API Enable করা থাকতে হবে।`,
+      };
     }
 
     const responseData = await res.json();
@@ -82,103 +105,77 @@ export async function uploadBackupToGoogleDrive(
 }
 
 /**
- * Fallback to Drive Root if AppData folder is inaccessible
- */
-async function uploadToDriveRoot(accessToken: string, bundle: BackupBundle) {
-  try {
-    const searchRes = await fetch(
-      `https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FILE_NAME}' and trashed=false`,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
-    const searchData = await searchRes.json();
-    const existingFileId = searchData.files && searchData.files[0]?.id;
-
-    const fileMetadata = {
-      name: DRIVE_FILE_NAME,
-      mimeType: 'application/json',
-    };
-    const fileData = JSON.stringify(bundle, null, 2);
-
-    let url = 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart';
-    let method = 'POST';
-
-    if (existingFileId) {
-      url = `https://www.googleapis.com/upload/drive/v3/files/${existingFileId}?uploadType=multipart`;
-      method = 'PATCH';
-    }
-
-    const form = new FormData();
-    form.append('metadata', new Blob([JSON.stringify(fileMetadata)], { type: 'application/json' }));
-    form.append('file', new Blob([fileData], { type: 'application/json' }));
-
-    const res = await fetch(url, {
-      method,
-      headers: { Authorization: `Bearer ${accessToken}` },
-      body: form,
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error('Drive Root upload failed:', res.status, errText);
-      let msg = errText;
-      try {
-        const parsed = JSON.parse(errText);
-        if (parsed.error?.message) {
-          msg = parsed.error.message;
-        }
-      } catch {}
-      return {
-        success: false,
-        error: `Google Drive Error (${res.status}): ${msg}. Google Cloud Console-এ Google Drive API Enable করা থাকতে হবে এবং ড্রাইভ পারমিশন থাকতে হবে।`,
-      };
-    }
-
-    const data = await res.json();
-    return { success: true, fileId: data.id, lastBackupAt: new Date().toISOString() };
-  } catch (e: any) {
-    return { success: false, error: e?.message || 'Drive root fallback failed' };
-  }
-}
-
-/**
- * Searches for existing Wealthfolio backup file in Google Drive AppData / Root
+ * Searches for existing Money Canvas backup file in Google Drive.
+ * Searches across Google Drive root, folders, and legacy AppData folder
+ * for both new ('money_canvas_ledger_backup.json') and legacy ('wealthfolio_ledger_backup.json') files.
  */
 export async function findBackupInGoogleDrive(
   accessToken: string
-): Promise<{ fileId: string; modifiedTime: string } | null> {
+): Promise<GoogleDriveFindResult> {
   try {
-    // Check appDataFolder first
-    const appDataUrl = `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)`;
-    const res = await fetch(appDataUrl, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
+    if (!accessToken) {
+      return { found: false, isAuthError: true, error: 'Google OAuth token is missing' };
+    }
 
-    if (res.ok) {
-      const data = await res.json();
-      if (data.files && data.files.length > 0) {
-        return { fileId: data.files[0].id, modifiedTime: data.files[0].modifiedTime };
+    const searchQueries = [
+      // 1. Primary file in user's Drive root/folders
+      `https://www.googleapis.com/drive/v3/files?q=name='${PRIMARY_DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)&orderBy=modifiedTime desc`,
+      // 2. Legacy file in user's Drive root/folders
+      `https://www.googleapis.com/drive/v3/files?q=name='${LEGACY_DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)&orderBy=modifiedTime desc`,
+      // 3. Primary file in AppData folder (backward compatibility)
+      `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${PRIMARY_DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)&orderBy=modifiedTime desc`,
+      // 4. Legacy file in AppData folder (backward compatibility)
+      `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${LEGACY_DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)&orderBy=modifiedTime desc`,
+    ];
+
+    let lastError: string | undefined;
+    let authError = false;
+
+    for (const url of searchQueries) {
+      try {
+        const res = await fetch(url, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (res.status === 401) {
+          authError = true;
+          lastError = 'গুগল সাইন-ইন সেশন শেষ হয়ে গেছে। অনুগ্রহ করে আবার Sign In with Google করুন।';
+          break;
+        }
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.files && data.files.length > 0) {
+            return {
+              found: true,
+              fileId: data.files[0].id,
+              fileName: data.files[0].name,
+              modifiedTime: data.files[0].modifiedTime,
+            };
+          }
+        } else {
+          const errText = await res.text();
+          console.warn('Drive search error at', url, res.status, errText);
+          if (res.status === 403) {
+            lastError = 'গুগল ড্রাইভ পারমিশন প্রয়োজন। অনুগ্রহ করে ড্রাইভ পারমিশন Allow দিন।';
+          }
+        }
+      } catch (reqErr: any) {
+        console.warn('Drive search request exception:', reqErr);
       }
     }
 
-    // Check Drive Root fallback
-    const rootUrl = `https://www.googleapis.com/drive/v3/files?q=name='${DRIVE_FILE_NAME}' and trashed=false&fields=files(id, name, modifiedTime)`;
-    const rootRes = await fetch(rootUrl, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-
-    if (rootRes.ok) {
-      const rootData = await rootRes.json();
-      if (rootData.files && rootData.files.length > 0) {
-        return { fileId: rootData.files[0].id, modifiedTime: rootData.files[0].modifiedTime };
-      }
+    if (authError) {
+      return { found: false, isAuthError: true, error: lastError };
     }
 
-    return null;
-  } catch (err) {
+    return {
+      found: false,
+      error: lastError,
+    };
+  } catch (err: any) {
     console.error('Error finding Google Drive backup:', err);
-    return null;
+    return { found: false, error: err?.message || 'Error communicating with Google Drive' };
   }
 }
 

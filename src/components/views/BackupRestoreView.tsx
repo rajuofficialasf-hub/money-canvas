@@ -43,6 +43,10 @@ import {
   FileText,
   CloudUpload,
   CloudDownload,
+  Cloud,
+  Smartphone,
+  Laptop,
+  Sparkles,
   Users,
 } from 'lucide-react';
 import { BackupBundle } from '../../types/accounting';
@@ -70,6 +74,11 @@ export const BackupRestoreView: React.FC = () => {
     exportFullBackup,
     restoreFromBackup,
     resetTenantLedger,
+    cloudSyncStatus,
+    lastCloudSyncAt,
+    cloudSyncError,
+    syncWithCloud,
+    restoreFromCloud,
   } = useLedger();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,6 +86,48 @@ export const BackupRestoreView: React.FC = () => {
   const [isDriveBackingUp, setIsDriveBackingUp] = useState(false);
   const [isDriveRestoring, setIsDriveRestoring] = useState(false);
   const [driveMsg, setDriveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Cloud Sync Manual Trigger State
+  const [isCloudSyncingManual, setIsCloudSyncingManual] = useState(false);
+  const [isCloudRestoringManual, setIsCloudRestoringManual] = useState(false);
+  const [cloudMsg, setCloudMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleCloudSync = async () => {
+    setIsCloudSyncingManual(true);
+    setCloudMsg(null);
+    const res = await syncWithCloud();
+    setIsCloudSyncingManual(false);
+    if (res.success) {
+      setCloudMsg({
+        type: 'success',
+        text: `আপনার সমস্ত ডাটা সফলভাবে ক্লাউডে সেভ ও সিঙ্ক করা হয়েছে! (${new Date().toLocaleTimeString('bn-BD')})`,
+      });
+    } else {
+      setCloudMsg({
+        type: 'error',
+        text: res.error || 'ক্লাউড সিঙ্ক করতে সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট ও সাইন-ইন চেক করুন।',
+      });
+    }
+  };
+
+  const handleCloudRestore = async () => {
+    setIsCloudRestoringManual(true);
+    setCloudMsg(null);
+    const res = await restoreFromCloud();
+    setIsCloudRestoringManual(false);
+    if (res.success) {
+      setRestoreSuccess(true);
+      setCloudMsg({
+        type: 'success',
+        text: 'ক্লাউড থেকে আপনার সমস্ত অ্যাকাউন্ট ও লেনদেন সফলভাবে লোড হয়েছে!',
+      });
+    } else {
+      setCloudMsg({
+        type: 'error',
+        text: res.error || 'ক্লাউডে কোনো ব্যাকআপ ফাইল পাওয়া যায়নি।',
+      });
+    }
+  };
 
   const [restoreFile, setRestoreFile] = useState<File | null>(null);
   const [parsedBundle, setParsedBundle] = useState<BackupBundle | null>(null);
@@ -89,7 +140,7 @@ export const BackupRestoreView: React.FC = () => {
 
   const handleBackupToDrive = async () => {
     if (!googleAccessToken) {
-      setDriveMsg({ type: 'error', text: 'Not signed in with Google. Please sign in first.' });
+      setDriveMsg({ type: 'error', text: 'গুগল অ্যাকাউন্টে সাইন-ইন করা নেই। অনুগ্রহ করে Sign In with Google করুন।' });
       return;
     }
 
@@ -106,13 +157,15 @@ export const BackupRestoreView: React.FC = () => {
       await updateUserDriveSyncStatus('synced', result.lastBackupAt);
       setDriveMsg({
         type: 'success',
-        text: `Your ledger was successfully backed up to Google Drive! (${new Date().toLocaleTimeString()})`,
+        text: `আপনার লেজার সফলভাবে Google Drive-এ সেভ করা হয়েছে! (${new Date().toLocaleTimeString('bn-BD')})`,
       });
     } else {
       await updateUserDriveSyncStatus('error');
-      let errorText = result.error || 'Failed to save backup to Google Drive.';
-      if (errorText.toLowerCase().includes('insufficient') || errorText.includes('403')) {
-        errorText = 'গুগল ড্রাইভ পারমিশন প্রয়োজন: অনুগ্রহ করে একবার Sign Out করে পুনরায় Google দিয়ে Sign In করুন এবং ড্রাইভ অ্যাক্সেসের অনুমতি (Allow) দিন।';
+      let errorText = result.error || 'Google Drive-এ ব্যাকআপ সেভ করা যায়নি।';
+      if (result.isAuthError) {
+        errorText = 'গুগল সাইন-ইন সেশন শেষ হয়ে গেছে: অনুগ্রহ করে একবার Sign In with Google দিয়ে পুনরায় কানেক্ট করুন।';
+      } else if (errorText.toLowerCase().includes('insufficient') || errorText.includes('403')) {
+        errorText = 'গুগল ড্রাইভ পারমিশন প্রয়োজন: অনুগ্রহ করে Sign In with Google করে ড্রাইভের অনুমতি Allow দিন।';
       }
       setDriveMsg({
         type: 'error',
@@ -123,7 +176,7 @@ export const BackupRestoreView: React.FC = () => {
 
   const handleRestoreFromDrive = async () => {
     if (!googleAccessToken) {
-      setDriveMsg({ type: 'error', text: 'Not signed in with Google. Please sign in first.' });
+      setDriveMsg({ type: 'error', text: 'গুগল অ্যাকাউন্টে সাইন-ইন করা নেই। অনুগ্রহ করে Sign In with Google করুন।' });
       return;
     }
 
@@ -132,12 +185,19 @@ export const BackupRestoreView: React.FC = () => {
 
     const backupInfo = await findBackupInGoogleDrive(googleAccessToken);
 
-    if (!backupInfo) {
+    if (!backupInfo.found || !backupInfo.fileId) {
       setIsDriveRestoring(false);
-      setDriveMsg({
-        type: 'error',
-        text: 'No backup file found in your Google Drive AppData folder.',
-      });
+      if (backupInfo.isAuthError) {
+        setDriveMsg({
+          type: 'error',
+          text: backupInfo.error || 'গুগল সাইন-ইন সেশন শেষ হয়ে গেছে। অনুগ্রহ করে Sign In with Google দিয়ে পুনরায় কানেক্ট করুন।',
+        });
+      } else {
+        setDriveMsg({
+          type: 'error',
+          text: backupInfo.error || 'আপনার গুগল ড্রাইভে কোনো ব্যাকআপ ফাইল পাওয়া যায়নি। মোবাইল অ্যাপ থেকে "Backup to Drive" বাটনে ক্লিক করেছেন কি না নিশ্চিত করুন, অথবা উপরের Real-Time Cloud Sync ব্যবহার করুন যা স্বয়ংক্রিয়ভাবে মোবাইল ও ব্রাউজার সিঙ্ক করে।',
+        });
+      }
       return;
     }
 
@@ -148,7 +208,7 @@ export const BackupRestoreView: React.FC = () => {
     if (error || !bundle) {
       setDriveMsg({
         type: 'error',
-        text: error || 'Failed to download backup from Google Drive.',
+        text: error || 'Google Drive থেকে ব্যাকআপ ডাউনলোড করা যায়নি।',
       });
       return;
     }
@@ -158,12 +218,12 @@ export const BackupRestoreView: React.FC = () => {
       setRestoreSuccess(true);
       setDriveMsg({
         type: 'success',
-        text: `Successfully restored all ledger data from Google Drive backup!`,
+        text: `Google Drive ব্যাকআপ (${backupInfo.fileName || 'backup'}) থেকে সমস্ত ডাটা সফলভাবে রিস্টোর হয়েছে!`,
       });
     } else {
       setDriveMsg({
         type: 'error',
-        text: res.error || 'Failed to restore backup file.',
+        text: res.error || 'ব্যাকআপ ফাইল রিস্টোর করতে সমস্যা হয়েছে।',
       });
     }
   };
@@ -352,24 +412,34 @@ export const BackupRestoreView: React.FC = () => {
         </p>
       </div>
 
-      {/* Google Drive Cloud Sync Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      {/* Card 1: Real-Time Google Account Cloud Sync (Instant Mobile <-> Web) */}
+      <div className="bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
+        <div className="absolute -right-10 -top-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
-              <HardDrive className="h-6 w-6" />
+            <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
+              <Cloud className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-white">Automatic Google Drive Cloud Backup</h2>
-                {isGoogleAuthenticated && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                    Connected
+                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                  <span>রিয়েল-টাইম ক্লাউড সিঙ্ক (Google Account Cloud Sync)</span>
+                  <Sparkles className="h-4 w-4 text-emerald-400" />
+                </h2>
+                {isGoogleAuthenticated ? (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>সিঙ্ক সক্রিয় (Active)</span>
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">
+                    লোকাল মোড
                   </span>
                 )}
               </div>
-              <p className="text-slate-400 text-xs mt-0.5">
-                Your financial data is encrypted and saved inside your private Google Drive AppData folder. Even if you re-install the app, your data restores instantly.
+              <p className="text-slate-400 text-xs mt-0.5 max-w-2xl leading-relaxed">
+                <strong className="text-emerald-300">মোবাইল অ্যাপ ও কম্পিউটার ব্রাউজার সিঙ্ক:</strong> আপনি যে ডিভাইসেই একই গুগল অ্যাকাউন্ট দিয়ে লগইন করবেন, স্বয়ংক্রিয়ভাবে আপনার সমস্ত অ্যাকাউন্ট ব্যালেন্স, খরচ এবং পোর্টফোলিও সাথে সাথে পেয়ে যাবেন।
               </p>
             </div>
           </div>
@@ -377,7 +447,124 @@ export const BackupRestoreView: React.FC = () => {
           {!isGoogleAuthenticated ? (
             <button
               onClick={signInWithGoogle}
-              className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl border border-slate-700 flex items-center justify-center gap-2 shadow-lg transition-all shrink-0"
+              className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
+            >
+              <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
+              <span>Google দিয়ে সাইন-ইন করুন</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                onClick={handleCloudSync}
+                disabled={isCloudSyncingManual || cloudSyncStatus === 'syncing'}
+                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+              >
+                <RefreshCw className={`h-4 w-4 ${isCloudSyncingManual || cloudSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+                <span>{isCloudSyncingManual ? 'সিঙ্ক হচ্ছে...' : 'এখনই সিঙ্ক করুন'}</span>
+              </button>
+
+              <button
+                onClick={handleCloudRestore}
+                disabled={isCloudRestoringManual}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              >
+                <CloudDownload className={`h-4 w-4 ${isCloudRestoringManual ? 'animate-spin text-emerald-400' : ''}`} />
+                <span>{isCloudRestoringManual ? 'লোড হচ্ছে...' : 'ক্লাউড থেকে লোড করুন'}</span>
+              </button>
+            </div>
+          )}
+        </div>
+
+        {cloudMsg && (
+          <div
+            className={`p-3 rounded-xl border text-xs font-medium flex items-center gap-2 ${
+              cloudMsg.type === 'success'
+                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
+                : 'bg-rose-950/40 border-rose-500/30 text-rose-300'
+            }`}
+          >
+            {cloudMsg.type === 'success' ? (
+              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            ) : (
+              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+            )}
+            <span>{cloudMsg.text}</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
+            <div className="p-2 bg-slate-900 rounded-lg text-slate-400">
+              <Users className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] text-slate-500 uppercase font-mono">কানেক্টেড ইউজার</p>
+              <p className="text-slate-200 font-semibold mt-0.5 truncate">{user.fullName}</p>
+              <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+            </div>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
+            <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+              <Smartphone className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] text-slate-500 uppercase font-mono">মাল্টি-ডিভাইস সিঙ্ক</p>
+              <p className="text-emerald-400 font-semibold mt-0.5 flex items-center gap-1">
+                <span>মোবাইল ও ব্রাউজার কানেক্টেড</span>
+              </p>
+              <p className="text-[10px] text-slate-400">স্বয়ংক্রিয় ব্যাকগ্রাউন্ড সিঙ্ক</p>
+            </div>
+          </div>
+
+          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
+            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
+              <Laptop className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[10px] text-slate-500 uppercase font-mono">সর্বশেষ ক্লাউড সিঙ্ক</p>
+              <p className="text-slate-200 font-semibold mt-0.5">
+                {lastCloudSyncAt
+                  ? new Date(lastCloudSyncAt).toLocaleString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })
+                  : 'এখনও সিঙ্ক করা হয়নি'}
+              </p>
+              <p className="text-[10px] text-emerald-400">Firebase Firestore Cloud</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Card 2: Google Drive File Backup & Restore */}
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
+              <HardDrive className="h-6 w-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-white">Google Drive ফাইল ব্যাকআপ ও রিস্টোর (File Archive)</h2>
+                {isGoogleAuthenticated && (
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                    Google Drive Active
+                  </span>
+                )}
+              </div>
+              <p className="text-slate-400 text-xs mt-0.5">
+                আপনার ব্যক্তিগত গুগল ড্রাইভে ব্যাকআপ ফাইল (<code className="text-slate-300 font-mono">money_canvas_ledger_backup.json</code>) হিসেবে সেভ ও রিস্টোর করুন। মোবাইল এবং ব্রাউজার উভয়েই এই ফাইল অ্যাক্সেস করতে পারবে।
+              </p>
+            </div>
+          </div>
+
+          {!isGoogleAuthenticated ? (
+            <button
+              onClick={signInWithGoogle}
+              className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl border border-slate-700 flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
             >
               <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
               <span>Sign In with Google</span>
@@ -387,7 +574,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleBackupToDrive}
                 disabled={isDriveBackingUp}
-                className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudUpload className={`h-4 w-4 ${isDriveBackingUp ? 'animate-bounce' : ''}`} />
                 <span>{isDriveBackingUp ? 'Saving to Drive...' : 'Backup to Drive'}</span>
@@ -396,7 +583,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleRestoreFromDrive}
                 disabled={isDriveRestoring}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50"
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudDownload className={`h-4 w-4 ${isDriveRestoring ? 'animate-spin' : ''}`} />
                 <span>{isDriveRestoring ? 'Restoring...' : 'Restore from Drive'}</span>
@@ -424,14 +611,14 @@ export const BackupRestoreView: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
           <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-            <p className="text-[10px] text-slate-500 uppercase font-mono">Logged In User</p>
-            <p className="text-slate-200 font-semibold mt-0.5 truncate">{user.fullName}</p>
-            <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+            <p className="text-[10px] text-slate-500 uppercase font-mono">ড্রাইভ ফাইল নেম</p>
+            <p className="text-slate-200 font-semibold font-mono mt-0.5 text-[11px] truncate">money_canvas_ledger_backup.json</p>
+            <p className="text-[10px] text-slate-400 truncate">Cross-Device Compatible</p>
           </div>
           <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
             <p className="text-[10px] text-slate-500 uppercase font-mono">Cloud Security</p>
-            <p className="text-emerald-400 font-semibold mt-0.5">100% Encrypted & Private</p>
-            <p className="text-[10px] text-slate-400">Stored in your private Google Drive</p>
+            <p className="text-blue-400 font-semibold mt-0.5">100% Encrypted & Private</p>
+            <p className="text-[10px] text-slate-400">Stored directly in your Google Drive</p>
           </div>
           <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
             <p className="text-[10px] text-slate-500 uppercase font-mono">Last Drive Backup</p>
@@ -445,7 +632,7 @@ export const BackupRestoreView: React.FC = () => {
                   })
                 : 'No backup taken yet'}
             </p>
-            <p className="text-[10px] text-slate-400">Automatic Sync Active</p>
+            <p className="text-[10px] text-slate-400">Google Drive API</p>
           </div>
         </div>
       </div>
