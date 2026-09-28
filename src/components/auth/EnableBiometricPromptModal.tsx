@@ -35,10 +35,14 @@ export const EnableBiometricPromptModal: React.FC = () => {
           setPromptEnableModal(false);
         }, 1200);
       } else {
-        setErrorMsg(res.error || 'Failed to enable biometrics. Please try again.');
+        if (!res.error?.toLowerCase().includes('cancel')) {
+          setErrorMsg(res.error || 'Failed to enable biometrics. Please try again.');
+        }
       }
     } catch (err: any) {
-      setErrorMsg(err?.message || 'Biometric sensor error occurred.');
+      if (!err?.message?.toLowerCase().includes('cancel')) {
+        setErrorMsg(err?.message || 'Biometric sensor error occurred.');
+      }
     } finally {
       setIsLoading(false);
     }

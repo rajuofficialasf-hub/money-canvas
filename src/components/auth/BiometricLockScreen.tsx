@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useBiometrics } from '../../lib/biometric-context';
 import { useAuth } from '../../lib/auth-context';
 import {
@@ -21,16 +21,20 @@ export const BiometricLockScreen: React.FC = () => {
     biometryTypeName,
   } = useBiometrics();
   const { user, signOutGoogle } = useAuth();
+  const hasAutoPromptedRef = useRef(false);
 
-  // Trigger biometric prompt automatically once on mount
+  // Trigger biometric prompt automatically once when screen locks
   useEffect(() => {
-    if (isBiometricEnabled && isAppLocked && !isAuthenticating) {
+    if (isBiometricEnabled && isAppLocked && !hasAutoPromptedRef.current) {
+      hasAutoPromptedRef.current = true;
       const timer = setTimeout(() => {
         authenticate();
-      }, 350);
+      }, 500);
       return () => clearTimeout(timer);
+    } else if (!isAppLocked) {
+      hasAutoPromptedRef.current = false;
     }
-  }, [isBiometricEnabled, isAppLocked]);
+  }, [isBiometricEnabled, isAppLocked, authenticate]);
 
   if (!isBiometricEnabled || !isAppLocked) {
     return null;
