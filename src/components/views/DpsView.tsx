@@ -24,6 +24,7 @@ export const DpsView: React.FC = () => {
     dpsInstallments,
     accounts,
     accountBalances,
+    getAccountBalance,
     openDps,
     payDpsInstallment,
     matureDps,
@@ -428,7 +429,7 @@ export const DpsView: React.FC = () => {
                           .filter((a) => !a.isArchived && a.id !== dps.dpsAccountId && a.accountType !== 'credit_card')
                           .map((a) => (
                             <option key={a.id} value={a.id}>
-                              {a.name} ({a.accountType.toUpperCase()})
+                              {a.name} ({a.accountType.toUpperCase()}) — ৳{getAccountBalance(a.id).toLocaleString()}
                             </option>
                           ))}
                       </select>
@@ -683,7 +684,7 @@ export const DpsView: React.FC = () => {
                   <option value="">-- Choose Funding Bank Account --</option>
                   {accounts.filter((a) => !a.isArchived && a.accountType === 'bank').map((a) => (
                     <option key={a.id} value={a.id}>
-                      {a.name} ({a.institutionName})
+                      {a.name} ({a.institutionName}) — ৳{getAccountBalance(a.id).toLocaleString()}
                     </option>
                   ))}
                 </select>

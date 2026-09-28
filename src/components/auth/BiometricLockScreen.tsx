@@ -66,10 +66,10 @@ export const BiometricLockScreen: React.FC = () => {
 
         <div className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center gap-2">
-            <span>অ্যাপটি লক করা আছে</span>
+            <span>Money Canvas is Locked</span>
           </h1>
           <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
-            আপনার আর্থিক হিসাবের গোপনীয়তা বজায় রাখতে {biometryTypeName} দিয়ে আনলক করুন।
+            Please authenticate using {biometryTypeName} to access your financial vault.
           </p>
         </div>
 
@@ -102,12 +102,12 @@ export const BiometricLockScreen: React.FC = () => {
           {isAuthenticating ? (
             <>
               <RefreshCw className="h-4 w-4 animate-spin" />
-              <span>যাচাই করা হচ্ছে...</span>
+              <span>Authenticating...</span>
             </>
           ) : (
             <>
               <Fingerprint className="h-4 w-4" />
-              <span>বায়োমেট্রিক দিয়ে আনলক করুন</span>
+              <span>Unlock with {biometryTypeName}</span>
             </>
           )}
         </button>
@@ -118,14 +118,14 @@ export const BiometricLockScreen: React.FC = () => {
         <button
           type="button"
           onClick={() => {
-            if (window.confirm('আপনি কি নিশ্চিত যে বর্তমান সেশন থেকে লগআউট করতে চান?')) {
+            if (window.confirm('Are you sure you want to sign out from this device?')) {
               signOutGoogle();
             }
           }}
           className="text-xs text-slate-400 hover:text-rose-300 flex items-center gap-1.5 transition-colors py-2 px-3 rounded-lg hover:bg-slate-900"
         >
           <LogOut className="h-3.5 w-3.5" />
-          <span>অন্য অ্যাকাউন্টে সাইন-ইন / লগআউট</span>
+          <span>Sign Out / Switch Account</span>
         </button>
       </div>
     </div>

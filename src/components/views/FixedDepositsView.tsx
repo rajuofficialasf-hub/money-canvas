@@ -20,6 +20,7 @@ export const FixedDepositsView: React.FC = () => {
   const {
     fixedDeposits,
     accounts,
+    getAccountBalance,
     openFixedDeposit,
     matureFixedDeposit,
     breakFixedDeposit,
@@ -334,7 +335,14 @@ export const FixedDepositsView: React.FC = () => {
             <form onSubmit={handleOpenFdSubmit} className="space-y-4 font-mono">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-slate-400 mb-1">Funding Account *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-slate-400">Funding Account *</label>
+                    {sourceAccountId && (
+                      <span className="text-[11px] text-emerald-400">
+                        ৳{getAccountBalance(sourceAccountId).toLocaleString()}
+                      </span>
+                    )}
+                  </div>
                   <select
                     value={sourceAccountId}
                     onChange={(e) => setSourceAccountId(e.target.value)}
@@ -342,10 +350,10 @@ export const FixedDepositsView: React.FC = () => {
                     required
                   >
                     {accounts
-                      .filter((a) => !a.isArchived && ['bank', 'cash'].includes(a.accountType))
+                      .filter((a) => !a.isArchived && ['bank', 'cash', 'mobile_wallet'].includes(a.accountType))
                       .map((a) => (
                         <option key={a.id} value={a.id}>
-                          {a.name}
+                          {a.name} — ৳{getAccountBalance(a.id).toLocaleString()}
                         </option>
                       ))}
                   </select>

@@ -143,7 +143,7 @@ export const ZakatView: React.FC = () => {
       setIsDisburseModalOpen(false);
       setDisburseAmount('');
     } else {
-      setDisburseError('Failed to record zakat disbursement.');
+      setDisburseError(res.error || 'Failed to record zakat disbursement.');
     }
   };
 

@@ -34,6 +34,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
     transactionLines,
     accounts,
     categories,
+    getAccountBalance,
     postTransaction,
     reverseTransaction,
     createCategory,
@@ -625,9 +626,16 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
               {/* Source Account */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {entryMode === 'income' ? 'Deposit Into Account *' : 'Source Funding Account *'}
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-slate-300 font-medium">
+                    {entryMode === 'income' ? 'Deposit Into Account *' : 'Source Funding Account *'}
+                  </label>
+                  {selectedAccount && (
+                    <span className="text-[11px] font-mono text-emerald-400">
+                      Balance: ৳{getAccountBalance(selectedAccount).toLocaleString()}
+                    </span>
+                  )}
+                </div>
                 <select
                   value={selectedAccount}
                   onChange={(e) => setSelectedAccount(e.target.value)}
@@ -638,16 +646,48 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                     .filter((a) => !a.isArchived)
                     .map((a) => (
                       <option key={a.id} value={a.id}>
-                        {a.name} ({a.accountType})
+                        {a.name} ({a.accountType}) — ৳{getAccountBalance(a.id).toLocaleString()}
                       </option>
                     ))}
                 </select>
+
+                {/* Insufficient Funds Warning for Expense/Transfer/Split */}
+                {(() => {
+                  if (entryMode === 'income') return null;
+                  const acc = accounts.find((a) => a.id === selectedAccount);
+                  if (!acc || !['cash', 'bank', 'mobile_wallet'].includes(acc.accountType)) return null;
+                  const bal = getAccountBalance(acc.id);
+                  const parsedAmt = parseFloat(amount) || 0;
+                  if (parsedAmt <= bal) return null;
+
+                  return (
+                    <div className="mt-2 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-1">
+                      <div className="font-semibold text-amber-200 flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই (Insufficient Balance)</span>
+                      </div>
+                      <div className="text-[11px] text-slate-300">
+                        "{acc.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold text-amber-400 font-mono">৳{bal.toLocaleString()}</span>, কিন্তু খরচ/ট্রান্সফার করতে চাওয়া হচ্ছে <span className="font-bold text-white font-mono">৳{parsedAmt.toLocaleString()}</span>।
+                      </div>
+                      <div className="text-[11px] text-emerald-300 font-medium">
+                        💡 লেনদেন সম্পন্ন করার পূর্বে অনুগ্রহ করে আগে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন।
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
 
               {/* Destination Account for Transfer */}
               {entryMode === 'transfer' && (
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">Destination Target Account *</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-slate-300 font-medium">Destination Target Account *</label>
+                    {destinationAccount && (
+                      <span className="text-[11px] font-mono text-emerald-400">
+                        Balance: ৳{getAccountBalance(destinationAccount).toLocaleString()}
+                      </span>
+                    )}
+                  </div>
                   <select
                     value={destinationAccount}
                     onChange={(e) => setDestinationAccount(e.target.value)}
@@ -658,7 +698,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                       .filter((a) => !a.isArchived && a.id !== selectedAccount)
                       .map((a) => (
                         <option key={a.id} value={a.id}>
-                          {a.name} ({a.accountType})
+                          {a.name} ({a.accountType}) — ৳{getAccountBalance(a.id).toLocaleString()}
                         </option>
                       ))}
                   </select>

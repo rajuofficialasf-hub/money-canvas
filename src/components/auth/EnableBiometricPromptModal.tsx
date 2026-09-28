@@ -35,10 +35,10 @@ export const EnableBiometricPromptModal: React.FC = () => {
           setPromptEnableModal(false);
         }, 1200);
       } else {
-        setErrorMsg(res.error || 'বায়োমেট্রিক চালু করা যায়নি। আবার চেষ্টা করুন।');
+        setErrorMsg(res.error || 'Failed to enable biometrics. Please try again.');
       }
     } catch (err: any) {
-      setErrorMsg(err?.message || 'বায়োমেট্রিক সংযোগে ত্রুটি হয়েছে।');
+      setErrorMsg(err?.message || 'Biometric sensor error occurred.');
     } finally {
       setIsLoading(false);
     }
@@ -71,13 +71,13 @@ export const EnableBiometricPromptModal: React.FC = () => {
           <div className="space-y-1">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold">
               <Sparkles className="h-3 w-3" />
-              <span>নিরাপদ ও দ্রুত প্রবেশ</span>
+              <span>Fast & Secure Access</span>
             </div>
             <h3 className="text-lg font-bold text-white tracking-tight">
-              {biometryTypeName} চালু করবেন?
+              Enable {biometryTypeName} Lock?
             </h3>
             <p className="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto">
-              পরবর্তী সময়ে পাসওয়ার্ড বা জটিলতা ছাড়াই সরাসরি আপনার ফিঙ্গারপ্রিন্ট অথবা ফেস আইডি দিয়ে চোখের পলকে মানি ক্যানভাসে প্রবেশ করতে পারবেন।
+              Protect your personal financial records and unlock Money Canvas instantly using your biometric credential.
             </p>
           </div>
         </div>
@@ -94,7 +94,7 @@ export const EnableBiometricPromptModal: React.FC = () => {
         {success && (
           <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center justify-center gap-2 font-medium">
             <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>বায়োমেট্রিক সফলভাবে সক্রিয় করা হয়েছে!</span>
+            <span>{biometryTypeName} lock enabled successfully!</span>
           </div>
         )}
 
@@ -109,12 +109,12 @@ export const EnableBiometricPromptModal: React.FC = () => {
             {isLoading ? (
               <>
                 <RefreshCw className="h-4 w-4 animate-spin" />
-                <span>যাচাই করা হচ্ছে...</span>
+                <span>Verifying...</span>
               </>
             ) : (
               <>
                 <Fingerprint className="h-4 w-4" />
-                <span>হ্যাঁ, {biometryTypeName} চালু করুন</span>
+                <span>Enable {biometryTypeName}</span>
               </>
             )}
           </button>
@@ -125,7 +125,7 @@ export const EnableBiometricPromptModal: React.FC = () => {
             onClick={() => setPromptEnableModal(false)}
             className="w-full py-2.5 px-4 rounded-xl text-slate-400 hover:text-slate-200 text-xs transition-colors"
           >
-            এখন নয়, পরে করব
+            Not now, maybe later
           </button>
         </div>
       </div>
