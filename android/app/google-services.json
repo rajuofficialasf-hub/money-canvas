@@ -14,23 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "258283545047-k6hlu0v0dpan031gv49rkdn39gtmdfvc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.aistudio.myfinance.qvrxtp",
-            "certificate_hash": "ef4fa2735f9d662bc117edd4e6110dc6fcd33c9f"
-          }
-        },
-        {
-          "client_id": "258283545047-pkneisnv0la8me5poafj3h8vhm0iqogl.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.aistudio.myfinance.qvrxtp",
-            "certificate_hash": "8e04d8d16358934a9cf95722583ef4e85605aefd"
-          }
-        },
-        {
-          "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+          "client_id": "258283545047-n5hsnjc0lv63pqduefv8n70i6nqbqqft.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -67,7 +51,15 @@
           }
         },
         {
-          "client_id": "258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com",
+          "client_id": "258283545047-hi12qt1jdb119coae50lq2d2nmhd9nis.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.moneycanvas.app",
+            "certificate_hash": "f6a9faf02bea922db7296a70d7066fcff91384da"
+          }
+        },
+        {
+          "client_id": "258283545047-n5hsnjc0lv63pqduefv8n70i6nqbqqft.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

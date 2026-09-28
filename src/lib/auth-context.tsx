@@ -258,10 +258,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
           // Do NOT pass custom scopes array: the plugin automatically requests email, profile & openid.
           // Passing custom scopes triggers rejection unless MainActivity is customized.
-          const nativeResult = await SocialLogin.login({
-            provider: 'google',
-            options: {},
-          });
+          let nativeResult: any;
+          try {
+            nativeResult = await SocialLogin.login({
+              provider: 'google',
+              options: {
+                style: 'bottom',
+                filterByAuthorizedAccounts: false,
+              },
+            });
+          } catch (firstErr: any) {
+            const firstErrMsg = firstErr?.message || String(firstErr);
+            if (firstErrMsg.toLowerCase().includes('cancel')) {
+              throw firstErr;
+            }
+            // Fallback to standard picker if bottom sheet encounters an issue
+            nativeResult = await SocialLogin.login({
+              provider: 'google',
+              options: {
+                style: 'standard',
+                filterByAuthorizedAccounts: false,
+              },
+            });
+          }
 
           const loginData = (nativeResult?.result || nativeResult) as any;
           if (loginData?.idToken) {
@@ -292,10 +311,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const errStr = nativeErr?.message || String(nativeErr);
           if (
             errStr.toLowerCase().includes('cancel') ||
-            nativeErr?.code === '16' ||
-            nativeErr?.code === 16
+            errStr.toLowerCase().includes('closed')
           ) {
-            return { success: false, error: 'Sign-in was cancelled.' };
+            return { success: false, error: 'সাইন-ইন বাতিল করা হয়েছে।' };
+          }
+          if (errStr.includes('[16]') || errStr.toLowerCase().includes('account reauth failed')) {
+            return {
+              success: false,
+              error: 'Google Sign-In failed [Error 16]: Google Cloud Console-এ আপনার ইমেইলটি OAuth Consent Screen > Test Users-এ যোগ করুন অথবা রিলিজ কি-এর SHA-1 ফিঙ্গারপ্রিন্ট যোগ করুন।',
+            };
           }
           // On Native Android, never fall through to browser redirects which fail in WebViews
           return {
