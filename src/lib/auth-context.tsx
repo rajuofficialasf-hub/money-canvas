@@ -250,9 +250,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // 1. Android Native Platform: Use Native Google Sign-In via Credential Manager
       if (Capacitor.isNativePlatform()) {
         try {
+          // Web client ID from google-services.json (client_type 3)
+          const webClientId =
+            '258283545047-n5hsnjc0lv63pqduefv8n70i6nqbqqft.apps.googleusercontent.com';
+
           await SocialLogin.initialize({
             google: {
-              webClientId: '258283545047-lb1fqibh14689c0g89hcf70dkavtg6ee.apps.googleusercontent.com',
+              webClientId,
             },
           });
 
