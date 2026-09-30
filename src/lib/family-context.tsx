@@ -1,3 +1,4 @@
+import { newId } from './id-utils';
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from './auth-context';
 import {
@@ -169,7 +170,7 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
       const status = permCheck.requiresApproval ? 'pending_approval' : 'approved';
       const expenseMonthYear = expenseInput.date.slice(0, 7);
-      const newExpenseId = `famexp-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const newExpenseId = newId('famexp');
 
       const newExpense: FamilyExpense = {
         ...expenseInput,
@@ -355,7 +356,7 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     (contributionInput: Omit<JointFundContribution, 'id' | 'createdAt'>) => {
       const newContribution: JointFundContribution = {
         ...contributionInput,
-        id: `famcnt-${Date.now()}`,
+        id: newId('famcnt'),
         createdAt: new Date().toISOString(),
       };
 
@@ -418,7 +419,7 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createFamilyMember = useCallback((memberInput: Omit<FamilyMember, 'id' | 'joinedAt'>) => {
     const newMember: FamilyMember = {
       ...memberInput,
-      id: `fam-mbr-${Date.now()}`,
+      id: newId('fam-mbr'),
       joinedAt: new Date().toISOString().slice(0, 10),
     };
 
@@ -457,7 +458,7 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createJointAccount = useCallback((accountInput: Omit<JointAccount, 'id' | 'createdAt'>) => {
     const newAcc: JointAccount = {
       ...accountInput,
-      id: `joint-acc-${Date.now()}`,
+      id: newId('joint-acc'),
       createdAt: new Date().toISOString().slice(0, 10),
     };
 

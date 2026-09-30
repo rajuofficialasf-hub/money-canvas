@@ -1,3 +1,4 @@
+import { newId } from '../lib/id-utils';
 import React, { useState } from 'react';
 import {
   Account,
@@ -103,7 +104,7 @@ export const LedgerSandbox: React.FC = () => {
       return;
     }
 
-    const newTxId = `tx-${Date.now()}`;
+    const newTxId = newId('tx');
     const newTx: Transaction = {
       id: newTxId,
       userId: 'u-1',
@@ -121,7 +122,7 @@ export const LedgerSandbox: React.FC = () => {
 
     if (txType === 'expense' || txType === 'cc_purchase') {
       newLines.push({
-        id: `l-${Date.now()}-1`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'category',
         categoryId: txCategory,
@@ -129,7 +130,7 @@ export const LedgerSandbox: React.FC = () => {
         createdAt: new Date().toISOString(),
       });
       newLines.push({
-        id: `l-${Date.now()}-2`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'account',
         accountId: txType === 'cc_purchase' ? 'acc-4' : txAccount,
@@ -138,7 +139,7 @@ export const LedgerSandbox: React.FC = () => {
       });
     } else if (txType === 'income') {
       newLines.push({
-        id: `l-${Date.now()}-1`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'category',
         categoryId: txCategory,
@@ -146,7 +147,7 @@ export const LedgerSandbox: React.FC = () => {
         createdAt: new Date().toISOString(),
       });
       newLines.push({
-        id: `l-${Date.now()}-2`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'account',
         accountId: txAccount,
@@ -155,7 +156,7 @@ export const LedgerSandbox: React.FC = () => {
       });
     } else if (txType === 'transfer') {
       newLines.push({
-        id: `l-${Date.now()}-1`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'account',
         accountId: txAccount,
@@ -163,7 +164,7 @@ export const LedgerSandbox: React.FC = () => {
         createdAt: new Date().toISOString(),
       });
       newLines.push({
-        id: `l-${Date.now()}-2`,
+        id: newId('l'),
         transactionId: newTxId,
         lineType: 'account',
         accountId: txTargetAccount,

@@ -1,3 +1,4 @@
+import { newId } from './id-utils';
 /**
  * 100% Free Offline Client-Side SMS & Notification Parser
  * Zero External API cost, Zero data transmission, 100% Private
@@ -436,7 +437,7 @@ export function parseSingleSms(
   const categoryMatch = matchCategory(trimmed, counterparty, txType, userCategories);
 
   return {
-    id: `sms_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    id: newId('sms'),
     rawText: trimmed,
     sourceProvider: provider,
     type: txType,

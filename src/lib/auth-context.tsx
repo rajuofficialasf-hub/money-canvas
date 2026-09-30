@@ -1,3 +1,4 @@
+import { newId } from './id-utils';
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { UserProfile, ProfileUpdateInput, TenantProfile, FirebaseAppUser } from '../types/auth';
 import {
@@ -661,7 +662,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setActiveProfileId(existing.id);
     } else {
       const newProf: UserProfile = {
-        id: crypto.randomUUID ? crypto.randomUUID() : `usr-${Date.now()}`,
+        id: newId('usr'),
         email,
         fullName: fullName || email.split('@')[0],
         baseCurrency: 'BDT',
@@ -711,7 +712,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const createProfile = (fullName: string, email: string, role: 'owner' | 'auditor' = 'owner') => {
     const newProfile: UserProfile = {
-      id: crypto.randomUUID ? crypto.randomUUID() : `usr-${Date.now()}`,
+      id: newId('usr'),
       email,
       fullName,
       baseCurrency: 'BDT',

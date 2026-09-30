@@ -1,3 +1,4 @@
+import { newId } from './id-utils';
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from './auth-context';
 import {
@@ -913,7 +914,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    */
   const createCategory = (input: NewCategoryInput): Category => {
     const newCat: Category = {
-      id: `cat-${input.type === 'income' ? 'inc' : 'exp'}-${Date.now()}`,
+      id: newId(input.type === 'income' ? 'cat-inc' : 'cat-exp'),
       userId,
       name: input.name.trim(),
       type: input.type,
@@ -958,7 +959,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Create New Account
    */
   const createAccount = (input: NewAccountInput) => {
-    const accountId = `acc-${Date.now()}`;
+    const accountId = newId('acc');
     const newAcc: Account = {
       id: accountId,
       userId,
@@ -977,7 +978,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const newLines: TransactionLine[] = [];
 
     if (input.initialBalance && input.initialBalance !== 0) {
-      const txId = `tx-init-${Date.now()}`;
+      const txId = newId('tx-init');
       initialTx = {
         id: txId,
         userId,
@@ -992,7 +993,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
 
       newLines.push({
-        id: `tl-${Date.now()}-1`,
+        id: newId('tl'),
         transactionId: txId,
         lineType: 'account',
         accountId: accountId,
@@ -1002,7 +1003,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       });
 
       newLines.push({
-        id: `tl-${Date.now()}-2`,
+        id: newId('tl'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-adj-1',
@@ -1058,7 +1059,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     }
 
-    const txId = `tx-${Date.now()}`;
+    const txId = newId('tx');
     const newTx: Transaction = {
       id: txId,
       userId,
@@ -1073,7 +1074,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const lines: TransactionLine[] = input.lines.map((l, idx) => ({
-      id: `tl-${Date.now()}-${idx + 1}`,
+      id: newId('tl'),
       transactionId: txId,
       lineType: l.lineType,
       accountId: l.accountId || null,
@@ -1108,9 +1109,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         return { success: false, error: `Row ${i + 1} validation error: ${validation.errors.join('; ')}` };
       }
 
-      const txId = typeof crypto !== 'undefined' && crypto.randomUUID
-        ? `tx-${crypto.randomUUID()}`
-        : `tx-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 7)}`;
+      const txId = newId('tx');
 
       const newTx: Transaction = {
         id: txId,
@@ -1125,10 +1124,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         updatedAt: nowISO,
       };
 
-      const lines: TransactionLine[] = input.lines.map((l, idx) => ({
-        id: typeof crypto !== 'undefined' && crypto.randomUUID
-          ? `tl-${crypto.randomUUID()}`
-          : `tl-${Date.now()}-${i}-${idx + 1}`,
+      const lines: TransactionLine[] = input.lines.map((l) => ({
+        id: newId('tl'),
         transactionId: txId,
         lineType: l.lineType,
         accountId: l.accountId || null,
@@ -1165,7 +1162,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return { success: false, error: 'Original transaction contains no child lines.' };
     }
 
-    const reversalTxId = `tx-rev-${Date.now()}`;
+    const reversalTxId = newId('tx-rev');
     const reversalTx: Transaction = {
       id: reversalTxId,
       userId,
@@ -1181,7 +1178,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const reversalLines: TransactionLine[] = originalLines.map((l, idx) => ({
-      id: `tl-rev-${Date.now()}-${idx + 1}`,
+      id: newId('tl-rev'),
       transactionId: reversalTxId,
       lineType: l.lineType,
       accountId: l.accountId,
@@ -1217,8 +1214,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const fdAccountId = `acc-fd-${Date.now()}`;
-    const fdId = `fd-${Date.now()}`;
+    const fdAccountId = newId('acc-fd');
+    const fdId = newId('fd');
 
     const maturityCalc = calculateFdMaturity(
       input.principalAmount,
@@ -1266,7 +1263,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       updatedAt: new Date().toISOString(),
     };
 
-    const fundingTxId = `tx-fd-open-${Date.now()}`;
+    const fundingTxId = newId('tx-fd-open');
     const fundingTx: Transaction = {
       id: fundingTxId,
       userId,
@@ -1282,7 +1279,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const fundingLines: TransactionLine[] = [
       {
-        id: `tl-fd-1-${Date.now()}`,
+        id: newId('tl-fd-1'),
         transactionId: fundingTxId,
         lineType: 'account',
         accountId: input.sourceAccountId,
@@ -1291,7 +1288,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-fd-2-${Date.now()}`,
+        id: newId('tl-fd-2'),
         transactionId: fundingTxId,
         lineType: 'account',
         accountId: fdAccountId,
@@ -1328,12 +1325,12 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       fd.taxRate
     );
 
-    const txId = `tx-fd-mat-${Date.now()}`;
+    const txId = newId('tx-fd-mat');
     const maturityDate = new Date().toISOString().split('T')[0];
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-mat-1-${Date.now()}`,
+        id: newId('tl-mat-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: fd.fdAccountId,
@@ -1342,7 +1339,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-mat-2-${Date.now()}`,
+        id: newId('tl-mat-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-inc-3',
@@ -1351,7 +1348,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-mat-3-${Date.now()}`,
+        id: newId('tl-mat-3'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-exp-7',
@@ -1360,7 +1357,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-mat-4-${Date.now()}`,
+        id: newId('tl-mat-4'),
         transactionId: txId,
         lineType: 'account',
         accountId: destinationAccountId,
@@ -1418,12 +1415,12 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       fd.taxRate
     );
 
-    const txId = `tx-fd-brk-${Date.now()}`;
+    const txId = newId('tx-fd-brk');
     const txDate = new Date().toISOString().split('T')[0];
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-brk-1-${Date.now()}`,
+        id: newId('tl-brk-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: fd.fdAccountId,
@@ -1432,7 +1429,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-brk-2-${Date.now()}`,
+        id: newId('tl-brk-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-inc-3',
@@ -1441,7 +1438,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-brk-3-${Date.now()}`,
+        id: newId('tl-brk-3'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-exp-7',
@@ -1450,7 +1447,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-brk-4-${Date.now()}`,
+        id: newId('tl-brk-4'),
         transactionId: txId,
         lineType: 'account',
         accountId: destinationAccountId,
@@ -1520,7 +1517,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         );
       }
       const newBudget: Budget = {
-        id: typeof crypto !== 'undefined' && crypto.randomUUID ? `bgt-${crypto.randomUUID()}` : `bgt-${Date.now()}`,
+        id: newId('bgt'),
         userId,
         categoryId: input.categoryId,
         monthYear: input.monthYear,
@@ -1569,7 +1566,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // ----------------------------------------------------
 
   const createRecurring = (input: NewRecurringInput): RecurringTransaction => {
-    const recId = `rec-${Date.now()}`;
+    const recId = newId('rec');
     const newRec: RecurringTransaction = {
       id: recId,
       userId,
@@ -1633,7 +1630,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // ----------------------------------------------------
 
   const createGoal = (input: NewGoalInput): FinancialGoal => {
-    const goalId = `goal-${Date.now()}`;
+    const goalId = newId('goal');
     let linkedAccountId: string | undefined = input.linkedAccountId;
 
     // If Mode is linked_savings_account_goal and no account chosen, create a dedicated account
@@ -1664,7 +1661,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // If tracking goal and initial deposit specified, record goal contribution (Lock 3: does NOT generate expense)
     if (input.goalMode === 'tracking_goal' && input.initialDeposit && input.initialDeposit > 0) {
       const contrib: GoalContribution = {
-        id: `gc-${Date.now()}`,
+        id: newId('gc'),
         goalId,
         amount: round2(input.initialDeposit),
         contributionDate: new Date().toISOString().split('T')[0],
@@ -1695,7 +1692,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (goal.goalMode === 'tracking_goal') {
       // Lock 3: tracking_goal does NOT post to double-entry ledger or manufacture an expense
       const contrib: GoalContribution = {
-        id: `gc-${Date.now()}`,
+        id: newId('gc'),
         goalId,
         amount: parsedAmt,
         contributionDate: todayStr,
@@ -1749,8 +1746,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const dpsAccountId = `acc-dps-${Date.now()}`;
-    const dpsId = `dps-${Date.now()}`;
+    const dpsAccountId = newId('acc-dps');
+    const dpsId = newId('dps');
 
     const maturityCalc = calculateDpsMaturity(
       input.monthlyInstallment,
@@ -1822,7 +1819,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Source Bank: -installment
     // DPS Account: +installment
     // Sum = 0! Net worth unchanged.
-    const firstTxId = `tx-dps-inst-${Date.now()}`;
+    const firstTxId = newId('tx-dps-inst');
     const firstTx: Transaction = {
       id: firstTxId,
       userId,
@@ -1838,7 +1835,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const firstTxLines: TransactionLine[] = [
       {
-        id: `tl-dps-1-${Date.now()}`,
+        id: newId('tl-dps-1'),
         transactionId: firstTxId,
         lineType: 'account',
         accountId: input.sourceAccountId,
@@ -1847,7 +1844,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-dps-2-${Date.now()}`,
+        id: newId('tl-dps-2'),
         transactionId: firstTxId,
         lineType: 'account',
         accountId: dpsAccountId,
@@ -1890,7 +1887,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const todayStr = new Date().toISOString().split('T')[0];
-    const txId = `tx-dps-pay-${Date.now()}`;
+    const txId = newId('tx-dps-pay');
 
     // Double-entry transfer
     const tx: Transaction = {
@@ -1908,7 +1905,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-dpsp-1-${Date.now()}`,
+        id: newId('tl-dpsp-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: sourceAccountId,
@@ -1917,7 +1914,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-dpsp-2-${Date.now()}`,
+        id: newId('tl-dpsp-2'),
         transactionId: txId,
         lineType: 'account',
         accountId: dps.dpsAccountId,
@@ -1962,7 +1959,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       dps.taxRate
     );
 
-    const txId = `tx-dps-mat-${Date.now()}`;
+    const txId = newId('tx-dps-mat');
     const todayStr = new Date().toISOString().split('T')[0];
 
     // Double-entry maturity liquidation:
@@ -1975,7 +1972,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-dmat-1-${Date.now()}`,
+        id: newId('tl-dmat-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: dps.dpsAccountId,
@@ -1984,7 +1981,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-dmat-2-${Date.now()}`,
+        id: newId('tl-dmat-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-inc-3', // Bank Interest
@@ -1993,7 +1990,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-dmat-3-${Date.now()}`,
+        id: newId('tl-dmat-3'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-exp-7', // Tax & Charges
@@ -2002,7 +1999,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-dmat-4-${Date.now()}`,
+        id: newId('tl-dmat-4'),
         transactionId: txId,
         lineType: 'account',
         accountId: destinationAccountId,
@@ -2045,7 +2042,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Create Peer-to-Peer Debt (Lent or Borrowed)
    */
   const createDebt = (input: NewDebtInput) => {
-    const debtId = `debt-${Date.now()}`;
+    const debtId = newId('debt');
     const isLent = input.direction === 'lent';
     const todayStr = new Date().toISOString().split('T')[0];
 
@@ -2066,7 +2063,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     }
 
-    const accId = `acc-${isLent ? 'rec' : 'pay'}-${Date.now()}`;
+    const accId = newId(isLent ? 'acc-rec' : 'acc-pay');
 
     const debtAccount: Account = {
       id: accId,
@@ -2080,10 +2077,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       createdAt: new Date().toISOString(),
     };
 
-    const txId = `tx-debt-${Date.now()}`;
+    const txId = newId('tx-debt');
     const lines: TransactionLine[] = [
       {
-        id: `tl-d1-${Date.now()}`,
+        id: newId('tl-d1'),
         transactionId: txId,
         lineType: 'account',
         accountId: input.sourceOrDestAccountId,
@@ -2092,7 +2089,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-d2-${Date.now()}`,
+        id: newId('tl-d2'),
         transactionId: txId,
         lineType: 'account',
         accountId: accId,
@@ -2165,13 +2162,13 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     }
 
-    const txId = `tx-settle-${Date.now()}`;
+    const txId = newId('tx-settle');
 
     // If lent: Bank/Cash gets +amount, Receivable gets -amount
     // If borrowed: Bank/Cash gets -amount, Payable gets +amount (reduces liability)
     const lines: TransactionLine[] = [
       {
-        id: `tl-set1-${Date.now()}`,
+        id: newId('tl-set1'),
         transactionId: txId,
         lineType: 'account',
         accountId: settlementAccountId,
@@ -2180,7 +2177,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-set2-${Date.now()}`,
+        id: newId('tl-set2'),
         transactionId: txId,
         lineType: 'account',
         accountId: debt.linkedAccountId,
@@ -2231,8 +2228,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Create Bank Loan with Amortization Schedule
    */
   const createLoan = (input: NewLoanInput) => {
-    const loanId = `loan-${Date.now()}`;
-    const loanAccId = `acc-loan-${Date.now()}`;
+    const loanId = newId('loan');
+    const loanAccId = newId('acc-loan');
     const todayStr = input.disbursementDate || new Date().toISOString().split('T')[0];
 
     const { emi } =
@@ -2253,10 +2250,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     // Disbursement transaction: Bank/Cash +principal, Loan account -principal (Liability is negative!)
-    const txId = `tx-ldisb-${Date.now()}`;
+    const txId = newId('tx-ldisb');
     const lines: TransactionLine[] = [
       {
-        id: `tl-ldisb-1-${Date.now()}`,
+        id: newId('tl-ldisb-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: input.disbursementAccountId,
@@ -2265,7 +2262,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-ldisb-2-${Date.now()}`,
+        id: newId('tl-ldisb-2'),
         transactionId: txId,
         lineType: 'account',
         accountId: loanAccId,
@@ -2351,7 +2348,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const todayStr = new Date().toISOString().split('T')[0];
-    const txId = `tx-emi-${Date.now()}`;
+    const txId = newId('tx-emi');
 
     // Section 9.4:
     // Bank Account: -scheduledEmiAmount
@@ -2360,7 +2357,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     // Invariant: -EMI + Principal + Interest === 0.00
     const lines: TransactionLine[] = [
       {
-        id: `tl-emi-1-${Date.now()}`,
+        id: newId('tl-emi-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: paymentAccountId,
@@ -2369,7 +2366,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-emi-2-${Date.now()}`,
+        id: newId('tl-emi-2'),
         transactionId: txId,
         lineType: 'account',
         accountId: loan.loanAccountId,
@@ -2378,7 +2375,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-emi-3-${Date.now()}`,
+        id: newId('tl-emi-3'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-exp-9', // Loan Interest Expense
@@ -2445,8 +2442,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
     }
 
-    const assetId = `asset-${Date.now()}`;
-    const assetAccId = `acc-asset-${Date.now()}`;
+    const assetId = newId('asset');
+    const assetAccId = newId('acc-asset');
     const todayStr = input.purchaseDate || new Date().toISOString().split('T')[0];
 
     const assetAccount: Account = {
@@ -2461,10 +2458,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       createdAt: new Date().toISOString(),
     };
 
-    const txId = `tx-asset-${Date.now()}`;
+    const txId = newId('tx-asset');
     const lines: TransactionLine[] = [
       {
-        id: `tl-ass-1-${Date.now()}`,
+        id: newId('tl-ass-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: assetAccId,
@@ -2476,7 +2473,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     if (input.fundingMethod === 'full_cash' && input.fundingAccountId) {
       lines.push({
-        id: `tl-ass-2-${Date.now()}`,
+        id: newId('tl-ass-2'),
         transactionId: txId,
         lineType: 'account',
         accountId: input.fundingAccountId,
@@ -2487,7 +2484,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else if (input.fundingMethod === 'cash_plus_loan') {
       if (input.fundingAccountId && input.cashDownpayment) {
         lines.push({
-          id: `tl-ass-2-${Date.now()}`,
+          id: newId('tl-ass-2'),
           transactionId: txId,
           lineType: 'account',
           accountId: input.fundingAccountId,
@@ -2498,7 +2495,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       if (input.loanAccountId && input.loanFinancedAmount) {
         lines.push({
-          id: `tl-ass-3-${Date.now()}`,
+          id: newId('tl-ass-3'),
           transactionId: txId,
           lineType: 'account',
           accountId: input.loanAccountId,
@@ -2510,7 +2507,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } else {
       // Opening balance equity
       lines.push({
-        id: `tl-ass-2-${Date.now()}`,
+        id: newId('tl-ass-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-adj-1',
@@ -2558,8 +2555,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Register Static Personal Liability
    */
   const createStaticLiability = (name: string, type: string, amount: number, sourceAccountId?: string) => {
-    const liabId = `liab-${Date.now()}`;
-    const liabAccId = `acc-liab-${Date.now()}`;
+    const liabId = newId('liab');
+    const liabAccId = newId('acc-liab');
     const todayStr = new Date().toISOString().split('T')[0];
 
     const liabAccount: Account = {
@@ -2574,10 +2571,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       createdAt: new Date().toISOString(),
     };
 
-    const txId = `tx-liab-${Date.now()}`;
+    const txId = newId('tx-liab');
     const lines: TransactionLine[] = [
       {
-        id: `tl-liab-1-${Date.now()}`,
+        id: newId('tl-liab-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: liabAccId,
@@ -2589,7 +2586,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     if (sourceAccountId) {
       lines.push({
-        id: `tl-liab-2-${Date.now()}`,
+        id: newId('tl-liab-2'),
         transactionId: txId,
         lineType: 'account',
         accountId: sourceAccountId,
@@ -2599,7 +2596,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       });
     } else {
       lines.push({
-        id: `tl-liab-2-${Date.now()}`,
+        id: newId('tl-liab-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-adj-1',
@@ -2660,7 +2657,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const netWorth = round2(totalAssets - totalLiabilities);
 
     const snapshot: NetWorthSnapshot = {
-      id: `nw-${Date.now()}`,
+      id: newId('nw'),
       userId,
       snapshotDate: todayStr,
       totalAssets: round2(totalAssets),
@@ -2701,11 +2698,11 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const todayStr = new Date().toISOString().split('T')[0];
-    const txId = `tx-zakat-${Date.now()}`;
+    const txId = newId('tx-zakat');
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-zk-1-${Date.now()}`,
+        id: newId('tl-zk-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: sourceAccountId,
@@ -2714,7 +2711,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-zk-2-${Date.now()}`,
+        id: newId('tl-zk-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-exp-10', // Zakat & Charitable Donations
@@ -2748,7 +2745,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    */
   const createBroker = (input: NewBrokerInput): Broker => {
     const newBroker: Broker = {
-      id: `broker-${Date.now()}`,
+      id: newId('broker'),
       userId,
       name: input.name.trim(),
       licenseNumber: input.licenseNumber?.trim(),
@@ -2767,7 +2764,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setBrokerAccounts((prev) => prev.map((ba) => ({ ...ba, isDefault: false })));
     }
     const newAccount: BrokerAccount = {
-      id: `bo-${Date.now()}`,
+      id: newId('bo'),
       userId,
       brokerId: input.brokerId,
       boId: input.boId && input.boId.trim() ? input.boId.trim() : `BO-${Math.floor(10000000 + Math.random() * 90000000)}`,
@@ -2789,14 +2786,14 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const todayStr = input.date || new Date().toISOString().split('T')[0];
-    const txId = `tx-bkdep-${Date.now()}`;
+    const txId = newId('tx-bkdep');
     let boAcc = brokerAccounts.find((b) => b.id === input.brokerAccountId) || brokerAccounts.find((b) => b.isDefault) || brokerAccounts[0];
     
     // Auto-create default BO Account if user has none yet
     if (!boAcc) {
       const defaultBroker = brokers[0] || { id: 'broker-default', name: 'BRAC EPL Stock Brokerage' };
       boAcc = {
-        id: `bo-auto-${Date.now()}`,
+        id: newId('bo-auto'),
         userId,
         brokerId: defaultBroker.id,
         boId: `120300${Math.floor(1000000000 + Math.random() * 9000000000)}`,
@@ -2835,7 +2832,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (isDirectExternal || !sourceAccount) {
       // Fresh Capital Inflow (Increases Net Worth & Total Assets directly)
       lines.push({
-        id: `tl-bkdep-1-${Date.now()}`,
+        id: newId('tl-bkdep-1'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-adj-1', // Balancing / Capital Inflow
@@ -2847,7 +2844,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       // Transfer from Bank Account to Broker Sub-Ledger
       lines.push(
         {
-          id: `tl-bkdep-1-${Date.now()}`,
+          id: newId('tl-bkdep-1'),
           transactionId: txId,
           lineType: 'account',
           accountId: sourceAccount.id,
@@ -2856,7 +2853,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           createdAt: new Date().toISOString(),
         },
         {
-          id: `tl-bkdep-2-${Date.now()}`,
+          id: newId('tl-bkdep-2'),
           transactionId: txId,
           lineType: 'category',
           categoryId: 'cat-adj-1', // Balancing/Transfer
@@ -2882,7 +2879,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Sub-ledger row in broker_cash_transactions
     const cashRow: BrokerCashTransaction = {
-      id: `bct-${Date.now()}`,
+      id: newId('bct'),
       userId,
       brokerAccountId: targetBoAccountId,
       transactionDate: todayStr,
@@ -2924,12 +2921,12 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const todayStr = input.date || new Date().toISOString().split('T')[0];
-    const txId = `tx-bkwdr-${Date.now()}`;
+    const txId = newId('tx-bkwdr');
     const brokerName = brokers.find((b) => b.id === boAcc?.brokerId)?.name || 'Brokerage';
 
     const lines: TransactionLine[] = [
       {
-        id: `tl-bkwdr-1-${Date.now()}`,
+        id: newId('tl-bkwdr-1'),
         transactionId: txId,
         lineType: 'account',
         accountId: input.destinationBankAccountId,
@@ -2938,7 +2935,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         createdAt: new Date().toISOString(),
       },
       {
-        id: `tl-bkwdr-2-${Date.now()}`,
+        id: newId('tl-bkwdr-2'),
         transactionId: txId,
         lineType: 'category',
         categoryId: 'cat-adj-1',
@@ -2962,7 +2959,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     const cashRow: BrokerCashTransaction = {
-      id: `bct-${Date.now()}`,
+      id: newId('bct'),
       userId,
       brokerAccountId: targetBoAccountId,
       transactionDate: todayStr,
@@ -3036,7 +3033,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const stock = stocks.find((s) => s.id === input.stockId);
     const stockSymbol = stock?.symbol || 'STOCK';
-    const tradeId = `st-tx-${Date.now()}`;
+    const tradeId = newId('st-tx');
     const tradeDate = input.tradeDate || new Date().toISOString().split('T')[0];
     const settlementDate = input.settlementDate || tradeDate;
 
@@ -3198,7 +3195,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Record into stock_price_history
     const newHist: StockPriceHistory = {
-      id: `sph-${stockId}-${today}-${Date.now().toString().slice(-4)}`,
+      id: newId(`sph-${stockId}-${today}`),
       stockId,
       priceDate: today,
       closePrice: round2(newPrice),
@@ -3220,7 +3217,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const addCustomStock = (stockInput: Omit<Stock, 'id' | 'createdAt'>): Stock => {
     const newStock: Stock = {
       ...stockInput,
-      id: `stock-${stockInput.symbol.toLowerCase()}-${Date.now().toString().slice(-4)}`,
+      id: newId(`stock-${stockInput.symbol.toLowerCase()}`),
       symbol: stockInput.symbol.toUpperCase().trim(),
       companyName: stockInput.companyName.trim(),
       createdAt: new Date().toISOString(),
@@ -3324,7 +3321,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           if (quote && quote.ltp > 0) {
             updatedCount++;
             newHistories.push({
-              id: `sph-${s.id}-${today}-${Date.now().toString().slice(-4)}`,
+              id: newId(`sph-${s.id}-${today}`),
               stockId: s.id,
               priceDate: today,
               closePrice: round2(quote.ltp),
@@ -3408,7 +3405,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const newP = updateMap.get(s.id);
         if (newP !== undefined) {
           newHistories.push({
-            id: `sph-${s.id}-${today}-${Date.now().toString().slice(-4)}`,
+            id: newId(`sph-${s.id}-${today}`),
             stockId: s.id,
             priceDate: today,
             closePrice: newP,
@@ -3478,7 +3475,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    */
   const addStockPriceHistoryRecord = (input: NewStockPriceHistoryInput): StockPriceHistory => {
     const newRecord: StockPriceHistory = {
-      id: `sph-${input.stockId}-${input.priceDate}-${Date.now().toString().slice(-4)}`,
+      id: newId(`sph-${input.stockId}-${input.priceDate}`),
       stockId: input.stockId,
       priceDate: input.priceDate,
       closePrice: round2(input.closePrice),
@@ -3504,7 +3501,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const addBenchmarkPriceRecord = (input: NewBenchmarkPriceInput): BenchmarkIndexPrice => {
     const symbol = input.indexSymbol || 'DSEX';
     const newRecord: BenchmarkIndexPrice = {
-      id: `bench-${symbol.toLowerCase()}-${input.priceDate}-${Date.now().toString().slice(-4)}`,
+      id: newId(`bench-${symbol.toLowerCase()}-${input.priceDate}`),
       indexSymbol: symbol,
       priceDate: input.priceDate,
       closeValue: round2(input.closeValue),
@@ -3541,7 +3538,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
 
     const snapshot: PortfolioSnapshot = {
-      id: `ps-${todayStr}-${Date.now().toString().slice(-4)}`,
+      id: newId(`ps-${todayStr}`),
       userId,
       snapshotDate: todayStr,
       totalInvested: round2(totalInvested),
@@ -3586,7 +3583,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       input.taxRate ?? 10.0
     );
 
-    const divId = `div-${Date.now().toString().slice(-6)}`;
+    const divId = newId('div');
     const stock = stocks.find((s) => s.id === input.stockId);
     const stockSymbol = stock?.symbol || 'SECURITY';
 
@@ -3650,7 +3647,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const holding = stockHoldings.find((h) => h.stockId === input.stockId);
     const currentWac = holding?.weightedAverageCost || stock.currentPrice;
-    const actionId = `ca-${Date.now().toString().slice(-6)}`;
+    const actionId = newId('ca');
 
     let newQuantity = input.eligibleQuantity;
     let newCostBasis = round2(input.eligibleQuantity * currentWac);
@@ -3794,7 +3791,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const ipoId = `ipo-${Date.now().toString().slice(-6)}`;
+    const ipoId = newId('ipo');
     const newApp: IpoApplication = {
       id: ipoId,
       userId,
@@ -4053,7 +4050,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     logAuditEvent(
       'BACKUP_EXPORTED',
       'backup',
-      `backup-${Date.now()}`,
+      newId('backup'),
       `Complete tenant JSON backup bundle generated (${Object.values(bundle.metadata.recordCounts).reduce((a, b) => a + b, 0)} total records)`,
       {
         schemaVersion: bundle.metadata.schemaVersion,
@@ -4112,7 +4109,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       logAuditEvent(
         'BACKUP_RESTORED',
         'backup',
-        `restore-${Date.now()}`,
+        newId('restore'),
         `Tenant ledger state successfully restored from backup file (Schema ${bundle.metadata.schemaVersion})`,
         {
           exportedAt: bundle.metadata.exportedAt,

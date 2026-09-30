@@ -1,3 +1,4 @@
+import { newId } from '../../lib/id-utils';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../lib/language-context';
 import { useLedger } from '../../lib/ledger-context';
@@ -208,7 +209,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
     const fallbackTitle = preset ? (isBn ? preset.nameBn : preset.nameEn) : (isBn ? 'সঞ্চয়পত্র' : 'Savings Certificate');
 
     const newBond: SanchayaBondItem = {
-      id: `sb-${Date.now()}`,
+      id: newId('sb'),
       userId: 'user-active',
       category,
       schemeType: selectedPresetType,

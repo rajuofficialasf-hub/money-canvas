@@ -1,3 +1,4 @@
+import { newId } from './id-utils';
 /**
  * Phase 9 Audit Trail, Alert Engine & Export Utilities
  * Complete Forensic Logging, Cryptographic Hash Chain Verification & CSV Exporters
@@ -58,7 +59,7 @@ export function createAuditEntry(
   previousHash: string = '0x00000000000000'
 ): AuditLogEntry {
   const timestamp = new Date().toISOString();
-  const id = `audit-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
+  const id = newId('audit');
   const payloadToHash = JSON.stringify({
     userId,
     action,
