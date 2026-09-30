@@ -1,4 +1,4 @@
-import { toLocalISO } from './date-utils';
+import { todayLocalISO, addMonthsClamped } from './date-utils';
 /**
  * Money Canvas — Loan Prepayment & Early Payoff Simulator Engine (FEAT-7)
  *
@@ -80,7 +80,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
   const lumpSumMonth = Math.max(1, Math.round(input.lumpSumMonth || 1));
   const strategy = input.strategy;
 
-  const startDate = input.startDate ? new Date(input.startDate) : new Date();
+  const startDateISO = input.startDate || todayLocalISO();
 
   // 1. Calculate Baseline (Original Schedule without Prepayment)
   const baseEmiCalc = calculateReducingEmi(principal, annualRate, tenureMonths);
@@ -97,8 +97,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
   }
   const origTotalPayment = round2(principal + origTotalInterest);
 
-  const origPayoffDate = new Date(startDate);
-  origPayoffDate.setMonth(origPayoffDate.getMonth() + tenureMonths);
+  const origPayoffISO = addMonthsClamped(startDateISO, tenureMonths);
 
   // 2. Simulate Prepayment Schedule
   const schedule: SimulationScheduleMonth[] = [];
@@ -146,12 +145,11 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
     totalInterestNew = round2(totalInterestNew + interest);
     totalPrepaymentNew = round2(totalPrepaymentNew + extraPrincipal);
 
-    const monthDueDate = new Date(startDate);
-    monthDueDate.setMonth(monthDueDate.getMonth() + m);
+
 
     schedule.push({
       month: m,
-      dueDate: toLocalISO(monthDueDate),
+      dueDate: addMonthsClamped(startDateISO, m),
       beginningBalance,
       scheduledEmi: scheduledEmiAmount,
       extraPrepayment: extraPrincipal,
@@ -177,8 +175,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
   const monthsSaved = Math.max(0, tenureMonths - simulatedMonths);
   const yearsSaved = round2(monthsSaved / 12);
 
-  const newPayoffDate = new Date(startDate);
-  newPayoffDate.setMonth(newPayoffDate.getMonth() + simulatedMonths);
+  const newPayoffISO = addMonthsClamped(startDateISO, simulatedMonths);
 
   // Effective risk-free return of prepayment equals annual loan interest rate
   const effectiveReturnPct = annualRate;
@@ -189,7 +186,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
       monthlyEmi: baseEmi,
       totalInterest: origTotalInterest,
       totalPayment: origTotalPayment,
-      payoffDate: toLocalISO(origPayoffDate),
+      payoffDate: origPayoffISO,
     },
     newSummary: {
       tenureMonths: simulatedMonths,
@@ -197,7 +194,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
       totalInterest: totalInterestNew,
       totalPrepaymentPaid: totalPrepaymentNew,
       totalPayment: newTotalPayment,
-      payoffDate: toLocalISO(newPayoffDate),
+      payoffDate: newPayoffISO,
     },
     comparison: {
       interestSaved,

@@ -1,4 +1,4 @@
-import { todayLocalISO, toLocalISO } from './date-utils';
+import { todayLocalISO, addMonthsClamped, addDaysISO } from './date-utils';
 /**
  * Personal Finance & Investment Manager — Authoritative Accounting Engine
  * Implements deterministic calculation rules matching PostgreSQL views & stored functions.
@@ -513,27 +513,24 @@ export function calculateDpsMaturity(
  */
 export function advanceRecurringDate(
   currentDateStr: string,
-  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
+  frequency: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly',
+  anchorDateStr?: string
 ): string {
-  const d = new Date(currentDateStr);
+  // Month-based advances clamp to the schedule anchor's day-of-month so a
+  // Jan-31 schedule yields Feb 28 → Mar 31 instead of drifting to the 28th.
+  const anchorDay = Number((anchorDateStr || currentDateStr).split('-')[2]);
   switch (frequency) {
     case 'daily':
-      d.setDate(d.getDate() + 1);
-      break;
+      return addDaysISO(currentDateStr, 1);
     case 'weekly':
-      d.setDate(d.getDate() + 7);
-      break;
+      return addDaysISO(currentDateStr, 7);
     case 'monthly':
-      d.setMonth(d.getMonth() + 1);
-      break;
+      return addMonthsClamped(currentDateStr, 1, anchorDay);
     case 'quarterly':
-      d.setMonth(d.getMonth() + 3);
-      break;
+      return addMonthsClamped(currentDateStr, 3, anchorDay);
     case 'yearly':
-      d.setFullYear(d.getFullYear() + 1);
-      break;
+      return addMonthsClamped(currentDateStr, 12, anchorDay);
   }
-  return toLocalISO(d);
 }
 
 /**
@@ -575,13 +572,10 @@ export function generateLoanAmortizationSchedule(
       ? calculateReducingEmi(principal, annualInterestRatePct, tenureMonths)
       : calculateFlatEmi(principal, annualInterestRatePct, tenureMonths);
 
-  let currentDate = new Date(disbursementDate);
-
   for (let installmentNumber = 1; installmentNumber <= tenureMonths; installmentNumber++) {
-    // Advance due date by 1 month
-    currentDate = new Date(currentDate);
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    const dueDateStr = toLocalISO(currentDate);
+    // Each due date is computed from the original disbursement anchor with
+    // day-of-month clamping, so a Jan 31 anchor never drifts (Feb 28, Mar 31, ...).
+    const dueDateStr = addMonthsClamped(disbursementDate, installmentNumber);
 
     let scheduledInterest = 0;
     let scheduledPrincipal = 0;

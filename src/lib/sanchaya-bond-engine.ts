@@ -1,4 +1,4 @@
-import { toLocalISO } from './date-utils';
+import { toLocalISO, addMonthsClamped } from './date-utils';
 /**
  * Bangladesh National Savings Certificates (সঞ্চয়পত্র),
  * Treasury Bonds (ট্রেজারি বন্ড) & Islamic Sukuk Engine
@@ -247,7 +247,6 @@ export function generateUpcomingSchedule(
   );
 
   const now = new Date();
-  const purchase = new Date(item.purchaseDate);
   const maturity = new Date(item.maturityDate);
 
   // Month increment based on frequency
@@ -277,18 +276,20 @@ export function generateUpcomingSchedule(
     return result;
   }
 
-  // Iterate dates starting from purchase date or current date
-  let curr = new Date(purchase);
-  // Advance until curr > now - 1 month
-  while (curr <= now) {
-    curr.setMonth(curr.getMonth() + stepMonths);
+  // Each payout date is derived from the original purchase anchor with
+  // day-of-month clamping, so month-end anchors never drift or overflow.
+  const todayISO = toLocalISO(now);
+  const limitISO = addMonthsClamped(todayISO, monthsAhead);
+  const maturityISO = item.maturityDate;
+
+  let period = 1;
+  let dateStr = addMonthsClamped(item.purchaseDate, stepMonths);
+  while (dateStr <= todayISO) {
+    period++;
+    dateStr = addMonthsClamped(item.purchaseDate, period * stepMonths);
   }
 
-  const limitDate = new Date();
-  limitDate.setMonth(limitDate.getMonth() + monthsAhead);
-
-  while (curr <= limitDate && curr <= maturity) {
-    const dateStr = toLocalISO(curr);
+  while (dateStr <= limitISO && dateStr <= maturityISO) {
     result.push({
       id: `${item.id}-${dateStr}`,
       investmentId: item.id,
@@ -301,7 +302,8 @@ export function generateUpcomingSchedule(
       isPaid: false,
       linkedBankAccountId: item.linkedBankAccountId,
     });
-    curr.setMonth(curr.getMonth() + stepMonths);
+    period++;
+    dateStr = addMonthsClamped(item.purchaseDate, period * stepMonths);
   }
 
   return result;

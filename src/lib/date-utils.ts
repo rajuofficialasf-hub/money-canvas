@@ -29,8 +29,9 @@ export function todayLocalISO(): string {
  * (STEP-10): 2026-01-31 + 1 month = 2026-02-28, never a March overflow.
  * Always computes from the original anchor, so schedules do not drift.
  */
-export function addMonthsClamped(anchorISO: string, months: number): string {
-  const [y, m, d] = anchorISO.split('-').map(Number);
+export function addMonthsClamped(anchorISO: string, months: number, dayOfMonth?: number): string {
+  const [y, m, dRaw] = anchorISO.split('-').map(Number);
+  const d = dayOfMonth ?? dRaw;
   const targetMonthIndex = m - 1 + months;
   const targetYear = y + Math.floor(targetMonthIndex / 12);
   const targetMonth = ((targetMonthIndex % 12) + 12) % 12;
@@ -39,4 +40,13 @@ export function addMonthsClamped(anchorISO: string, months: number): string {
   const mm = String(targetMonth + 1).padStart(2, '0');
   const dd = String(day).padStart(2, '0');
   return `${targetYear}-${mm}-${dd}`;
+}
+
+/** Add whole days to an ISO date (YYYY-MM-DD), calendar-safe via UTC math. */
+export function addDaysISO(dateISO: string, days: number): string {
+  const [y, m, d] = dateISO.split('-').map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d + days));
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getUTCDate()).padStart(2, '0');
+  return `${dt.getUTCFullYear()}-${mm}-${dd}`;
 }

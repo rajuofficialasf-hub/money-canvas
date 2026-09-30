@@ -1074,7 +1074,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       updatedAt: new Date().toISOString(),
     };
 
-    const lines: TransactionLine[] = input.lines.map((l, idx) => ({
+    const lines: TransactionLine[] = input.lines.map((l) => ({
       id: newId('tl'),
       transactionId: txId,
       lineType: l.lineType,
@@ -1178,7 +1178,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       updatedAt: new Date().toISOString(),
     };
 
-    const reversalLines: TransactionLine[] = originalLines.map((l, idx) => ({
+    const reversalLines: TransactionLine[] = originalLines.map((l) => ({
       id: newId('tl-rev'),
       transactionId: reversalTxId,
       lineType: l.lineType,
@@ -1606,7 +1606,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!res.success) return res;
 
     // Advance next run date
-    const nextDate = advanceRecurringDate(rec.nextRun, rec.frequency);
+    const nextDate = advanceRecurringDate(rec.nextRun, rec.frequency, rec.startDate);
     setRecurringTransactions((prev) =>
       prev.map((r) =>
         r.id === id
