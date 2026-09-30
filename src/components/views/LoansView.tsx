@@ -18,7 +18,10 @@ import {
   ChevronRight,
   TrendingDown,
   Info,
+  Zap,
+  Calculator,
 } from 'lucide-react';
+import { LoanPrepaymentSimulator } from './LoanPrepaymentSimulator';
 
 export const LoansView: React.FC = () => {
   const {
@@ -32,6 +35,7 @@ export const LoansView: React.FC = () => {
   } = useLedger();
 
   const [selectedLoanId, setSelectedLoanId] = useState<string>(() => loans[0]?.id || '');
+  const [activeTab, setActiveTab] = useState<'loans' | 'simulator'>('loans');
   const [isNewLoanModalOpen, setIsNewLoanModalOpen] = useState(false);
   const [payingInstallment, setPayingInstallment] = useState<LoanPaymentScheduleItem | null>(null);
 
@@ -176,18 +180,59 @@ export const LoansView: React.FC = () => {
           </p>
         </div>
 
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+          {activeTab === 'loans' && (
+            <button
+              onClick={() => {
+                setFormError('');
+                if (liquidAccounts.length > 0) setDisbursementAccountId(liquidAccounts[0].id);
+                setIsNewLoanModalOpen(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors cursor-pointer"
+            >
+              <Plus className="h-4 w-4" />
+              <span>New Bank Loan</span>
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* View Mode Tabs */}
+      <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
         <button
-          onClick={() => {
-            setFormError('');
-            if (liquidAccounts.length > 0) setDisbursementAccountId(liquidAccounts[0].id);
-            setIsNewLoanModalOpen(true);
-          }}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors self-start sm:self-auto"
+          type="button"
+          onClick={() => setActiveTab('loans')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+            activeTab === 'loans'
+              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
         >
-          <Plus className="h-4 w-4" />
-          <span>New Bank Loan</span>
+          <Building2 className="h-3.5 w-3.5" />
+          <span>লোন ও কিস্তির হিসাব (Loans & Schedules)</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('simulator')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+            activeTab === 'simulator'
+              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40'
+              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+          }`}
+        >
+          <Zap className="h-3.5 w-3.5 text-amber-400" />
+          <span>প্রি-পেমেন্ট সিমুলেটর (Prepayment Simulator)</span>
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-bold">
+            NEW
+          </span>
         </button>
       </div>
+
+      {activeTab === 'simulator' ? (
+        <LoanPrepaymentSimulator />
+      ) : (
+        <>
 
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -417,6 +462,8 @@ export const LoansView: React.FC = () => {
             )}
           </div>
         </div>
+      )}
+        </>
       )}
 
       {/* MODAL 1: Create New Loan */}
