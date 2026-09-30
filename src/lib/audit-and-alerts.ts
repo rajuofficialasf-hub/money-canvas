@@ -295,31 +295,32 @@ export function evaluateSystemAlerts(params: AlertEvaluationContext): SystemAler
 
   // 5. Monthly Budget Threshold & Overspend Alerts
   params.budgets.forEach((b) => {
-    if (b.monthYear === currentMonthYear && b.allocatedAmount > 0) {
+    const effectiveLimit = b.allocatedAmount + (b.rolloverEnabled ? (b.rolloverAmount || 0) : 0);
+    if (b.monthYear === currentMonthYear && effectiveLimit > 0) {
       const spent = params.getCategorySpent(b.categoryId, currentMonthYear);
-      const pct = (spent / b.allocatedAmount) * 100;
+      const pct = (spent / effectiveLimit) * 100;
 
-      if (spent > b.allocatedAmount) {
-        const excess = spent - b.allocatedAmount;
+      if (spent > effectiveLimit) {
+        const excess = spent - effectiveLimit;
         alerts.push({
           id: `alert-budget-over-${b.id}`,
           severity: 'critical',
           category: 'budget_exceeded',
           title: `Budget Exceeded (${pct.toFixed(0)}%)`,
-          message: `You have spent ৳${spent.toLocaleString()} against the monthly budget limit of ৳${b.allocatedAmount.toLocaleString()} (Exceeded by ৳${excess.toLocaleString()}).`,
+          message: `You have spent ৳${spent.toLocaleString()} against the monthly effective budget of ৳${effectiveLimit.toLocaleString()} (Exceeded by ৳${excess.toLocaleString()}).`,
           targetView: 'budgets',
           targetId: b.id,
           amount: spent,
           actionLabel: 'Review Budget',
           createdAt: todayStr,
         });
-      } else if (pct >= 80) {
+      } else if (pct >= (b.warningThresholdPct || 80)) {
         alerts.push({
           id: `alert-budget-warn-${b.id}`,
           severity: 'warning',
           category: 'budget_warning',
           title: `Budget Warning: Spent ${pct.toFixed(0)}%`,
-          message: `Spent ৳${spent.toLocaleString()} of ৳${b.allocatedAmount.toLocaleString()}. Only ৳${(b.allocatedAmount - spent).toLocaleString()} remaining this month.`,
+          message: `Spent ৳${spent.toLocaleString()} of ৳${effectiveLimit.toLocaleString()}. Only ৳${(effectiveLimit - spent).toLocaleString()} remaining this month.`,
           targetView: 'budgets',
           targetId: b.id,
           amount: spent,

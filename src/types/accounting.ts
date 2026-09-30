@@ -261,6 +261,8 @@ export interface Budget {
   allocatedAmount: number;
   warningThresholdPct: number; // default 90.00 (%)
   createdAt: string;
+  rolloverEnabled?: boolean; // FEAT-8: opt-in surplus carry-forward per category/budget
+  rolloverAmount?: number; // FEAT-8: carried over amount from previous month
 }
 
 export type RecurringFrequency = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
@@ -345,6 +347,8 @@ export interface NewBudgetInput {
   monthYear: string;
   allocatedAmount: number;
   warningThresholdPct?: number;
+  rolloverEnabled?: boolean;
+  rolloverAmount?: number;
 }
 
 export interface NewRecurringInput {

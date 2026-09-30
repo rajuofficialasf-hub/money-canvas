@@ -1513,17 +1513,21 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 ...b,
                 allocatedAmount: round2(input.allocatedAmount),
                 warningThresholdPct: input.warningThresholdPct || b.warningThresholdPct,
+                rolloverEnabled: input.rolloverEnabled !== undefined ? input.rolloverEnabled : b.rolloverEnabled,
+                rolloverAmount: input.rolloverAmount !== undefined ? round2(input.rolloverAmount) : b.rolloverAmount,
               }
             : b
         );
       }
       const newBudget: Budget = {
-        id: `bgt-${Date.now()}`,
+        id: typeof crypto !== 'undefined' && crypto.randomUUID ? `bgt-${crypto.randomUUID()}` : `bgt-${Date.now()}`,
         userId,
         categoryId: input.categoryId,
         monthYear: input.monthYear,
         allocatedAmount: round2(input.allocatedAmount),
         warningThresholdPct: input.warningThresholdPct || 90.0,
+        rolloverEnabled: input.rolloverEnabled ?? false,
+        rolloverAmount: input.rolloverAmount ? round2(input.rolloverAmount) : 0,
         createdAt: new Date().toISOString(),
       };
       return [...prev, newBudget];
