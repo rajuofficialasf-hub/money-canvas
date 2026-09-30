@@ -1,4 +1,5 @@
-import { BackupBundle } from '../types/accounting';
+import { BackupBundle, EncryptedBackupBundle } from '../types/accounting';
+import { isEncryptedBackup } from './encryption-service';
 
 export const PRIMARY_DRIVE_FILE_NAME = 'money_canvas_ledger_backup.json';
 export const LEGACY_DRIVE_FILE_NAME = 'wealthfolio_ledger_backup.json';
@@ -19,7 +20,7 @@ export interface GoogleDriveFindResult {
  */
 export async function uploadBackupToGoogleDrive(
   accessToken: string,
-  bundle: BackupBundle
+  bundle: BackupBundle | EncryptedBackupBundle
 ): Promise<{ success: boolean; fileId?: string; lastBackupAt?: string; error?: string; isAuthError?: boolean }> {
   try {
     if (!accessToken) {
@@ -33,10 +34,13 @@ export async function uploadBackupToGoogleDrive(
       return { success: false, isAuthError: true, error: existingSearch.error || 'Google session expired. Please sign in again.' };
     }
 
+    const encrypted = isEncryptedBackup(bundle);
     const fileMetadata = {
       name: PRIMARY_DRIVE_FILE_NAME,
       mimeType: 'application/json',
-      description: 'Money Canvas Financial Ledger Backup (Cross-Device Sync)',
+      description: encrypted
+        ? 'Money Canvas Financial Ledger Backup (AES-GCM-256 Encrypted)'
+        : 'Money Canvas Financial Ledger Backup (Cross-Device Sync)',
     };
 
     const fileData = JSON.stringify(bundle, null, 2);
@@ -180,12 +184,18 @@ export async function findBackupInGoogleDrive(
 }
 
 /**
- * Downloads and parses the BackupBundle from Google Drive
+ * Downloads and parses the BackupBundle from Google Drive.
+ * Automatically detects whether the file is encrypted with AES-GCM.
  */
 export async function downloadBackupFromGoogleDrive(
   accessToken: string,
   fileId: string
-): Promise<{ bundle: BackupBundle | null; error?: string }> {
+): Promise<{
+  bundle: BackupBundle | null;
+  encryptedBundle?: EncryptedBackupBundle | null;
+  isEncrypted?: boolean;
+  error?: string;
+}> {
   try {
     const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
     const res = await fetch(url, {
@@ -196,8 +206,11 @@ export async function downloadBackupFromGoogleDrive(
       return { bundle: null, error: `Failed to download file from Google Drive (${res.status})` };
     }
 
-    const bundle: BackupBundle = await res.json();
-    return { bundle };
+    const json = await res.json();
+    if (isEncryptedBackup(json)) {
+      return { bundle: null, encryptedBundle: json, isEncrypted: true };
+    }
+    return { bundle: json as BackupBundle, isEncrypted: false };
   } catch (err: any) {
     return { bundle: null, error: err?.message || 'Failed to parse Google Drive backup content' };
   }

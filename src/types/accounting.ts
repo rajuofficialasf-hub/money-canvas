@@ -1133,3 +1133,23 @@ export interface BackupBundle {
   };
 }
 
+export interface EncryptedBackupBundle {
+  version: '1.0';
+  isEncrypted: true;
+  cipher: 'AES-GCM-256';
+  kdf: 'PBKDF2';
+  hash: 'SHA-256';
+  salt: string;
+  iv: string;
+  iterations: number;
+  ciphertext: string;
+  exportedAt: string;
+  userFullName?: string;
+  recordCountsSummary?: {
+    accounts: number;
+    transactions: number;
+    stocks: number;
+  };
+  hint?: string;
+}
+

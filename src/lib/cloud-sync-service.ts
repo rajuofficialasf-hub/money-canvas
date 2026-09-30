@@ -14,7 +14,8 @@ import {
   serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import { BackupBundle } from '../types/accounting';
+import { BackupBundle, EncryptedBackupBundle } from '../types/accounting';
+import { isEncryptedBackup } from './encryption-service';
 
 export interface CloudSyncResult {
   success: boolean;
@@ -214,5 +215,74 @@ export function subscribeToCloudLedger(
   } catch (e: any) {
     console.warn('Failed to subscribe to cloud updates:', e);
     return null;
+  }
+}
+
+/**
+ * Saves an AES-GCM encrypted backup snapshot into Firestore Cloud Vault
+ */
+export async function saveEncryptedBackupToFirestore(
+  userId: string,
+  encryptedBundle: EncryptedBackupBundle
+): Promise<CloudSyncResult> {
+  try {
+    if (!userId) {
+      return { success: false, error: 'User ID is required' };
+    }
+    const nowISO = new Date().toISOString();
+    const vaultDocRef = doc(db, 'users', userId, 'cloud_vault', 'current');
+    await setDoc(vaultDocRef, {
+      ...encryptedBundle,
+      updatedAtServer: serverTimestamp(),
+      savedAt: nowISO,
+    });
+    return {
+      success: true,
+      syncedAt: nowISO,
+      recordCount:
+        (encryptedBundle.recordCountsSummary?.accounts || 0) +
+        (encryptedBundle.recordCountsSummary?.transactions || 0),
+    };
+  } catch (err: any) {
+    console.error('Failed to save encrypted backup to Firestore vault:', err);
+    return {
+      success: false,
+      error: err?.message || 'Failed to save encrypted backup to Firestore vault',
+    };
+  }
+}
+
+/**
+ * Fetches the user's AES-GCM encrypted backup snapshot from Firestore Cloud Vault
+ */
+export async function fetchEncryptedBackupFromFirestore(
+  userId: string
+): Promise<{ success: boolean; encryptedBundle?: EncryptedBackupBundle; error?: string }> {
+  try {
+    if (!userId) {
+      return { success: false, error: 'User ID is required' };
+    }
+    const vaultDocRef = doc(db, 'users', userId, 'cloud_vault', 'current');
+    const docSnap = await getDoc(vaultDocRef);
+    if (!docSnap.exists()) {
+      return {
+        success: false,
+        error: 'ক্লাউড ভল্টে কোনো এনক্রিপ্টেড ব্যাকআপ পাওয়া যায়নি (No encrypted backup found in cloud vault).',
+      };
+    }
+    const data = docSnap.data();
+    if (!data || !isEncryptedBackup(data)) {
+      return { success: false, error: 'ক্লাউড ভল্টের ব্যাকআপ ফাইলটি সঠিক এনক্রিপ্টেড ফরম্যাটে নেই।' };
+    }
+    return {
+      success: true,
+      encryptedBundle: data as EncryptedBackupBundle,
+    };
+  } catch (err: any) {
+    console.error('Failed to fetch encrypted backup from Firestore vault:', err);
+    return {
+      success: false,
+      error: err?.message || 'Failed to fetch encrypted backup from Firestore vault',
+    };
   }
 }
