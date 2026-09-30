@@ -11,9 +11,9 @@ import {
   Archive,
   ArrowUpRight,
   ArrowDownLeft,
-  X,
   FileSpreadsheet,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, StatCard } from '../ui';
 
 export const AccountsView: React.FC = () => {
   const { accounts, accountBalances, brokerCashBalances, createAccount, archiveAccount, unarchiveAccount } = useLedger();
@@ -131,48 +131,45 @@ export const AccountsView: React.FC = () => {
           </p>
         </div>
 
-        <button
+        <Button
           onClick={() => setIsCreateModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold font-mono transition-colors shadow-sm w-fit"
+          variant="primary"
+          size="sm"
+          icon={Plus}
         >
-          <Plus className="h-4 w-4" />
-          <span>Add New Account</span>
-        </button>
+          Add New Account
+        </Button>
       </div>
 
       {/* Metric Cards for Account Holdings */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-1.5">
-          <div className="text-xs font-mono uppercase text-slate-400">Total Asset Accounts</div>
-          <div className="text-xl font-bold font-mono text-emerald-400 tracking-tight">
-            ৳{totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono">Cash, Bank, Mobile Wallets & FDs</div>
-        </div>
+        <StatCard
+          title="Total Asset Accounts"
+          value={`৳${totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          subtitle="Cash, Bank, Mobile Wallets & FDs"
+          variant="emerald"
+        />
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-1.5">
-          <div className="text-xs font-mono uppercase text-slate-400">Brokerage BO Cash</div>
-          <div className="text-xl font-bold font-mono text-sky-400 tracking-tight">
-            ৳{totalBrokerCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono">CDBL Broker Sub-Ledger Funds</div>
-        </div>
+        <StatCard
+          title="Brokerage BO Cash"
+          value={`৳${totalBrokerCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          subtitle="CDBL Broker Sub-Ledger Funds"
+          variant="sky"
+        />
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-1.5">
-          <div className="text-xs font-mono uppercase text-slate-400">Total Liability Accounts</div>
-          <div className="text-xl font-bold font-mono text-rose-400 tracking-tight">
-            {totalLiabilities === 0 ? '৳0.00' : `-৳${Math.abs(totalLiabilities).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono">Credit Cards, Loans & Payables</div>
-        </div>
+        <StatCard
+          title="Total Liability Accounts"
+          value={totalLiabilities === 0 ? '৳0.00' : `-৳${Math.abs(totalLiabilities).toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          subtitle="Credit Cards, Loans & Payables"
+          variant="rose"
+        />
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 space-y-1.5">
-          <div className="text-xs font-mono uppercase text-slate-400">Net Liquid + BO Total</div>
-          <div className="text-xl font-bold font-mono text-white tracking-tight">
-            ৳{totalWealth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 font-mono">All liquid assets + brokerage funds</div>
-        </div>
+        <StatCard
+          title="Net Liquid + BO Total"
+          value={`৳${totalWealth.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+          subtitle="All liquid assets + brokerage funds"
+          variant="default"
+        />
       </div>
 
       {/* Filter and Search Bar */}
@@ -202,14 +199,13 @@ export const AccountsView: React.FC = () => {
         </div>
 
         {/* Search */}
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
-          <input
+        <div className="w-full md:w-64">
+          <Input
+            icon={Search}
             type="text"
             placeholder="Search accounts or institutions..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-slate-900 pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
       </div>
@@ -309,136 +305,113 @@ export const AccountsView: React.FC = () => {
       )}
 
       {/* Modal: Create Account */}
-      {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl font-sans text-xs space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div>
-                <h2 className="text-base font-bold text-white">Add Canonical Account</h2>
-                <p className="text-slate-400 text-xs mt-0.5">Creates a new double-entry account ledger.</p>
-              </div>
-              <button
-                onClick={() => setIsCreateModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Add Canonical Account"
+        description="Creates a new double-entry account ledger."
+        maxWidth="lg"
+      >
+        <form onSubmit={handleCreateSubmit} className="space-y-4 font-mono">
+          <Field label="Account Name" required>
+            <Input
+              type="text"
+              placeholder="e.g. BRAC Bank Salary Account"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </Field>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="Account Type" required>
+              <Select
+                value={accountType}
+                onChange={(e) => setAccountType(e.target.value as AccountType)}
               >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+                <option value="bank">Bank Account</option>
+                <option value="cash">Cash / Vault</option>
+                <option value="mobile_wallet">Mobile Wallet (bKash/Nagad)</option>
+                <option value="credit_card">Credit Card (Liability)</option>
+                <option value="loan">Loan Facility (Liability)</option>
+                <option value="asset">Physical Asset</option>
+                <option value="receivable">Receivable</option>
+                <option value="payable">Payable</option>
+              </Select>
+            </Field>
 
-            <form onSubmit={handleCreateSubmit} className="space-y-4 font-mono">
-              <div>
-                <label className="block text-slate-400 mb-1">Account Name *</label>
-                <input
-                  type="text"
-                  placeholder="e.g. BRAC Bank Salary Account"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-sans focus:border-emerald-500 focus:outline-none"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-400 mb-1">Account Type *</label>
-                  <select
-                    value={accountType}
-                    onChange={(e) => setAccountType(e.target.value as AccountType)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
-                  >
-                    <option value="bank">Bank Account</option>
-                    <option value="cash">Cash / Vault</option>
-                    <option value="mobile_wallet">Mobile Wallet (bKash/Nagad)</option>
-                    <option value="credit_card">Credit Card (Liability)</option>
-                    <option value="loan">Loan Facility (Liability)</option>
-                    <option value="asset">Physical Asset</option>
-                    <option value="receivable">Receivable</option>
-                    <option value="payable">Payable</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Institution Name</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. BRAC Bank"
-                    value={institutionName}
-                    onChange={(e) => setInstitutionName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-sans focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-400 mb-1">Account Mask / Number</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. •••• 9921"
-                    value={accountNumberMask}
-                    onChange={(e) => setAccountNumberMask(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-sans focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-slate-400 mb-1">Initial Balance (৳)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value={initialBalance}
-                    onChange={(e) => setInitialBalance(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {accountType === 'credit_card' && (
-                <div>
-                  <label className="block text-slate-400 mb-1">Credit Limit (৳)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    placeholder="e.g. 150000"
-                    value={creditLimit}
-                    onChange={(e) => setCreditLimit(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
-                  />
-                </div>
-              )}
-
-              <div className="flex items-center gap-2 pt-1 font-sans">
-                <input
-                  type="checkbox"
-                  id="zakatable-chk"
-                  checked={isZakatable}
-                  onChange={(e) => setIsZakatable(e.target.checked)}
-                  className="rounded border-slate-800 bg-slate-950 text-emerald-500 focus:ring-0"
-                />
-                <label htmlFor="zakatable-chk" className="text-slate-300 text-xs">
-                  Include in Zakat wealth calculation (applicable to liquid assets & cash)
-                </label>
-              </div>
-
-              <div className="border-t border-slate-800 pt-4 flex items-center justify-end gap-3 font-sans">
-                <button
-                  type="button"
-                  onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-800 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold font-mono text-xs transition-colors"
-                >
-                  Create Account
-                </button>
-              </div>
-            </form>
+            <Field label="Institution Name">
+              <Input
+                type="text"
+                placeholder="e.g. BRAC Bank"
+                value={institutionName}
+                onChange={(e) => setInstitutionName(e.target.value)}
+              />
+            </Field>
           </div>
-        </div>
-      )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Field label="Account Mask / Number">
+              <Input
+                type="text"
+                placeholder="e.g. •••• 9921"
+                value={accountNumberMask}
+                onChange={(e) => setAccountNumberMask(e.target.value)}
+              />
+            </Field>
+
+            <Field label="Initial Balance (৳)">
+              <Input
+                type="number"
+                step="0.01"
+                value={initialBalance}
+                onChange={(e) => setInitialBalance(e.target.value)}
+              />
+            </Field>
+          </div>
+
+          {accountType === 'credit_card' && (
+            <Field label="Credit Limit (৳)">
+              <Input
+                type="number"
+                step="0.01"
+                placeholder="e.g. 150000"
+                value={creditLimit}
+                onChange={(e) => setCreditLimit(e.target.value)}
+              />
+            </Field>
+          )}
+
+          <div className="flex items-center gap-2 pt-1 font-sans">
+            <input
+              type="checkbox"
+              id="zakatable-chk"
+              checked={isZakatable}
+              onChange={(e) => setIsZakatable(e.target.checked)}
+              className="rounded border-slate-800 bg-slate-950 text-emerald-500 focus:ring-0 cursor-pointer"
+            />
+            <label htmlFor="zakatable-chk" className="text-slate-300 text-xs cursor-pointer select-none">
+              Include in Zakat wealth calculation (applicable to liquid assets & cash)
+            </label>
+          </div>
+
+          <div className="border-t border-slate-800 pt-4 flex items-center justify-end gap-3 font-sans">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsCreateModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+            >
+              Create Account
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
