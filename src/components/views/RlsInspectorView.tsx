@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../lib/auth-context';
+import { APP_CONFIG } from '../../lib/app-config';
 import { useLanguage } from '../../lib/language-context';
 import { GoogleIcon } from '../icons/GoogleIcon';
 import {
@@ -26,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export const RlsInspectorView: React.FC = () => {
-  const { user, availableProfiles, openAuthModal, signInWithGoogle } = useAuth();
+  const { user, availableProfiles, openAuthModal, signInWithGoogle, isAdmin } = useAuth();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleGoogleSignIn = async () => {
@@ -38,7 +39,7 @@ export const RlsInspectorView: React.FC = () => {
     }
   };
 
-  if (user.role !== 'admin') {
+  if (!isAdmin) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 text-center max-w-xl mx-auto my-12 shadow-2xl space-y-4">
         <div className="p-4 bg-purple-500/10 text-purple-400 rounded-2xl w-16 h-16 mx-auto border border-purple-500/20 flex items-center justify-center">
@@ -46,7 +47,7 @@ export const RlsInspectorView: React.FC = () => {
         </div>
         <h2 className="text-xl font-bold text-white">Access Restricted (Admin Only)</h2>
         <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
-          Database SQL Code, Protected Tables & RLS Inspector are restricted to System Administrator (<strong className="text-white font-mono">raju.official.asf@gmail.com</strong>). Please sign in with your authorized Google account.
+          Database SQL Code, Protected Tables & RLS Inspector are restricted to System Administrator (<strong className="text-white font-mono">{APP_CONFIG.OWNER_EMAIL}</strong>). Please sign in with your authorized Google account.
         </p>
         <div className="pt-2">
           <button

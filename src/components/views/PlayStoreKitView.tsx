@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../lib/auth-context';
+import { APP_CONFIG } from '../../lib/app-config';
 import { useLanguage } from '../../lib/language-context';
 import {
   Download,
@@ -37,13 +38,11 @@ interface AssetCardProps {
 }
 
 export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
-  const { user, openAuthModal, isGoogleAuthenticated } = useAuth();
+  const { user, openAuthModal, isGoogleAuthenticated, isAdmin } = useAuth();
   const { language, isBn, t } = useLanguage();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [selectedPreview, setSelectedPreview] = useState<string | null>('/play-store/feature_graphic_1024x500.png');
   const [activeTab, setActiveTab] = useState<'assets' | 'metadata' | 'datasafety' | 'checklist'>('assets');
-
-  const isOwner = user.role === 'admin' || user.email?.toLowerCase() === 'raju.official.asf@gmail.com';
 
   // Checklist state saved in local storage
   const [checklist, setChecklist] = useState<Record<string, boolean>>(() => {
@@ -63,7 +62,7 @@ export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }>
     });
   };
 
-  if (!isOwner) {
+  if (!isAdmin) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center p-6">
         <div className="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-8 text-center shadow-2xl backdrop-blur-xl space-y-5">
@@ -73,7 +72,7 @@ export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }>
           <div className="space-y-2">
             <h2 className="text-lg font-bold text-white tracking-tight">Owner Access Required</h2>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Google Play Store Kit and publishing assets are private developer resources restricted exclusively to the app owner (<span className="text-emerald-400 font-mono">raju.official.asf@gmail.com</span>).
+              Google Play Store Kit and publishing assets are private developer resources restricted exclusively to the app owner (<span className="text-emerald-400 font-mono">{APP_CONFIG.OWNER_EMAIL}</span>).
             </p>
           </div>
           <div className="pt-2 flex flex-col gap-2.5">

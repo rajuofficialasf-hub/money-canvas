@@ -32,6 +32,7 @@ import {
   addDoc,
 } from 'firebase/firestore';
 import { auth, googleProvider, db } from './firebase';
+import { APP_CONFIG } from './app-config';
 
 const STORAGE_KEY = 'pfos_auth_profile';
 const PROFILES_STORAGE_KEY = 'pfos_user_profiles';
@@ -47,13 +48,8 @@ export function setInMemoryGoogleAccessToken(token: string | null): void {
   inMemoryGoogleAccessToken = token;
 }
 
-// Admin emails (The app owner)
-const ADMIN_EMAILS = ['raju.official.asf@gmail.com'];
-
-const isAdminEmail = (email?: string) => {
-  if (!email) return false;
-  return email.toLowerCase().trim() === 'raju.official.asf@gmail.com';
-};
+// STEP-5: Admin role is verified EXCLUSIVELY via Firebase custom claims.
+// No client-side email comparison is used for admin determination.
 
 const DEFAULT_PROFILES: UserProfile[] = [
   {
@@ -74,6 +70,8 @@ interface AuthContextType {
   firebaseUser: FirebaseUser | null;
   googleAccessToken: string | null;
   isGoogleAuthenticated: boolean;
+  /** STEP-5: Server-verified admin status from Firebase custom claims */
+  isAdmin: boolean;
   availableProfiles: UserProfile[];
   tenants: TenantProfile[];
   isAuthenticated: boolean;
@@ -104,6 +102,8 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  // STEP-5: Server-verified admin flag from Firebase custom claims
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
@@ -159,9 +159,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const rawActiveUser = profiles.find((p) => p.id === activeProfileId) || profiles[0] || DEFAULT_PROFILES[0];
+  // STEP-5: Active user role is NEVER set to 'admin' via email comparison.
+  // Admin role is set only when isAdmin is true (verified via Firebase custom claims).
   const activeUser: UserProfile = {
     ...rawActiveUser,
-    role: isAdminEmail(rawActiveUser.email) ? 'admin' : 'owner',
+    role: isAdmin ? 'admin' : (rawActiveUser.role === 'admin' ? 'owner' : rawActiveUser.role),
   };
 
   // Persist local profile state
@@ -174,14 +176,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [activeUser.id, profiles]);
 
+  // STEP-5: Verify admin claims from Firebase ID token
+  const verifyAdminClaims = useCallback(async (fUser: FirebaseUser): Promise<boolean> => {
+    try {
+      const tokenResult = await fUser.getIdTokenResult(/* forceRefresh */ true);
+      const claims = tokenResult.claims;
+      return claims.admin === true || claims.role === 'admin';
+    } catch (err) {
+      console.warn('Failed to verify admin claims:', err);
+      return false;
+    }
+  }, []);
+
   // Handle Firestore user sync upon Google login
   const syncGoogleUserToFirestore = useCallback(async (fUser: FirebaseUser) => {
     try {
+      // STEP-5: Determine admin status from server-verified custom claims
+      const claimIsAdmin = await verifyAdminClaims(fUser);
+      setIsAdmin(claimIsAdmin);
+
       const userDocRef = doc(db, 'users', fUser.uid);
       const userDoc = await getDoc(userDocRef);
 
       const nowISO = new Date().toISOString();
-      const isAdmin = ADMIN_EMAILS.includes(fUser.email?.toLowerCase() || '');
 
       let userRecord: FirebaseAppUser;
 
@@ -191,7 +208,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           displayName: fUser.displayName || fUser.email?.split('@')[0] || 'App User',
           email: fUser.email || '',
           photoURL: fUser.photoURL || undefined,
-          role: isAdmin ? 'admin' : 'user',
+          role: claimIsAdmin ? 'admin' : 'user',
           createdAt: nowISO,
           lastLoginAt: nowISO,
           driveBackupStatus: 'none',
@@ -206,6 +223,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       // Also sync active local profile
+      // STEP-5: Role from claims, not email comparison
       const localProfile: UserProfile = {
         id: fUser.uid,
         email: fUser.email || '',
@@ -213,7 +231,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         baseCurrency: 'BDT',
         timezone: 'Asia/Dhaka',
         avatarUrl: fUser.photoURL || undefined,
-        role: isAdmin ? 'admin' : 'owner',
+        role: claimIsAdmin ? 'admin' : 'owner',
         createdAt: userDoc.exists() ? userDoc.data().createdAt : nowISO,
         updatedAt: nowISO,
         googleUid: fUser.uid,
@@ -229,7 +247,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (err) {
       console.error('Error syncing Google user to Firestore:', err);
     }
-  }, []);
+  }, [verifyAdminClaims]);
 
   // Listen to Auth State Changes & handle redirect results
   useEffect(() => {
@@ -256,6 +274,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setFirebaseUser(user);
       if (user) {
         await syncGoogleUserToFirestore(user);
+      } else {
+        // STEP-5: Clear admin flag when user signs out
+        setIsAdmin(false);
       }
     });
     return () => unsubscribe();
@@ -633,6 +654,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch {}
   };
 
+  // STEP-5: Local signIn can NEVER grant admin role — admin is strictly from Firebase custom claims
   const signIn = async (email: string, fullName?: string) => {
     const existing = profiles.find((p) => p.email.toLowerCase() === email.toLowerCase());
     if (existing) {
@@ -644,7 +666,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fullName: fullName || email.split('@')[0],
         baseCurrency: 'BDT',
         timezone: 'Asia/Dhaka',
-        role: ADMIN_EMAILS.includes(email.toLowerCase()) ? 'admin' : 'owner',
+        role: 'owner',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -847,7 +869,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       console.error('Failed to submit deletion request:', err);
       return {
         success: false,
-        error: err?.message || 'রিকোয়েস্ট জমা নেওয়া সম্ভব হয়নি। অনুগ্রহ করে raju.official.asf@gmail.com এ যোগাযোগ করুন।',
+        error: err?.message || 'রিকোয়েস্ট জমা নেওয়া সম্ভব হয়নি। অনুগ্রহ করে '+ APP_CONFIG.OWNER_EMAIL + ' এ যোগাযোগ করুন।',
       };
     }
   };
@@ -859,6 +881,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         firebaseUser,
         googleAccessToken,
         isGoogleAuthenticated: !!firebaseUser,
+        isAdmin,
         availableProfiles: profiles,
         tenants,
         isAuthenticated: !!firebaseUser,

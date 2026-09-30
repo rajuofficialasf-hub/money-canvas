@@ -51,7 +51,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { systemAlerts } = useLedger();
   const { checkForUpdate, downloadApp, isChecking, currentVersionName } = useAppUpdate();
 
@@ -425,7 +425,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </button>
               )}
-              {user.role === 'admin' && (
+              {isAdmin && (
                 <button
                   onClick={() => handleItemClick('rls')}
                   className={navItemClass('rls')}
@@ -436,7 +436,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   </div>
                 </button>
               )}
-              {(user.role === 'admin' || user.email?.toLowerCase() === 'raju.official.asf@gmail.com') && (
+              {isAdmin && (
                 <button
                   onClick={() => handleItemClick('playstore_kit')}
                   className={navItemClass('playstore_kit')}

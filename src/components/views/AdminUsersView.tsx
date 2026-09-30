@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../lib/auth-context';
+import { APP_CONFIG } from '../../lib/app-config';
 import { FirebaseAppUser } from '../../types/auth';
 import { GoogleIcon } from '../icons/GoogleIcon';
 import {
@@ -20,7 +21,7 @@ import {
 } from 'lucide-react';
 
 export const AdminUsersView: React.FC = () => {
-  const { fetchRegisteredUsers, user: currentUser, isGoogleAuthenticated, openAuthModal, signInWithGoogle } = useAuth();
+  const { fetchRegisteredUsers, user: currentUser, isGoogleAuthenticated, isAdmin, openAuthModal, signInWithGoogle } = useAuth();
   const [usersList, setUsersList] = useState<FirebaseAppUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,10 +41,10 @@ export const AdminUsersView: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentUser.role === 'admin') {
+    if (isAdmin) {
       loadUsers();
     }
-  }, [currentUser.role]);
+  }, [isAdmin]);
 
   const handleGoogleSignIn = async () => {
     setIsLoggingIn(true);
@@ -54,7 +55,7 @@ export const AdminUsersView: React.FC = () => {
     }
   };
 
-  if (currentUser.role !== 'admin') {
+  if (!isAdmin) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 text-center max-w-xl mx-auto my-12 shadow-2xl space-y-4">
         <div className="p-4 bg-purple-500/10 text-purple-400 rounded-2xl w-16 h-16 mx-auto border border-purple-500/20 flex items-center justify-center">
@@ -62,7 +63,7 @@ export const AdminUsersView: React.FC = () => {
         </div>
         <h2 className="text-xl font-bold text-white">Access Restricted (Admin Only)</h2>
         <p className="text-xs text-slate-400 leading-relaxed max-w-md mx-auto">
-          এই অ্যাডমিন প্যানেলটি শুধুমাত্র সিস্টেম অ্যাডমিন (<strong className="text-white font-mono">raju.official.asf@gmail.com</strong>)-এর জন্য সংরক্ষিত। অনুগ্রহ করে আপনার আসল Google অ্যাকাউন্ট দিয়ে সাইন-ইন করুন।
+          এই অ্যাডমিন প্যানেলটি শুধুমাত্র সিস্টেম অ্যাডমিন (<strong className="text-white font-mono">{APP_CONFIG.OWNER_EMAIL}</strong>)-এর জন্য সংরক্ষিত। অনুগ্রহ করে আপনার আসল Google অ্যাকাউন্ট দিয়ে সাইন-ইন করুন।
         </p>
         <div className="pt-2">
           <button

@@ -44,7 +44,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   onClose,
   onNavigate,
 }) => {
-  const { availableProfiles, switchProfile, user } = useAuth();
+  const { availableProfiles, switchProfile, user, isAdmin } = useAuth();
   const { isBn } = useLanguage();
   const [query, setQuery] = useState('');
 
@@ -305,13 +305,11 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     },
   ];
 
-  const isOwner = user.role === 'admin' || user.email?.toLowerCase() === 'raju.official.asf@gmail.com';
-
   const filteredNav = NAVIGATION_ITEMS.filter((item) => {
-    if ((item.id === 'admin_users' || item.id === 'rls') && user.role !== 'admin') {
+    if ((item.id === 'admin_users' || item.id === 'rls') && !isAdmin) {
       return false;
     }
-    if (item.id === 'playstore_kit' && !isOwner) {
+    if (item.id === 'playstore_kit' && !isAdmin) {
       return false;
     }
     const q = query.toLowerCase();

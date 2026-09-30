@@ -70,6 +70,7 @@ function AppContent() {
     hasCompletedOnboarding,
     completeOnboarding,
     user,
+    isAdmin,
     isAuthModalOpen,
     closeAuthModal,
   } = useAuth();
@@ -322,7 +323,7 @@ function AppContent() {
           {currentView === 'backup_restore' && <BackupRestoreView />}
 
           {currentView === 'rls' &&
-            (user.role === 'admin' ? (
+            (isAdmin ? (
               <RlsInspectorView />
             ) : (
               <DashboardView onNavigate={setCurrentView} />
@@ -331,7 +332,7 @@ function AppContent() {
           {currentView === 'settings' && <SettingsView onNavigate={setCurrentView} />}
 
           {currentView === 'playstore_kit' &&
-            (user.role === 'admin' || user.email?.toLowerCase() === 'raju.official.asf@gmail.com' ? (
+            (isAdmin ? (
               <PlayStoreKitView onNavigate={setCurrentView} />
             ) : (
               <DashboardView onNavigate={setCurrentView} />
