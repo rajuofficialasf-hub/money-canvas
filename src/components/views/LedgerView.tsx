@@ -22,6 +22,7 @@ import {
   Sparkles,
   FolderPlus,
   MessageSquare,
+  FileSpreadsheet,
 } from 'lucide-react';
 
 interface LedgerViewProps {
@@ -291,14 +292,25 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
         <div className="flex items-center gap-2 flex-wrap">
           {onNavigate && (
-            <button
-              onClick={() => onNavigate('sms_parser')}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 transition-all shadow-sm"
-              title="Parse SMS from bKash, Nagad, Rocket or Bank alerts"
-            >
-              <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
-              <span>SMS পার্সার (100% Free)</span>
-            </button>
+            <>
+              <button
+                onClick={() => onNavigate('csv_import')}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold border border-sky-500/30 transition-all shadow-sm cursor-pointer"
+                title="Import transactions from Bank / bKash / Nagad statement CSV"
+              >
+                <FileSpreadsheet className="h-3.5 w-3.5 text-sky-400" />
+                <span>CSV স্টেটমেন্ট ইমপোর্ট</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('sms_parser')}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 transition-all shadow-sm cursor-pointer"
+                title="Parse SMS from bKash, Nagad, Rocket or Bank alerts"
+              >
+                <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
+                <span>SMS পার্সার (100% Free)</span>
+              </button>
+            </>
           )}
 
           <button

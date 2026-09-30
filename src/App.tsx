@@ -15,6 +15,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { DashboardView } from './components/views/DashboardView';
 import { AccountsView } from './components/views/AccountsView';
 import { LedgerView } from './components/views/LedgerView';
+import { CsvImportView } from './components/views/CsvImportView';
 import { SmsParserView } from './components/views/SmsParserView';
 import { FixedDepositsView } from './components/views/FixedDepositsView';
 import { DpsView } from './components/views/DpsView';
@@ -207,6 +208,10 @@ function AppContent() {
 
           {currentView === 'ledger' && (
             <LedgerView onNavigate={setCurrentView} />
+          )}
+
+          {currentView === 'csv_import' && (
+            <CsvImportView onNavigate={setCurrentView} />
           )}
 
           {currentView === 'sms_parser' && (

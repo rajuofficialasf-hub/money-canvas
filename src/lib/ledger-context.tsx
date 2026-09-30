@@ -131,6 +131,7 @@ interface LedgerContextType {
   isLoading: boolean;
   createAccount: (input: NewAccountInput) => { account: Account; transaction?: Transaction };
   postTransaction: (input: NewTransactionInput) => { success: boolean; transaction?: Transaction; error?: string };
+  postTransactionsBatch: (inputs: NewTransactionInput[]) => { success: boolean; count?: number; transactions?: Transaction[]; error?: string };
   reverseTransaction: (transactionId: string, reason?: string) => { success: boolean; reversalTransaction?: Transaction; error?: string };
   openFixedDeposit: (input: NewFdInput) => { success: boolean; fd?: FixedDeposit; error?: string };
   matureFixedDeposit: (fdId: string, destinationAccountId: string) => { success: boolean; error?: string };
@@ -1086,6 +1087,65 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setTransactionLines((prev) => [...prev, ...lines]);
 
     return { success: true, transaction: newTx };
+  };
+
+  /**
+   * Action: Post Batch Transactions (Atomic Multi-Row Import)
+   */
+  const postTransactionsBatch = (inputs: NewTransactionInput[]) => {
+    if (!inputs || inputs.length === 0) {
+      return { success: true, count: 0, transactions: [] };
+    }
+
+    const newTxs: Transaction[] = [];
+    const newLines: TransactionLine[] = [];
+    const nowISO = new Date().toISOString();
+
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      const validation = validateTransactionLines(input.lines);
+      if (!validation.valid) {
+        return { success: false, error: `Row ${i + 1} validation error: ${validation.errors.join('; ')}` };
+      }
+
+      const txId = typeof crypto !== 'undefined' && crypto.randomUUID
+        ? `tx-${crypto.randomUUID()}`
+        : `tx-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 7)}`;
+
+      const newTx: Transaction = {
+        id: txId,
+        userId,
+        date: input.date,
+        type: input.type,
+        status: 'posted',
+        version: 1,
+        note: input.note,
+        createdBy: userId,
+        createdAt: nowISO,
+        updatedAt: nowISO,
+      };
+
+      const lines: TransactionLine[] = input.lines.map((l, idx) => ({
+        id: typeof crypto !== 'undefined' && crypto.randomUUID
+          ? `tl-${crypto.randomUUID()}`
+          : `tl-${Date.now()}-${i}-${idx + 1}`,
+        transactionId: txId,
+        lineType: l.lineType,
+        accountId: l.accountId || null,
+        categoryId: l.categoryId || null,
+        amount: round2(l.amount),
+        memo: l.memo,
+        createdAt: nowISO,
+      }));
+
+      newTxs.push(newTx);
+      newLines.push(...lines);
+    }
+
+    setTransactions((prev) => [...newTxs, ...prev]);
+    setTransactionLines((prev) => [...prev, ...newLines]);
+
+    return { success: true, count: newTxs.length, transactions: newTxs };
   };
 
   /**
@@ -4537,6 +4597,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         isLoading,
         createAccount,
         postTransaction,
+        postTransactionsBatch,
         reverseTransaction,
         openFixedDeposit,
         matureFixedDeposit,

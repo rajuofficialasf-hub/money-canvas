@@ -7,6 +7,7 @@ export const ROUTE_MAP: Record<string, string> = {
   dashboard: '/dashboard',
   accounts: '/accounts',
   ledger: '/ledger',
+  csv_import: '/csv-import',
   sms_parser: '/sms-parser',
   fixed_deposits: '/fixed-deposits',
   dps: '/dps',
