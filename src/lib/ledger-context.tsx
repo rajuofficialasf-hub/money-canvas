@@ -245,6 +245,15 @@ interface LedgerContextType {
   cloudSyncWarning: string | null;
   syncWithCloud: () => Promise<{ success: boolean; error?: string }>;
   restoreFromCloud: () => Promise<{ success: boolean; error?: string }>;
+  syncConflict: SyncConflictInfo | null;
+  resolveSyncConflict: (choice: 'local' | 'cloud') => Promise<void>;
+}
+
+export interface SyncConflictInfo {
+  cloudExportedAt: string;
+  cloudRecordCount: number;
+  localLastSavedAt: string | null;
+  localRecordCount: number;
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
@@ -283,6 +292,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   });
   const [cloudSyncError, setCloudSyncError] = useState<string | null>(null);
   const [cloudSyncWarning, setCloudSyncWarning] = useState<string | null>(null);
+  const [syncConflict, setSyncConflict] = useState<SyncConflictInfo | null>(null);
+  const conflictCloudBundleRef = useRef<BackupBundle | null>(null);
   const lastSyncedChecksumRef = useRef<string>('');
   const currentLoadedUserIdRef = useRef<string>(userId);
   const isInitialMountRef = useRef<boolean>(true);
@@ -4019,6 +4030,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const bundle: BackupBundle = {
       metadata: {
         schemaVersion: '5.0-phase9',
+        bundleFormatVersion: 1,
         exportedAt,
         userId,
         userFullName: user.fullName,
@@ -4082,6 +4094,35 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       if (!bundle || !bundle.data || !bundle.metadata) {
         return { success: false, error: 'Invalid backup format: Missing metadata or data payload.' };
+      }
+
+      // STEP-15: Structural validation — a malformed document must never
+      // become app state. Future bundleFormatVersion bumps migrate here.
+      if (typeof bundle.metadata.schemaVersion !== 'string' || typeof bundle.metadata.exportedAt !== 'string') {
+        return { success: false, error: 'Invalid backup format: metadata is malformed.' };
+      }
+      const fmt = bundle.metadata.bundleFormatVersion;
+      if (fmt !== undefined && (typeof fmt !== 'number' || fmt > 1)) {
+        return { success: false, error: `Unsupported backup format version (${String(fmt)}). Please update the app.` };
+      }
+      const requiredCollections = ['accounts', 'transactions', 'transactionLines'] as const;
+      for (const key of requiredCollections) {
+        if (!Array.isArray((bundle.data as Record<string, unknown>)[key])) {
+          return { success: false, error: `Invalid backup format: '${key}' collection missing or malformed.` };
+        }
+      }
+      const optionalCollections = [
+        'categories', 'fixedDeposits', 'budgets', 'recurringTransactions', 'financialGoals',
+        'goalContributions', 'dpsAccounts', 'dpsInstallments', 'debts', 'loans', 'loanSchedules',
+        'physicalAssets', 'staticLiabilities', 'netWorthSnapshots', 'brokers', 'brokerAccounts',
+        'brokerCashTransactions', 'stocks', 'stockTransactions', 'stockPriceHistory',
+        'benchmarkIndexPrices', 'dividends', 'corporateActions', 'ipoApplications', 'auditLogs',
+      ];
+      for (const key of optionalCollections) {
+        const v = (bundle.data as Record<string, unknown>)[key];
+        if (v !== undefined && v !== null && !Array.isArray(v)) {
+          return { success: false, error: `Invalid backup format: '${key}' is not a list.` };
+        }
       }
 
       // Monotonic revision update from restored bundle
@@ -4360,24 +4401,18 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             setCloudSyncStatus('synced');
             setLastCloudSyncAt(saveBundle.metadata.exportedAt);
           } else {
-            // Revisions equal or not present: fallback to timestamp & counts
-            const cloudTime = new Date(cloudBundle.metadata.exportedAt).getTime();
-            const localSavedTime = lastCloudSyncAt ? new Date(lastCloudSyncAt).getTime() : 0;
-
-            if (cloudTime > localSavedTime && cloudRecordCount >= localCount) {
-              console.log('Multi-device sync: Cloud has newer timestamp/data, updating browser state...');
-              isApplyingRemoteRef.current = true;
-              restoreFromBackup(cloudBundle);
-              setCloudSyncStatus('synced');
-              setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
-              lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
-            } else {
-              const saveBundle = exportFullBackup({ incrementRevision: true, forSync: true });
-              lastSyncedChecksumRef.current = saveBundle.metadata.checksum || '';
-              await saveLedgerToFirestore(firebaseUser.uid, saveBundle);
-              setCloudSyncStatus('synced');
-              setLastCloudSyncAt(saveBundle.metadata.exportedAt);
-            }
+            // Revisions equal (or absent) but checksums differ: both sides
+            // changed since the last common point — a fork. Record counts are
+            // no basis for guessing (deletes look like data loss), so ask the
+            // user which side wins (STEP-15).
+            conflictCloudBundleRef.current = cloudBundle;
+            setSyncConflict({
+              cloudExportedAt: cloudBundle.metadata.exportedAt,
+              cloudRecordCount,
+              localLastSavedAt: lastCloudSyncAt,
+              localRecordCount: localCount,
+            });
+            setCloudSyncStatus('idle');
           }
         } else {
           // Cloud has no ledger yet, push local if local has data
@@ -4590,6 +4625,30 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  // STEP-15: apply the user's choice for a fork between local and cloud state
+  const resolveSyncConflict = async (choice: 'local' | 'cloud'): Promise<void> => {
+    const cloudBundle = conflictCloudBundleRef.current;
+    conflictCloudBundleRef.current = null;
+    setSyncConflict(null);
+    if (choice === 'cloud' && cloudBundle) {
+      isApplyingRemoteRef.current = true;
+      lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
+      const res = restoreFromBackup(cloudBundle);
+      if (res.success) {
+        setCloudSyncStatus('synced');
+        setLastCloudSyncAt(cloudBundle.metadata.exportedAt);
+        try {
+          localStorage.setItem(`pfos_${userId}_last_cloud_sync`, cloudBundle.metadata.exportedAt);
+        } catch {}
+      } else {
+        setCloudSyncStatus('error');
+        setCloudSyncError(res.error || 'Failed to apply cloud data');
+      }
+    } else if (choice === 'local') {
+      await syncWithCloud();
+    }
+  };
+
   return (
     <LedgerContext.Provider
       value={{
@@ -4710,6 +4769,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         // Real-Time Cloud Sync
         cloudSyncStatus,
         cloudSyncWarning,
+        syncConflict,
+        resolveSyncConflict,
         lastCloudSyncAt,
         cloudSyncError,
         syncWithCloud,

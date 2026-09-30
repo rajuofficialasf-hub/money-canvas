@@ -50,6 +50,7 @@ import { TermsOfServiceView } from './components/views/TermsOfServiceView';
 import { PublicLandingView } from './components/views/PublicLandingView';
 import { DataDeletionRequestView } from './components/views/DataDeletionRequestView';
 import { ClipboardSmsBanner } from './components/common/ClipboardSmsBanner';
+import { SyncConflictModal } from './components/common/SyncConflictModal';
 import { Capacitor } from '@capacitor/core';
 import { UserGuideModal } from './components/onboarding/UserGuideModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -400,6 +401,9 @@ function AppContent() {
 
         {/* FEAT-6: Floating Clipboard SMS Transaction Auto-Detection Prompt */}
         <ClipboardSmsBanner onNavigate={setCurrentView} />
+
+        {/* STEP-15: Multi-device sync fork resolution prompt */}
+        <SyncConflictModal />
 
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav

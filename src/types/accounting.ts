@@ -1093,6 +1093,8 @@ export interface SystemAlert {
 
 export interface BackupMetadata {
   schemaVersion: string;
+  /** Structural version of the bundle format itself; bump on breaking layout changes (STEP-15). */
+  bundleFormatVersion?: number;
   exportedAt: string;
   userId: string;
   userFullName: string;
