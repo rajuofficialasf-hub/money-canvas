@@ -49,6 +49,7 @@ import { PrivacyPolicyView } from './components/views/PrivacyPolicyView';
 import { TermsOfServiceView } from './components/views/TermsOfServiceView';
 import { PublicLandingView } from './components/views/PublicLandingView';
 import { DataDeletionRequestView } from './components/views/DataDeletionRequestView';
+import { ClipboardSmsBanner } from './components/common/ClipboardSmsBanner';
 import { Capacitor } from '@capacitor/core';
 import { UserGuideModal } from './components/onboarding/UserGuideModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -395,6 +396,9 @@ function AppContent() {
 
         {/* PWA New Code Update Notification Toast */}
         <PWAUpdateToast />
+
+        {/* FEAT-6: Floating Clipboard SMS Transaction Auto-Detection Prompt */}
+        <ClipboardSmsBanner onNavigate={setCurrentView} />
 
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav

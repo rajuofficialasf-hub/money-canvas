@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { useLanguage } from '../../lib/language-context';
 import {
   parseBatchSms,
   BANGLADESH_SMS_PRESETS,
 } from '../../lib/sms-parser-engine';
+import { readClipboardText } from '../../lib/clipboard-sms-service';
 import { ParsedSmsTransaction } from '../../types/sms-parser';
 import { NewTransactionLineInput } from '../../types/accounting';
 import {
@@ -50,6 +51,18 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
 
   const [expandedRawId, setExpandedRawId] = useState<string | null>(null);
 
+  // Auto-pickup pending SMS from clipboard auto-detection banner
+  useEffect(() => {
+    try {
+      const pending = sessionStorage.getItem('mc_pending_sms_input');
+      if (pending) {
+        sessionStorage.removeItem('mc_pending_sms_input');
+        setRawInput(pending);
+        handleParse(pending);
+      }
+    } catch {}
+  }, []);
+
   // Parse logic
   const handleParse = (textToParse?: string) => {
     const text = typeof textToParse === 'string' ? textToParse : rawInput;
@@ -65,18 +78,18 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
     setPostingStatus({ loading: false });
   };
 
-  // Paste from clipboard
+  // Paste from clipboard (Native & Web)
   const handlePasteClipboard = async () => {
     try {
-      if (navigator.clipboard && navigator.clipboard.readText) {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          setRawInput(text);
-          handleParse(text);
-        }
+      const text = await readClipboardText();
+      if (text) {
+        setRawInput(text);
+        handleParse(text);
+      } else {
+        const el = document.getElementById('sms-input-area');
+        if (el) el.focus();
       }
     } catch {
-      // If clipboard permission is denied, focus the textarea
       const el = document.getElementById('sms-input-area');
       if (el) el.focus();
     }
