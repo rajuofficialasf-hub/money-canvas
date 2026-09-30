@@ -120,11 +120,11 @@ function detectProvider(text: string): string {
   if (lower.includes('city bank') || lower.includes('citytouch')) return 'City Bank';
   if (lower.includes('brac bank') || lower.includes('astha')) return 'BRAC Bank';
   if (lower.includes('ebl') || lower.includes('eastern bank') || lower.includes('skybanking')) return 'EBL (Eastern Bank)';
-  if (lower.includes('standard chartered') || lower.includes('scb')) return 'Standard Chartered';
+  if (lower.includes('standard chartered') || /\bscb\b/.test(lower)) return 'Standard Chartered';
   if (lower.includes('mtb') || lower.includes('mutual trust')) return 'MTB';
   if (lower.includes('dhaka bank')) return 'Dhaka Bank';
   if (lower.includes('prime bank')) return 'Prime Bank';
-  if (lower.includes('ucb') || lower.includes('upay')) return 'UCB';
+  if (lower.includes('ucb')) return 'UCB';
 
   if (lower.includes('card') || lower.includes('a/c') || lower.includes('acct') || lower.includes('account')) {
     return 'Bank / Card';
@@ -181,7 +181,7 @@ function extractRef(text: string): string | undefined {
  * Extracts Fee / Charge
  */
 function extractFee(text: string): number {
-  const match = text.match(/\bFee\s*(?:is|:)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,4}(?:\.[0-9]{1,2})?)/i);
+  const match = text.match(/\bFee\s*(?:is|:)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i);
   return match ? parseAmountNumber(match[1]) : 0;
 }
 
@@ -189,7 +189,7 @@ function extractFee(text: string): number {
  * Extracts Balance after transaction
  */
 function extractBalance(text: string): number | undefined {
-  const match = text.match(/\b(?:Balance|Bal|Avail Bal|Available Balance)\s*(?:is|:)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?)/i);
+  const match = text.match(/\b(?:Balance|Bal|Avail Bal|Available Balance)\s*(?:is|:)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?)/i);
   return match ? parseAmountNumber(match[1]) : undefined;
 }
 
@@ -241,11 +241,11 @@ function extractAmount(text: string): number {
   // 7. "(Tk|BDT|৳)\s*1,200.00"
 
   const specificPatterns = [
-    /(?:debited|credited|paid|spent)\s+(?:by|for|with)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
-    /(?:Payment|Cash Out|Send Money|Bill Pay|Recharge)\s+(?:of)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
-    /(?:received|transferred)\s+(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
-    /(?:Tk|BDT|৳)\s*([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
-    /([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)\s*(?:Tk|BDT|৳)/i,
+    /(?:debited|credited|paid|spent)\s+(?:by|for|with)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
+    /(?:Payment|Cash Out|Send Money|Bill Pay|Recharge)\s+(?:of)?\s*(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
+    /(?:received|transferred)\s+(?:Tk|BDT|৳)?\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
+    /(?:Tk|BDT|৳)\s*([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)/i,
+    /([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]+(?:\.[0-9]{1,2})?)\s*(?:Tk|BDT|৳)/i,
   ];
 
   for (const pattern of specificPatterns) {
@@ -257,7 +257,7 @@ function extractAmount(text: string): number {
   }
 
   // Fallback: any standalone number that looks like a currency amount
-  const fallback = text.match(/\b([0-9]{1,3}(?:,[0-9]{3})*(?:\.[0-9]{1,2})?|[0-9]{2,}\.[0-9]{2})\b/);
+  const fallback = text.match(/\b([0-9]{1,3}(?:,[0-9]{2,3})*(?:\.[0-9]{1,2})?|[0-9]{2,}\.[0-9]{2})\b/);
   if (fallback && fallback[1]) {
     return parseAmountNumber(fallback[1]);
   }
@@ -431,6 +431,12 @@ export function parseSingleSms(
   if (amount > 0 && (trxId || provider !== 'Mobile / Bank SMS')) {
     confidence = 'high';
   } else if (amount > 0) {
+    confidence = 'medium';
+  }
+
+  // Sanity check against the reported post-transaction balance: a credited
+  // amount vastly larger than the resulting balance implies a parse error.
+  if (confidence === 'high' && typeof balanceAfter === 'number' && balanceAfter > 0 && txType === 'income' && amount > balanceAfter) {
     confidence = 'medium';
   }
 
