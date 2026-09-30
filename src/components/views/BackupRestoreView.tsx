@@ -1,6 +1,6 @@
 import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useRef } from 'react';
-import { useLedger } from '../../lib/ledger-context';
+import { useLedger, useSyncStatus } from '../../lib/ledger-context';
 import { useAuth } from '../../lib/auth-context';
 import { GoogleIcon } from '../icons/GoogleIcon';
 import {
@@ -93,13 +93,15 @@ export const BackupRestoreView: React.FC = () => {
     exportFullBackup,
     restoreFromBackup,
     resetTenantLedger,
+  } = useLedger();
+  const {
     cloudSyncStatus,
     lastCloudSyncAt,
     cloudSyncError,
     cloudSyncWarning,
     syncWithCloud,
     restoreFromCloud,
-  } = useLedger();
+  } = useSyncStatus();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isExporting, setIsExporting] = useState(false);

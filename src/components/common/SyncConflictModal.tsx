@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Cloud, Laptop, GitBranch } from 'lucide-react';
 import { Modal, Button } from '../ui';
-import { useLedger } from '../../lib/ledger-context';
+import { useSyncStatus } from '../../lib/ledger-context';
 
 /**
  * STEP-15: When both this device and the cloud changed since their last common
@@ -9,7 +9,7 @@ import { useLedger } from '../../lib/ledger-context';
  * sides (last saved time + record count) and lets the user pick.
  */
 export const SyncConflictModal: React.FC = () => {
-  const { syncConflict, resolveSyncConflict } = useLedger();
+  const { syncConflict, resolveSyncConflict } = useSyncStatus();
   const [resolving, setResolving] = useState<'local' | 'cloud' | null>(null);
 
   if (!syncConflict) return null;

@@ -42,7 +42,7 @@ interface HeaderProps {
   onOpenShortcuts?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<HeaderProps> = React.memo(({
   currentView,
   onNavigate,
   onOpenCommandPalette,
@@ -607,6 +607,6 @@ export const Header: React.FC<HeaderProps> = ({
       </div>
     </header>
   );
-};
+});
 
-
+Header.displayName = 'Header';

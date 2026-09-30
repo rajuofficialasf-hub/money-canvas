@@ -238,7 +238,11 @@ interface LedgerContextType {
   restoreFromBackup: (bundle: BackupBundle) => { success: boolean; error?: string };
   resetTenantLedger: () => void;
 
-  // Real-Time Cloud Sync (Mobile <-> Web)
+}
+
+// STEP-20: sync status lives in its own context so a sync tick (status change,
+// timestamp update, warning) does not re-render every ledger consumer.
+export interface SyncStatusContextType {
   cloudSyncStatus: 'idle' | 'syncing' | 'synced' | 'error';
   lastCloudSyncAt: string | null;
   cloudSyncError: string | null;
@@ -259,6 +263,7 @@ export interface SyncConflictInfo {
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
+const SyncStatusContext = createContext<SyncStatusContextType | undefined>(undefined);
 
 // Initial Categories Seed (Matches standard Bangladesh personal finance)
 const DEFAULT_CATEGORIES: Category[] = [
@@ -4727,137 +4732,206 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
+  // STEP-20ক: the ledger context value is memoized on its data deps. Action
+  // functions are recreated every render, but the memo only swaps the object
+  // (and therefore the captured closures) when one of the data deps actually
+  // changed — so closures are never stale, and sync ticks no longer re-render
+  // every ledger consumer.
+  const ledgerValue = useMemo(
+    () => ({
+      accounts,
+      categories,
+      transactions,
+      transactionLines,
+      fixedDeposits,
+      budgets,
+      recurringTransactions,
+      financialGoals,
+      goalContributions,
+      dpsAccounts,
+      dpsInstallments,
+      debts,
+      loans,
+      loanSchedules,
+      physicalAssets,
+      staticLiabilities,
+      netWorthSnapshots,
+      zakatSettings,
+      accountBalances,
+      getAccountBalance,
+      isLoading,
+      createAccount,
+      postTransaction,
+      postTransactionsBatch,
+      reverseTransaction,
+      openFixedDeposit,
+      matureFixedDeposit,
+      breakFixedDeposit,
+      archiveAccount,
+      unarchiveAccount,
+      createCategory,
+      deleteCategory,
+      upsertBudget,
+      deleteBudget,
+      getCategorySpent,
+      createRecurring,
+      toggleRecurringPause,
+      executeRecurringNow,
+      deleteRecurring,
+      createGoal,
+      contributeToGoal,
+      updateGoalStatus,
+      openDps,
+      payDpsInstallment,
+      matureDps,
+      createDebt,
+      settleDebt,
+      updateDebtStatus,
+      createLoan,
+      payLoanEmi,
+      createPhysicalAsset,
+      createStaticLiability,
+      saveNetWorthSnapshot,
+      updateZakatSettings,
+      disburseZakat,
+      brokers,
+      brokerAccounts,
+      brokerCashTransactions,
+      stocks,
+      stockTransactions,
+      stockHoldings,
+      brokerCashBalances,
+      createBroker,
+      createBrokerAccount,
+      depositBrokerCash,
+      withdrawBrokerCash,
+      executeStockTrade,
+      updateStockPrice,
+      addCustomStock,
+      deleteStock,
+      clearUnusedStocks,
+      dseSyncStatus,
+      syncDsePrices,
+      batchUpdateStockPrices,
+      importDseCsvPrices,
+      toggleDseManualMode,
+      stockPriceHistory,
+      benchmarkIndexPrices,
+      portfolioSnapshots,
+      portfolioCashFlows,
+      twrSubPeriods,
+      benchmarkComparisonData,
+      portfolioPerformanceMetrics,
+      addStockPriceHistoryRecord,
+      addBenchmarkPriceRecord,
+      recordPortfolioSnapshot,
+      backfillHistoricalSnapshots,
+      dividends,
+      corporateActions,
+      ipoApplications,
+      recordDividend,
+      executeCorporateAction,
+      applyIpo,
+      settleIpo,
+      auditLogs,
+      systemAlerts,
+      dismissAlert,
+      logAuditEvent,
+      exportFullBackup,
+      restoreFromBackup,
+      resetTenantLedger,
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- data deps only:
+    // functions are stable as long as the data they close over is unchanged.
+    [
+      accounts,
+      categories,
+      transactions,
+      transactionLines,
+      fixedDeposits,
+      budgets,
+      recurringTransactions,
+      financialGoals,
+      goalContributions,
+      dpsAccounts,
+      dpsInstallments,
+      debts,
+      loans,
+      loanSchedules,
+      physicalAssets,
+      staticLiabilities,
+      netWorthSnapshots,
+      zakatSettings,
+      accountBalances,
+      isLoading,
+      brokers,
+      brokerAccounts,
+      brokerCashTransactions,
+      stocks,
+      stockTransactions,
+      stockHoldings,
+      brokerCashBalances,
+      dseSyncStatus,
+      stockPriceHistory,
+      benchmarkIndexPrices,
+      portfolioSnapshots,
+      portfolioCashFlows,
+      twrSubPeriods,
+      benchmarkComparisonData,
+      portfolioPerformanceMetrics,
+      dividends,
+      corporateActions,
+      ipoApplications,
+      auditLogs,
+      systemAlerts,
+      dismissedAlertIds,
+      user,
+      userId,
+      firebaseUser,
+    ]
+  );
+
+  // Latest-ref trampolines keep the sync context value stable across ledger
+  // re-renders without ever calling a stale closure.
+  const syncActionsRef = useRef({ syncWithCloud, restoreFromCloud, resolveSyncConflict });
+  syncActionsRef.current = { syncWithCloud, restoreFromCloud, resolveSyncConflict };
+  const stableSyncWithCloud = useCallback(() => syncActionsRef.current.syncWithCloud(), []);
+  const stableRestoreFromCloud = useCallback(() => syncActionsRef.current.restoreFromCloud(), []);
+  const stableResolveSyncConflict = useCallback(
+    (choice: 'local' | 'cloud') => syncActionsRef.current.resolveSyncConflict(choice),
+    []
+  );
+
+  const syncValue = useMemo<SyncStatusContextType>(
+    () => ({
+      cloudSyncStatus,
+      lastCloudSyncAt,
+      cloudSyncError,
+      cloudSyncWarning,
+      syncConflict,
+      storageWarning,
+      integrityWarning,
+      syncWithCloud: stableSyncWithCloud,
+      restoreFromCloud: stableRestoreFromCloud,
+      resolveSyncConflict: stableResolveSyncConflict,
+    }),
+    [
+      cloudSyncStatus,
+      lastCloudSyncAt,
+      cloudSyncError,
+      cloudSyncWarning,
+      syncConflict,
+      storageWarning,
+      integrityWarning,
+      stableSyncWithCloud,
+      stableRestoreFromCloud,
+      stableResolveSyncConflict,
+    ]
+  );
+
   return (
-    <LedgerContext.Provider
-      value={{
-        accounts,
-        categories,
-        transactions,
-        transactionLines,
-        fixedDeposits,
-        budgets,
-        recurringTransactions,
-        financialGoals,
-        goalContributions,
-        dpsAccounts,
-        dpsInstallments,
-        debts,
-        loans,
-        loanSchedules,
-        physicalAssets,
-        staticLiabilities,
-        netWorthSnapshots,
-        zakatSettings,
-        accountBalances,
-        getAccountBalance,
-        isLoading,
-        createAccount,
-        postTransaction,
-        postTransactionsBatch,
-        reverseTransaction,
-        openFixedDeposit,
-        matureFixedDeposit,
-        breakFixedDeposit,
-        archiveAccount,
-        unarchiveAccount,
-        createCategory,
-        deleteCategory,
-
-        // Phase 3
-        upsertBudget,
-        deleteBudget,
-        getCategorySpent,
-        createRecurring,
-        toggleRecurringPause,
-        executeRecurringNow,
-        deleteRecurring,
-        createGoal,
-        contributeToGoal,
-        updateGoalStatus,
-        openDps,
-        payDpsInstallment,
-        matureDps,
-
-        // Phase 4
-        createDebt,
-        settleDebt,
-        updateDebtStatus,
-        createLoan,
-        payLoanEmi,
-        createPhysicalAsset,
-        createStaticLiability,
-        saveNetWorthSnapshot,
-        updateZakatSettings,
-        disburseZakat,
-
-        // Phase 5
-        brokers,
-        brokerAccounts,
-        brokerCashTransactions,
-        stocks,
-        stockTransactions,
-        stockHoldings,
-        brokerCashBalances,
-        createBroker,
-        createBrokerAccount,
-        depositBrokerCash,
-        withdrawBrokerCash,
-        executeStockTrade,
-        updateStockPrice,
-        addCustomStock,
-        deleteStock,
-        clearUnusedStocks,
-        dseSyncStatus,
-        syncDsePrices,
-        batchUpdateStockPrices,
-        importDseCsvPrices,
-        toggleDseManualMode,
-
-        // Phase 6
-        stockPriceHistory,
-        benchmarkIndexPrices,
-        portfolioSnapshots,
-        portfolioCashFlows,
-        twrSubPeriods,
-        benchmarkComparisonData,
-        portfolioPerformanceMetrics,
-        addStockPriceHistoryRecord,
-        addBenchmarkPriceRecord,
-        recordPortfolioSnapshot,
-        backfillHistoricalSnapshots,
-
-        // Phase 7: Dividends, Corporate Actions & IPO Applications
-        dividends,
-        corporateActions,
-        ipoApplications,
-        recordDividend,
-        executeCorporateAction,
-        applyIpo,
-        settleIpo,
-
-        // Phase 9: Audit Trail, Alerts & Backup
-        auditLogs,
-        systemAlerts,
-        dismissAlert,
-        logAuditEvent,
-        exportFullBackup,
-        restoreFromBackup,
-        resetTenantLedger,
-
-        // Real-Time Cloud Sync
-        cloudSyncStatus,
-        cloudSyncWarning,
-        syncConflict,
-        resolveSyncConflict,
-        storageWarning,
-        integrityWarning,
-        lastCloudSyncAt,
-        cloudSyncError,
-        syncWithCloud,
-        restoreFromCloud,
-      }}
-    >
-      {children}
+    <LedgerContext.Provider value={ledgerValue}>
+      <SyncStatusContext.Provider value={syncValue}>{children}</SyncStatusContext.Provider>
     </LedgerContext.Provider>
   );
 };
@@ -4866,6 +4940,14 @@ export const useLedger = () => {
   const context = useContext(LedgerContext);
   if (!context) {
     throw new Error('useLedger must be used within a LedgerProvider');
+  }
+  return context;
+};
+
+export const useSyncStatus = () => {
+  const context = useContext(SyncStatusContext);
+  if (!context) {
+    throw new Error('useSyncStatus must be used within a LedgerProvider');
   }
   return context;
 };

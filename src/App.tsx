@@ -2,7 +2,7 @@
  * Weathfolio — Wealth, Investment & Double-Entry Accounting OS
  */
 
-import React, { useState, useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, lazy, Suspense, useCallback } from 'react';
 import { AuthProvider } from './lib/auth-context';
 import { LedgerProvider } from './lib/ledger-context';
 import { Header } from './components/layout/Header';
@@ -93,10 +93,19 @@ function AppContent() {
   // Resolve active view from URL hash route for browser back/forward and deep linking
   const currentView = getViewFromPath(location.pathname);
 
-  const setCurrentView = (view: string) => {
-    const targetPath = getPathFromView(view);
-    navigate(targetPath);
-  };
+  const setCurrentView = useCallback(
+    (view: string) => {
+      navigate(getPathFromView(view));
+    },
+    [navigate]
+  );
+
+  // Stable handlers so the memoized Header/Sidebar do not re-render on every
+  // App state change (STEP-20).
+  const closeSidebar = useCallback(() => setIsSidebarOpen(false), []);
+  const toggleSidebar = useCallback(() => setIsSidebarOpen((p) => !p), []);
+  const openCommandPalette = useCallback(() => setIsCommandPaletteOpen(true), []);
+  const openShortcuts = useCallback(() => setIsShortcutsOpen(true), []);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
@@ -199,7 +208,7 @@ function AppContent() {
         currentView={currentView}
         onNavigate={setCurrentView}
         isOpen={isSidebarOpen}
-        onClose={() => setIsSidebarOpen(false)}
+        onClose={closeSidebar}
       />
 
       {/* Main Workspace Frame (offset for lg screens where sidebar is 64 / 16rem wide) */}
@@ -208,10 +217,10 @@ function AppContent() {
         <Header
           currentView={currentView}
           onNavigate={setCurrentView}
-          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-          onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+          onOpenCommandPalette={openCommandPalette}
+          onToggleSidebar={toggleSidebar}
           isMobileSidebarOpen={isSidebarOpen}
-          onOpenShortcuts={() => setIsShortcutsOpen(true)}
+          onOpenShortcuts={openShortcuts}
         />
 
         {/* Dynamic Viewport Content */}

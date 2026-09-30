@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertTriangle, HardDrive } from 'lucide-react';
-import { useLedger } from '../../lib/ledger-context';
+import { useSyncStatus } from '../../lib/ledger-context';
 
 /**
  * STEP-16: Fixed, always-visible banners for local persistence failures
@@ -8,7 +8,7 @@ import { useLedger } from '../../lib/ledger-context';
  * app shell level so the user sees them regardless of the active view.
  */
 export const LedgerHealthBanners: React.FC = () => {
-  const { storageWarning, integrityWarning } = useLedger();
+  const { storageWarning, integrityWarning } = useSyncStatus();
 
   if (!storageWarning && !integrityWarning) return null;
 
