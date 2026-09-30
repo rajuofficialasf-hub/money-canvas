@@ -31,6 +31,7 @@ import {
   Layers,
   ExternalLink,
 } from 'lucide-react';
+import { Field, Input, Select, Button, ErrorBanner } from '../ui';
 
 export const IncomeTaxView: React.FC = () => {
   const { user } = useAuth();
@@ -318,31 +319,28 @@ export const IncomeTaxView: React.FC = () => {
 
           {/* Quick Actions */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <button
+            <Button
               onClick={handleSyncFromCanvas}
-              className="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all cursor-pointer"
+              variant="primary"
+              icon={RefreshCw}
               title="Pull balances from double-entry accounts, DSE stocks, and physical assets"
             >
-              <RefreshCw className="h-3.5 w-3.5" />
               <span>লেজার থেকে ডেটা আনুন (Auto-Sync)</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={() => setActiveTab('summary')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors"
+              variant="secondary"
             >
               <Printer className="h-3.5 w-3.5 text-sky-400" />
               <span>রিটার্ন সামারি</span>
-            </button>
+            </Button>
           </div>
         </div>
 
         {/* Sync alert banner */}
         {syncFeedback && (
-          <div className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>{syncFeedback}</span>
-          </div>
+          <ErrorBanner variant="success" message={syncFeedback} className="mt-4" />
         )}
 
         {/* High-level Tax KPIs */}
@@ -463,34 +461,26 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-[11px] font-mono text-slate-300 mb-1">
-                    কর বছর (Assessment Year)
-                  </label>
-                  <select
+                <Field label="কর বছর (Assessment Year)">
+                  <Select
                     value={profile.assessmentYear}
                     onChange={(e) => {
                       const ay = e.target.value;
                       const iy = ay === '2026-2027' ? '2025-2026' : '2024-2025';
                       setProfile({ ...profile, assessmentYear: ay, incomeYear: iy });
                     }}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
                   >
                     <option value="2026-2027">২০২৬-২০২৭ (অধ্যাদেশ ২০২৫)</option>
                     <option value="2025-2026">২০২৫-২০২৬ (আইন ২০২৪)</option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
 
-                <div>
-                  <label className="block text-[11px] font-mono text-slate-300 mb-1">
-                    করদাতার শ্রেণি (Taxpayer Category)
-                  </label>
-                  <select
+                <Field label="করদাতার শ্রেণি (Taxpayer Category)">
+                  <Select
                     value={profile.category}
                     onChange={(e) =>
                       setProfile({ ...profile, category: e.target.value as TaxpayerCategory })
                     }
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
                   >
                     <option value="general_male">
                       সাধারণ পুরুষ (করমুক্ত: {formatBDT(getExemptionThreshold('general_male', false, 0, profile.assessmentYear))})
@@ -504,19 +494,15 @@ export const IncomeTaxView: React.FC = () => {
                     <option value="freedom_fighter">
                       গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধা (করমুক্ত: {formatBDT(getExemptionThreshold('freedom_fighter', false, 0, profile.assessmentYear))})
                     </option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
 
-                <div>
-                  <label className="block text-[11px] font-mono text-slate-300 mb-1">
-                    কর অঞ্চল ও ন্যূনতম কর এলাকা
-                  </label>
-                  <select
+                <Field label="কর অঞ্চল ও ন্যূনতম কর এলাকা">
+                  <Select
                     value={profile.location}
                     onChange={(e) =>
                       setProfile({ ...profile, location: e.target.value as TaxZoneLocation })
                     }
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
                   >
                     <option value="dhaka_chattogram_city">
                       ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন (ন্যূনতম: {formatBDT(getMinimumTax('dhaka_chattogram_city', profile.assessmentYear))})
@@ -527,8 +513,8 @@ export const IncomeTaxView: React.FC = () => {
                     <option value="non_city_areas">
                       পৌরসভা / সিটি কর্পোরেশন বহির্ভূত (ন্যূনতম: {formatBDT(getMinimumTax('non_city_areas', profile.assessmentYear))})
                     </option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
               </div>
 
               {/* Disabled child allowance */}
@@ -591,22 +577,19 @@ export const IncomeTaxView: React.FC = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                  <div>
-                    <label className="text-[10px] text-slate-400">মোট গ্রস বেতন (Gross Annual Salary)</label>
-                    <input
+                  <Field label="মোট গ্রস বেতন (Gross Annual Salary)">
+                    <Input
                       type="number"
                       value={income.salaryGross || ''}
                       onChange={(e) => setIncome({ ...income, salaryGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">অনুমোদিত করমুক্ত অংশ (স্বয়ংক্রিয়)</label>
-                    <div className="mt-1 px-3 py-1.5 rounded-lg bg-slate-900/50 border border-slate-800 text-emerald-400 text-xs font-mono font-semibold">
+                  </Field>
+                  <Field label="অনুমোদিত করমুক্ত অংশ (স্বয়ংক্রিয়)">
+                    <div className="px-3 py-1.5 rounded-lg bg-slate-900/50 border border-slate-800 text-emerald-400 text-xs font-mono font-semibold">
                       - {formatBDT(taxResult.statutoryExemptions.salaryExemption)}
                     </div>
-                  </div>
+                  </Field>
                 </div>
               </div>
 
@@ -622,37 +605,31 @@ export const IncomeTaxView: React.FC = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-                  <div>
-                    <label className="text-[10px] text-slate-400">বাৎসরিক মোট ভাড়া</label>
-                    <input
+                  <Field label="বাৎসরিক মোট ভাড়া">
+                    <Input
                       type="number"
                       value={income.rentalIncomeGross || ''}
                       onChange={(e) => setIncome({ ...income, rentalIncomeGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">ভাড়ার ধরন</label>
-                    <select
+                  </Field>
+                  <Field label="ভাড়ার ধরন">
+                    <Select
                       value={income.rentalType}
                       onChange={(e) => setIncome({ ...income, rentalType: e.target.value as 'residential' | 'commercial' })}
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     >
                       <option value="residential">আবাসিক (২৫% মেরামত ছাড়)</option>
                       <option value="commercial">বাণিজ্যিক (৩০% মেরামত ছাড়)</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">পৌর কর / মিউনিসিপ্যাল ট্যাক্স</label>
-                    <input
+                    </Select>
+                  </Field>
+                  <Field label="পৌর কর / মিউনিসিপ্যাল ট্যাক্স">
+                    <Input
                       type="number"
                       value={income.rentalMunicipalTax || ''}
                       onChange={(e) => setIncome({ ...income, rentalMunicipalTax: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
+                  </Field>
                 </div>
               </div>
 
@@ -666,16 +643,14 @@ export const IncomeTaxView: React.FC = () => {
                     </span>
                     <span className="text-[10px] text-amber-400">৬০% উৎপাদন খরচ ছাড়</span>
                   </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">বাৎসরিক মোট কৃষি আয়</label>
-                    <input
+                  <Field label="বাৎসরিক মোট কৃষি আয়">
+                    <Input
                       type="number"
                       value={income.agricultureGross || ''}
                       onChange={(e) => setIncome({ ...income, agricultureGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
+                  </Field>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
@@ -686,16 +661,14 @@ export const IncomeTaxView: React.FC = () => {
                     </span>
                     <span className="text-[10px] text-purple-400">নিট মুনাফা</span>
                   </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">ব্যবসার নিট লাভ (Net Profit)</label>
-                    <input
+                  <Field label="ব্যবসার নিট লাভ (Net Profit)">
+                    <Input
                       type="number"
                       value={income.businessNetProfit || ''}
                       onChange={(e) => setIncome({ ...income, businessNetProfit: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
+                  </Field>
                 </div>
               </div>
 
@@ -711,52 +684,47 @@ export const IncomeTaxView: React.FC = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <label className="text-[10px] text-slate-400">ডিএসই স্টক ক্যাপিটাল গেইন</label>
-                      <span className="text-[9px] text-emerald-400 font-mono">৫০ লাখ পর্যন্ত করমুক্ত</span>
-                    </div>
-                    <input
+                  <Field
+                    label={
+                      <span className="flex items-center justify-between">
+                        <span>ডিএসই স্টক ক্যাপিটাল গেইন</span>
+                        <span className="text-[9px] text-emerald-400 font-mono">৫০ লাখ পর্যন্ত করমুক্ত</span>
+                      </span>
+                    }
+                  >
+                    <Input
                       type="number"
                       value={income.capitalGainsListedShares || ''}
                       onChange={(e) => setIncome({ ...income, capitalGainsListedShares: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">ব্যাংক মুনাফা / FDR সুদ</label>
-                    <input
+                  </Field>
+                  <Field label="ব্যাংক মুনাফা / FDR সুদ">
+                    <Input
                       type="number"
                       value={income.bankInterestGross || ''}
                       onChange={(e) => setIncome({ ...income, bankInterestGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">সঞ্চয়পত্র থেকে মুনাফা</label>
-                    <input
+                  </Field>
+                  <Field label="সঞ্চয়পত্র থেকে মুনাফা">
+                    <Input
                       type="number"
                       value={income.sanchayapatraProfitGross || ''}
                       onChange={(e) => setIncome({ ...income, sanchayapatraProfitGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">ক্যাশ ডিভিডেন্ড আয়</label>
-                    <input
+                  </Field>
+                  <Field label="ক্যাশ ডিভিডেন্ড আয়">
+                    <Input
                       type="number"
                       value={income.cashDividendsGross || ''}
                       onChange={(e) => setIncome({ ...income, cashDividendsGross: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">ব্যাংক/সঞ্চয়পত্র উৎসে কর (AIT/TDS)</label>
-                    <input
+                  </Field>
+                  <Field label="ব্যাংক/সঞ্চয়পত্র উৎসে কর (AIT/TDS)">
+                    <Input
                       type="number"
                       value={(income.bankInterestTds + income.sanchayapatraTds) || ''}
                       onChange={(e) => {
@@ -764,19 +732,16 @@ export const IncomeTaxView: React.FC = () => {
                         setIncome({ ...income, bankInterestTds: val });
                       }}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-slate-400">অগ্রিম আয়কর (মোটরযান AIT ইত্যাদি)</label>
-                    <input
+                  </Field>
+                  <Field label="অগ্রিম আয়কর (মোটরযান AIT ইত্যাদি)">
+                    <Input
                       type="number"
                       value={income.advanceTaxAitPaid || ''}
                       onChange={(e) => setIncome({ ...income, advanceTaxAitPaid: parseFloat(e.target.value) || 0 })}
                       placeholder="0"
-                      className="w-full mt-1 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs"
                     />
-                  </div>
+                  </Field>
                 </div>
               </div>
             </div>
@@ -949,15 +914,17 @@ export const IncomeTaxView: React.FC = () => {
                       বাৎসরিক জমা করা মাসিক ডিপিএস কিস্তি
                     </div>
                   </div>
-                  <input
-                    type="number"
-                    value={investments.dpsContribution || ''}
-                    onChange={(e) =>
-                      setInvestments({ ...investments, dpsContribution: parseFloat(e.target.value) || 0 })
-                    }
-                    placeholder="0"
-                    className="w-full sm:w-44 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-right"
-                  />
+                  <div className="w-full sm:w-44">
+                    <Input
+                      type="number"
+                      value={investments.dpsContribution || ''}
+                      onChange={(e) =>
+                        setInvestments({ ...investments, dpsContribution: parseFloat(e.target.value) || 0 })
+                      }
+                      placeholder="0"
+                      className="text-right font-mono"
+                    />
+                  </div>
                 </div>
 
                 {/* Sanchayapatra */}
@@ -971,15 +938,17 @@ export const IncomeTaxView: React.FC = () => {
                       পরিবার, পেনশনার বা ৩ মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র
                     </div>
                   </div>
-                  <input
-                    type="number"
-                    value={investments.sanchayapatraPurchase || ''}
-                    onChange={(e) =>
-                      setInvestments({ ...investments, sanchayapatraPurchase: parseFloat(e.target.value) || 0 })
-                    }
-                    placeholder="0"
-                    className="w-full sm:w-44 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-right"
-                  />
+                  <div className="w-full sm:w-44">
+                    <Input
+                      type="number"
+                      value={investments.sanchayapatraPurchase || ''}
+                      onChange={(e) =>
+                        setInvestments({ ...investments, sanchayapatraPurchase: parseFloat(e.target.value) || 0 })
+                      }
+                      placeholder="0"
+                      className="text-right font-mono"
+                    />
+                  </div>
                 </div>
 
                 {/* DSE Shares */}
@@ -992,15 +961,17 @@ export const IncomeTaxView: React.FC = () => {
                       শেয়ারবাজারে তালিকাভুক্ত শেয়ার বা অনুমোদিত ইউনিট ফান্ড ক্রয়
                     </div>
                   </div>
-                  <input
-                    type="number"
-                    value={investments.dseStockPurchase || ''}
-                    onChange={(e) =>
-                      setInvestments({ ...investments, dseStockPurchase: parseFloat(e.target.value) || 0 })
-                    }
-                    placeholder="0"
-                    className="w-full sm:w-44 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-right"
-                  />
+                  <div className="w-full sm:w-44">
+                    <Input
+                      type="number"
+                      value={investments.dseStockPurchase || ''}
+                      onChange={(e) =>
+                        setInvestments({ ...investments, dseStockPurchase: parseFloat(e.target.value) || 0 })
+                      }
+                      placeholder="0"
+                      className="text-right font-mono"
+                    />
+                  </div>
                 </div>
 
                 {/* Life Insurance */}
@@ -1013,15 +984,17 @@ export const IncomeTaxView: React.FC = () => {
                       পলিসি মূল্যের সর্বোচ্চ ১০% পর্যন্ত অনুমোদনযোগ্য
                     </div>
                   </div>
-                  <input
-                    type="number"
-                    value={investments.lifeInsurancePremium || ''}
-                    onChange={(e) =>
-                      setInvestments({ ...investments, lifeInsurancePremium: parseFloat(e.target.value) || 0 })
-                    }
-                    placeholder="0"
-                    className="w-full sm:w-44 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-right"
-                  />
+                  <div className="w-full sm:w-44">
+                    <Input
+                      type="number"
+                      value={investments.lifeInsurancePremium || ''}
+                      onChange={(e) =>
+                        setInvestments({ ...investments, lifeInsurancePremium: parseFloat(e.target.value) || 0 })
+                      }
+                      placeholder="0"
+                      className="text-right font-mono"
+                    />
+                  </div>
                 </div>
 
                 {/* Provident Fund */}
@@ -1034,15 +1007,17 @@ export const IncomeTaxView: React.FC = () => {
                       জিপিএফ / আরপিএফ ও কল্যাণ তহবিল চাঁদা
                     </div>
                   </div>
-                  <input
-                    type="number"
-                    value={investments.providentFundContribution || ''}
-                    onChange={(e) =>
-                      setInvestments({ ...investments, providentFundContribution: parseFloat(e.target.value) || 0 })
-                    }
-                    placeholder="0"
-                    className="w-full sm:w-44 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-700 text-white text-right"
-                  />
+                  <div className="w-full sm:w-44">
+                    <Input
+                      type="number"
+                      value={investments.providentFundContribution || ''}
+                      onChange={(e) =>
+                        setInvestments({ ...investments, providentFundContribution: parseFloat(e.target.value) || 0 })
+                      }
+                      placeholder="0"
+                      className="text-right font-mono"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -1125,13 +1100,15 @@ export const IncomeTaxView: React.FC = () => {
                 </p>
               </div>
 
-              <button
+              <Button
                 onClick={handleSyncFromCanvas}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-semibold transition-colors"
+                variant="success"
+                size="sm"
+                className="font-mono"
               >
                 <RefreshCw className="h-3 w-3" />
                 <span>লেজার ব্যালেন্স অটো-সিঙ্ক</span>
-              </button>
+              </Button>
             </div>
 
             {/* Grid of Assets & Liabilities */}
@@ -1400,13 +1377,14 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2">
-                <button
+                <Button
                   onClick={() => window.print()}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-colors"
+                  variant="primary"
+                  size="sm"
+                  icon={Printer}
                 >
-                  <Printer className="h-3.5 w-3.5" />
                   <span>প্রিন্ট / PDF সংরক্ষণ</span>
-                </button>
+                </Button>
 
                 <a
                   href="https://etaxnbr.gov.bd"

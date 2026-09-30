@@ -10,11 +10,10 @@ import {
   TrendingUp,
   Percent,
   ShieldCheck,
-  AlertCircle,
-  X,
   Sparkles,
   Layers,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 import { useLedger } from '../../lib/ledger-context';
 import {
   CorporateActionType,
@@ -355,16 +354,17 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          <button
+          <Button
             onClick={() => {
               setDivError(null);
               setShowDividendModal(true);
             }}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 text-xs sm:text-sm font-medium rounded-lg text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition-colors"
+            variant="primary"
+            icon={Coins}
+            className="flex-1 sm:flex-none"
           >
-            <Coins className="w-4 h-4" />
             Record Dividend
-          </button>
+          </Button>
           <button
             onClick={() => {
               setCaError(null);
@@ -927,756 +927,611 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
       {/* ====================================================
           MODAL 1: RECORD CASH DIVIDEND
           ==================================================== */}
-      {showDividendModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 text-white w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Coins className="w-5 h-5 text-emerald-400" />
-                <h3 className="font-bold text-white text-sm sm:text-base">Record Cash Dividend</h3>
-              </div>
-              <button
-                onClick={() => setShowDividendModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
+      <Modal
+        isOpen={showDividendModal}
+        onClose={() => setShowDividendModal(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Coins className="w-5 h-5 text-emerald-400" />
+            Record Cash Dividend
+          </span>
+        }
+        maxWidth="lg"
+      >
+        <form onSubmit={handleRecordDividendSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+          {divError && <ErrorBanner message={divError} />}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Broker Account">
+              <Select
+                value={divBrokerAcc}
+                onChange={(e) => setDivBrokerAcc(e.target.value)}
+                required
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+                {brokerAccounts.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.accountName} ({b.boId})
+                  </option>
+                ))}
+              </Select>
+            </Field>
 
-            <form onSubmit={handleRecordDividendSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
-              {divError && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs rounded-lg flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{divError}</span>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Broker Account
-                  </label>
-                  <select
-                    value={divBrokerAcc}
-                    onChange={(e) => setDivBrokerAcc(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
-                    required
-                  >
-                    {brokerAccounts.map((b) => (
-                      <option key={b.id} value={b.id}>
-                        {b.accountName} ({b.boId})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Security / Stock
-                  </label>
-                  <select
-                    value={divStockId}
-                    onChange={(e) => handleDivStockChange(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
-                    required
-                  >
-                    {stocks.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.symbol} - {s.companyName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Shares Held
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={divShares}
-                    onChange={(e) => setDivShares(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    DPS (৳/Share)
-                  </label>
-                  <input
-                    type="number"
-                    min="0.01"
-                    step="0.01"
-                    value={divPerShare}
-                    onChange={(e) => setDivPerShare(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    AIT Tax Rate (%)
-                  </label>
-                  <select
-                    value={divTaxRate}
-                    onChange={(e) => setDivTaxRate(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
-                  >
-                    <option value={10}>10% (With TIN)</option>
-                    <option value={15}>15% (Without TIN)</option>
-                    <option value={0}>0% (Exempt)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Record Date
-                  </label>
-                  <input
-                    type="date"
-                    value={divRecordDate}
-                    onChange={(e) => setDivRecordDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Payment Date
-                  </label>
-                  <input
-                    type="date"
-                    value={divPaymentDate}
-                    onChange={(e) => setDivPaymentDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Live Preview Box */}
-              <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
-                <div className="font-semibold text-emerald-400 flex items-center justify-between">
-                  <span>Sub-Ledger Impact Preview:</span>
-                  <span className="font-mono text-slate-400">Real-time Calculation</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">Gross Dividend (+)</span>
-                    <span className="font-mono font-bold text-white text-sm">
-                      ৳{liveDivPreview.grossDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">AIT Tax Withheld (-)</span>
-                    <span className="font-mono font-bold text-rose-400 text-sm">
-                      -৳{liveDivPreview.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">Net BO Cash Impact</span>
-                    <span className="font-mono font-bold text-emerald-400 text-sm">
-                      +৳{liveDivPreview.netDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Notes & Reference
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. FY26 Final Cash Dividend declaration"
-                  value={divNotes}
-                  onChange={(e) => setDivNotes(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 pt-1">
-                <input
-                  type="checkbox"
-                  id="externalPayoutCheckbox"
-                  checked={divIsExternal}
-                  onChange={(e) => setDivIsExternal(e.target.checked)}
-                  className="rounded text-emerald-600 focus:ring-emerald-500 border-slate-800 bg-slate-950"
-                />
-                <label htmlFor="externalPayoutCheckbox" className="text-xs text-slate-400">
-                  External Direct Bank Payout (bypass BO cash sub-ledger)
-                </label>
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setShowDividendModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg shadow-sm transition-colors"
-                >
-                  Record Dividend
-                </button>
-              </div>
-            </form>
+            <Field label="Security / Stock">
+              <Select
+                value={divStockId}
+                onChange={(e) => handleDivStockChange(e.target.value)}
+                required
+              >
+                {stocks.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.symbol} - {s.companyName}
+                  </option>
+                ))}
+              </Select>
+            </Field>
           </div>
-        </div>
-      )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Field label="Shares Held">
+              <Input
+                type="number"
+                min="1"
+                step="1"
+                value={divShares}
+                onChange={(e) => setDivShares(Number(e.target.value))}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="DPS (৳/Share)">
+              <Input
+                type="number"
+                min="0.01"
+                step="0.01"
+                value={divPerShare}
+                onChange={(e) => setDivPerShare(Number(e.target.value))}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="AIT Tax Rate (%)">
+              <Select
+                value={divTaxRate}
+                onChange={(e) => setDivTaxRate(Number(e.target.value))}
+              >
+                <option value={10}>10% (With TIN)</option>
+                <option value={15}>15% (Without TIN)</option>
+                <option value={0}>0% (Exempt)</option>
+              </Select>
+            </Field>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Record Date">
+              <Input
+                type="date"
+                value={divRecordDate}
+                onChange={(e) => setDivRecordDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="Payment Date">
+              <Input
+                type="date"
+                value={divPaymentDate}
+                onChange={(e) => setDivPaymentDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+          </div>
+
+          {/* Live Preview Box */}
+          <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
+            <div className="font-semibold text-emerald-400 flex items-center justify-between">
+              <span>Sub-Ledger Impact Preview:</span>
+              <span className="font-mono text-slate-400">Real-time Calculation</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+              <div>
+                <span className="text-slate-400 block text-[11px]">Gross Dividend (+)</span>
+                <span className="font-mono font-bold text-white text-sm">
+                  ৳{liveDivPreview.grossDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[11px]">AIT Tax Withheld (-)</span>
+                <span className="font-mono font-bold text-rose-400 text-sm">
+                  -৳{liveDivPreview.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[11px]">Net BO Cash Impact</span>
+                <span className="font-mono font-bold text-emerald-400 text-sm">
+                  +৳{liveDivPreview.netDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <Field label="Notes & Reference">
+            <Input
+              type="text"
+              placeholder="e.g. FY26 Final Cash Dividend declaration"
+              value={divNotes}
+              onChange={(e) => setDivNotes(e.target.value)}
+            />
+          </Field>
+
+          <div className="flex items-center gap-2 pt-1">
+            <input
+              type="checkbox"
+              id="externalPayoutCheckbox"
+              checked={divIsExternal}
+              onChange={(e) => setDivIsExternal(e.target.checked)}
+              className="rounded text-emerald-600 focus:ring-emerald-500 border-slate-800 bg-slate-950"
+            />
+            <label htmlFor="externalPayoutCheckbox" className="text-xs text-slate-400">
+              External Direct Bank Payout (bypass BO cash sub-ledger)
+            </label>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <Button type="button" variant="secondary" onClick={() => setShowDividendModal(false)}>
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary">
+              Record Dividend
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* ====================================================
           MODAL 2: EXECUTE CORPORATE ACTION (Bonus, Split, Rights)
           ==================================================== */}
-      {showCorporateActionModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 text-white w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Split className="w-5 h-5 text-indigo-400" />
-                <h3 className="font-bold text-white text-sm sm:text-base">Execute Corporate Action</h3>
-              </div>
-              <button
-                onClick={() => setShowCorporateActionModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
+      <Modal
+        isOpen={showCorporateActionModal}
+        onClose={() => setShowCorporateActionModal(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Split className="w-5 h-5 text-indigo-400" />
+            Execute Corporate Action
+          </span>
+        }
+        maxWidth="lg"
+      >
+        <form onSubmit={handleExecuteCaSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+          {caError && <ErrorBanner message={caError} />}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Action Type">
+              <Select
+                value={caType}
+                onChange={(e) => setCaType(e.target.value as CorporateActionType)}
               >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+                <option value="bonus">Bonus Issue (Stock Dividend)</option>
+                <option value="split">Stock Split</option>
+                <option value="right">Right Share Issue</option>
+              </Select>
+            </Field>
 
-            <form onSubmit={handleExecuteCaSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
-              {caError && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs rounded-lg flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{caError}</span>
-                </div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Action Type
-                  </label>
-                  <select
-                    value={caType}
-                    onChange={(e) => setCaType(e.target.value as CorporateActionType)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                  >
-                    <option value="bonus">Bonus Issue (Stock Dividend)</option>
-                    <option value="split">Stock Split</option>
-                    <option value="right">Right Share Issue</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Target Security
-                  </label>
-                  <select
-                    value={caStockId}
-                    onChange={(e) => setCaStockId(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                  >
-                    {stocks.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.symbol} - {s.companyName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Ratio (e.g. 10:1 or 1:2)
-                  </label>
-                  <input
-                    type="text"
-                    value={caRatio}
-                    onChange={(e) => setCaRatio(e.target.value)}
-                    placeholder={caType === 'bonus' ? '10:1' : caType === 'split' ? '1:2' : '1:5'}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                  <span className="text-[11px] text-slate-400 mt-0.5 block">
-                    {caType === 'bonus'
-                      ? '10:1 means 1 bonus for every 10 held (10%)'
-                      : caType === 'split'
-                      ? '1:2 means 1 share splits into 2 shares'
-                      : '1:5 means 1 right for every 5 held'}
-                  </span>
-                </div>
-
-                {caType === 'right' ? (
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Subscription Price (৳)
-                    </label>
-                    <input
-                      type="number"
-                      step="0.1"
-                      min="1"
-                      value={caCashComponent}
-                      onChange={(e) => setCaCashComponent(Number(e.target.value))}
-                      className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                      required
-                    />
-                  </div>
-                ) : (
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Eligible Quantity Held
-                    </label>
-                    <div className="px-3 py-2 text-sm bg-slate-950 border border-slate-800 rounded-lg text-slate-200 font-medium">
-                      {eligibleCaShares} shares (Current WAC: ৳{currentCaWac.toFixed(2)})
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Announcement Date
-                  </label>
-                  <input
-                    type="date"
-                    value={caAnnounceDate}
-                    onChange={(e) => setCaAnnounceDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Effective / Record Date
-                  </label>
-                  <input
-                    type="date"
-                    value={caEffectiveDate}
-                    onChange={(e) => setCaEffectiveDate(e.target.value)}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Live Preview Box for Dilution */}
-              <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
-                <div className="font-semibold text-indigo-400 flex items-center justify-between">
-                  <span>Mathematical Holding Adjustment & Dilution:</span>
-                  <span className="font-mono text-slate-400">WAC Invariant</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">New Quantity</span>
-                    <span className="font-mono font-bold text-white text-sm">
-                      {liveCaPreview.newQuantity} shares
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">Diluted WAC</span>
-                    <span className="font-mono font-bold text-indigo-400 text-sm">
-                      ৳{liveCaPreview.newWac.toFixed(2)}/sh
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-slate-400 block text-[11px]">Total Cost Basis</span>
-                    <span className="font-mono font-bold text-white text-sm">
-                      ৳{liveCaPreview.newCostBasis.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Notes & Reference
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Board meeting approved 10% stock dividend"
-                  value={caNotes}
-                  onChange={(e) => setCaNotes(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setShowCorporateActionModal(false)}
-                  className="px-4 py-2 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
-                >
-                  Apply Corporate Action
-                </button>
-              </div>
-            </form>
+            <Field label="Target Security">
+              <Select
+                value={caStockId}
+                onChange={(e) => setCaStockId(e.target.value)}
+              >
+                {stocks.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.symbol} - {s.companyName}
+                  </option>
+                ))}
+              </Select>
+            </Field>
           </div>
-        </div>
-      )}
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field
+              label="Ratio (e.g. 10:1 or 1:2)"
+              hint={
+                caType === 'bonus'
+                  ? '10:1 means 1 bonus for every 10 held (10%)'
+                  : caType === 'split'
+                  ? '1:2 means 1 share splits into 2 shares'
+                  : '1:5 means 1 right for every 5 held'
+              }
+            >
+              <Input
+                type="text"
+                value={caRatio}
+                onChange={(e) => setCaRatio(e.target.value)}
+                placeholder={caType === 'bonus' ? '10:1' : caType === 'split' ? '1:2' : '1:5'}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            {caType === 'right' ? (
+              <Field label="Subscription Price (৳)">
+                <Input
+                  type="number"
+                  step="0.1"
+                  min="1"
+                  value={caCashComponent}
+                  onChange={(e) => setCaCashComponent(Number(e.target.value))}
+                  className="font-mono"
+                  required
+                />
+              </Field>
+            ) : (
+              <Field label="Eligible Quantity Held">
+                <div className="px-3 py-2 text-sm bg-slate-950 border border-slate-800 rounded-lg text-slate-200 font-medium">
+                  {eligibleCaShares} shares (Current WAC: ৳{currentCaWac.toFixed(2)})
+                </div>
+              </Field>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Announcement Date">
+              <Input
+                type="date"
+                value={caAnnounceDate}
+                onChange={(e) => setCaAnnounceDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="Effective / Record Date">
+              <Input
+                type="date"
+                value={caEffectiveDate}
+                onChange={(e) => setCaEffectiveDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+          </div>
+
+          {/* Live Preview Box for Dilution */}
+          <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
+            <div className="font-semibold text-indigo-400 flex items-center justify-between">
+              <span>Mathematical Holding Adjustment & Dilution:</span>
+              <span className="font-mono text-slate-400">WAC Invariant</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
+              <div>
+                <span className="text-slate-400 block text-[11px]">New Quantity</span>
+                <span className="font-mono font-bold text-white text-sm">
+                  {liveCaPreview.newQuantity} shares
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[11px]">Diluted WAC</span>
+                <span className="font-mono font-bold text-indigo-400 text-sm">
+                  ৳{liveCaPreview.newWac.toFixed(2)}/sh
+                </span>
+              </div>
+              <div>
+                <span className="text-slate-400 block text-[11px]">Total Cost Basis</span>
+                <span className="font-mono font-bold text-white text-sm">
+                  ৳{liveCaPreview.newCostBasis.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <Field label="Notes & Reference">
+            <Input
+              type="text"
+              placeholder="e.g. Board meeting approved 10% stock dividend"
+              value={caNotes}
+              onChange={(e) => setCaNotes(e.target.value)}
+            />
+          </Field>
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <Button type="button" variant="secondary" onClick={() => setShowCorporateActionModal(false)}>
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
+            >
+              Apply Corporate Action
+            </button>
+          </div>
+        </form>
+      </Modal>
 
       {/* ====================================================
           MODAL 3: APPLY FOR IPO
           ==================================================== */}
-      {showIpoModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 text-white w-full max-w-lg max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-indigo-400" />
-                <h3 className="font-bold text-white text-sm sm:text-base">Apply for IPO (Primary Market)</h3>
-              </div>
-              <button
-                onClick={() => setShowIpoModal(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Modal
+        isOpen={showIpoModal}
+        onClose={() => setShowIpoModal(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-indigo-400" />
+            Apply for IPO (Primary Market)
+          </span>
+        }
+        maxWidth="lg"
+      >
+        <form onSubmit={handleApplyIpoSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+          {ipoError && <ErrorBanner message={ipoError} />}
 
-            <form onSubmit={handleApplyIpoSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
-              {ipoError && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs rounded-lg flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{ipoError}</span>
-                </div>
-              )}
+          <Field
+            label={
+              <span className="flex items-center justify-between">
+                <span>Beneficiary Owner (BO) Account *</span>
+                <span className="text-[11px] font-mono text-indigo-400">
+                  Avail Cash: ৳{availableBrokerCash.toLocaleString()}
+                </span>
+              </span>
+            }
+          >
+            <Select
+              value={ipoBrokerAcc}
+              onChange={(e) => setIpoBrokerAcc(e.target.value)}
+              className="font-mono"
+              required
+            >
+              {brokerAccounts.map((b) => {
+                const cash = brokerCashBalances.find((bc) => bc.brokerAccountId === b.id)?.cashBalance || 0;
+                return (
+                  <option key={b.id} value={b.id}>
+                    {b.accountName} (BO: {b.boId}) — Cash: ৳{cash.toLocaleString()}
+                  </option>
+                );
+              })}
+            </Select>
+          </Field>
 
-              <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-semibold text-slate-300">
-                    Beneficiary Owner (BO) Account *
-                  </label>
-                  <span className="text-[11px] font-mono text-indigo-400">
-                    Avail Cash: ৳{availableBrokerCash.toLocaleString()}
-                  </span>
-                </div>
-                <select
-                  value={ipoBrokerAcc}
-                  onChange={(e) => setIpoBrokerAcc(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                  required
-                >
-                  {brokerAccounts.map((b) => {
-                    const cash = brokerCashBalances.find((bc) => bc.brokerAccountId === b.id)?.cashBalance || 0;
-                    return (
-                      <option key={b.id} value={b.id}>
-                        {b.accountName} (BO: {b.boId}) — Cash: ৳{cash.toLocaleString()}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Company Name" required>
+              <Input
+                type="text"
+                placeholder="e.g. Techno Drugs Ltd"
+                value={ipoCompany}
+                onChange={(e) => setIpoCompany(e.target.value)}
+                required
+              />
+            </Field>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Company Name *
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Techno Drugs Ltd"
-                    value={ipoCompany}
-                    onChange={(e) => setIpoCompany(e.target.value)}
-                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    DSE Symbol / Ticker *
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. TECHNODRUG"
-                    value={ipoSymbol}
-                    onChange={(e) => setIpoSymbol(e.target.value.toUpperCase())}
-                    className="w-full px-3 py-2 text-base sm:text-sm font-mono uppercase rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Quick Lot Presets */}
-              <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] text-slate-400 font-mono">Quick Preset:</span>
-                <button
-                  type="button"
-                  onClick={() => { setIpoLotSize(500); setIpoOfferPrice(10); }}
-                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
-                >
-                  500 sh @ ৳10 (৳5,000)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setIpoLotSize(1000); setIpoOfferPrice(10); }}
-                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
-                >
-                  1,000 sh @ ৳10 (৳10,000)
-                </button>
-                <button
-                  type="button"
-                  onClick={() => { setIpoLotSize(2000); setIpoOfferPrice(10); }}
-                  className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
-                >
-                  2,000 sh @ ৳10 (৳20,000)
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Lot Size (Shares) *
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={ipoLotSize}
-                    onChange={(e) => setIpoLotSize(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Offer Price (৳) *
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="0.1"
-                    value={ipoOfferPrice}
-                    onChange={(e) => setIpoOfferPrice(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Application Date *
-                  </label>
-                  <input
-                    type="date"
-                    value={ipoAppDate}
-                    onChange={(e) => setIpoAppDate(e.target.value)}
-                    className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Total Required Subscription
-                  </label>
-                  <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-slate-950 border border-slate-800 rounded-lg text-indigo-400">
-                    ৳{ipoTotalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                  </div>
-                </div>
-              </div>
-
-              {/* Insufficient Cash Warning */}
-              {availableBrokerCash < ipoTotalAmount && (
-                <div className="p-2.5 bg-amber-500/10 border border-amber-500/30 rounded-lg text-xs text-amber-300 flex items-start gap-2">
-                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
-                  <span>
-                    অপর্যাপ্ত ব্যালেন্স: নির্বাচিত বিও অ্যাকাউন্টে উপলব্ধ ক্যাশ ৳{availableBrokerCash.toLocaleString()}, কিন্তু সাবস্ক্রিপশন প্রয়োজন ৳{ipoTotalAmount.toLocaleString()}। আবেদন করার আগে বিও অ্যাকাউন্টে টাকা ডিপোজিট করুন।
-                  </span>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Notes
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. General public quota application"
-                  value={ipoNotes}
-                  onChange={(e) => setIpoNotes(e.target.value)}
-                  className="w-full px-3 py-2 text-base sm:text-sm rounded-lg border border-slate-800 bg-slate-950 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setShowIpoModal(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-center"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={availableBrokerCash < ipoTotalAmount}
-                  className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
-                >
-                  Apply &amp; Block Funds (৳{ipoTotalAmount.toLocaleString()})
-                </button>
-              </div>
-            </form>
+            <Field label="DSE Symbol / Ticker" required>
+              <Input
+                type="text"
+                placeholder="e.g. TECHNODRUG"
+                value={ipoSymbol}
+                onChange={(e) => setIpoSymbol(e.target.value.toUpperCase())}
+                className="font-mono uppercase"
+                required
+              />
+            </Field>
           </div>
-        </div>
-      )}
+
+          {/* Quick Lot Presets */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] text-slate-400 font-mono">Quick Preset:</span>
+            <button
+              type="button"
+              onClick={() => { setIpoLotSize(500); setIpoOfferPrice(10); }}
+              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+            >
+              500 sh @ ৳10 (৳5,000)
+            </button>
+            <button
+              type="button"
+              onClick={() => { setIpoLotSize(1000); setIpoOfferPrice(10); }}
+              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+            >
+              1,000 sh @ ৳10 (৳10,000)
+            </button>
+            <button
+              type="button"
+              onClick={() => { setIpoLotSize(2000); setIpoOfferPrice(10); }}
+              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+            >
+              2,000 sh @ ৳10 (৳20,000)
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Lot Size (Shares)" required>
+              <Input
+                type="number"
+                min="1"
+                step="1"
+                value={ipoLotSize}
+                onChange={(e) => setIpoLotSize(Number(e.target.value))}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="Offer Price (৳)" required>
+              <Input
+                type="number"
+                min="1"
+                step="0.1"
+                value={ipoOfferPrice}
+                onChange={(e) => setIpoOfferPrice(Number(e.target.value))}
+                className="font-mono"
+                required
+              />
+            </Field>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+            <Field label="Application Date" required>
+              <Input
+                type="date"
+                value={ipoAppDate}
+                onChange={(e) => setIpoAppDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <Field label="Total Required Subscription">
+              <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-slate-950 border border-slate-800 rounded-lg text-indigo-400">
+                ৳{ipoTotalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </div>
+            </Field>
+          </div>
+
+          {/* Insufficient Cash Warning */}
+          {availableBrokerCash < ipoTotalAmount && (
+            <ErrorBanner
+              variant="warning"
+              message={
+                <>
+BENGALI_LINE                </>
+              }
+            />
+          )}
+
+          <Field label="Notes">
+            <Input
+              type="text"
+              placeholder="e.g. General public quota application"
+              value={ipoNotes}
+              onChange={(e) => setIpoNotes(e.target.value)}
+            />
+          </Field>
+
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setShowIpoModal(false)}
+              className="w-full sm:w-auto"
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              disabled={availableBrokerCash < ipoTotalAmount}
+              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
+            >
+              Apply &amp; Block Funds (৳{ipoTotalAmount.toLocaleString()})
+            </button>
+          </div>
+        </form>
+      </Modal>
 
       {/* ====================================================
           MODAL 4: SETTLE IPO ALLOTMENT / LOTTERY
           ==================================================== */}
       {settlingIpo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-3 sm:p-4">
-          <div className="bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 text-white w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-            <div className="px-4 sm:px-6 py-3.5 sm:py-4 border-b border-slate-800 bg-slate-900/90 flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-white text-sm sm:text-base">Settle IPO: {settlingIpo.symbol}</h3>
-                <p className="text-xs text-slate-400">{settlingIpo.companyName}</p>
-              </div>
-              <button
-                onClick={() => setSettlingIpo(null)}
-                className="text-slate-400 hover:text-white p-1 rounded"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+        <Modal
+          isOpen={!!settlingIpo}
+          onClose={() => setSettlingIpo(null)}
+          title={`Settle IPO: ${settlingIpo.symbol}`}
+          description={settlingIpo.companyName}
+          maxWidth="md"
+        >
+          <form onSubmit={handleSettleIpoSubmit} className="space-y-4 max-h-[70vh] overflow-y-auto">
+            {settleError && <ErrorBanner message={settleError} />}
 
-            <form onSubmit={handleSettleIpoSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
-              {settleError && (
-                <div className="p-3 bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs rounded-lg flex items-center gap-2">
-                  <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                  <span>{settleError}</span>
-                </div>
-              )}
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Lottery / Pro-Rata Outcome
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleSettleStatusChange('allotted')}
-                    className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
-                      settleStatus === 'allotted'
-                        ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold'
-                        : 'border-slate-800 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    100% Allotted
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleSettleStatusChange('partially_allotted')}
-                    className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
-                      settleStatus === 'partially_allotted'
-                        ? 'border-sky-500 bg-sky-500/20 text-sky-300 font-bold'
-                        : 'border-slate-800 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    Partial Allotment
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleSettleStatusChange('refunded')}
-                    className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
-                      settleStatus === 'refunded'
-                        ? 'border-rose-500 bg-rose-500/20 text-rose-300 font-bold'
-                        : 'border-slate-800 text-slate-300 hover:bg-slate-800'
-                    }`}
-                  >
-                    Not Allotted
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Allotted Shares
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    value={settleShares}
-                    onChange={(e) => setSettleShares(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
-                    Refund Amount (৳)
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={settleRefund}
-                    onChange={(e) => setSettleRefund(Number(e.target.value))}
-                    className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Settlement Date
-                </label>
-                <input
-                  type="date"
-                  value={settleDate}
-                  onChange={(e) => setSettleDate(e.target.value)}
-                  className="w-full px-3 py-2 text-sm rounded-lg border border-slate-800 bg-slate-950 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none font-mono"
-                  required
-                />
-              </div>
-
-              <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
+            <Field label="Lottery / Pro-Rata Outcome">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <button
                   type="button"
-                  onClick={() => setSettlingIpo(null)}
-                  className="w-full sm:w-auto px-4 py-2.5 text-sm font-medium text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors text-center"
+                  onClick={() => handleSettleStatusChange('allotted')}
+                  className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
+                    settleStatus === 'allotted'
+                      ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold'
+                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                  }`}
                 >
-                  Cancel
+                  100% Allotted
                 </button>
                 <button
-                  type="submit"
-                  className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
+                  type="button"
+                  onClick={() => handleSettleStatusChange('partially_allotted')}
+                  className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
+                    settleStatus === 'partially_allotted'
+                      ? 'border-sky-500 bg-sky-500/20 text-sky-300 font-bold'
+                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                  }`}
                 >
-                  Confirm Settlement
+                  Partial Allotment
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleSettleStatusChange('refunded')}
+                  className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
+                    settleStatus === 'refunded'
+                      ? 'border-rose-500 bg-rose-500/20 text-rose-300 font-bold'
+                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  Not Allotted
                 </button>
               </div>
-            </form>
-          </div>
-        </div>
+            </Field>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <Field label="Allotted Shares">
+                <Input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={settleShares}
+                  onChange={(e) => setSettleShares(Number(e.target.value))}
+                  className="font-mono"
+                  required
+                />
+              </Field>
+
+              <Field label="Refund Amount (৳)">
+                <Input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value={settleRefund}
+                  onChange={(e) => setSettleRefund(Number(e.target.value))}
+                  className="font-mono"
+                  required
+                />
+              </Field>
+            </div>
+
+            <Field label="Settlement Date">
+              <Input
+                type="date"
+                value={settleDate}
+                onChange={(e) => setSettleDate(e.target.value)}
+                className="font-mono"
+                required
+              />
+            </Field>
+
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setSettlingIpo(null)}
+                className="w-full sm:w-auto"
+              >
+                Cancel
+              </Button>
+              <button
+                type="submit"
+                className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
+              >
+                Confirm Settlement
+              </button>
+            </div>
+          </form>
+        </Modal>
       )}
     </div>
   );

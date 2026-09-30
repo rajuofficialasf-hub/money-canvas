@@ -21,6 +21,7 @@ import {
   Camera,
   Sparkles,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button } from '../ui';
 
 interface PortfolioAnalyticsViewProps {
   onNavigateToPortfolio?: () => void;
@@ -230,53 +231,55 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button
+          <Button
             onClick={handleSyncLiveMarketData}
             disabled={isSyncingMarketApi}
-            className="w-full sm:w-auto px-4 py-2 text-xs sm:text-sm font-semibold text-slate-950 bg-emerald-400 hover:bg-emerald-300 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
+            isLoading={isSyncingMarketApi}
+            variant="primary"
+            icon={Sparkles}
+            className="w-full sm:w-auto"
             title="Fetch real-time DSE market quotes for accurate XIRR and TWR calculation"
           >
-            {isSyncingMarketApi ? (
-              <RefreshCw className="w-4 h-4 animate-spin text-slate-950" />
-            ) : (
-              <Sparkles className="w-4 h-4 text-slate-950" />
-            )}
-            <span>{isSyncingMarketApi ? 'Syncing DSE API...' : 'Sync Live Market API'}</span>
-          </button>
+            {isSyncingMarketApi ? 'Syncing DSE API...' : 'Sync Live Market API'}
+          </Button>
 
-          <button
+          <Button
             onClick={handleExportPortfolioPdf}
-            className="w-full sm:w-auto px-3.5 py-2 text-xs sm:text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+            variant="primary"
+            icon={FileText}
+            className="w-full sm:w-auto"
             title="Download Valuation & XIRR PDF Report"
           >
-            <FileText className="w-4 h-4" />
-            <span>Download PDF Report</span>
-          </button>
+            Download PDF Report
+          </Button>
 
-          <button
+          <Button
             onClick={handleTakeSnapshotNow}
-            className="flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+            variant="outline"
+            icon={Camera}
+            className="flex-1 sm:flex-none"
             title="Saves a snapshot of equity market valuation and cash"
           >
-            <Camera className="w-4 h-4 text-slate-600" />
-            <span>Snapshot Today</span>
-          </button>
+            Snapshot Today
+          </Button>
 
-          <button
+          <Button
             onClick={() => setIsAddPriceModalOpen(true)}
-            className="flex-1 sm:flex-none px-3 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+            variant="outline"
+            icon={Plus}
+            className="flex-1 sm:flex-none"
           >
-            <Plus className="w-4 h-4 text-slate-600" />
-            <span>Add Close Price</span>
-          </button>
+            Add Close Price
+          </Button>
 
-          <button
+          <Button
             onClick={() => setIsAddBenchModalOpen(true)}
-            className="w-full sm:w-auto px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-2xs"
+            variant="outline"
+            icon={BarChart3}
+            className="w-full sm:w-auto"
           >
-            <BarChart3 className="w-4 h-4 text-slate-600" />
-            <span>Add DSEX Point</span>
-          </button>
+            Add DSEX Point
+          </Button>
         </div>
       </div>
 
@@ -1058,131 +1061,105 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
       )}
 
       {/* Modal: Add Stock Price Record */}
-      {isAddPriceModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-slate-200 p-6 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-slate-900">Record Stock Close Price</h3>
-              <button onClick={() => setIsAddPriceModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isAddPriceModalOpen}
+        onClose={() => setIsAddPriceModalOpen(false)}
+        title="Record Stock Close Price"
+        maxWidth="md"
+      >
+        <form onSubmit={handleSaveStockPrice} className="space-y-4 text-sm">
+          <Field label="Security">
+            <Select
+              value={newPriceStockId}
+              onChange={(e) => setNewPriceStockId(e.target.value)}
+            >
+              {stocks.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.symbol} — {s.companyName}
+                </option>
+              ))}
+            </Select>
+          </Field>
 
-            <form onSubmit={handleSaveStockPrice} className="space-y-4 text-sm">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Security</label>
-                <select
-                  value={newPriceStockId}
-                  onChange={(e) => setNewPriceStockId(e.target.value)}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white"
-                >
-                  {stocks.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.symbol} — {s.companyName}
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <Field label="Closing Date">
+            <Input
+              type="date"
+              value={newPriceDate}
+              onChange={(e) => setNewPriceDate(e.target.value)}
+              required
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Closing Date</label>
-                <input
-                  type="date"
-                  value={newPriceDate}
-                  onChange={(e) => setNewPriceDate(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                />
-              </div>
+          <Field label="Closing Price (BDT ৳)">
+            <Input
+              type="number"
+              step="0.1"
+              min="0.1"
+              value={newPriceClose}
+              onChange={(e) => setNewPriceClose(e.target.value === '' ? '' : parseFloat(e.target.value))}
+              required
+              className="font-mono"
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Closing Price (BDT ৳)</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0.1"
-                  value={newPriceClose}
-                  onChange={(e) => setNewPriceClose(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                  required
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddPriceModalOpen(false)}
-                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-xs"
-                >
-                  Save Price
-                </button>
-              </div>
-            </form>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsAddPriceModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary">
+              Save Price
+            </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
 
       {/* Modal: Add DSEX Benchmark Record */}
-      {isAddBenchModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl max-w-md w-full border border-slate-200 p-6 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-bold text-slate-900">Record DSEX Benchmark Point</h3>
-              <button onClick={() => setIsAddBenchModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isAddBenchModalOpen}
+        onClose={() => setIsAddBenchModalOpen(false)}
+        title="Record DSEX Benchmark Point"
+        maxWidth="md"
+      >
+        <form onSubmit={handleSaveBenchmarkPrice} className="space-y-4 text-sm">
+          <Field label="Date">
+            <Input
+              type="date"
+              value={newBenchDate}
+              onChange={(e) => setNewBenchDate(e.target.value)}
+              required
+            />
+          </Field>
 
-            <form onSubmit={handleSaveBenchmarkPrice} className="space-y-4 text-sm">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Date</label>
-                <input
-                  type="date"
-                  value={newBenchDate}
-                  onChange={(e) => setNewBenchDate(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm"
-                />
-              </div>
+          <Field label="DSEX Index Close">
+            <Input
+              type="number"
+              step="0.1"
+              min="1000"
+              value={newBenchValue}
+              onChange={(e) => setNewBenchValue(e.target.value === '' ? '' : parseFloat(e.target.value))}
+              required
+              className="font-mono"
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">DSEX Index Close</label>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="1000"
-                  value={newBenchValue}
-                  onChange={(e) => setNewBenchValue(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                  required
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm font-mono"
-                />
-              </div>
-
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddBenchModalOpen(false)}
-                  className="px-4 py-2 text-slate-600 hover:bg-slate-100 rounded-lg font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-xs"
-                >
-                  Save Benchmark Point
-                </button>
-              </div>
-            </form>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsAddBenchModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary">
+              Save Benchmark Point
+            </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
     </div>
   );
 };

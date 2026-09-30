@@ -31,6 +31,7 @@ import {
   Scale,
   Receipt,
 } from 'lucide-react';
+import { Field, Input, Select, Button } from '../ui';
 
 interface FinancialAnalyticsAndReportsViewProps {
   onNavigateToPortfolio?: () => void;
@@ -494,40 +495,39 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           )}
 
           {activeTab === 'statements' && statementSubTab === 'balance_sheet' && (
-            <button
+            <Button
               onClick={handleExportBalanceSheetPdf}
-              className="px-2.5 sm:px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+              variant="primary"
+              size="sm"
+              icon={FileText}
               title="Generate Balance Sheet PDF Statement"
             >
-              <FileText className="h-3.5 w-3.5 shrink-0" />
               <span>
                 <span className="sm:hidden">Balance Sheet PDF</span>
                 <span className="hidden sm:inline">Download Balance Sheet PDF</span>
               </span>
-            </button>
+            </Button>
           )}
 
           {activeTab === 'statements' && statementSubTab === 'pnl' && (
-            <button
+            <Button
               onClick={handleExportIncomeStatementPdf}
-              className="px-2.5 sm:px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+              variant="primary"
+              size="sm"
+              icon={FileText}
               title="Generate Income Statement (P&L) PDF"
             >
-              <FileText className="h-3.5 w-3.5 shrink-0" />
               <span>
                 <span className="sm:hidden">P&L PDF</span>
                 <span className="hidden sm:inline">Download P&L PDF</span>
               </span>
-            </button>
+            </Button>
           )}
 
-          <button
-            onClick={handlePrint}
-            className="px-2.5 sm:px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
-          >
+          <Button onClick={handlePrint} variant="outline" size="sm">
             <Printer className="h-3.5 w-3.5 text-slate-400 shrink-0" />
             <span>Print</span>
-          </button>
+          </Button>
           <button
             onClick={handleExportFullJsonBackup}
             className="px-2.5 sm:px-3 py-1.5 bg-indigo-950/60 border border-indigo-700/60 hover:border-indigo-500 text-indigo-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
@@ -538,7 +538,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
               <span className="hidden sm:inline">JSON Backup</span>
             </span>
           </button>
-          <button
+          <Button
             onClick={() => {
               if (activeTab === 'statements') {
                 if (statementSubTab === 'balance_sheet') {
@@ -550,14 +550,15 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                 handleExportTaxCsv();
               }
             }}
-            className="px-2.5 sm:px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-slate-700 transition-colors"
+            variant="secondary"
+            size="sm"
           >
             <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
             <span>
               <span className="sm:hidden">CSV</span>
               <span className="hidden sm:inline">Export CSV</span>
             </span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -709,33 +710,27 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           {/* Tax Parameters & Configuration Bar */}
           <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-4 flex-wrap">
-              <div>
-                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
-                  Tax Assessment Fiscal Year
-                </label>
-                <select
+              <Field label="Tax Assessment Fiscal Year">
+                <Select
                   value={fiscalYear}
                   onChange={(e) => setFiscalYear(e.target.value)}
-                  className="px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                 >
                   <option value="2026-2027">FY 2026-2027 (Assessment Year 2027-28)</option>
                   <option value="2025-2026">FY 2025-2026 (Assessment Year 2026-27)</option>
                   <option value="2024-2025">FY 2024-2025 (Assessment Year 2025-26)</option>
-                </select>
-              </div>
+                </Select>
+              </Field>
 
-              <div>
-                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
-                  NBR Exemption Threshold (BDT)
-                </label>
+              <Field label="NBR Exemption Threshold (BDT)">
                 <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    step="100000"
-                    value={exemptionThreshold}
-                    onChange={(e) => setExemptionThreshold(parseFloat(e.target.value) || 0)}
-                    className="w-36 px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                  />
+                  <div className="w-36">
+                    <Input
+                      type="number"
+                      step="100000"
+                      value={exemptionThreshold}
+                      onChange={(e) => setExemptionThreshold(parseFloat(e.target.value) || 0)}
+                    />
+                  </div>
                   <button
                     onClick={() => setExemptionThreshold(5000000)}
                     className="text-[10px] px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded transition-colors"
@@ -743,34 +738,34 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                     Set ৳50 Lakh
                   </button>
                 </div>
-              </div>
+              </Field>
 
-              <div>
-                <label className="block text-[10px] font-mono uppercase text-slate-400 mb-1">
-                  Capital Gains Tax Rate
-                </label>
+              <Field label="Capital Gains Tax Rate">
                 <div className="flex items-center gap-1.5">
-                  <input
-                    type="number"
-                    step="1"
-                    min="0"
-                    max="50"
-                    value={taxRatePct}
-                    onChange={(e) => setTaxRatePct(parseFloat(e.target.value) || 0)}
-                    className="w-20 px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
-                  />
+                  <div className="w-20">
+                    <Input
+                      type="number"
+                      step="1"
+                      min="0"
+                      max="50"
+                      value={taxRatePct}
+                      onChange={(e) => setTaxRatePct(parseFloat(e.target.value) || 0)}
+                    />
+                  </div>
                   <span className="text-xs text-slate-400 font-mono">%</span>
                 </div>
-              </div>
+              </Field>
             </div>
 
-            <button
+            <Button
               onClick={handleExportTaxCsv}
-              className="px-3.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 self-start md:self-auto transition-colors"
+              variant="secondary"
+              size="sm"
+              className="self-start md:self-auto"
             >
-              <Download className="h-3.5 w-3.5 text-emerald-400" />
+              <Download className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
               <span>Download NBR Schedule</span>
-            </button>
+            </Button>
           </div>
 
           {/* Tax Assessment Summary Grid */}
@@ -1169,32 +1164,38 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
             </div>
 
             {statementSubTab === 'balance_sheet' ? (
-              <button
+              <Button
                 onClick={handleExportBalanceSheetCsv}
-                className="w-full sm:w-auto justify-center px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors shrink-0"
+                variant="outline"
+                size="sm"
+                className="w-full sm:w-auto shrink-0"
               >
                 <Download className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                 <span>Export Balance Sheet</span>
-              </button>
+              </Button>
             ) : (
               <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
-                <select
-                  value={pnlDateRange}
-                  onChange={(e) => setPnlDateRange(e.target.value as any)}
-                  className="px-2.5 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono flex-1 sm:flex-initial"
-                >
-                  <option value="month">This Month</option>
-                  <option value="quarter">This Quarter</option>
-                  <option value="year">Fiscal Year 2026-27</option>
-                  <option value="all">All Time History</option>
-                </select>
-                <button
+                <div className="flex-1 sm:flex-initial">
+                  <Select
+                    value={pnlDateRange}
+                    onChange={(e) => setPnlDateRange(e.target.value as any)}
+                    className="font-mono"
+                  >
+                    <option value="month">This Month</option>
+                    <option value="quarter">This Quarter</option>
+                    <option value="year">Fiscal Year 2026-27</option>
+                    <option value="all">All Time History</option>
+                  </Select>
+                </div>
+                <Button
                   onClick={handleExportPnlCsv}
-                  className="px-3 py-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors shrink-0"
+                  variant="outline"
+                  size="sm"
+                  className="shrink-0"
                 >
                   <Download className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
                   <span>Export P&L</span>
-                </button>
+                </Button>
               </div>
             )}
           </div>
@@ -1467,13 +1468,14 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   Download the official schedule of realized capital gains, Lock 4 charges, 0.05% turnover AIT, and 10% dividend tax credits in CSV format.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handleExportTaxCsv}
-                className="mt-4 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                variant="primary"
+                icon={Download}
+                className="mt-4"
               >
-                <Download className="h-3.5 w-3.5" />
                 <span>Download Tax Return CSV</span>
-              </button>
+              </Button>
             </div>
 
             {/* Export 2: Balance Sheet */}
@@ -1487,13 +1489,14 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   Full Balance Sheet conforming to Lock 1 (negative liability balances) and Lock 2 (physical asset book valuations) with solvency ratios.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handleExportBalanceSheetCsv}
-                className="mt-4 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                variant="secondary"
+                icon={Download}
+                className="mt-4"
               >
-                <Download className="h-3.5 w-3.5" />
                 <span>Download Balance Sheet CSV</span>
-              </button>
+              </Button>
             </div>
 
             {/* Export 3: Income Statement */}
@@ -1507,13 +1510,14 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   Comprehensive Profit & Loss report showing operating income, investment returns, and Lock 6 refund offsets by category.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handleExportPnlCsv}
-                className="mt-4 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                variant="secondary"
+                icon={Download}
+                className="mt-4"
               >
-                <Download className="h-3.5 w-3.5" />
                 <span>Download P&L CSV</span>
-              </button>
+              </Button>
             </div>
 
             {/* Export 4: JSON System Backup */}
@@ -1547,13 +1551,14 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   Clean, print-optimized format formatted for physical paper or PDF print drivers for tax submission or audit reviews.
                 </p>
               </div>
-              <button
+              <Button
                 onClick={handlePrint}
-                className="mt-4 px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"
+                variant="secondary"
+                icon={Printer}
+                className="mt-4"
               >
-                <Printer className="h-3.5 w-3.5" />
                 <span>Print Statements</span>
-              </button>
+              </Button>
             </div>
           </div>
         </div>

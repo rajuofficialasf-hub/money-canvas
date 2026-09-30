@@ -11,7 +11,6 @@ import {
 } from '../../lib/dse-market-service';
 import {
   TrendingUp,
-  TrendingDown,
   Building2,
   DollarSign,
   Plus,
@@ -22,7 +21,6 @@ import {
   Coins,
   ArrowUpRight,
   Sliders,
-  X,
   CheckCircle2,
   Activity,
   FileSpreadsheet,
@@ -36,6 +34,11 @@ import {
   Sparkles,
   Trash2,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, StatCard, ErrorBanner } from '../ui';
+
+const TakaPrefix: React.FC<{ className?: string }> = () => (
+  <span className="font-mono text-xs">৳</span>
+);
 
 interface StockPortfolioViewProps {
   onNavigateToTrades?: (stockId?: string) => void;
@@ -410,13 +413,13 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <span>Reports</span>
             </button>
           )}
-          <button
+          <Button
             onClick={() => onNavigateToTrades && onNavigateToTrades()}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+            variant="primary"
+            icon={ArrowUpRight}
           >
-            <ArrowUpRight className="h-3.5 w-3.5" />
-            <span>Execute Trade</span>
-          </button>
+            Execute Trade
+          </Button>
         </div>
       </div>
 
@@ -538,91 +541,51 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       {/* Overview Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Total Market Value */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 relative overflow-hidden">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Portfolio Market Value
-          </div>
-          <div className="text-2xl font-bold text-white mt-1">
-            ৳{totalMarketValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
-            <span>Invested Cost: ৳{totalCostBasis.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-          </div>
-          <div className="absolute top-3 right-3 p-2 bg-slate-800/80 rounded-lg text-slate-400">
-            <Coins className="h-4 w-4" />
-          </div>
-        </div>
+        <StatCard
+          title="Portfolio Market Value"
+          value={`৳${totalMarketValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          subtitle={`Invested Cost: ৳${totalCostBasis.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          icon={Coins}
+          variant="default"
+        />
 
         {/* Unrealized Gain / Loss */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 relative overflow-hidden">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Unrealized Gain / Loss
-          </div>
-          <div
-            className={`text-2xl font-bold mt-1 flex items-baseline gap-1.5 ${
-              totalUnrealizedGain >= 0 ? 'text-emerald-400' : 'text-rose-400'
-            }`}
-          >
-            <span>
-              {totalUnrealizedGain >= 0 ? '+' : ''}৳
-              {totalUnrealizedGain.toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </span>
-          </div>
-          <div
-            className={`text-[11px] font-medium mt-1 flex items-center gap-1 ${
-              totalUnrealizedGain >= 0 ? 'text-emerald-400' : 'text-rose-400'
-            }`}
-          >
-            {totalUnrealizedGain >= 0 ? (
-              <TrendingUp className="h-3 w-3" />
-            ) : (
-              <TrendingDown className="h-3 w-3" />
-            )}
-            <span>
-              {totalUnrealizedGain >= 0 ? '+' : ''}
-              {totalUnrealizedGainPct.toFixed(2)}% ROI
-            </span>
-          </div>
-          <div className="absolute top-3 right-3 p-2 bg-slate-800/80 rounded-lg text-slate-400">
-            <TrendingUp className="h-4 w-4" />
-          </div>
-        </div>
+        <StatCard
+          title="Unrealized Gain / Loss"
+          value={`${totalUnrealizedGain >= 0 ? '+' : ''}৳${totalUnrealizedGain.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`}
+          icon={TrendingUp}
+          variant={totalUnrealizedGain >= 0 ? 'emerald' : 'rose'}
+          trend={{
+            value: `${totalUnrealizedGain >= 0 ? '+' : ''}${totalUnrealizedGainPct.toFixed(2)}% ROI`,
+            isPositive: totalUnrealizedGain >= 0,
+          }}
+        />
 
         {/* Broker Cash Reserves */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 relative overflow-hidden">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Available Broker Cash
-          </div>
-          <div className="text-2xl font-bold text-sky-400 mt-1">
-            ৳{totalBrokerCash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
-            <ShieldCheck className="h-3 w-3 text-emerald-400" />
-            <span>v_broker_cash_balance sub-ledger</span>
-          </div>
-          <div className="absolute top-3 right-3 p-2 bg-slate-800/80 rounded-lg text-slate-400">
-            <Building2 className="h-4 w-4" />
-          </div>
-        </div>
+        <StatCard
+          title="Available Broker Cash"
+          value={`৳${totalBrokerCash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          subtitle={
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="h-3 w-3 text-emerald-400" />
+              <span>v_broker_cash_balance sub-ledger</span>
+            </span>
+          }
+          icon={Building2}
+          variant="sky"
+        />
 
         {/* Total Equity & Cash */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4 relative overflow-hidden">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Total Capital Committed
-          </div>
-          <div className="text-2xl font-bold text-white mt-1">
-            ৳{totalEquityAndCash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            {stockHoldings.length} Active Positions · {brokerAccounts.length} BO Accounts
-          </div>
-          <div className="absolute top-3 right-3 p-2 bg-slate-800/80 rounded-lg text-slate-400">
-            <DollarSign className="h-4 w-4" />
-          </div>
-        </div>
+        <StatCard
+          title="Total Capital Committed"
+          value={`৳${totalEquityAndCash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          subtitle={`${stockHoldings.length} Active Positions · ${brokerAccounts.length} BO Accounts`}
+          icon={DollarSign}
+          variant="default"
+        />
       </div>
 
       {/* Lock 4 & WAC Invariant Explanation Box */}
@@ -635,14 +598,13 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
       {/* Filters and Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/40 p-3 rounded-xl border border-slate-800">
-        <div className="relative flex-1 max-w-md">
-          <Search className="h-3.5 w-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
+        <div className="flex-1 max-w-md">
+          <Input
+            icon={Search}
             type="text"
             placeholder="Search stock by symbol or company name (e.g. GP, SQURPHARMA, BATBC)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
 
@@ -682,13 +644,15 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
               Either all shares have been closed out, or no matching trade has been executed yet.
             </p>
-            <button
+            <Button
               onClick={() => onNavigateToTrades && onNavigateToTrades()}
-              className="mt-4 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium inline-flex items-center gap-1.5 transition-colors"
+              variant="primary"
+              size="sm"
+              icon={Plus}
+              className="mt-4"
             >
-              <Plus className="h-3.5 w-3.5" />
-              <span>Execute Buy Order</span>
-            </button>
+              Execute Buy Order
+            </Button>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -880,13 +844,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             <p className="text-[11px] text-slate-500 max-w-sm mx-auto mt-1 mb-3">
               No preloaded stocks. You can search and add any Dhaka Stock Exchange (DSE) company by clicking "+ Add Stock".
             </p>
-            <button
+            <Button
               onClick={() => setIsAddStockModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition-colors"
+              variant="primary"
+              size="sm"
+              icon={Plus}
             >
-              <Plus className="h-3.5 w-3.5" />
-              <span>Add Your First Stock</span>
-            </button>
+              Add Your First Stock
+            </Button>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
@@ -975,102 +940,74 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* Modal: Single Stock Price Override */}
-      {isPriceModalOpen && selectedStockForPrice && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white">Update Market Price</h3>
-                <p className="text-xs text-slate-400">
-                  {selectedStockForPrice.symbol} — {selectedStockForPrice.companyName}
-                </p>
+      {selectedStockForPrice && (
+        <Modal
+          isOpen={isPriceModalOpen}
+          onClose={() => setIsPriceModalOpen(false)}
+          title="Update Market Price"
+          description={`${selectedStockForPrice.symbol} — ${selectedStockForPrice.companyName}`}
+          maxWidth="sm"
+        >
+          <form onSubmit={handleSavePrice} className="space-y-4">
+            <div>
+              <Field label="Current Market Price / LTP (BDT)">
+                <Input
+                  type="number"
+                  step="0.05"
+                  min="0.05"
+                  required
+                  icon={TakaPrefix}
+                  value={newSimulatedPrice}
+                  onChange={(e) =>
+                    setNewSimulatedPrice(e.target.value === '' ? '' : parseFloat(e.target.value))
+                  }
+                  className="font-mono text-sm"
+                />
+              </Field>
+              <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 bg-slate-950/60 p-2 rounded border border-slate-800">
+                <span>Yesterday Close (YCP):</span>
+                <span className="font-mono text-slate-200">৳{(selectedStockForPrice.ycp ?? selectedStockForPrice.currentPrice).toFixed(2)}</span>
               </div>
-              <button
-                onClick={() => setIsPriceModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
+              <p className="text-[11px] text-slate-500 mt-1.5">
+                Saving will record this rate to the historical price ledger and recalculate all portfolio P/L immediately.
+              </p>
             </div>
 
-            <form onSubmit={handleSavePrice} className="space-y-4">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Current Market Price / LTP (BDT)
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-mono text-xs">
-                    ৳
-                  </span>
-                  <input
-                    type="number"
-                    step="0.05"
-                    min="0.05"
-                    required
-                    value={newSimulatedPrice}
-                    onChange={(e) =>
-                      setNewSimulatedPrice(e.target.value === '' ? '' : parseFloat(e.target.value))
-                    }
-                    className="w-full pl-8 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-sm text-white font-mono focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-                <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 bg-slate-950/60 p-2 rounded border border-slate-800">
-                  <span>Yesterday Close (YCP):</span>
-                  <span className="font-mono text-slate-200">৳{(selectedStockForPrice.ycp ?? selectedStockForPrice.currentPrice).toFixed(2)}</span>
-                </div>
-                <p className="text-[11px] text-slate-500 mt-1.5">
-                  Saving will record this rate to the historical price ledger and recalculate all portfolio P/L immediately.
-                </p>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setIsPriceModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
-                  Save Override
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => setIsPriceModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" variant="primary">
+                Save Override
+              </Button>
+            </div>
+          </form>
+        </Modal>
       )}
 
       {/* Modal: Batch Price Editor (Table Grid) */}
-      {isBatchPriceModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-5 shadow-2xl max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-              <div>
-                <h3 className="text-sm font-bold text-white">Bulk Stock Price Editor</h3>
-                <p className="text-xs text-slate-400">Quickly adjust or update market prices for multiple DSE securities</p>
-              </div>
-              <button
-                onClick={() => setIsBatchPriceModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
+      <Modal
+        isOpen={isBatchPriceModalOpen}
+        onClose={() => setIsBatchPriceModalOpen(false)}
+        title="Bulk Stock Price Editor"
+        description="Quickly adjust or update market prices for multiple DSE securities"
+        maxWidth="2xl"
+      >
+        <div className="flex flex-col max-h-[65vh]">
             <div className="mb-3">
-              <input
+              <Input
                 type="text"
                 placeholder="Filter securities in table..."
                 value={batchSearch}
                 onChange={(e) => setBatchSearch(e.target.value)}
-                className="w-full px-3 py-1.5 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
               />
             </div>
 
-            <div className="overflow-y-auto flex-1 border border-slate-800 rounded-xl bg-slate-950/50">
+            <div className="overflow-y-auto flex-1 min-h-0 border border-slate-800 rounded-xl bg-slate-950/50">
               <table className="w-full text-left text-xs">
                 <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 sticky top-0 text-[11px] font-mono">
                   <tr>
@@ -1133,53 +1070,40 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                 prices modified
               </div>
               <div className="flex items-center gap-2">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => setIsBatchPriceModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="primary"
+                  icon={Check}
                   onClick={handleSaveBatchPrices}
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors"
                 >
-                  <Check className="h-3.5 w-3.5" />
-                  <span>Save All Changes</span>
-                </button>
+                  Save All Changes
+                </Button>
               </div>
             </div>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* Modal: CSV Sheet Importer / Exporter */}
-      {isCsvModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-5 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div>
-                <h3 className="text-sm font-bold text-white">DSE Price Sheet CSV Management</h3>
-                <p className="text-xs text-slate-400">Import or export daily market rate sheets</p>
-              </div>
-              <button
-                onClick={() => setIsCsvModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
+      <Modal
+        isOpen={isCsvModalOpen}
+        onClose={() => setIsCsvModalOpen(false)}
+        title="DSE Price Sheet CSV Management"
+        description="Import or export daily market rate sheets"
+        maxWidth="lg"
+      >
+        <div className="space-y-4">
             {csvFeedback && (
-              <div className={`p-3 rounded-lg text-xs flex items-center gap-2 border ${
-                csvFeedback.success
-                  ? 'bg-emerald-950/40 border-emerald-800 text-emerald-300'
-                  : 'bg-rose-950/40 border-rose-800 text-rose-300'
-              }`}>
-                {csvFeedback.success ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
-                <span>{csvFeedback.message}</span>
-              </div>
+              <ErrorBanner
+                variant={csvFeedback.success ? 'success' : 'error'}
+                message={csvFeedback.message}
+              />
             )}
 
             <div>
@@ -1197,58 +1121,46 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             </div>
 
             <div className="flex items-center justify-between pt-2 border-t border-slate-800">
-              <button
+              <Button
                 type="button"
+                variant="outline"
                 onClick={handleDownloadPriceSheet}
-                className="px-3 py-1.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
               >
                 <Download className="h-3.5 w-3.5 text-sky-400" />
                 <span>Download Current Rates</span>
-              </button>
+              </Button>
 
               <div className="flex items-center gap-2">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => setIsCsvModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="primary"
+                  icon={Upload}
                   onClick={handleImportCsv}
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
                 >
-                  <Upload className="h-3.5 w-3.5" />
-                  <span>Import Rates</span>
-                </button>
+                  Import Rates
+                </Button>
               </div>
             </div>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* Modal: Add New Security to Master Catalog */}
-      {isAddStockModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white">Add Security to Catalog</h3>
-                <p className="text-xs text-slate-400">List an equity instrument traded on DSE or CSE</p>
-              </div>
-              <button
-                onClick={() => setIsAddStockModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
+      <Modal
+        isOpen={isAddStockModalOpen}
+        onClose={() => setIsAddStockModalOpen(false)}
+        title="Add Security to Catalog"
+        description="List an equity instrument traded on DSE or CSE"
+        maxWidth="md"
+      >
             {formError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {formError}
-              </div>
+              <ErrorBanner variant="error" message={formError} className="mb-4" />
             )}
 
             <form onSubmit={handleAddStock} className="space-y-3.5">
@@ -1274,11 +1186,8 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="relative">
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Symbol / Ticker *
-                  </label>
-                  <div className="relative">
-                    <input
+                  <Field label="Symbol / Ticker" required>
+                    <Input
                       type="text"
                       required
                       placeholder="e.g. GP, CITYBANK, BATBC"
@@ -1287,12 +1196,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       onFocus={() => {
                         if (symbol.length >= 1) setShowSuggestions(true);
                       }}
-                      className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono uppercase focus:outline-none focus:border-emerald-500"
+                      className="font-mono uppercase"
+                      rightElement={
+                        isFetchingQuote ? (
+                          <Loader2 className="h-3.5 w-3.5 text-emerald-400 animate-spin" />
+                        ) : undefined
+                      }
                     />
-                    {isFetchingQuote && (
-                      <Loader2 className="h-3.5 w-3.5 absolute right-2.5 top-1/2 -translate-y-1/2 text-emerald-400 animate-spin" />
-                    )}
-                  </div>
+                  </Field>
 
                   {/* 409+ DSE Companies Autocomplete Dropdown */}
                   {showSuggestions && symbol.length >= 1 && (
@@ -1329,103 +1240,85 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                     </div>
                   )}
                 </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Exchange</label>
-                  <select
+                <Field label="Exchange">
+                  <Select
                     value={exchange}
                     onChange={(e) => setExchange(e.target.value as 'DSE' | 'CSE')}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="DSE">Dhaka Stock Exchange (DSE)</option>
                     <option value="CSE">Chittagong Stock Exchange (CSE)</option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Company / Issuer Name *
-                </label>
-                <input
+              <Field label="Company / Issuer Name" required>
+                <Input
                   type="text"
                   required
                   placeholder="e.g. Grameenphone Ltd."
                   value={companyName}
                   onChange={(e) => setCompanyName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
               <div className="grid grid-cols-3 gap-3">
-                <div className="col-span-2">
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Sector</label>
-                  <input
+                <Field label="Sector" className="col-span-2">
+                  <Input
                     type="text"
                     value={sector}
                     onChange={(e) => setSector(e.target.value)}
                     placeholder="e.g. Telecommunication"
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">Category</label>
-                  <select
+                </Field>
+                <Field label="Category">
+                  <Select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                   >
                     <option value="A">Cat A</option>
                     <option value="B">Cat B</option>
                     <option value="N">Cat N</option>
                     <option value="Z">Cat Z</option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Current Market Price / LTP (BDT) *
-                </label>
-                <div className="relative">
-                  <input
-                    type="number"
-                    step="0.1"
-                    min="0.1"
-                    required
-                    value={initialPrice}
-                    onChange={(e) =>
-                      setInitialPrice(e.target.value === '' ? '' : parseFloat(e.target.value))
-                    }
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-emerald-400 font-semibold font-mono">
-                    BDT
-                  </div>
-                </div>
-              </div>
+              <Field label="Current Market Price / LTP (BDT)" required>
+                <Input
+                  type="number"
+                  step="0.1"
+                  min="0.1"
+                  required
+                  value={initialPrice}
+                  onChange={(e) =>
+                    setInitialPrice(e.target.value === '' ? '' : parseFloat(e.target.value))
+                  }
+                  className="font-mono"
+                  rightElement={
+                    <span className="text-[10px] text-emerald-400 font-semibold font-mono">
+                      BDT
+                    </span>
+                  }
+                />
+              </Field>
 
               <div className="flex items-center justify-end gap-2 pt-3">
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   onClick={() => {
                     setIsAddStockModalOpen(false);
                     setShowSuggestions(false);
                   }}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
+                </Button>
+                <Button type="submit" variant="primary">
                   Add to Catalog
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

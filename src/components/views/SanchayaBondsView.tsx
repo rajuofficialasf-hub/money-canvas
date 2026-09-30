@@ -22,7 +22,6 @@ import {
   Calendar,
   Clock,
   AlertTriangle,
-  X,
   ShieldCheck,
   CheckCircle2,
   Info,
@@ -34,6 +33,7 @@ import {
   Layers,
   Trash2,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 
 const STORAGE_KEY = 'wealthfolio_sanchaya_bonds_v1';
 const DEMO_BOND_IDS = new Set(['sb-001', 'sb-002', 'sb-003', 'sb-004']);
@@ -387,7 +387,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
-            <button
+            <Button
               onClick={() => {
                 const preset = SCHEME_PRESETS.find((p) => p.schemeType === selectedPresetType);
                 if (preset) {
@@ -395,21 +395,21 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 }
                 setIsAddModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 active:scale-95 transition-all cursor-pointer"
+              variant="primary"
+              icon={Plus}
             >
-              <Plus className="h-4 w-4" />
               <span>{isBn ? 'নতুন সঞ্চয়পত্র / বন্ড যুক্ত করুন' : 'Add Sanchayapatra / Bond'}</span>
-            </button>
+            </Button>
 
             {onNavigate && (
-              <button
+              <Button
                 onClick={() => onNavigate('tax')}
-                className="flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition-colors cursor-pointer"
+                variant="secondary"
                 title={isBn ? 'আয়কর রিটার্ন প্ল্যানারে দেখুন' : 'View in NBR Tax Planner'}
               >
                 <FileText className="h-4 w-4 text-emerald-400" />
                 <span>{isBn ? 'আয়কর রিটার্নে দেখুন' : 'View in Tax Return'}</span>
-              </button>
+              </Button>
             )}
           </div>
         </div>
@@ -874,35 +874,28 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             </div>
 
             <div className="space-y-3">
-              <div>
-                <label className="text-xs text-slate-300 block mb-1">
-                  {isBn ? 'স্কিম নির্বাচন করুন' : 'Select Scheme'}
-                </label>
-                <select
+              <Field label={isBn ? 'স্কিম নির্বাচন করুন' : 'Select Scheme'}>
+                <Select
                   value={selectedPresetType}
                   onChange={(e) => handlePresetSelect(e.target.value as SanchayaSchemeType)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs outline-none focus:border-emerald-500"
                 >
                   {SCHEME_PRESETS.map((p) => (
                     <option key={p.schemeType} value={p.schemeType}>
                       {isBn ? p.nameBn : p.nameEn} ({p.defaultRate}% • {p.defaultTenureYears} {isBn ? 'বছর' : 'yrs'})
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
-              <div>
-                <label className="text-xs text-slate-300 block mb-1">
-                  {isBn ? 'বিনিয়োগের পরিমাণ (টাকা)' : 'Investment Amount (BDT)'}
-                </label>
-                <input
+              <Field label={isBn ? 'বিনিয়োগের পরিমাণ (টাকা)' : 'Investment Amount (BDT)'}>
+                <Input
                   type="number"
                   step="10000"
                   value={principalAmount}
                   onChange={(e) => setPrincipalAmount(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono outline-none focus:border-emerald-500"
+                  className="font-mono"
                 />
-              </div>
+              </Field>
 
               {/* Calculator Output */}
               {(() => {
@@ -1136,264 +1129,197 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
       {/* ----------------------------------------------------------------- */}
       {/* ADD NEW CERTIFICATE / BOND MODAL */}
       {/* ----------------------------------------------------------------- */}
-      {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-700 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Landmark className="h-5 w-5 text-emerald-400" />
-                <h3 className="text-base font-bold text-white">
-                  {isBn ? 'নতুন সঞ্চয়পত্র / সরকারি বন্ড যুক্ত করুন' : 'Add New Sanchayapatra / Govt Bond'}
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsAddModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer"
+      <Modal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Landmark className="h-5 w-5 text-emerald-400" />
+            <span>{isBn ? 'নতুন সঞ্চয়পত্র / সরকারি বন্ড যুক্ত করুন' : 'Add New Sanchayapatra / Govt Bond'}</span>
+          </span>
+        }
+        maxWidth="2xl"
+        className="max-h-[90vh] overflow-y-auto"
+      >
+        <form onSubmit={handleAddSubmit} className="space-y-4">
+          {formError && <ErrorBanner message={formError} />}
+
+          {/* Preset Selector */}
+          <Field label={isBn ? 'স্কিমের ধরন নির্বাচন করুন' : 'Select Scheme Type'}>
+            <Select
+              value={selectedPresetType}
+              onChange={(e) => handlePresetSelect(e.target.value as SanchayaSchemeType)}
+            >
+              {SCHEME_PRESETS.map((p) => (
+                <option key={p.schemeType} value={p.schemeType}>
+                  {isBn ? p.nameBn : p.nameEn} ({p.defaultRate}% {isBn ? 'বার্ষিক' : 'p.a.'} • {p.defaultTenureYears} {isBn ? 'বছর' : 'yrs'})
+                </option>
+              ))}
+            </Select>
+          </Field>
+
+          {/* Title & Certificate Number */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label={isBn ? 'শিরোনাম / স্কিম নাম' : 'Title / Scheme Name'} required>
+              <Input
+                type="text"
+                required
+                value={customTitle}
+                onChange={(e) => setCustomTitle(e.target.value)}
+                placeholder={isBn ? 'পরিবার সঞ্চয়পত্র' : 'Poribar Sanchayapatra'}
+              />
+            </Field>
+
+            <Field label={isBn ? 'সার্টিফিকেট / ইস্যু নম্বর' : 'Certificate / Issue Number'} required>
+              <Input
+                type="text"
+                required
+                value={certificateNumber}
+                onChange={(e) => setCertificateNumber(e.target.value)}
+                placeholder="PS-1092841"
+                className="font-mono"
+              />
+            </Field>
+          </div>
+
+          {/* Issuer & Branch */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label={isBn ? 'ইস্যুকারী ব্যাংক / ব্যুরো' : 'Issuer Bank / Bureau'} required>
+              <Input
+                type="text"
+                required
+                value={issuer}
+                onChange={(e) => setIssuer(e.target.value)}
+                placeholder="Sonali Bank PLC / Bangladesh Bank"
+              />
+            </Field>
+
+            <Field label={isBn ? 'শাখা / অফিস' : 'Branch / Office'}>
+              <Input
+                type="text"
+                value={issueOfficeBranch}
+                onChange={(e) => setIssueOfficeBranch(e.target.value)}
+                placeholder={isBn ? 'মৌলভীবাজার শাখা / মতিঝিল' : 'Motijheel Corporate Branch'}
+              />
+            </Field>
+          </div>
+
+          {/* Amount, Rate, Tenure */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <Field label={isBn ? 'মূলধন পরিমাণ (টাকা)' : 'Principal Amount (BDT)'} required>
+              <Input
+                type="number"
+                step="10000"
+                required
+                value={principalAmount}
+                onChange={(e) => setPrincipalAmount(e.target.value)}
+                className="font-mono"
+              />
+            </Field>
+
+            <Field label={isBn ? 'বার্ষিক মুনাফার হার (%)' : 'Annual Profit Rate (%)'} required>
+              <Input
+                type="number"
+                step="0.01"
+                required
+                value={customRate}
+                onChange={(e) => setCustomRate(e.target.value)}
+                className="font-mono"
+              />
+            </Field>
+
+            <Field label={isBn ? 'মেয়াদ (বছর)' : 'Tenure (Years)'} required>
+              <Input
+                type="number"
+                min="1"
+                max="30"
+                required
+                value={customTenure}
+                onChange={(e) => setCustomTenure(e.target.value)}
+                className="font-mono"
+              />
+            </Field>
+          </div>
+
+          {/* Purchase Date & Frequency */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label={isBn ? 'ক্রয়ের তারিখ' : 'Purchase Date'} required>
+              <Input
+                type="date"
+                required
+                value={purchaseDate}
+                onChange={(e) => setPurchaseDate(e.target.value)}
+              />
+            </Field>
+
+            <Field label={isBn ? 'মুনাফা প্রদানের ফ্রিকোয়েন্সি' : 'Payout Frequency'}>
+              <Select
+                value={customFrequency}
+                onChange={(e) => setCustomFrequency(e.target.value as PayoutFrequency)}
               >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
+                <option value="monthly">{isBn ? 'মাসিক (Monthly EFT)' : 'Monthly (BEFTN/EFT)'}</option>
+                <option value="quarterly">{isBn ? 'ত্রৈমাসিক (Quarterly)' : 'Quarterly'}</option>
+                <option value="semi_annually">{isBn ? 'ষান্মাসিক (Semi-Annually)' : 'Semi-Annually'}</option>
+                <option value="at_maturity">{isBn ? 'মেয়াদান্তে এককালীন (At Maturity)' : 'At Maturity'}</option>
+              </Select>
+            </Field>
+          </div>
 
-            <form onSubmit={handleAddSubmit} className="p-6 space-y-4 overflow-y-auto">
-              {formError && (
-                <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
-                  {formError}
-                </div>
-              )}
-
-              {/* Preset Selector */}
-              <div>
-                <label className="text-xs font-semibold text-slate-300 block mb-1">
-                  {isBn ? 'স্কিমের ধরন নির্বাচন করুন' : 'Select Scheme Type'}
-                </label>
-                <select
-                  value={selectedPresetType}
-                  onChange={(e) => handlePresetSelect(e.target.value as SanchayaSchemeType)}
-                  className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
-                >
-                  {SCHEME_PRESETS.map((p) => (
-                    <option key={p.schemeType} value={p.schemeType}>
-                      {isBn ? p.nameBn : p.nameEn} ({p.defaultRate}% {isBn ? 'বার্ষিক' : 'p.a.'} • {p.defaultTenureYears} {isBn ? 'বছর' : 'yrs'})
+          {/* Linked Account & Nominee */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label={isBn ? 'মুনাফা জমার ব্যাংক অ্যাকাউন্ট' : 'Linked Deposit Account'}>
+              <Select
+                value={linkedBankAccountId}
+                onChange={(e) => setLinkedBankAccountId(e.target.value)}
+              >
+                <option value="">{isBn ? 'নির্বাচন করুন (ঐচ্ছিক)' : 'Select Account (Optional)'}</option>
+                {accounts
+                  .filter((a) => a.accountType === 'bank' || a.accountType === 'cash')
+                  .map((acc) => (
+                    <option key={acc.id} value={acc.id}>
+                      {acc.name} ({acc.institutionName || 'Bank'})
                     </option>
                   ))}
-                </select>
-              </div>
+              </Select>
+            </Field>
 
-              {/* Title & Certificate Number */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'শিরোনাম / স্কিম নাম' : 'Title / Scheme Name'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={customTitle}
-                    onChange={(e) => setCustomTitle(e.target.value)}
-                    placeholder={isBn ? 'পরিবার সঞ্চয়পত্র' : 'Poribar Sanchayapatra'}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'সার্টিফিকেট / ইস্যু নম্বর' : 'Certificate / Issue Number'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={certificateNumber}
-                    onChange={(e) => setCertificateNumber(e.target.value)}
-                    placeholder="PS-1092841"
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* Issuer & Branch */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'ইস্যুকারী ব্যাংক / ব্যুরো' : 'Issuer Bank / Bureau'}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={issuer}
-                    onChange={(e) => setIssuer(e.target.value)}
-                    placeholder="Sonali Bank PLC / Bangladesh Bank"
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'শাখা / অফিস' : 'Branch / Office'}
-                  </label>
-                  <input
-                    type="text"
-                    value={issueOfficeBranch}
-                    onChange={(e) => setIssueOfficeBranch(e.target.value)}
-                    placeholder={isBn ? 'মৌলভীবাজার শাখা / মতিঝিল' : 'Motijheel Corporate Branch'}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  />
-                </div>
-              </div>
-
-              {/* Amount, Rate, Tenure */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'মূলধন পরিমাণ (টাকা)' : 'Principal Amount (BDT)'}
-                  </label>
-                  <input
-                    type="number"
-                    step="10000"
-                    required
-                    value={principalAmount}
-                    onChange={(e) => setPrincipalAmount(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'বার্ষিক মুনাফার হার (%)' : 'Annual Profit Rate (%)'}
-                  </label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    required
-                    value={customRate}
-                    onChange={(e) => setCustomRate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'মেয়াদ (বছর)' : 'Tenure (Years)'}
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    max="30"
-                    required
-                    value={customTenure}
-                    onChange={(e) => setCustomTenure(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* Purchase Date & Frequency */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'ক্রয়ের তারিখ' : 'Purchase Date'}
-                  </label>
-                  <input
-                    type="date"
-                    required
-                    value={purchaseDate}
-                    onChange={(e) => setPurchaseDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'মুনাফা প্রদানের ফ্রিকোয়েন্সি' : 'Payout Frequency'}
-                  </label>
-                  <select
-                    value={customFrequency}
-                    onChange={(e) => setCustomFrequency(e.target.value as PayoutFrequency)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  >
-                    <option value="monthly">{isBn ? 'মাসিক (Monthly EFT)' : 'Monthly (BEFTN/EFT)'}</option>
-                    <option value="quarterly">{isBn ? 'ত্রৈমাসিক (Quarterly)' : 'Quarterly'}</option>
-                    <option value="semi_annually">{isBn ? 'ষান্মাসিক (Semi-Annually)' : 'Semi-Annually'}</option>
-                    <option value="at_maturity">{isBn ? 'মেয়াদান্তে এককালীন (At Maturity)' : 'At Maturity'}</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Linked Account & Nominee */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'মুনাফা জমার ব্যাংক অ্যাকাউন্ট' : 'Linked Deposit Account'}
-                  </label>
-                  <select
-                    value={linkedBankAccountId}
-                    onChange={(e) => setLinkedBankAccountId(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  >
-                    <option value="">{isBn ? 'নির্বাচন করুন (ঐচ্ছিক)' : 'Select Account (Optional)'}</option>
-                    {accounts
-                      .filter((a) => a.accountType === 'bank' || a.accountType === 'cash')
-                      .map((acc) => (
-                        <option key={acc.id} value={acc.id}>
-                          {acc.name} ({acc.institutionName || 'Bank'})
-                        </option>
-                      ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="text-xs text-slate-400 block mb-1">
-                    {isBn ? 'মনোনীত ব্যক্তি (Nominee)' : 'Nominee'}
-                  </label>
-                  <input
-                    type="text"
-                    value={nomineeName}
-                    onChange={(e) => setNomineeName(e.target.value)}
-                    placeholder={isBn ? 'নাম ও সম্পর্ক' : 'Name & Relationship'}
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer"
-                >
-                  {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/20 cursor-pointer"
-                >
-                  {isBn ? 'সংরক্ষণ করুন' : 'Save Investment'}
-                </button>
-              </div>
-            </form>
+            <Field label={isBn ? 'মনোনীত ব্যক্তি (Nominee)' : 'Nominee'}>
+              <Input
+                type="text"
+                value={nomineeName}
+                onChange={(e) => setNomineeName(e.target.value)}
+                placeholder={isBn ? 'নাম ও সম্পর্ক' : 'Name & Relationship'}
+              />
+            </Field>
           </div>
-        </div>
-      )}
+
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <Button type="button" variant="secondary" onClick={() => setIsAddModalOpen(false)}>
+              {isBn ? 'বাতিল' : 'Cancel'}
+            </Button>
+            <Button type="submit" variant="primary">
+              {isBn ? 'সংরক্ষণ করুন' : 'Save Investment'}
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* ----------------------------------------------------------------- */}
       {/* EARLY BREAK / ENCASH MODAL */}
       {/* ----------------------------------------------------------------- */}
       {encashModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-700 p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-amber-400 text-sm font-bold">
-                <AlertTriangle className="h-5 w-5" />
-                <span>{isBn ? 'মেয়াদপূর্ব ভাঙ্গানোর হিসাব (Pre-Mature Encashment)' : 'Pre-Mature Encashment Calculation'}</span>
-              </div>
-              <button
-                onClick={() => setEncashModalItem(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {(() => {
+        <Modal
+          isOpen={!!encashModalItem}
+          onClose={() => setEncashModalItem(null)}
+          title={
+            <span className="flex items-center gap-2 text-amber-400 text-sm font-bold">
+              <AlertTriangle className="h-5 w-5" />
+              <span>{isBn ? 'মেয়াদপূর্ব ভাঙ্গানোর হিসাব (Pre-Mature Encashment)' : 'Pre-Mature Encashment Calculation'}</span>
+            </span>
+          }
+          maxWidth="lg"
+        >
+          {(() => {
               const encashCalc = calculatePreMatureEncashment(
                 encashModalItem,
                 todayLocalISO(),
@@ -1450,13 +1376,9 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                   </div>
 
                   <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => setEncashModalItem(null)}
-                      className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer"
-                    >
+                    <Button type="button" variant="secondary" onClick={() => setEncashModalItem(null)}>
                       {isBn ? 'বাতিল' : 'Cancel'}
-                    </button>
+                    </Button>
                     <button
                       type="button"
                       onClick={handleConfirmEncashment}
@@ -1468,29 +1390,24 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 </div>
               );
             })()}
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* ----------------------------------------------------------------- */}
       {/* COLLECT PROFIT MODAL */}
       {/* ----------------------------------------------------------------- */}
       {collectModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4 animate-in fade-in">
-          <div className="w-full max-w-md rounded-2xl bg-slate-900 border border-slate-700 p-6 space-y-4 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                <Coins className="h-5 w-5" />
-                <span>{isBn ? 'মুনাফা প্রাপ্তি রেকর্ড (Collect Profit)' : 'Record Profit Collection'}</span>
-              </div>
-              <button
-                onClick={() => setCollectModalItem(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white cursor-pointer"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
+        <Modal
+          isOpen={!!collectModalItem}
+          onClose={() => setCollectModalItem(null)}
+          title={
+            <span className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
+              <Coins className="h-5 w-5" />
+              <span>{isBn ? 'মুনাফা প্রাপ্তি রেকর্ড (Collect Profit)' : 'Record Profit Collection'}</span>
+            </span>
+          }
+          maxWidth="md"
+        >
             <div className="space-y-3 text-xs font-mono">
               <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                 <div className="font-bold text-white">{collectModalItem.item.title}</div>
@@ -1523,24 +1440,15 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               </p>
 
               <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-                <button
-                  type="button"
-                  onClick={() => setCollectModalItem(null)}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold cursor-pointer"
-                >
+                <Button type="button" variant="secondary" onClick={() => setCollectModalItem(null)}>
                   {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleConfirmCollectProfit}
-                  className="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold shadow-md shadow-emerald-500/20 cursor-pointer"
-                >
+                </Button>
+                <Button type="button" variant="primary" onClick={handleConfirmCollectProfit}>
                   {isBn ? 'লেজারে জমা করুন' : 'Post to Ledger'}
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

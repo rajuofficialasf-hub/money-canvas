@@ -30,8 +30,8 @@ import {
   Lock,
   Sliders,
   Calendar,
-  AlertCircle,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 
 export const FamilyLedgerView: React.FC = () => {
   const { isBn } = useLanguage();
@@ -443,16 +443,17 @@ export const FamilyLedgerView: React.FC = () => {
 
           {/* Action: Log Expense */}
           {canAddExpenses ? (
-            <button
+            <Button
               onClick={() => {
                 setExpPaidBy(activeMember.id);
                 setIsAddExpenseModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow-lg shadow-emerald-500/20"
+              variant="primary"
+              size="md"
+              icon={Plus}
             >
-              <Plus className="w-4 h-4" />
-              <span>{isBn ? 'সংসার খরচ যোগ করুন' : 'Record Expense'}</span>
-            </button>
+              {isBn ? 'সংসার খরচ যোগ করুন' : 'Record Expense'}
+            </Button>
           ) : (
             <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-medium cursor-not-allowed">
               <Lock className="w-3.5 h-3.5 text-slate-500" />
@@ -1020,13 +1021,14 @@ export const FamilyLedgerView: React.FC = () => {
               </p>
             </div>
 
-            <button
+            <Button
               onClick={() => setIsContributeModalOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow"
+              variant="primary"
+              size="sm"
+              icon={Plus}
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>{isBn ? 'তহবিলে টাকা জমা' : 'Fund Account'}</span>
-            </button>
+              {isBn ? 'তহবিলে টাকা জমা' : 'Fund Account'}
+            </Button>
           </div>
 
           {/* Accounts Cards */}
@@ -1140,13 +1142,14 @@ export const FamilyLedgerView: React.FC = () => {
             </div>
 
             {canManageMembers && (
-              <button
+              <Button
                 onClick={() => openMemberModal()}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold transition-all shadow"
+                variant="primary"
+                size="md"
+                icon={Plus}
               >
-                <Plus className="w-3.5 h-3.5" />
-                <span>{isBn ? 'নতুন সদস্য যোগ করুন' : 'Add Family Member'}</span>
-              </button>
+                {isBn ? 'নতুন সদস্য যোগ করুন' : 'Add Family Member'}
+              </Button>
             )}
           </div>
 
@@ -1355,62 +1358,42 @@ export const FamilyLedgerView: React.FC = () => {
       )}
 
       {/* MODAL 1: RECORD FAMILY EXPENSE */}
-      {isAddExpenseModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Receipt className="w-5 h-5 text-emerald-400" />
-                <span>{isBn ? 'পারিবারিক সংসার খরচ যোগ করুন' : 'Record Household Expense'}</span>
-              </h3>
-              <button
-                onClick={() => setIsAddExpenseModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isAddExpenseModalOpen}
+        onClose={() => setIsAddExpenseModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Receipt className="w-5 h-5 text-emerald-400" />
+            <span>{isBn ? 'পারিবারিক সংসার খরচ যোগ করুন' : 'Record Household Expense'}</span>
+          </span>
+        }
+        maxWidth="lg"
+        className="max-h-[90vh] overflow-y-auto"
+      >
+        <div className="space-y-4">
 
-            {expFormError && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0" />
-                <span>{expFormError}</span>
-              </div>
-            )}
+            {expFormError && <ErrorBanner variant="error" message={expFormError} />}
 
             {livePermissionWarning && (
-              <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 shrink-0" />
-                <span>{livePermissionWarning}</span>
-              </div>
-            )}
+            <ErrorBanner variant="warning" message={livePermissionWarning} />
+          )}
 
             <form onSubmit={handleSaveExpense} className="space-y-4 text-xs">
               {/* Category */}
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'খরচের খাত (Category)' : 'Household Category'}
-                </label>
-                <select
-                  value={expCategory}
-                  onChange={(e) => setExpCategory(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                >
+              <Field label={isBn ? 'খরচের খাত (Category)' : 'Household Category'}>
+                <Select value={expCategory} onChange={(e) => setExpCategory(e.target.value)}>
                   {FAMILY_CATEGORIES.map((cat) => (
                     <option key={cat.key} value={cat.key}>
                       {isBn ? cat.nameBn : cat.nameEn}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
               {/* Amount & Date */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'পরিমাণ (৳ BDT)' : 'Amount (৳ BDT)'}
-                  </label>
-                  <input
+                <Field label={isBn ? 'পরিমাণ (৳ BDT)' : 'Amount (৳ BDT)'}>
+                  <Input
                     type="number"
                     value={expAmount}
                     onChange={(e) => setExpAmount(e.target.value)}
@@ -1418,62 +1401,43 @@ export const FamilyLedgerView: React.FC = () => {
                     min="1"
                     step="any"
                     required
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
 
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'তারিখ' : 'Date'}
-                  </label>
-                  <input
+                <Field label={isBn ? 'তারিখ' : 'Date'}>
+                  <Input
                     type="date"
                     value={expDate}
                     onChange={(e) => setExpDate(e.target.value)}
                     required
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 font-mono focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
               </div>
 
               {/* Description */}
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'খরচের বিবরণ' : 'Description'}
-                </label>
-                <input
+              <Field label={isBn ? 'খরচের বিবরণ' : 'Description'}>
+                <Input
                   type="text"
                   value={expDescription}
                   onChange={(e) => setExpDescription(e.target.value)}
                   placeholder={isBn ? 'যেমন: চাল-ডাল ও মাছ কেনাকাটা, বিদ্যুৎ রিচার্জ' : 'e.g. Weekly bazaar, grocery, DPDC bill'}
                   required
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
               {/* Paid By Member */}
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'কে পরিশোধ করেছেন? (Paid By Member)' : 'Paid By Member'}
-                </label>
-                <select
-                  value={expPaidBy}
-                  onChange={(e) => setExpPaidBy(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                >
+              <Field label={isBn ? 'কে পরিশোধ করেছেন? (Paid By Member)' : 'Paid By Member'}>
+                <Select value={expPaidBy} onChange={(e) => setExpPaidBy(e.target.value)}>
                   {state.members.map((m) => (
                     <option key={m.id} value={m.id}>
                       {isBn ? m.nameBn : m.name} ({m.role})
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
               {/* Payment Source: Joint Account vs Personal Pocket */}
-              <div>
-                <label className="block text-slate-300 font-medium mb-1.5">
-                  {isBn ? 'টাকা কোন উৎস থেকে দেওয়া হয়েছে?' : 'Paid From Where?'}
-                </label>
+              <Field label={isBn ? 'টাকা কোন উৎস থেকে দেওয়া হয়েছে?' : 'Paid From Where?'}>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     type="button"
@@ -1501,273 +1465,183 @@ export const FamilyLedgerView: React.FC = () => {
                     <div className="text-[10px] text-slate-400 mt-0.5">{isBn ? 'রিইমবার্সমেন্ট পাওনা হবে' : 'Eligible for reimbursement'}</div>
                   </button>
                 </div>
-              </div>
+              </Field>
 
               {/* Joint Account Select (if joint) */}
               {expPaymentSourceType === 'joint' && (
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'নির্দিষ্ট যৌথ অ্যাকাউন্ট' : 'Select Joint Account'}
-                  </label>
-                  <select
-                    value={expJointAccountId}
-                    onChange={(e) => setExpJointAccountId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                  >
+                <Field label={isBn ? 'নির্দিষ্ট যৌথ অ্যাকাউন্ট' : 'Select Joint Account'}>
+                  <Select value={expJointAccountId} onChange={(e) => setExpJointAccountId(e.target.value)}>
                     {state.jointAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
                         {isBn ? acc.nameBn : acc.name} (৳{acc.balance.toLocaleString()})
                       </option>
                     ))}
-                  </select>
-                </div>
+                  </Select>
+                </Field>
               )}
 
               {/* Memo & Receipt */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'রসিদ / মেমো নম্বর' : 'Receipt / Voucher #'}
-                  </label>
-                  <input
+                <Field label={isBn ? 'রসিদ / মেমো নম্বর' : 'Receipt / Voucher #'}>
+                  <Input
                     type="text"
                     value={expReceipt}
                     onChange={(e) => setExpReceipt(e.target.value)}
                     placeholder="e.g. REC-891"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
 
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'অতিরিক্ত নোট' : 'Note / Memo'}
-                  </label>
-                  <input
+                <Field label={isBn ? 'অতিরিক্ত নোট' : 'Note / Memo'}>
+                  <Input
                     type="text"
                     value={expMemo}
                     onChange={(e) => setExpMemo(e.target.value)}
                     placeholder="e.g. স্বপ্ন আউটলেট"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
               </div>
 
               <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddExpenseModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs"
-                >
-                  {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20"
-                >
-                  {isBn ? 'খরচ সংরক্ষণ করুন' : 'Save Expense'}
-                </button>
+                <Button type="button" variant="outline" onClick={() => setIsAddExpenseModalOpen(false)}>
+                    {isBn ? 'বাতিল' : 'Cancel'}
+                </Button>
+                <Button type="submit" variant="primary">
+                    {isBn ? 'খরচ সংরক্ষণ করুন' : 'Save Expense'}
+                </Button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* MODAL 2: FUND JOINT ACCOUNT */}
-      {isContributeModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-md rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <DollarSign className="w-5 h-5 text-emerald-400" />
-                <span>{isBn ? 'যৌথ তহবিলে টাকা জমা দিন' : 'Fund Joint Account Pool'}</span>
-              </h3>
-              <button
-                onClick={() => setIsContributeModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isContributeModalOpen}
+        onClose={() => setIsContributeModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-emerald-400" />
+            <span>{isBn ? 'যৌথ তহবিলে টাকা জমা দিন' : 'Fund Joint Account Pool'}</span>
+          </span>
+        }
+        maxWidth="md"
+      >
+        <div className="space-y-4">
 
-            {cntError && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
-                {cntError}
-              </div>
-            )}
+            {cntError && <ErrorBanner variant="error" message={cntError} />}
 
             <form onSubmit={handleSaveContribution} className="space-y-4 text-xs">
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'কোন সদস্য টাকা দিচ্ছেন?' : 'Contributing Member'}
-                </label>
-                <select
-                  value={cntMemberId}
-                  onChange={(e) => setCntMemberId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                >
+              <Field label={isBn ? 'কোন সদস্য টাকা দিচ্ছেন?' : 'Contributing Member'}>
+                <Select value={cntMemberId} onChange={(e) => setCntMemberId(e.target.value)}>
                   {state.members.map((m) => (
                     <option key={m.id} value={m.id}>
                       {isBn ? m.nameBn : m.name}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'কোন যৌথ অ্যাকাউন্টে জমা হবে?' : 'Target Joint Account'}
-                </label>
-                <select
-                  value={cntAccountId}
-                  onChange={(e) => setCntAccountId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                >
+              <Field label={isBn ? 'কোন যৌথ অ্যাকাউন্টে জমা হবে?' : 'Target Joint Account'}>
+                <Select value={cntAccountId} onChange={(e) => setCntAccountId(e.target.value)}>
                   {state.jointAccounts.map((a) => (
                     <option key={a.id} value={a.id}>
                       {isBn ? a.nameBn : a.name} (বর্তমান ব্যালেন্স: ৳{a.balance.toLocaleString()})
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'টাকার পরিমাণ (৳ BDT)' : 'Amount (৳ BDT)'}
-                </label>
-                <input
+              <Field label={isBn ? 'টাকার পরিমাণ (৳ BDT)' : 'Amount (৳ BDT)'}>
+                <Input
                   type="number"
                   value={cntAmount}
                   onChange={(e) => setCntAmount(e.target.value)}
                   placeholder="e.g. 20000"
                   min="1"
                   required
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'মন্তব্য বা উৎস' : 'Note / Memo'}
-                </label>
-                <input
+              <Field label={isBn ? 'মন্তব্য বা উৎস' : 'Note / Memo'}>
+                <Input
                   type="text"
                   value={cntNote}
                   onChange={(e) => setCntNote(e.target.value)}
                   placeholder={isBn ? 'যেমন: মাসিক বেতনের অংশ থেকে জমা' : 'e.g. Monthly salary contribution'}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
               <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsContributeModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs"
-                >
-                  {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20"
-                >
-                  {isBn ? 'জমা সম্পন্ন করুন' : 'Confirm Deposit'}
-                </button>
+                <Button type="button" variant="outline" onClick={() => setIsContributeModalOpen(false)}>
+                    {isBn ? 'বাতিল' : 'Cancel'}
+                </Button>
+                <Button type="submit" variant="primary">
+                    {isBn ? 'জমা সম্পন্ন করুন' : 'Confirm Deposit'}
+                </Button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* MODAL 3: ADD / EDIT MEMBER & GRANULAR PERMISSIONS */}
-      {isMemberModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-5 h-5 text-emerald-400" />
-                <span>
-                  {editingMember
+      <Modal
+        isOpen={isMemberModalOpen}
+        onClose={() => setIsMemberModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Users className="w-5 h-5 text-emerald-400" />
+            <span>{editingMember
                     ? isBn ? 'সদস্য ও পারমিশন সম্পাদনা' : 'Edit Member & Permissions'
-                    : isBn ? 'নতুন পারিবারিক সদস্য যোগ করুন' : 'Add New Family Member'}
-                </span>
-              </h3>
-              <button
-                onClick={() => setIsMemberModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+                    : isBn ? 'নতুন পারিবারিক সদস্য যোগ করুন' : 'Add New Family Member'}</span>
+          </span>
+        }
+        maxWidth="lg"
+        className="max-h-[90vh] overflow-y-auto"
+      >
+        <div className="space-y-4">
 
-            {mbrError && (
-              <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
-                {mbrError}
-              </div>
-            )}
+            {mbrError && <ErrorBanner variant="error" message={mbrError} />}
 
             <form onSubmit={handleSaveMember} className="space-y-4 text-xs">
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'নাম (English)' : 'Name (English)'}
-                  </label>
-                  <input
+                <Field label={isBn ? 'নাম (English)' : 'Name (English)'}>
+                  <Input
                     type="text"
                     value={mbrName}
                     onChange={(e) => setMbrName(e.target.value)}
                     placeholder="e.g. Spouse / Rahim"
                     required
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'নাম (বাংলায়)' : 'Name (Bengali)'}
-                  </label>
-                  <input
+                </Field>
+                <Field label={isBn ? 'নাম (বাংলায়)' : 'Name (Bengali)'}>
+                  <Input
                     type="text"
                     value={mbrNameBn}
                     onChange={(e) => setMbrNameBn(e.target.value)}
                     placeholder="যেমন: স্ত্রী / রহিম"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'পারিবারিক সম্পর্ক' : 'Relation'}
-                  </label>
-                  <select
-                    value={mbrRelation}
-                    onChange={(e) => setMbrRelation(e.target.value as FamilyRelation)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                  >
+                <Field label={isBn ? 'পারিবারিক সম্পর্ক' : 'Relation'}>
+                  <Select value={mbrRelation} onChange={(e) => setMbrRelation(e.target.value as FamilyRelation)}>
                     <option value="spouse">{isBn ? 'স্ত্রী / স্বামী (Spouse)' : 'Spouse'}</option>
                     <option value="child">{isBn ? 'সন্তান (Child)' : 'Child'}</option>
                     <option value="parent">{isBn ? 'পিতা / মাতা (Parent)' : 'Parent'}</option>
                     <option value="sibling">{isBn ? 'ভাই / বোন (Sibling)' : 'Sibling'}</option>
                     <option value="house_manager">{isBn ? 'কেয়ারটেকার / বাজার সহকারী' : 'House Manager / Caretaker'}</option>
                     <option value="roommate">{isBn ? 'রুমমেট / মেস মেম্বার' : 'Roommate / Flatmate'}</option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
 
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">
-                    {isBn ? 'অ্যাক্সেস রোল' : 'Access Role'}
-                  </label>
-                  <select
-                    value={mbrRole}
-                    onChange={(e) => setMbrRole(e.target.value as FamilyMemberRole)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-emerald-500"
-                  >
+                <Field label={isBn ? 'অ্যাক্সেস রোল' : 'Access Role'}>
+                  <Select value={mbrRole} onChange={(e) => setMbrRole(e.target.value as FamilyMemberRole)}>
                     <option value="contributor">{isBn ? 'সহযোগী (সীমিত পারমিশন)' : 'Contributor (Limited)'}</option>
                     <option value="dependent">{isBn ? 'হাতখরচ প্রাপক (পকেট মানি)' : 'Dependent (Allowance)'}</option>
                     <option value="viewer">{isBn ? 'দর্শক (Viewer Only)' : 'Viewer Only'}</option>
                     <option value="family_head">{isBn ? 'পরিবারের প্রধান (পূর্ণ ক্ষমতা)' : 'Family Head (Full Admin)'}</option>
-                  </select>
-                </div>
+                  </Select>
+                </Field>
               </div>
 
               {/* Granular Permission Toggles */}
@@ -1830,67 +1704,54 @@ export const FamilyLedgerView: React.FC = () => {
               </div>
 
               <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsMemberModalOpen(false)}
-                  className="px-4 py-2 rounded-xl border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs"
-                >
-                  {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20"
-                >
-                  {isBn ? 'সংরক্ষণ করুন' : 'Save Member'}
-                </button>
+                <Button type="button" variant="outline" onClick={() => setIsMemberModalOpen(false)}>
+                    {isBn ? 'বাতিল' : 'Cancel'}
+                </Button>
+                <Button type="submit" variant="primary">
+                    {isBn ? 'সংরক্ষণ করুন' : 'Save Member'}
+                </Button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* MODAL 4: EDIT CATEGORY BUDGET CEILING */}
-      {isBudgetEditModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
-          <div className="relative w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-800 p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Sliders className="w-5 h-5 text-emerald-400" />
-                <span>{isBn ? 'খাত বাজেট সীমা পরিবর্তন' : 'Edit Category Ceiling'}</span>
-              </h3>
-              <button
-                onClick={() => setIsBudgetEditModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-white"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isBudgetEditModalOpen}
+        onClose={() => setIsBudgetEditModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Sliders className="w-5 h-5 text-emerald-400" />
+            <span>{isBn ? 'খাত বাজেট সীমা পরিবর্তন' : 'Edit Category Ceiling'}</span>
+          </span>
+        }
+        maxWidth="sm"
+      >
 
             <div className="space-y-3 text-xs">
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">
-                  {isBn ? 'মাসিক বরাদ্দ (৳ BDT)' : 'Monthly Allocation (৳ BDT)'}
-                </label>
-                <input
+              <Field label={isBn ? 'মাসিক বরাদ্দ (৳ BDT)' : 'Monthly Allocation (৳ BDT)'}>
+                <Input
                   type="number"
                   value={budgetEditAmount}
                   onChange={(e) => setBudgetEditAmount(e.target.value)}
                   min="0"
                   required
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
               <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsBudgetEditModalOpen(false)}
-                  className="px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-800 text-slate-300"
                 >
                   {isBn ? 'বাতিল' : 'Cancel'}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="primary"
+                  size="sm"
                   onClick={() => {
                     const amt = parseFloat(budgetEditAmount);
                     if (!isNaN(amt) && amt >= 0) {
@@ -1898,15 +1759,12 @@ export const FamilyLedgerView: React.FC = () => {
                     }
                     setIsBudgetEditModalOpen(false);
                   }}
-                  className="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold"
                 >
                   {isBn ? 'সংরক্ষণ' : 'Save Limit'}
-                </button>
+                </Button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };

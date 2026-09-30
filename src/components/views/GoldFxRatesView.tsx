@@ -35,6 +35,7 @@ import {
   Sparkles,
   Calendar,
 } from 'lucide-react';
+import { Field, Input, Select, Button } from '../ui';
 
 interface GoldFxRatesViewProps {
   onNavigate?: (view: string) => void;
@@ -272,22 +273,22 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             <span>{isBn ? 'যাকাত নিসাবে সিঙ্ক' : 'Sync to Zakat Nisab'}</span>
           </button>
 
-          <button
+          <Button
+            variant="secondary"
             onClick={handleRefreshFx}
             disabled={isRefreshingFx}
-            className="px-3.5 py-2 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
           >
             <RefreshCw className={`h-3.5 w-3.5 text-emerald-400 ${isRefreshingFx ? 'animate-spin' : ''}`} />
             <span>{isRefreshingFx ? (isBn ? 'রিফ্রেশ হচ্ছে...' : 'Refreshing...') : (isBn ? 'লাইভ রিফ্রেশ' : 'Refresh Rates')}</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
+            variant="outline"
             onClick={() => setIsEditingGoldRates(!isEditingGoldRates)}
-            className="px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <Sliders className="h-3.5 w-3.5 text-slate-400" />
             <span>{isBn ? 'দর কাস্টমাইজ' : 'Edit Rates'}</span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -443,61 +444,52 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3.5 text-xs font-mono">
-            <div>
-              <label className="block text-slate-400 mb-1">২২ ক্যারেট সোনা (ভরি)</label>
-              <input
+            <Field label="২২ ক্যারেট সোনা (ভরি)">
+              <Input
                 type="number"
                 value={edit22kRate}
                 onChange={(e) => setEdit22kRate(Number(e.target.value) || 0)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
               />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">২১ ক্যারেট সোনা (ভরি)</label>
-              <input
+            </Field>
+            <Field label="২১ ক্যারেট সোনা (ভরি)">
+              <Input
                 type="number"
                 value={edit21kRate}
                 onChange={(e) => setEdit21kRate(Number(e.target.value) || 0)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
               />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">১৮ ক্যারেট সোনা (ভরি)</label>
-              <input
+            </Field>
+            <Field label="১৮ ক্যারেট সোনা (ভরি)">
+              <Input
                 type="number"
                 value={edit18kRate}
                 onChange={(e) => setEdit18kRate(Number(e.target.value) || 0)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
               />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">সনাতন সোনা (ভরি)</label>
-              <input
+            </Field>
+            <Field label="সনাতন সোনা (ভরি)">
+              <Input
                 type="number"
                 value={editTraditionalRate}
                 onChange={(e) => setEditTraditionalRate(Number(e.target.value) || 0)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
               />
-            </div>
-            <div>
-              <label className="block text-slate-400 mb-1">২২ ক্যারেট রূপা (ভরি)</label>
-              <input
+            </Field>
+            <Field label="২২ ক্যারেট রূপা (ভরি)">
+              <Input
                 type="number"
                 value={editSilver22kRate}
                 onChange={(e) => setEditSilver22kRate(Number(e.target.value) || 0)}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
               />
-            </div>
+            </Field>
           </div>
 
           <div className="flex justify-end gap-2 pt-1">
-            <button
+            <Button
               type="button"
+              variant="outline"
+              size="sm"
               onClick={() => setIsEditingGoldRates(false)}
-              className="px-4 py-1.5 rounded-lg border border-slate-700 text-slate-300 text-xs hover:bg-slate-800"
             >
               {isBn ? 'বাতিল' : 'Cancel'}
-            </button>
+            </Button>
             <button
               type="submit"
               className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold"
@@ -704,77 +696,67 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
 
                 {weightMode === 'bhori' ? (
                   <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-                    <div>
-                      <label className="block text-slate-400 mb-1 text-[11px]">{isBn ? 'ভরি (Bhori)' : 'Bhori'}</label>
-                      <input
+                    <Field label={isBn ? 'ভরি (Bhori)' : 'Bhori'}>
+                      <Input
                         type="number"
                         min="0"
                         step="any"
                         value={inputBhori}
                         onChange={(e) => setInputBhori(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                        className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
                       />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 mb-1 text-[11px]">{isBn ? 'আনা (Anna)' : 'Anna (0-15)'}</label>
-                      <input
+                    </Field>
+                    <Field label={isBn ? 'আনা (Anna)' : 'Anna (0-15)'}>
+                      <Input
                         type="number"
                         min="0"
                         max="15"
                         step="any"
                         value={inputAnna}
                         onChange={(e) => setInputAnna(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                        className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
                       />
-                    </div>
-                    <div>
-                      <label className="block text-slate-400 mb-1 text-[11px]">{isBn ? 'রতি (Ratti)' : 'Ratti (0-5)'}</label>
-                      <input
+                    </Field>
+                    <Field label={isBn ? 'রতি (Ratti)' : 'Ratti (0-5)'}>
+                      <Input
                         type="number"
                         min="0"
                         max="5.9"
                         step="any"
                         value={inputRatti}
                         onChange={(e) => setInputRatti(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                        className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
                       />
-                    </div>
+                    </Field>
                   </div>
                 ) : (
-                  <div>
-                    <label className="block text-slate-400 mb-1 text-xs">{isBn ? 'মোট গ্রাম (Total Grams)' : 'Weight in Grams'}</label>
-                    <input
+                  <Field label={isBn ? 'মোট গ্রাম (Total Grams)' : 'Weight in Grams'}>
+                    <Input
                       type="number"
                       min="0"
                       step="any"
                       value={inputGrams}
                       onChange={(e) => setInputGrams(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
                     />
-                  </div>
+                  </Field>
                 )}
               </div>
 
               {/* Making Charge & VAT Settings */}
               <div className="grid grid-cols-2 gap-3 text-xs font-mono pt-1">
-                <div>
-                  <label className="block text-slate-400 mb-1">
-                    {isBn ? 'মেকিং চার্জ প্রতি গ্রাম (৳)' : 'Making Charge/g (৳)'}
-                  </label>
-                  <input
+                <Field
+                  label={isBn ? 'মেকিং চার্জ প্রতি গ্রাম (৳)' : 'Making Charge/g (৳)'}
+                  hint="বাজুস সর্বনিম্ন ৳৪৯০/গ্রাম"
+                >
+                  <Input
                     type="number"
                     min="0"
                     value={makingChargePerGram}
                     onChange={(e) => setMakingChargePerGram(parseFloat(e.target.value) || 0)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-amber-400 focus:outline-none"
                   />
-                  <span className="text-[10px] text-slate-500">বাজুস সর্বনিম্ন ৳৪৯০/গ্রাম</span>
-                </div>
+                </Field>
 
-                <div>
-                  <label className="block text-slate-400 mb-1">
-                    {isBn ? 'সরকারি ভ্যাট (৫%)' : 'Government VAT (5%)'}
-                  </label>
+                <Field
+                  label={isBn ? 'সরকারি ভ্যাট (৫%)' : 'Government VAT (5%)'}
+                  hint="এনবিআর নির্ধারিত ৫% ভ্যাট"
+                >
                   <button
                     type="button"
                     onClick={() => setIncludeVat(!includeVat)}
@@ -786,8 +768,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   >
                     {includeVat ? (isBn ? '৫% ভ্যাট অন্তর্ভুক্ত' : '5% VAT Included') : (isBn ? 'ভ্যাট ছাড়া' : 'No VAT')}
                   </button>
-                  <span className="text-[10px] text-slate-500">এনবিআর নির্ধারিত ৫% ভ্যাট</span>
-                </div>
+                </Field>
               </div>
             </div>
 
@@ -845,14 +826,14 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   <span>{isBn ? 'স্থাবর সম্পদে যোগ করুন' : 'Add to Physical Assets'}</span>
                 </button>
 
-                <button
+                <Button
                   type="button"
+                  variant="secondary"
                   onClick={handleSyncToZakat}
-                  className="py-2.5 px-3 rounded-xl border border-slate-700 bg-slate-900 hover:bg-slate-800 text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <Scale className="h-4 w-4 text-emerald-400" />
                   <span>{isBn ? 'যাকাত নিসাব আপডেট' : 'Sync to Zakat'}</span>
-                </button>
+                </Button>
               </div>
             </div>
           </div>
@@ -883,8 +864,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
               {/* Foreign Amount & Currency */}
-              <div className="md:col-span-4 space-y-1">
-                <label className="block text-slate-400 text-xs font-mono">{isBn ? 'বৈদেশিক মুদ্রার পরিমাণ' : 'Foreign Amount'}</label>
+              <Field className="md:col-span-4" label={isBn ? 'বৈদেশিক মুদ্রার পরিমাণ' : 'Foreign Amount'}>
                 <div className="flex gap-2">
                   <select
                     value={remitCurrency}
@@ -897,30 +877,29 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       </option>
                     ))}
                   </select>
-                  <input
-                    type="number"
-                    min="1"
-                    value={remitAmount}
-                    onChange={(e) => setRemitAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                    className="flex-1 rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white text-xs font-mono font-bold focus:border-emerald-500 focus:outline-none"
-                    placeholder="e.g. 1000"
-                  />
+                  <div className="flex-1">
+                    <Input
+                      type="number"
+                      min="1"
+                      value={remitAmount}
+                      onChange={(e) => setRemitAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
+                      placeholder="e.g. 1000"
+                    />
+                  </div>
                 </div>
-              </div>
+              </Field>
 
               {/* Rate Type Channel */}
-              <div className="md:col-span-3 space-y-1">
-                <label className="block text-slate-400 text-xs font-mono">{isBn ? 'বিনিময় চ্যানেল' : 'Exchange Channel'}</label>
-                <select
+              <Field className="md:col-span-3" label={isBn ? 'বিনিময় চ্যানেল' : 'Exchange Channel'}>
+                <Select
                   value={remitRateType}
                   onChange={(e) => setRemitRateType(e.target.value as any)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white text-xs font-mono focus:border-emerald-500 focus:outline-none"
                 >
                   <option value="remittanceRate">ব্যাংক রেমিট্যান্স দর (Bank Remittance)</option>
                   <option value="cashKerbRate">খোলা বাজার / ক্যাশ নোট (Kerb Market)</option>
                   <option value="interbankRate">আন্তঃব্যাংক অফিশিয়াল (BB Interbank)</option>
-                </select>
-              </div>
+                </Select>
+              </Field>
 
               {/* Live Converted Output */}
               <div className="md:col-span-5 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 font-mono text-xs space-y-1.5">
@@ -1028,33 +1007,29 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-              <div className="md:col-span-5 space-y-1">
-                <label className="block text-slate-400 text-xs font-mono">{isBn ? 'বাংলাদেশি টাকার পরিমাণ (BDT)' : 'Amount in BDT'}</label>
-                <input
+              <Field className="md:col-span-5" label={isBn ? 'বাংলাদেশি টাকার পরিমাণ (BDT)' : 'Amount in BDT'}>
+                <Input
                   type="number"
                   min="1000"
                   step="1000"
                   value={reverseBdtAmount}
                   onChange={(e) => setReverseBdtAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white text-xs font-mono font-bold focus:border-sky-500 focus:outline-none"
                   placeholder="e.g. 100000"
                 />
-              </div>
+              </Field>
 
-              <div className="md:col-span-3 space-y-1">
-                <label className="block text-slate-400 text-xs font-mono">{isBn ? 'কাঙ্ক্ষিত মুদ্রা' : 'Target Currency'}</label>
-                <select
+              <Field className="md:col-span-3" label={isBn ? 'কাঙ্ক্ষিত মুদ্রা' : 'Target Currency'}>
+                <Select
                   value={reverseCurrency}
                   onChange={(e) => setReverseCurrency(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white text-xs font-mono font-bold focus:border-sky-500 focus:outline-none"
                 >
                   {fxRates.map((f) => (
                     <option key={f.code} value={f.code}>
                       {f.flag} {f.code} — {f.nameEn}
                     </option>
                   ))}
-                </select>
-              </div>
+                </Select>
+              </Field>
 
               <div className="md:col-span-4 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs font-mono space-y-1">
                 <div className="text-slate-400 text-[11px]">
