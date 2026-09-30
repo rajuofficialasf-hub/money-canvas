@@ -28,7 +28,7 @@ interface RetirementFireViewProps {
   onNavigate?: (view: string) => void;
 }
 
-export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNavigate }) => {
+export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNavigate: _onNavigate }) => {
   const { isBn } = useLanguage();
   const {
     accountBalances,

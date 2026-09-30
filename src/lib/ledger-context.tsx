@@ -4735,6 +4735,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   // (and therefore the captured closures) when one of the data deps actually
   // changed — so closures are never stale, and sync ticks no longer re-render
   // every ledger consumer.
+  // Data deps only: the action functions are stable as long as the data they
+  // close over is unchanged, so they are intentionally left out of the deps.
   const ledgerValue = useMemo(
     () => ({
       accounts,
@@ -4839,8 +4841,6 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       restoreFromBackup,
       resetTenantLedger,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- data deps only:
-    // functions are stable as long as the data they close over is unchanged.
     [
       accounts,
       categories,

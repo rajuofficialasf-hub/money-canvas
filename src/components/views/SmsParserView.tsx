@@ -523,7 +523,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
 
           {/* Transaction Cards List */}
           <div className="space-y-3">
-            {parsedItems.map((item, idx) => (
+            {parsedItems.map((item) => (
               <div
                 key={item.id}
                 className={`p-4 rounded-xl border transition-all ${

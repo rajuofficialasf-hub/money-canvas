@@ -57,10 +57,6 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [bioFeedback, setBioFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  if (showPrivacyPolicy) {
-    return <PrivacyPolicyView onBack={() => setShowPrivacyPolicy(false)} />;
-  }
-
   // Biometric toggle handler
   const handleToggleBiometric = async () => {
     setBioFeedback(null);
@@ -155,6 +151,10 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
     setNewProfileEmail('');
     setIsCreatingProfile(false);
   };
+
+  if (showPrivacyPolicy) {
+    return <PrivacyPolicyView onBack={() => setShowPrivacyPolicy(false)} />;
+  }
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto py-2">

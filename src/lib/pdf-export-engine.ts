@@ -692,7 +692,7 @@ export async function exportPortfolioValuationPdf(
   user: UserProfile,
   holdings: HoldingPosition[],
   metrics: PortfolioMetricSummary,
-  benchmarkComparison?: { dsexReturnPct: number; alphaPct: number }
+  _benchmarkComparison?: { dsexReturnPct: number; alphaPct: number }
 ): Promise<boolean> {
   try {
     const { JsPDF, autoTable } = await loadPdfLibs();

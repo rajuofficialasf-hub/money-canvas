@@ -26,6 +26,18 @@ import {
 export const RlsInspectorView: React.FC = () => {
   const { user, availableProfiles, openAuthModal, isAdmin } = useAuth();
 
+  const [copied, setCopied] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(RLS_TABLES_LIST[0]);
+  const { language, setLanguage } = useLanguage();
+  const [activeTab, setActiveTab] = useState<'overview' | 'simulator' | 'tables' | 'sql'>('overview');
+
+  // RLS Simulation state
+  const otherProfile = availableProfiles.find((p) => p.id !== user.id) || availableProfiles[0];
+  const [simulatedOwnerId, setSimulatedOwnerId] = useState<string>(
+    otherProfile?.id !== user.id ? otherProfile.id : user.id
+  );
+  const [simResult, setSimResult] = useState<{ allowed: boolean; reason: string } | null>(null);
+
   if (!isAdmin) {
     return (
       <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8 sm:p-12 text-center max-w-xl mx-auto my-12 shadow-2xl space-y-4">
@@ -49,17 +61,6 @@ export const RlsInspectorView: React.FC = () => {
     );
   }
 
-  const [copied, setCopied] = useState(false);
-  const [selectedTable, setSelectedTable] = useState(RLS_TABLES_LIST[0]);
-  const { language, setLanguage } = useLanguage();
-  const [activeTab, setActiveTab] = useState<'overview' | 'simulator' | 'tables' | 'sql'>('overview');
-
-  // RLS Simulation state
-  const otherProfile = availableProfiles.find((p) => p.id !== user.id) || availableProfiles[0];
-  const [simulatedOwnerId, setSimulatedOwnerId] = useState<string>(
-    otherProfile?.id !== user.id ? otherProfile.id : user.id
-  );
-  const [simResult, setSimResult] = useState<{ allowed: boolean; reason: string } | null>(null);
 
   const fullSql = generateFullRlsMigrationSql();
 

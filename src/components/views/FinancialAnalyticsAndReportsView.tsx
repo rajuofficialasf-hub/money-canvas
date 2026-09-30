@@ -39,9 +39,9 @@ interface FinancialAnalyticsAndReportsViewProps {
 }
 
 export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndReportsViewProps> = ({
-  onNavigateToPortfolio,
-  onNavigateToTrades,
-  onNavigateToDividends,
+  onNavigateToPortfolio: _onNavigateToPortfolio,
+  onNavigateToTrades: _onNavigateToTrades,
+  onNavigateToDividends: _onNavigateToDividends,
 }) => {
   const {
     accounts,

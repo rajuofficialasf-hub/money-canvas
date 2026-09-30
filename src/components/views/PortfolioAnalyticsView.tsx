@@ -29,7 +29,7 @@ interface PortfolioAnalyticsViewProps {
 
 export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
   onNavigateToPortfolio,
-  onNavigateToTrades,
+  onNavigateToTrades: _onNavigateToTrades,
 }) => {
   const { user } = useAuth();
   const {

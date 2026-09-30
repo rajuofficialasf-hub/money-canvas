@@ -17,7 +17,7 @@ interface BrokerageViewProps {
   onNavigateToTrades?: () => void;
 }
 
-export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades }) => {
+export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades: _onNavigateToTrades }) => {
   const {
     brokers,
     brokerAccounts,
