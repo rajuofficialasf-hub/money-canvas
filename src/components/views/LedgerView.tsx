@@ -14,7 +14,6 @@ import {
   RotateCcw,
   AlertCircle,
   X,
-  CheckCircle2,
   Calendar,
   Tag,
   Trash2,
@@ -23,6 +22,7 @@ import {
   MessageSquare,
   FileSpreadsheet,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 
 interface LedgerViewProps {
   onNavigate?: (view: string) => void;
@@ -312,25 +312,25 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
             </>
           )}
 
-          <button
+          <Button
             onClick={() => setIsCategoryModalOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700 transition-colors shadow-sm"
+            variant="secondary"
           >
             <Tag className="h-3.5 w-3.5 text-emerald-400" />
             <span>Manage Categories</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             onClick={() => {
               setIsCreatingInlineCategory(false);
               setFormError(null);
               setIsPostModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold transition-colors shadow-sm"
+            variant="primary"
+            icon={Plus}
           >
-            <Plus className="h-4 w-4" />
-            <span>Post Transaction</span>
-          </button>
+            Post Transaction
+          </Button>
         </div>
       </div>
 
@@ -360,14 +360,13 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
           ))}
         </div>
 
-        <div className="relative w-full md:w-64">
-          <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-slate-500" />
-          <input
+        <div className="w-full md:w-64">
+          <Input
+            icon={Search}
             type="text"
             placeholder="Search memo, ID, type..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-slate-900 pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
           />
         </div>
       </div>
@@ -541,25 +540,20 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
       </div>
 
       {/* Modal: Post New Transaction */}
-      {isPostModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in overflow-y-auto">
-          <div className="w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl font-sans text-xs space-y-4 my-8">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div>
-                <h2 className="text-base font-bold text-white flex items-center gap-2">
-                  <Plus className="h-4 w-4 text-emerald-400" />
-                  <span>Post Double-Entry Transaction</span>
-                </h2>
-                <p className="text-slate-400 text-xs mt-0.5">Record income, expenses, transfers, or multi-item splits.</p>
-              </div>
-              <button
-                onClick={() => setIsPostModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
+      <Modal
+        isOpen={isPostModalOpen}
+        onClose={() => setIsPostModalOpen(false)}
+        title={
+          <span className="flex items-center gap-2">
+            <Plus className="h-4 w-4 text-emerald-400" />
+            <span>Post Double-Entry Transaction</span>
+          </span>
+        }
+        description="Record income, expenses, transfers, or multi-item splits."
+        maxWidth="xl"
+        className="max-h-[90vh] overflow-y-auto"
+      >
+        <div className="space-y-4">
             {/* Mode Switcher Tabs */}
             <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800">
               {[
@@ -594,45 +588,32 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               ))}
             </div>
 
-            {categoryCreateMsg && (
-              <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-                <span>{categoryCreateMsg}</span>
-              </div>
-            )}
+            {categoryCreateMsg && <ErrorBanner variant="success" message={categoryCreateMsg} />}
 
-            {formError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
-                <span>{formError}</span>
-              </div>
-            )}
+            {formError && <ErrorBanner variant="error" message={formError} />}
 
             <form onSubmit={handlePostSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Date *</label>
-                  <input
+                <Field label="Date" required>
+                  <Input
                     type="date"
                     value={txDate}
                     onChange={(e) => setTxDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
                     required
                   />
-                </div>
+                </Field>
 
-                <div>
-                  <label className="block text-slate-300 font-medium mb-1">Total Amount (৳) *</label>
-                  <input
+                <Field label="Total Amount (৳)" required>
+                  <Input
                     type="number"
                     step="0.01"
                     placeholder="e.g. 2500"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono font-bold focus:border-emerald-500 focus:outline-none"
+                    className="font-mono font-bold"
                     required
                   />
-                </div>
+                </Field>
               </div>
 
               {/* Source Account */}
@@ -647,10 +628,9 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                     </span>
                   )}
                 </div>
-                <select
+                <Select
                   value={selectedAccount}
                   onChange={(e) => setSelectedAccount(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
                   required
                 >
                   {accounts
@@ -660,7 +640,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                         {a.name} ({a.accountType}) — ৳{getAccountBalance(a.id).toLocaleString()}
                       </option>
                     ))}
-                </select>
+                </Select>
 
                 {/* Insufficient Funds Warning for Expense/Transfer/Split */}
                 {(() => {
@@ -699,10 +679,9 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                       </span>
                     )}
                   </div>
-                  <select
+                  <Select
                     value={destinationAccount}
                     onChange={(e) => setDestinationAccount(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
                     required
                   >
                     {accounts
@@ -712,7 +691,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                           {a.name} ({a.accountType}) — ৳{getAccountBalance(a.id).toLocaleString()}
                         </option>
                       ))}
-                  </select>
+                  </Select>
                 </div>
               )}
 
@@ -741,12 +720,11 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <div className="sm:col-span-2">
-                          <input
+                          <Input
                             type="text"
                             placeholder={entryMode === 'income' ? 'e.g. Freelancing, Rental, Bonus...' : 'e.g. Gym, Pet Care, Office Lunch...'}
                             value={newCatName}
                             onChange={(e) => setNewCatName(e.target.value)}
-                            className="w-full rounded-md border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-emerald-500"
                             autoFocus
                           />
                         </div>
@@ -758,21 +736,22 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-slate-900 p-0.5"
                             title="Choose color tag"
                           />
-                          <button
+                          <Button
                             type="button"
+                            variant="primary"
+                            size="sm"
                             onClick={handleCreateCategory}
-                            className="flex-1 py-1.5 px-3 rounded bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs"
+                            className="flex-1"
                           >
                             Save Category
-                          </button>
+                          </Button>
                         </div>
                       </div>
                     </div>
                   ) : (
-                    <select
+                    <Select
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
                       required
                     >
                       {categories
@@ -782,7 +761,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             {c.name} {!c.isSystem ? '★ (Custom)' : ''}
                           </option>
                         ))}
-                    </select>
+                    </Select>
                   )}
                 </div>
               )}
@@ -863,36 +842,33 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               )}
 
               {/* Note / Memo */}
-              <div>
-                <label className="block text-slate-300 font-medium mb-1">Description / Memo</label>
-                <input
+              <Field label="Description / Memo">
+                <Input
                   type="text"
                   placeholder="e.g. Agora grocery shopping, restaurant dinner, project milestone..."
                   value={txNote}
                   onChange={(e) => setTxNote(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
                 />
-              </div>
+              </Field>
 
               <div className="border-t border-slate-800 pt-4 flex items-center justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => setIsPostModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-800 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
-                  className="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors shadow-sm"
+                  variant="primary"
                 >
                   Post Transaction
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
         </div>
-      )}
+      </Modal>
 
       {/* Modal: Category Management Drawer / Modal */}
       {isCategoryModalOpen && (
@@ -944,26 +920,20 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in overflow-y-auto">
-      <div className="w-full max-w-2xl rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl font-sans text-xs space-y-4 my-8">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-          <div>
-            <h2 className="text-base font-bold text-white flex items-center gap-2">
-              <FolderPlus className="h-4 w-4 text-emerald-400" />
-              <span>Income & Expense Categories</span>
-            </h2>
-            <p className="text-slate-400 text-xs mt-0.5">
-              Customize and manage income and expense categories for your accounts.
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="p-1 text-slate-400 hover:text-white rounded"
-          >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
+    <Modal
+      isOpen
+      onClose={onClose}
+      title={
+        <span className="flex items-center gap-2">
+          <FolderPlus className="h-4 w-4 text-emerald-400" />
+          <span>Income & Expense Categories</span>
+        </span>
+      }
+      description="Customize and manage income and expense categories for your accounts."
+      maxWidth="2xl"
+      className="max-h-[90vh] overflow-y-auto"
+    >
+      <div className="space-y-4">
         {/* Tab Switcher */}
         <div className="flex items-center gap-2 p-1 bg-slate-950 rounded-lg border border-slate-800">
           <button
@@ -990,19 +960,9 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
           </button>
         </div>
 
-        {errorMessage && (
-          <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
-            <span>{errorMessage}</span>
-          </div>
-        )}
+        {errorMessage && <ErrorBanner variant="error" message={errorMessage} />}
 
-        {successMessage && (
-          <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-            <span>{successMessage}</span>
-          </div>
-        )}
+        {successMessage && <ErrorBanner variant="success" message={successMessage} />}
 
         {/* Add New Category Form */}
         <form onSubmit={handleSubmit} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
@@ -1011,13 +971,14 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             <span>Add New {activeTab === 'expense' ? 'Expense' : 'Income'} Category</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2">
-            <input
-              type="text"
-              placeholder={activeTab === 'expense' ? 'Category name (e.g., Medical, Fitness, Subscriptions...)' : 'Category name (e.g., Bonus, Rental, Dividend...)'}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="flex-1 w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500"
-            />
+            <div className="flex-1 w-full">
+              <Input
+                type="text"
+                placeholder={activeTab === 'expense' ? 'Category name (e.g., Medical, Fitness, Subscriptions...)' : 'Category name (e.g., Bonus, Rental, Dividend...)'}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <input
                 type="color"
@@ -1026,12 +987,13 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                 className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-slate-900 p-0.5 shrink-0"
                 title="Choose color tag"
               />
-              <button
+              <Button
                 type="submit"
-                className="flex-1 sm:flex-none px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs whitespace-nowrap transition-colors"
+                variant="primary"
+                className="flex-1 sm:flex-none whitespace-nowrap"
               >
                 + Add Category
-              </button>
+              </Button>
             </div>
           </div>
         </form>
@@ -1077,15 +1039,15 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
         </div>
 
         <div className="border-t border-slate-800 pt-3 flex justify-end">
-          <button
+          <Button
             type="button"
+            variant="secondary"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-colors"
           >
             Done
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 };

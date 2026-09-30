@@ -65,7 +65,7 @@ import {
   saveEncryptedBackupToFirestore,
   fetchEncryptedBackupFromFirestore,
 } from '../../lib/cloud-sync-service';
-import { Modal } from '../ui/Modal';
+import { Modal, Field, Input, Button } from '../ui';
 
 export const BackupRestoreView: React.FC = () => {
   const { user, firebaseUser, googleAccessToken, isGoogleAuthenticated, signInWithGoogle, refreshGoogleAccessToken, updateUserDriveSyncStatus } = useAuth();
@@ -1318,26 +1318,27 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
 
                 <div className="space-y-2 pt-1 font-sans">
-                  <label className="text-[11px] text-slate-400 block">এই ব্যাকআপ ফাইলটি আনলক করতে পাসফ্রেজ দিন:</label>
-                  <div className="relative font-mono">
-                    <input
+                  <Field label="এই ব্যাকআপ ফাইলটি আনলক করতে পাসফ্রেজ দিন:">
+                    <Input
                       type={showFileDecryptPassword ? 'text' : 'password'}
                       value={fileDecryptPassphrase}
                       onChange={(e) => setFileDecryptPassphrase(e.target.value)}
                       placeholder="পাসফ্রেজ লিখুন..."
-                      className="w-full px-3 py-2 pr-10 rounded-lg bg-slate-900 border border-slate-700 text-white text-xs focus:outline-none focus:border-amber-500"
+                      className="font-mono"
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') handleDecryptLocalFile();
                       }}
+                      rightElement={
+                        <button
+                          type="button"
+                          onClick={() => setShowFileDecryptPassword(!showFileDecryptPassword)}
+                          className="text-slate-400 hover:text-white cursor-pointer"
+                        >
+                          {showFileDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
+                      }
                     />
-                    <button
-                      type="button"
-                      onClick={() => setShowFileDecryptPassword(!showFileDecryptPassword)}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                    >
-                      {showFileDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
+                  </Field>
 
                   {fileDecryptError && (
                     <div className="p-2 rounded bg-rose-950/30 border border-rose-500/30 text-rose-300 text-[11px] flex items-center gap-1.5">
@@ -1378,24 +1379,25 @@ export const BackupRestoreView: React.FC = () => {
         </p>
 
         {!showResetModal ? (
-          <button
+          <Button
             onClick={() => setShowResetModal(true)}
-            className="px-4 py-2 rounded-lg bg-rose-950 hover:bg-rose-900 text-rose-300 border border-rose-800 text-xs font-mono font-semibold flex items-center gap-2 transition-colors"
+            variant="danger"
+            icon={Trash2}
+            className="font-mono"
           >
-            <Trash2 className="h-4 w-4" />
-            <span>Reset Tenant Data</span>
-          </button>
+            Reset Tenant Data
+          </Button>
         ) : (
           <div className="p-4 rounded-lg bg-slate-950 border border-rose-500/50 space-y-3 max-w-md font-mono text-xs">
             <div className="text-rose-400 font-semibold">
               Type "CONFIRM RESET" to purge active tenant:
             </div>
-            <input
+            <Input
               type="text"
               value={confirmResetText}
               onChange={(e) => setConfirmResetText(e.target.value)}
               placeholder="CONFIRM RESET"
-              className="w-full px-3 py-2 rounded border border-slate-800 bg-slate-900 text-white font-mono text-xs focus:outline-none focus:border-rose-500"
+              className="font-mono"
             />
             <div className="flex items-center gap-2 pt-1">
               <button
@@ -1448,69 +1450,73 @@ export const BackupRestoreView: React.FC = () => {
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                <span>পাসফ্রেজ তৈরি করুন (কমপক্ষে ৮ অক্ষর):</span>
-                {exportPassphrase && (
-                  <span
-                    className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded ${
-                      validatePassphrase(exportPassphrase).strength === 'strong'
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+            <Field
+              label={
+                <span className="flex items-center justify-between">
+                  <span>পাসফ্রেজ তৈরি করুন (কমপক্ষে ৮ অক্ষর):</span>
+                  {exportPassphrase && (
+                    <span
+                      className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded ${
+                        validatePassphrase(exportPassphrase).strength === 'strong'
+                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                          : validatePassphrase(exportPassphrase).strength === 'medium'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
+                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                      }`}
+                    >
+                      {validatePassphrase(exportPassphrase).strength === 'strong'
+                        ? 'শক্তিশালী (Strong)'
                         : validatePassphrase(exportPassphrase).strength === 'medium'
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                        : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                    }`}
+                        ? 'মাঝারি (Medium)'
+                        : 'দুর্বল (Weak)'}
+                    </span>
+                  )}
+                </span>
+              }
+            >
+              <Input
+                type={showExportPassword ? 'text' : 'password'}
+                value={exportPassphrase}
+                onChange={(e) => setExportPassphrase(e.target.value)}
+                placeholder="শক্তিশালী পাসফ্রেজ লিখুন..."
+                className="font-mono"
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowExportPassword(!showExportPassword)}
+                    className="text-slate-400 hover:text-white cursor-pointer"
                   >
-                    {validatePassphrase(exportPassphrase).strength === 'strong'
-                      ? 'শক্তিশালী (Strong)'
-                      : validatePassphrase(exportPassphrase).strength === 'medium'
-                      ? 'মাঝারি (Medium)'
-                      : 'দুর্বল (Weak)'}
-                  </span>
-                )}
-              </label>
-              <div className="relative">
-                <input
-                  type={showExportPassword ? 'text' : 'password'}
-                  value={exportPassphrase}
-                  onChange={(e) => setExportPassphrase(e.target.value)}
-                  placeholder="শক্তিশালী পাসফ্রেজ লিখুন..."
-                  className="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-emerald-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowExportPassword(!showExportPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                >
-                  {showExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
+                    {showExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                }
+              />
+            </Field>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ নিশ্চিত করুন:</label>
-              <input
+            <Field label="পাসফ্রেজ নিশ্চিত করুন:">
+              <Input
                 type={showExportPassword ? 'text' : 'password'}
                 value={exportPassphraseConfirm}
                 onChange={(e) => setExportPassphraseConfirm(e.target.value)}
                 placeholder="পুনরায় পাসফ্রেজ লিখুন..."
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-emerald-500"
+                className="font-mono"
               />
-            </div>
+            </Field>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300 flex items-center justify-between">
-                <span>পাসফ্রেজ হিন্ট (ঐচ্ছিক):</span>
-                <span className="text-[10px] text-slate-500">ফাইলে দেখা যাবে</span>
-              </label>
-              <input
+            <Field
+              label={
+                <span className="flex items-center justify-between">
+                  <span>পাসফ্রেজ হিন্ট (ঐচ্ছিক):</span>
+                  <span className="text-[10px] text-slate-500">ফাইলে দেখা যাবে</span>
+                </span>
+              }
+            >
+              <Input
                 type="text"
                 value={exportHint}
                 onChange={(e) => setExportHint(e.target.value)}
                 placeholder="যেমন: প্রিয় বইয়ের নাম ও বিশেষ সাল..."
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-emerald-500"
               />
-            </div>
+            </Field>
 
             {exportCryptoError && (
               <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
@@ -1520,22 +1526,22 @@ export const BackupRestoreView: React.FC = () => {
             )}
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => setShowEncryptedExportModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer"
               >
                 বাতিল
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
+                variant="primary"
                 onClick={handleExecuteEncryptedExport}
                 disabled={isEncryptingExport || !exportPassphrase || !exportPassphraseConfirm}
-                className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
               >
                 <Lock className={`h-4 w-4 ${isEncryptingExport ? 'animate-spin' : ''}`} />
                 <span>{isEncryptingExport ? 'এনক্রিপ্ট হচ্ছে...' : 'এনক্রিপ্ট ও ডাউনলোড করুন'}</span>
-              </button>
+              </Button>
             </div>
           </div>
         </Modal>
@@ -1570,47 +1576,43 @@ export const BackupRestoreView: React.FC = () => {
               </p>
             </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ তৈরি করুন (কমপক্ষে ৮ অক্ষর):</label>
-              <div className="relative">
-                <input
-                  type={showDriveExportPassword ? 'text' : 'password'}
-                  value={driveExportPassphrase}
-                  onChange={(e) => setDriveExportPassphrase(e.target.value)}
-                  placeholder="পাসফ্রেজ..."
-                  className="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowDriveExportPassword(!showDriveExportPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                >
-                  {showDriveExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
+            <Field label="পাসফ্রেজ তৈরি করুন (কমপক্ষে ৮ অক্ষর):">
+              <Input
+                type={showDriveExportPassword ? 'text' : 'password'}
+                value={driveExportPassphrase}
+                onChange={(e) => setDriveExportPassphrase(e.target.value)}
+                placeholder="পাসফ্রেজ..."
+                className="font-mono"
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowDriveExportPassword(!showDriveExportPassword)}
+                    className="text-slate-400 hover:text-white cursor-pointer"
+                  >
+                    {showDriveExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                }
+              />
+            </Field>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ নিশ্চিত করুন:</label>
-              <input
+            <Field label="পাসফ্রেজ নিশ্চিত করুন:">
+              <Input
                 type={showDriveExportPassword ? 'text' : 'password'}
                 value={driveExportPassphraseConfirm}
                 onChange={(e) => setDriveExportPassphraseConfirm(e.target.value)}
                 placeholder="পুনরায় পাসফ্রেজ..."
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-blue-500"
+                className="font-mono"
               />
-            </div>
+            </Field>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ হিন্ট (ঐচ্ছিক):</label>
-              <input
+            <Field label="পাসফ্রেজ হিন্ট (ঐচ্ছিক):">
+              <Input
                 type="text"
                 value={driveExportHint}
                 onChange={(e) => setDriveExportHint(e.target.value)}
                 placeholder="যেমন: অফিস পাসকোড..."
-                className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-blue-500"
               />
-            </div>
+            </Field>
 
             {driveExportError && (
               <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
@@ -1620,13 +1622,13 @@ export const BackupRestoreView: React.FC = () => {
             )}
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => setShowDriveEncryptedModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer"
               >
                 বাতিল
-              </button>
+              </Button>
               <button
                 type="button"
                 onClick={handleExecuteDriveEncryptedBackup}
@@ -1669,28 +1671,27 @@ export const BackupRestoreView: React.FC = () => {
               </div>
             )}
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ লিখুন:</label>
-              <div className="relative">
-                <input
-                  type={showDriveDecryptPassword ? 'text' : 'password'}
-                  value={driveDecryptPassphrase}
-                  onChange={(e) => setDriveDecryptPassphrase(e.target.value)}
-                  placeholder="পাসফ্রেজ লিখুন..."
-                  className="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-amber-500"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleExecuteDriveDecryptRestore();
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowDriveDecryptPassword(!showDriveDecryptPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                >
-                  {showDriveDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
+            <Field label="পাসফ্রেজ লিখুন:">
+              <Input
+                type={showDriveDecryptPassword ? 'text' : 'password'}
+                value={driveDecryptPassphrase}
+                onChange={(e) => setDriveDecryptPassphrase(e.target.value)}
+                placeholder="পাসফ্রেজ লিখুন..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleExecuteDriveDecryptRestore();
+                }}
+                className="font-mono"
+                rightElement={
+                  <button
+                    type="button"
+                    onClick={() => setShowDriveDecryptPassword(!showDriveDecryptPassword)}
+                    className="text-slate-400 hover:text-white cursor-pointer"
+                  >
+                    {showDriveDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                }
+              />
+            </Field>
 
             {driveDecryptError && (
               <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
@@ -1700,13 +1701,13 @@ export const BackupRestoreView: React.FC = () => {
             )}
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => setShowDriveDecryptModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer"
               >
                 বাতিল
-              </button>
+              </Button>
               <button
                 type="button"
                 onClick={handleExecuteDriveDecryptRestore}
@@ -1778,75 +1779,70 @@ export const BackupRestoreView: React.FC = () => {
                   ভল্টে সংরক্ষিত ডেটা আপনার ব্রাউজারেই AES-GCM দিয়ে এনক্রিপ্ট হয়ে ক্লাউডে পৌঁছায়। পাসফ্রেজ হারিয়ে গেলে এই ডেটা আর কোনোভাবেই উদ্ধার করা সম্ভব নয়।
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">ভল্ট পাসফ্রেজ (কমপক্ষে ৮ অক্ষর):</label>
-                  <div className="relative">
-                    <input
-                      type={showVaultPassword ? 'text' : 'password'}
-                      value={vaultPassphrase}
-                      onChange={(e) => setVaultPassphrase(e.target.value)}
-                      placeholder="পাসফ্রেজ..."
-                      className="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowVaultPassword(!showVaultPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                    >
-                      {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
+                <Field label="ভল্ট পাসফ্রেজ (কমপক্ষে ৮ অক্ষর):">
+                  <Input
+                    type={showVaultPassword ? 'text' : 'password'}
+                    value={vaultPassphrase}
+                    onChange={(e) => setVaultPassphrase(e.target.value)}
+                    placeholder="পাসফ্রেজ..."
+                    className="font-mono"
+                    rightElement={
+                      <button
+                        type="button"
+                        onClick={() => setShowVaultPassword(!showVaultPassword)}
+                        className="text-slate-400 hover:text-white cursor-pointer"
+                      >
+                        {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    }
+                  />
+                </Field>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ নিশ্চিত করুন:</label>
-                  <input
+                <Field label="পাসফ্রেজ নিশ্চিত করুন:">
+                  <Input
                     type={showVaultPassword ? 'text' : 'password'}
                     value={vaultPassphraseConfirm}
                     onChange={(e) => setVaultPassphraseConfirm(e.target.value)}
                     placeholder="পুনরায় পাসফ্রেজ..."
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
+                    className="font-mono"
                   />
-                </div>
+                </Field>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">পাসফ্রেজ হিন্ট (ঐচ্ছিক):</label>
-                  <input
+                <Field label="পাসফ্রেজ হিন্ট (ঐচ্ছিক):">
+                  <Input
                     type="text"
                     value={vaultHint}
                     onChange={(e) => setVaultHint(e.target.value)}
                     placeholder="হিন্ট..."
-                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs focus:outline-none focus:border-indigo-500"
                   />
-                </div>
+                </Field>
               </div>
             ) : (
               <div className="space-y-3.5">
                 <p className="text-xs text-slate-300">
                   ক্লাউড ভল্ট থেকে ডেটা নামিয়ে ডিক্রিপ্ট করতে ভল্ট তৈরির সময় ব্যবহৃত পাসফ্রেজটি লিখুন:
                 </p>
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">ভল্ট পাসফ্রেজ:</label>
-                  <div className="relative">
-                    <input
-                      type={showVaultPassword ? 'text' : 'password'}
-                      value={vaultPassphrase}
-                      onChange={(e) => setVaultPassphrase(e.target.value)}
-                      placeholder="পাসফ্রেজ..."
-                      className="w-full px-3 py-2.5 pr-10 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono focus:outline-none focus:border-indigo-500"
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter') handleRestoreFromCloudVault();
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowVaultPassword(!showVaultPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                    >
-                      {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                    </button>
-                  </div>
-                </div>
+                <Field label="ভল্ট পাসফ্রেজ:">
+                  <Input
+                    type={showVaultPassword ? 'text' : 'password'}
+                    value={vaultPassphrase}
+                    onChange={(e) => setVaultPassphrase(e.target.value)}
+                    placeholder="পাসফ্রেজ..."
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleRestoreFromCloudVault();
+                    }}
+                    className="font-mono"
+                    rightElement={
+                      <button
+                        type="button"
+                        onClick={() => setShowVaultPassword(!showVaultPassword)}
+                        className="text-slate-400 hover:text-white cursor-pointer"
+                      >
+                        {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                      </button>
+                    }
+                  />
+                </Field>
               </div>
             )}
 
@@ -1858,13 +1854,13 @@ export const BackupRestoreView: React.FC = () => {
             )}
 
             <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button
+              <Button
                 type="button"
+                variant="secondary"
                 onClick={() => setShowCloudVaultModal(false)}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium cursor-pointer"
               >
                 বাতিল
-              </button>
+              </Button>
               {vaultMode === 'export' ? (
                 <button
                   type="button"

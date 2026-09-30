@@ -8,10 +8,11 @@ import {
   Plus,
   ShieldCheck,
   AlertCircle,
-  CheckCircle2,
-  X,
   Receipt,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, StatCard, ErrorBanner } from '../ui';
+
+const TakaIcon = () => <span className="font-mono text-xs">৳</span>;
 
 interface BrokerageViewProps {
   onNavigateToTrades?: () => void;
@@ -322,85 +323,68 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
+          <Button
             onClick={() => setIsDepositModalOpen(true)}
-            className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+            variant="primary"
+            icon={ArrowDownLeft}
           >
-            <ArrowDownLeft className="h-3.5 w-3.5" />
-            <span>Deposit Cash</span>
-          </button>
-          <button
+            Deposit Cash
+          </Button>
+          <Button
             onClick={() => setIsWithdrawModalOpen(true)}
-            className="px-3.5 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            variant="outline"
           >
             <ArrowUpRight className="h-3.5 w-3.5 text-sky-400" />
             <span>Withdraw to Bank</span>
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => setIsAddBoModalOpen(true)}
-            className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            variant="outline"
+            icon={Plus}
           >
-            <Plus className="h-3.5 w-3.5 text-slate-400" />
-            <span>New BO Account</span>
-          </button>
+            New BO Account
+          </Button>
         </div>
       </div>
 
       {/* Toast Notification Banner */}
-      {toastMessage && (
-        <div className="p-3 rounded-xl border border-emerald-500/30 bg-emerald-950/40 text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in duration-200">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      {toastMessage && <ErrorBanner variant="success" message={toastMessage} />}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {/* Total Broker Cash Balance */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Total Broker Cash Balance
-          </div>
-          <div className="text-2xl font-bold text-sky-400 mt-1">
-            ৳{totalCashBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center gap-1">
-            <ShieldCheck className="h-3 w-3 text-emerald-400" />
-            <span>Sum of all verified BO sub-ledgers</span>
-          </div>
-        </div>
+        <StatCard
+          title="Total Broker Cash Balance"
+          value={`৳${totalCashBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+          variant="sky"
+          subtitle={
+            <span className="flex items-center gap-1">
+              <ShieldCheck className="h-3 w-3 text-emerald-400" />
+              <span>Sum of all verified BO sub-ledgers</span>
+            </span>
+          }
+        />
 
-        {/* Total BO Accounts */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Active Beneficiary Owner (BO) Accounts
-          </div>
-          <div className="text-2xl font-bold text-white mt-1">
-            {brokerAccounts.length} Account{brokerAccounts.length === 1 ? '' : 's'}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-1">
-            Registered under CDBL Depository
-          </div>
-        </div>
+        <StatCard
+          title="Active Beneficiary Owner (BO) Accounts"
+          value={`${brokerAccounts.length} Account${brokerAccounts.length === 1 ? '' : 's'}`}
+          subtitle="Registered under CDBL Depository"
+        />
 
-        {/* Registered Brokerages */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
-          <div className="text-[11px] font-mono uppercase tracking-wider text-slate-400">
-            Registered TREC Brokerage Houses
-          </div>
-          <div className="text-2xl font-bold text-white mt-1">
-            {brokers.length} Broker{brokers.length === 1 ? '' : 's'}
-          </div>
-          <div className="text-[11px] text-slate-500 mt-1 flex items-center justify-between">
-            <span>DSE TREC Licensees</span>
-            <button
-              onClick={() => setIsAddBrokerModalOpen(true)}
-              className="text-xs text-emerald-400 hover:text-emerald-300 font-medium"
-            >
-              + Add Firm
-            </button>
-          </div>
-        </div>
+        <StatCard
+          title="Registered TREC Brokerage Houses"
+          value={`${brokers.length} Broker${brokers.length === 1 ? '' : 's'}`}
+          subtitle={
+            <span className="flex items-center justify-between gap-2">
+              <span>DSE TREC Licensees</span>
+              <button
+                onClick={() => setIsAddBrokerModalOpen(true)}
+                className="text-xs text-emerald-400 hover:text-emerald-300 font-medium"
+              >
+                + Add Firm
+              </button>
+            </span>
+          }
+        />
       </div>
 
       {/* BO Accounts Card Grid */}
@@ -600,32 +584,19 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
       </div>
 
       {/* Modal: Deposit Broker Cash */}
-      {isDepositModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                  <ArrowDownLeft className="h-4 w-4 text-emerald-400" />
-                  <span>Deposit Cash to BO Account</span>
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Transfer funds from your bank/cash account into your brokerage ledger
-                </p>
-              </div>
-              <button
-                onClick={() => setIsDepositModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            {depositError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {depositError}
-              </div>
-            )}
+      <Modal
+        isOpen={isDepositModalOpen}
+        onClose={() => setIsDepositModalOpen(false)}
+        title={
+          <span className="flex items-center gap-1.5">
+            <ArrowDownLeft className="h-4 w-4 text-emerald-400" />
+            <span>Deposit Cash to BO Account</span>
+          </span>
+        }
+        description="Transfer funds from your bank/cash account into your brokerage ledger"
+        maxWidth="md"
+      >
+        {depositError && <ErrorBanner message={depositError} className="mb-4" />}
 
             <form onSubmit={handleDepositSubmit} className="space-y-3.5">
               <div>
@@ -646,11 +617,10 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                     </button>
                   )}
                 </div>
-                <select
+                <Select
                   value={depositBoAccountId || (brokerAccounts[0]?.id ?? '')}
                   onChange={(e) => setDepositBoAccountId(e.target.value)}
                   required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                 >
                   {brokerAccounts.length === 0 ? (
                     <option value="">No BO Accounts Found (Create One First)</option>
@@ -661,7 +631,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                       </option>
                     ))
                   )}
-                </select>
+                </Select>
               </div>
 
               <div>
@@ -675,11 +645,11 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                     </span>
                   )}
                 </div>
-                <select
+                <Select
                   value={depositBankAccountId}
                   onChange={(e) => setDepositBankAccountId(e.target.value)}
                   required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="font-mono"
                 >
                   <option value="direct_deposit">Direct Cash / Counter Deposit / External (Fresh Capital)</option>
                   {liquidAccounts.map((acc) => {
@@ -690,7 +660,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                       </option>
                     );
                   })}
-                </select>
+                </Select>
                 <p className="text-[11px] text-slate-500 mt-1">
                   Direct Cash directly increases your total wealth &amp; BO ledger. Bank transfer moves funds from your bank.
                 </p>
@@ -722,369 +692,260 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                 })()}
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Deposit Amount (BDT) *
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-mono text-xs">
-                    ৳
-                  </span>
-                  <input
-                    type="number"
-                    step="1"
-                    min="1"
-                    required
-                    value={depositAmount}
-                    onChange={(e) =>
-                      setDepositAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
-                    }
-                    className="w-full pl-8 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-              </div>
+              <Field label="Deposit Amount (BDT)" required>
+                <Input
+                  type="number"
+                  step="1"
+                  min="1"
+                  required
+                  icon={TakaIcon}
+                  value={depositAmount}
+                  onChange={(e) =>
+                    setDepositAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
+                  }
+                />
+              </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Notes / Reference
-                </label>
-                <input
+              <Field label="Notes / Reference">
+                <Input
                   type="text"
                   placeholder="e.g. BEFTN Bank Transfer to BRAC EPL"
                   value={depositNote}
                   onChange={(e) => setDepositNote(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                 />
-              </div>
+              </Field>
 
               <div className="flex items-center justify-end gap-2 pt-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => setIsDepositModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
+                </Button>
+                <Button type="submit" variant="primary">
                   Confirm Deposit
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
 
       {/* Modal: Withdraw Broker Cash */}
-      {isWithdrawModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                  <ArrowUpRight className="h-4 w-4 text-sky-400" />
-                  <span>Withdraw Cash to Bank</span>
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Transfer uninvested broker cash back into your personal bank account
-                </p>
-              </div>
-              <button
-                onClick={() => setIsWithdrawModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+        title={
+          <span className="flex items-center gap-1.5">
+            <ArrowUpRight className="h-4 w-4 text-sky-400" />
+            <span>Withdraw Cash to Bank</span>
+          </span>
+        }
+        description="Transfer uninvested broker cash back into your personal bank account"
+        maxWidth="md"
+      >
+        {withdrawError && <ErrorBanner message={withdrawError} className="mb-4" />}
 
-            {withdrawError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {withdrawError}
-              </div>
-            )}
+        <form onSubmit={handleWithdrawSubmit} className="space-y-3.5">
+          <Field label="Source BO Account" required>
+            <Select
+              value={withdrawBoAccountId || (brokerAccounts[0]?.id ?? '')}
+              onChange={(e) => setWithdrawBoAccountId(e.target.value)}
+            >
+              {brokerAccounts.map((bo) => {
+                const bal = brokerCashBalances.find((b) => b.brokerAccountId === bo.id);
+                return (
+                  <option key={bo.id} value={bo.id}>
+                    {bo.accountName} (Avail: ৳{(bal?.cashBalance || 0).toLocaleString()})
+                  </option>
+                );
+              })}
+            </Select>
+          </Field>
 
-            <form onSubmit={handleWithdrawSubmit} className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Source BO Account *
-                </label>
-                <select
-                  value={withdrawBoAccountId || (brokerAccounts[0]?.id ?? '')}
-                  onChange={(e) => setWithdrawBoAccountId(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-sky-500"
-                >
-                  {brokerAccounts.map((bo) => {
-                    const bal = brokerCashBalances.find((b) => b.brokerAccountId === bo.id);
-                    return (
-                      <option key={bo.id} value={bo.id}>
-                        {bo.accountName} (Avail: ৳{(bal?.cashBalance || 0).toLocaleString()})
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
+          <Field label="Destination Bank Account" required>
+            <Select
+              value={withdrawBankAccountId}
+              onChange={(e) => setWithdrawBankAccountId(e.target.value)}
+              required
+            >
+              <option value="">Select receiving bank account...</option>
+              {liquidAccounts.map((acc) => (
+                <option key={acc.id} value={acc.id}>
+                  {acc.name} ({acc.accountType})
+                </option>
+              ))}
+            </Select>
+          </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Destination Bank Account *
-                </label>
-                <select
-                  value={withdrawBankAccountId}
-                  onChange={(e) => setWithdrawBankAccountId(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-sky-500"
-                >
-                  <option value="">Select receiving bank account...</option>
-                  {liquidAccounts.map((acc) => (
-                    <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <Field label="Withdrawal Amount (BDT)" required>
+            <Input
+              type="number"
+              step="1"
+              min="1"
+              required
+              icon={TakaIcon}
+              value={withdrawAmount}
+              onChange={(e) =>
+                setWithdrawAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
+              }
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Withdrawal Amount (BDT) *
-                </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-mono text-xs">
-                    ৳
-                  </span>
-                  <input
-                    type="number"
-                    step="1"
-                    min="1"
-                    required
-                    value={withdrawAmount}
-                    onChange={(e) =>
-                      setWithdrawAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
-                    }
-                    className="w-full pl-8 pr-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-sky-500"
-                  />
-                </div>
-              </div>
+          <Field label="Notes / Reference">
+            <Input
+              type="text"
+              placeholder="e.g. Broker payout check to City Bank"
+              value={withdrawNote}
+              onChange={(e) => setWithdrawNote(e.target.value)}
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Notes / Reference
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. Broker payout check to City Bank"
-                  value={withdrawNote}
-                  onChange={(e) => setWithdrawNote(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-sky-500"
-                />
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setIsWithdrawModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
-                  Confirm Withdrawal
-                </button>
-              </div>
-            </form>
+          <div className="flex items-center justify-end gap-2 pt-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsWithdrawModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <button
+              type="submit"
+              className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-colors"
+            >
+              Confirm Withdrawal
+            </button>
           </div>
-        </div>
-      )}
+        </form>
+      </Modal>
 
       {/* Modal: Add Brokerage Firm */}
-      {isAddBrokerModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white">Add Brokerage House (TREC)</h3>
-                <p className="text-xs text-slate-400">Register a DSE/CSE licensed brokerage intermediary</p>
-              </div>
-              <button
-                onClick={() => setIsAddBrokerModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isAddBrokerModalOpen}
+        onClose={() => setIsAddBrokerModalOpen(false)}
+        title="Add Brokerage House (TREC)"
+        description="Register a DSE/CSE licensed brokerage intermediary"
+        maxWidth="md"
+      >
+        {brokerError && <ErrorBanner message={brokerError} className="mb-4" />}
 
-            {brokerError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {brokerError}
-              </div>
-            )}
+        <form onSubmit={handleAddBroker} className="space-y-3.5">
+          <Field label="Brokerage Name" required>
+            <Input
+              type="text"
+              required
+              placeholder="e.g. City Bank Capital Resources"
+              value={newBrokerName}
+              onChange={(e) => setNewBrokerName(e.target.value)}
+            />
+          </Field>
 
-            <form onSubmit={handleAddBroker} className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Brokerage Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. City Bank Capital Resources"
-                  value={newBrokerName}
-                  onChange={(e) => setNewBrokerName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    TREC / License No.
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. DSE-TREC-225"
-                    value={newBrokerLicense}
-                    onChange={(e) => setNewBrokerLicense(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Contact / Support
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. +8802-9565555"
-                    value={newBrokerPhone}
-                    onChange={(e) => setNewBrokerPhone(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddBrokerModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
-                  Save Broker
-                </button>
-              </div>
-            </form>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="TREC / License No.">
+              <Input
+                type="text"
+                placeholder="e.g. DSE-TREC-225"
+                value={newBrokerLicense}
+                onChange={(e) => setNewBrokerLicense(e.target.value)}
+              />
+            </Field>
+            <Field label="Contact / Support">
+              <Input
+                type="text"
+                placeholder="e.g. +8802-9565555"
+                value={newBrokerPhone}
+                onChange={(e) => setNewBrokerPhone(e.target.value)}
+              />
+            </Field>
           </div>
-        </div>
-      )}
+
+          <div className="flex items-center justify-end gap-2 pt-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsAddBrokerModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary">
+              Save Broker
+            </Button>
+          </div>
+        </form>
+      </Modal>
 
       {/* Modal: Add BO Account */}
-      {isAddBoModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white">Create BO Account (CDBL)</h3>
-                <p className="text-xs text-slate-400">Add a 16-digit Beneficiary Owner account under CDBL</p>
-              </div>
-              <button
-                onClick={() => setIsAddBoModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isAddBoModalOpen}
+        onClose={() => setIsAddBoModalOpen(false)}
+        title="Create BO Account (CDBL)"
+        description="Add a 16-digit Beneficiary Owner account under CDBL"
+        maxWidth="md"
+      >
+        {boError && <ErrorBanner message={boError} className="mb-4" />}
 
-            {boError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {boError}
-              </div>
-            )}
+        <form onSubmit={handleAddBoAccount} className="space-y-3.5">
+          <Field label="Brokerage House" required>
+            <Select value={newBoBrokerId} onChange={(e) => setNewBoBrokerId(e.target.value)}>
+              {brokers.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name} ({b.licenseNumber || 'TREC'})
+                </option>
+              ))}
+            </Select>
+          </Field>
 
-            <form onSubmit={handleAddBoAccount} className="space-y-3.5">
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Brokerage House *
-                </label>
-                <select
-                  value={newBoBrokerId}
-                  onChange={(e) => setNewBoBrokerId(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
-                >
-                  {brokers.map((b) => (
-                    <option key={b.id} value={b.id}>
-                      {b.name} ({b.licenseNumber || 'TREC'})
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <Field
+            label={
+              <>
+                BO Account ID (16 Digits) <span className="text-slate-500 font-normal">(Optional)</span>
+              </>
+            }
+          >
+            <Input
+              type="text"
+              placeholder="e.g. 1203000098765432 (Leave blank to auto-generate)"
+              value={newBoNumber}
+              onChange={(e) => setNewBoNumber(e.target.value)}
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  BO Account ID (16 Digits) <span className="text-slate-500 font-normal">(Optional)</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 1203000098765432 (Leave blank to auto-generate)"
-                  value={newBoNumber}
-                  onChange={(e) => setNewBoNumber(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
-                />
-              </div>
+          <Field label="Account Display Label" required>
+            <Input
+              type="text"
+              required
+              placeholder="e.g. Secondary Trading Account (IPO/Growth)"
+              value={newBoName}
+              onChange={(e) => setNewBoName(e.target.value)}
+            />
+          </Field>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">
-                  Account Display Label *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Secondary Trading Account (IPO/Growth)"
-                  value={newBoName}
-                  onChange={(e) => setNewBoName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
-                />
-              </div>
-
-              <div className="flex items-center gap-2 pt-1">
-                <input
-                  type="checkbox"
-                  id="boDefault"
-                  checked={newBoIsDefault}
-                  onChange={(e) => setNewBoIsDefault(e.target.checked)}
-                  className="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
-                />
-                <label htmlFor="boDefault" className="text-xs text-slate-300">
-                  Set as primary/default BO account for trades
-                </label>
-              </div>
-
-              <div className="flex items-center justify-end gap-2 pt-3">
-                <button
-                  type="button"
-                  onClick={() => setIsAddBoModalOpen(false)}
-                  className="px-3 py-1.5 text-xs text-slate-400 hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-medium transition-colors"
-                >
-                  Save BO Account
-                </button>
-              </div>
-            </form>
+          <div className="flex items-center gap-2 pt-1">
+            <input
+              type="checkbox"
+              id="boDefault"
+              checked={newBoIsDefault}
+              onChange={(e) => setNewBoIsDefault(e.target.checked)}
+              className="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
+            />
+            <label htmlFor="boDefault" className="text-xs text-slate-300">
+              Set as primary/default BO account for trades
+            </label>
           </div>
-        </div>
-      )}
+
+          <div className="flex items-center justify-end gap-2 pt-3">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsAddBoModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="primary">
+              Save BO Account
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };

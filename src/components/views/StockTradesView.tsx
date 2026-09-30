@@ -11,13 +11,13 @@ import {
   Plus,
   Coins,
   Building2,
-  CheckCircle2,
   X,
   FileSpreadsheet,
   RefreshCw,
   Loader2,
   ChevronDown,
 } from 'lucide-react';
+import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 
 interface StockTradesViewProps {
   initialStockId?: string;
@@ -282,39 +282,29 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5 flex-wrap">
-          <button
-            onClick={onNavigateToPortfolio}
-            className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
-          >
+          <Button onClick={onNavigateToPortfolio} variant="outline" size="md">
             <Coins className="h-3.5 w-3.5 text-emerald-400" />
             <span>Portfolio & WAC</span>
-          </button>
-          <button
-            onClick={onNavigateToBrokerage}
-            className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
-          >
+          </Button>
+          <Button onClick={onNavigateToBrokerage} variant="outline" size="md">
             <Building2 className="h-3.5 w-3.5 text-sky-400" />
             <span>Broker Cash Ledger</span>
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={() => {
               setFormError('');
               setIsTradeModalOpen(true);
             }}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-sm shadow-emerald-950 transition-colors"
+            variant="primary"
+            size="md"
+            icon={Plus}
           >
-            <Plus className="h-3.5 w-3.5" />
-            <span>New Trade Order</span>
-          </button>
+            New Trade Order
+          </Button>
         </div>
       </div>
 
-      {successMessage && (
-        <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
-          <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-          <span>{successMessage}</span>
-        </div>
-      )}
+      {successMessage && <ErrorBanner variant="success" message={successMessage} />}
 
       {/* Trade Principles Banner */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -492,35 +482,24 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
       </div>
 
       {/* Modal: New Trade Order */}
-      {isTradeModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-5 shadow-2xl max-h-[90vh] overflow-y-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-              <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                  <span>Execute Stock Trade</span>
-                  <span className="text-[10px] font-mono px-1.5 py-0.2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
-                    Tax & Fee Engine
-                  </span>
-                </h3>
-                <p className="text-xs text-slate-400">Dhaka Stock Exchange (DSE) Order Gateway</p>
-              </div>
-              <button
-                onClick={() => setIsTradeModalOpen(false)}
-                className="p-1 text-slate-400 hover:text-white rounded"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
+      <Modal
+        isOpen={isTradeModalOpen}
+        onClose={() => setIsTradeModalOpen(false)}
+        title={
+          <span className="flex items-center gap-1.5">
+            <span>Execute Stock Trade</span>
+            <span className="text-[10px] font-mono font-normal px-1.5 py-0.2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
+              Tax & Fee Engine
+            </span>
+          </span>
+        }
+        description="Dhaka Stock Exchange (DSE) Order Gateway"
+        maxWidth="lg"
+        className="max-h-[90vh] overflow-y-auto"
+      >
+        {formError && <ErrorBanner message={formError} className="mb-4" />}
 
-            {formError && (
-              <div className="mb-4 p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300">
-                {formError}
-              </div>
-            )}
-
-            <form onSubmit={handleExecuteTrade} className="space-y-4">
+        <form onSubmit={handleExecuteTrade} className="space-y-4">
               {/* Buy / Sell Toggle Buttons */}
               <div>
                 <label className="block text-xs font-medium text-slate-300 mb-1.5">
@@ -564,10 +543,10 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     Avail Cash: ৳{availableCash.toLocaleString()}
                   </span>
                 </div>
-                <select
+                <Select
                   value={selectedBoAccountId}
                   onChange={(e) => setSelectedBoAccountId(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                  className="font-mono"
                 >
                   {brokerAccounts.map((bo) => {
                     const bal = brokerCashBalances.find((b) => b.brokerAccountId === bo.id);
@@ -577,7 +556,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       </option>
                     );
                   })}
-                </select>
+                </Select>
               </div>
 
               {/* Security / Stock Selector */}
@@ -644,7 +623,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       </div>
 
                       {/* Dropdown for held stocks */}
-                      <select
+                      <Select
                         value={selectedStockId}
                         onChange={(e) => {
                           const val = e.target.value;
@@ -658,7 +637,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                           const h = holdingsInSelectedBo.find((hld) => hld.stockId === val);
                           if (h) setQuantity(h.quantity);
                         }}
-                        className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-rose-500 font-mono"
+                        className="font-mono"
                       >
                         {holdingsInSelectedBo.map((h) => {
                           const st = stocks.find((s) => s.id === h.stockId);
@@ -668,7 +647,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                             </option>
                           );
                         })}
-                      </select>
+                      </Select>
                     </>
                   )}
                 </div>
@@ -800,22 +779,19 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   </div>
 
                   {/* Native dropdown selector (Mobile Friendly Fallback) */}
-                  <div>
-                    <label className="block text-[11px] text-slate-400 mb-1">
-                      Or select from DSE Securities list:
-                    </label>
-                    <select
+                  <Field label="Or select from DSE Securities list:">
+                    <Select
                       value={selectedStockId}
                       onChange={(e) => handleStockChange(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500 font-mono"
+                      className="font-mono"
                     >
                       {stocks.map((s) => (
                         <option key={s.id} value={s.id}>
                           {s.symbol} — {s.companyName} (৳{s.currentPrice})
                         </option>
                       ))}
-                    </select>
-                  </div>
+                    </Select>
+                  </Field>
                 </div>
               )}
 
@@ -889,7 +865,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       </div>
                     ) : null}
                   </div>
-                  <input
+                  <Input
                     type="number"
                     step="1"
                     min="1"
@@ -898,7 +874,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     onChange={(e) =>
                       setQuantity(e.target.value === '' ? '' : parseInt(e.target.value, 10))
                     }
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                    className="font-mono"
                   />
                 </div>
                 <div>
@@ -921,7 +897,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       <span>{livePriceFeedback || 'Live Sync'}</span>
                     </button>
                   </div>
-                  <input
+                  <Input
                     type="number"
                     step="0.1"
                     min="0.1"
@@ -930,7 +906,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     onChange={(e) =>
                       setPrice(e.target.value === '' ? '' : parseFloat(e.target.value))
                     }
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                    className="font-mono"
                   />
                 </div>
               </div>
@@ -943,11 +919,8 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                 </div>
 
                 <div className="grid grid-cols-3 gap-2">
-                  <div>
-                    <label className="block text-[10px] text-slate-400 mb-1">
-                      Commission (%)
-                    </label>
-                    <input
+                  <Field label="Commission (%)">
+                    <Input
                       type="number"
                       step="0.01"
                       min="0"
@@ -955,14 +928,11 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       onChange={(e) =>
                         setCommissionRatePct(e.target.value === '' ? '' : parseFloat(e.target.value))
                       }
-                      className="w-full px-2 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                      className="font-mono"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] text-slate-400 mb-1">
-                      AIT Tax (BDT)
-                    </label>
-                    <input
+                  </Field>
+                  <Field label="AIT Tax (BDT)">
+                    <Input
                       type="number"
                       step="1"
                       min="0"
@@ -970,14 +940,11 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       onChange={(e) =>
                         setTaxAmount(e.target.value === '' ? '' : parseFloat(e.target.value))
                       }
-                      className="w-full px-2 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                      className="font-mono"
                     />
-                  </div>
-                  <div>
-                    <label className="block text-[10px] text-slate-400 mb-1">
-                      CDBL/Other (BDT)
-                    </label>
-                    <input
+                  </Field>
+                  <Field label="CDBL/Other (BDT)">
+                    <Input
                       type="number"
                       step="1"
                       min="0"
@@ -985,9 +952,9 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                       onChange={(e) =>
                         setOtherCharges(e.target.value === '' ? '' : parseFloat(e.target.value))
                       }
-                      className="w-full px-2 py-1.5 bg-slate-900 border border-slate-800 rounded text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                      className="font-mono"
                     />
-                  </div>
+                  </Field>
                 </div>
 
                 {/* Real-time Calculation Breakdown */}
@@ -1035,60 +1002,56 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
 
               {/* Validation Warning Safeguards */}
               {tradeType === 'buy' && availableCash < liveValues.netValue && (
-                <div className="p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300 flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                  <span>
-                    Insufficient cash balance. Available: ৳{availableCash.toLocaleString()}, Required: ৳{liveValues.netValue.toLocaleString()}. Please deposit cash before submitting.
-                  </span>
-                </div>
+                <ErrorBanner
+                  message={
+                    <>
+                      Insufficient cash balance. Available: ৳{availableCash.toLocaleString()}, Required: ৳{liveValues.netValue.toLocaleString()}. Please deposit cash before submitting.
+                    </>
+                  }
+                />
               )}
 
               {tradeType === 'sell' && availableSharesToSell < numQty && (
-                <div className="p-2.5 bg-rose-500/10 border border-rose-500/30 rounded-lg text-xs text-rose-300 flex items-start gap-2">
-                  <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" />
-                  <span>
-                    Insufficient shares held. Available in this BO: {availableSharesToSell.toLocaleString()} shares, Requested: {numQty.toLocaleString()} shares. Short selling is prohibited.
-                  </span>
-                </div>
+                <ErrorBanner
+                  message={
+                    <>
+                      Insufficient shares held. Available in this BO: {availableSharesToSell.toLocaleString()} shares, Requested: {numQty.toLocaleString()} shares. Short selling is prohibited.
+                    </>
+                  }
+                />
               )}
 
               {/* Trade Date & Reference */}
               <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Trade Date
-                  </label>
-                  <input
+                <Field label="Trade Date">
+                  <Input
                     type="date"
                     required
                     value={tradeDate}
                     onChange={(e) => setTradeDate(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-emerald-500"
+                    className="font-mono"
                   />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-slate-300 mb-1">
-                    Order Reference / Broker Slip
-                  </label>
-                  <input
+                </Field>
+                <Field label="Order Reference / Broker Slip">
+                  <Input
                     type="text"
                     placeholder="e.g. BRAC-EPL-ORD-004"
                     value={tradeReference}
                     onChange={(e) => setTradeReference(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-950 border border-slate-800 rounded-lg text-xs text-white focus:outline-none focus:border-emerald-500"
                   />
-                </div>
+                </Field>
               </div>
 
               {/* Submit Buttons */}
               <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
                   onClick={() => setIsTradeModalOpen(false)}
-                  className="w-full sm:w-auto px-4 py-2.5 text-xs text-slate-400 hover:text-white rounded-lg border border-slate-800 sm:border-transparent text-center"
+                  className="w-full sm:w-auto"
                 >
                   Cancel
-                </button>
+                </Button>
                 <button
                   type="submit"
                   disabled={
@@ -1105,9 +1068,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
+      </Modal>
     </div>
   );
 };
