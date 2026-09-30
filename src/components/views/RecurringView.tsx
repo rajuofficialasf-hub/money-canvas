@@ -9,11 +9,7 @@ import {
   Pause,
   Trash2,
   X,
-  Calendar,
   CheckCircle2,
-  Clock,
-  ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 export const RecurringView: React.FC = () => {

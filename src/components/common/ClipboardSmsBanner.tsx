@@ -12,9 +12,7 @@ import {
   X,
   ArrowRight,
   AlertCircle,
-  Building2,
   Calendar,
-  Layers,
   Check,
 } from 'lucide-react';
 

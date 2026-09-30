@@ -277,7 +277,6 @@ function matchAccount(
     return { accountName: provider };
   }
 
-  const lower = rawText.toLowerCase();
 
   // Try matching mask digits (e.g. "...3456" or "*1234")
   const maskMatch = rawText.match(/(?:\.\.\.|\*|x+|X+)(\d{4})/);

@@ -1,7 +1,7 @@
 import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLedger } from '../../lib/ledger-context';
-import { Stock, StockHolding } from '../../types/accounting';
+import { Stock } from '../../types/accounting';
 import {
   generateDsePriceCsv,
   fetchDseCompanyList,
@@ -17,12 +17,10 @@ import {
   Plus,
   RefreshCw,
   Search,
-  ExternalLink,
   ShieldCheck,
   AlertCircle,
   Coins,
   ArrowUpRight,
-  ArrowDownRight,
   Sliders,
   X,
   CheckCircle2,
@@ -31,11 +29,9 @@ import {
   Download,
   Upload,
   Globe,
-  Radio,
   Edit3,
   SlidersHorizontal,
   Check,
-  HelpCircle,
   Loader2,
   Sparkles,
   Trash2,
@@ -83,7 +79,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
   
   const [selectedStockForPrice, setSelectedStockForPrice] = useState<Stock | null>(null);
   const [newSimulatedPrice, setNewSimulatedPrice] = useState<number | ''>('');
-  const [singleStockYcp, setSingleStockYcp] = useState<number | ''>('');
+  const [, setSingleStockYcp] = useState<number | ''>('');
 
   // Catalog feedback toast
   const [catalogToast, setCatalogToast] = useState<{ text: string; isError?: boolean } | null>(null);

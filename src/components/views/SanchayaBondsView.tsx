@@ -21,7 +21,6 @@ import {
   Plus,
   Calendar,
   Clock,
-  ArrowRight,
   AlertTriangle,
   X,
   ShieldCheck,
@@ -105,7 +104,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
     accounts.find((a) => a.accountType === 'bank')?.id || ''
   );
   const [nomineeName, setNomineeName] = useState('');
-  const [nomineeRelation, setNomineeRelation] = useState('');
+  const [nomineeRelation] = useState('');
   const [notes, setNotes] = useState('');
   const [formError, setFormError] = useState<string | null>(null);
 

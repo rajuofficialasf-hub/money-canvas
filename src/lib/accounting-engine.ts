@@ -21,7 +21,6 @@ import {
   Transaction,
   TransactionLine,
   ZakatCalculationResult,
-  StockPriceHistory,
   BenchmarkIndexPrice,
   PortfolioSnapshot,
   PortfolioCashFlow,

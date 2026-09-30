@@ -30,7 +30,6 @@ import {
   MessageSquare,
   HeartHandshake,
   Smartphone,
-  ChevronRight,
   ArrowUpCircle,
   RefreshCw,
   Download,

@@ -8,7 +8,6 @@ import {
   RefreshCw,
   LogOut,
   AlertCircle,
-  Sparkles,
 } from 'lucide-react';
 
 export const BiometricLockScreen: React.FC = () => {

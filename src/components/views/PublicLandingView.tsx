@@ -3,14 +3,12 @@ import {
   Wallet,
   TrendingUp,
   ShieldCheck,
-  Smartphone,
   Lock,
   PieChart,
   ArrowRight,
   Database,
   Building2,
   Receipt,
-  Scale
 } from 'lucide-react';
 
 export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLaunchApp }) => {

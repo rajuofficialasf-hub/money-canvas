@@ -15,19 +15,12 @@ import {
   Trash2,
   CheckCircle2,
   AlertCircle,
-  ArrowRight,
   ShieldCheck,
   Zap,
-  Lock,
   Layers,
-  Calendar,
-  Building2,
-  Tag,
-  DollarSign,
   ChevronDown,
   ChevronUp,
   FileCheck,
-  HelpCircle,
   Info,
 } from 'lucide-react';
 
@@ -37,7 +30,7 @@ interface SmsParserViewProps {
 
 export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
   const { accounts, categories, postTransaction } = useLedger();
-  const { isBn, t } = useLanguage();
+  const { isBn } = useLanguage();
 
   const [rawInput, setRawInput] = useState('');
   const [parsedItems, setParsedItems] = useState<ParsedSmsTransaction[]>([]);

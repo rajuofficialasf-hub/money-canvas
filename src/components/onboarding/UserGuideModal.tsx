@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../lib/language-context';
 import {
-  HelpCircle,
   X,
   ChevronRight,
   ChevronLeft,
@@ -14,11 +13,6 @@ import {
   FileSpreadsheet,
   Compass,
   Sparkles,
-  Globe,
-  ShieldCheck,
-  Building2,
-  CalendarClock,
-  ArrowRight,
 } from 'lucide-react';
 
 interface UserGuideModalProps {

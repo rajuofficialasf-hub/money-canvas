@@ -10,19 +10,12 @@ import { SpendingInsightsView } from './SpendingInsightsView';
 import {
   PieChart,
   Plus,
-  AlertTriangle,
-  CheckCircle2,
   Calendar,
   Copy,
   Trash2,
   X,
-  TrendingDown,
-  TrendingUp,
-  ArrowUpRight,
   Sparkles,
-  RefreshCw,
   Layers,
-  HelpCircle,
 } from 'lucide-react';
 import { Budget } from '../../types/accounting';
 

@@ -22,12 +22,10 @@ import {
   Landmark,
   CreditCard,
   SlidersHorizontal,
-  Globe2,
   Sparkles,
   CheckCircle,
   KeyRound,
 } from 'lucide-react';
-import { AuditLogEntry } from '../../types/accounting';
 
 export const AuditLogsView: React.FC = () => {
   const { user } = useAuth();

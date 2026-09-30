@@ -1,4 +1,4 @@
-import React, { forwardRef, ButtonHTMLAttributes, ElementType } from 'react';
+import { forwardRef, ButtonHTMLAttributes, ElementType } from 'react';
 import { Loader2 } from 'lucide-react';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost' | 'success';

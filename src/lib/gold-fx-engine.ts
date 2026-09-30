@@ -5,9 +5,6 @@
 
 import {
   GoldKarat,
-  SilverKarat,
-  BajusGoldRateItem,
-  BajusSilverRateItem,
   BajusRatesSnapshot,
   CurrencyFxRate,
   RemittanceCalculationResult,
@@ -332,7 +329,7 @@ export function calculateGoldJewelryPrice(
   const pricePerGram = customGoldRatePerGram || rateItem.pricePerGram;
 
   const weightGrams = Math.max(0, grams);
-  const { bhori, anna, ratti } = fromGrams(weightGrams);
+  const { anna, ratti } = fromGrams(weightGrams);
   const weightBhori = weightGrams / GRAMS_PER_BHORI;
 
   const goldBasePrice = Math.round(weightGrams * pricePerGram);

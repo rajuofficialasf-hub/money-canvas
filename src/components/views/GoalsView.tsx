@@ -7,12 +7,7 @@ import {
   CheckCircle2,
   Calendar,
   Lock,
-  ArrowRight,
-  TrendingUp,
   X,
-  Sparkles,
-  Wallet,
-  Building2,
 } from 'lucide-react';
 
 export const GoalsView: React.FC = () => {
@@ -44,8 +39,6 @@ export const GoalsView: React.FC = () => {
   const [contribNote, setContribNote] = useState('');
   const [contribError, setContribError] = useState('');
 
-  const activeGoals = financialGoals.filter((g) => g.status === 'in_progress');
-  const achievedGoals = financialGoals.filter((g) => g.status === 'achieved');
 
   // Helper to compute saved amount based on Lock 3
   const getGoalProgress = (goal: (typeof financialGoals)[0]) => {
@@ -197,7 +190,7 @@ export const GoalsView: React.FC = () => {
       {/* Goals Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {financialGoals.map((g) => {
-          const { currentSaved, pct, remaining, monthsRemaining, monthlyRequired } = getGoalProgress(g);
+          const { currentSaved, pct, remaining, monthlyRequired } = getGoalProgress(g);
           const isComplete = pct >= 100 || g.status === 'achieved';
           const linkedAcc = accounts.find((a) => a.id === g.linkedAccountId);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Keyboard, X, Command } from 'lucide-react';
+import { Keyboard, X } from 'lucide-react';
 
 interface KeyboardShortcutsModalProps {
   isOpen: boolean;

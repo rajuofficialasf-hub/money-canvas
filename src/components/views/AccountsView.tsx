@@ -2,16 +2,10 @@ import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { AccountType, NewAccountInput } from '../../types/accounting';
 import {
-  Wallet,
   Building2,
-  CreditCard,
   Plus,
   Search,
-  CheckCircle2,
   Archive,
-  ArrowUpRight,
-  ArrowDownLeft,
-  FileSpreadsheet,
 } from 'lucide-react';
 import { Modal, Field, Input, Select, Button, StatCard } from '../ui';
 
@@ -21,7 +15,6 @@ export const AccountsView: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
   // Form State
   const [name, setName] = useState('');

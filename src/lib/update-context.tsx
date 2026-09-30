@@ -7,7 +7,7 @@ import {
 } from './github-updater';
 import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_RELEASES_URL } from './app-version';
 import { AppUpdateModal } from '../components/common/AppUpdateModal';
-import { CheckCircle2, AlertCircle, RefreshCw, Sparkles, X } from 'lucide-react';
+import { CheckCircle2, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 
 interface ToastState {

@@ -15,9 +15,8 @@ import {
   calculateNetWorth,
   calculateStockHoldings,
   validateTransactionPosting,
-  round2,
 } from '../lib/accounting-engine';
-import { PlusCircle, AlertTriangle, ShieldCheck, ArrowRightLeft, Sparkles, RefreshCw } from 'lucide-react';
+import { PlusCircle, AlertTriangle, ShieldCheck, Sparkles, RefreshCw } from 'lucide-react';
 
 const INITIAL_ACCOUNTS: Account[] = [
   { id: 'acc-1', userId: 'u-1', name: 'City Bank Savings', accountType: 'bank', currency: 'BDT', isZakatable: true, isArchived: false, createdAt: '2026-09-01' },

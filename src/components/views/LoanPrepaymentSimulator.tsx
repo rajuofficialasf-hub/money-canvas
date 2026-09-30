@@ -1,33 +1,25 @@
 import React, { useState, useMemo } from 'react';
 import { useLedger } from '../../lib/ledger-context';
-import { useLanguage } from '../../lib/language-context';
 import {
   simulateLoanPrepayment,
   PrepaymentStrategy,
   LoanPrepaymentResult,
 } from '../../lib/loan-prepayment-engine';
-import { Loan } from '../../types/accounting';
 import {
   Calculator,
   TrendingDown,
   Clock,
   Sparkles,
-  Calendar,
   CheckCircle2,
-  DollarSign,
   Layers,
   ChevronDown,
   ChevronUp,
-  Percent,
-  ArrowRight,
   Info,
-  ShieldCheck,
   Zap,
 } from 'lucide-react';
 
 export const LoanPrepaymentSimulator: React.FC = () => {
   const { loans, accountBalances } = useLedger();
-  const { isBn } = useLanguage();
 
   const activeLoans = loans.filter((l) => l.status === 'active');
 

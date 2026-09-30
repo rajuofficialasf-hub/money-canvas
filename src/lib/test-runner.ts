@@ -15,7 +15,6 @@ import {
   computePortfolioExternalCashFlows,
   computeTwrSubPeriods,
   computeBenchmarkComparison,
-  computePortfolioPerformanceMetrics,
   calculateCapitalGainsTaxSummary,
   calculateSectorAllocation,
   generateBalanceSheetReport,

@@ -6,20 +6,12 @@ import {
   Download,
   Copy,
   CheckCircle2,
-  ExternalLink,
-  Smartphone,
   Image,
-  Layers,
   FileText,
   ShieldCheck,
   Sparkles,
-  HelpCircle,
   CheckSquare,
   Square,
-  ArrowRight,
-  Info,
-  Globe,
-  Sliders,
   Award,
   Lock,
 } from 'lucide-react';
@@ -38,8 +30,8 @@ interface AssetCardProps {
 }
 
 export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
-  const { user, openAuthModal, isGoogleAuthenticated, isAdmin } = useAuth();
-  const { language, isBn, t } = useLanguage();
+  const { openAuthModal, isAdmin } = useAuth();
+  const { isBn } = useLanguage();
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [selectedPreview, setSelectedPreview] = useState<string | null>('/play-store/feature_graphic_1024x500.png');
   const [activeTab, setActiveTab] = useState<'assets' | 'metadata' | 'datasafety' | 'checklist'>('assets');

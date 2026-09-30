@@ -5,7 +5,6 @@ import { useAuth } from './auth-context';
 import {
   Account,
   AccountBalanceView,
-  AccountType,
   Budget,
   Category,
   Debt,
@@ -93,7 +92,6 @@ import {
   calculateFlatEmi,
   calculateReducingEmi,
   calculateTradeValues,
-  calculateXirr,
   calculateDividendValues,
   calculateBonusShareDilution,
   calculateStockSplit,
@@ -352,7 +350,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const AUDIT_LOGS_KEY = `pfos_${userId}_audit_logs`;
   const DISMISSED_ALERTS_KEY = `pfos_${userId}_dismissed_alerts`;
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
   // Phase 9: Dismissed Alert IDs
   const [dismissedAlertIds, setDismissedAlertIds] = useState<string[]>(() => {

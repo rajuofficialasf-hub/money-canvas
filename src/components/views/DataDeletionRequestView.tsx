@@ -8,10 +8,7 @@ import {
   Mail,
   Clock,
   Database,
-  Lock,
   Smartphone,
-  ExternalLink,
-  Info,
 } from 'lucide-react';
 import { useAuth } from '../../lib/auth-context';
 

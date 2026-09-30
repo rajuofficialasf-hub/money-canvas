@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Info,
   Calendar,
-  DollarSign,
   TrendingUp,
   Landmark,
   PiggyBank,
@@ -15,7 +14,6 @@ import {
   ArrowRight,
   CheckCheck,
   Filter,
-  BellRing,
   Clock,
   Send,
   Smartphone,
@@ -27,11 +25,9 @@ import { SystemAlert } from '../../types/accounting';
 import {
   syncAndScheduleReminders,
   checkNotificationPermission,
-  requestNotificationPermission,
   sendTestNotification,
   cancelAllReminders,
   collectReminderItems,
-  ReminderItem,
 } from '../../lib/notification-service';
 
 interface NotificationsViewProps {

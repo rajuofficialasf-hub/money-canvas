@@ -3,7 +3,6 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 import { UserProfile, ProfileUpdateInput, TenantProfile, FirebaseAppUser } from '../types/auth';
 import {
   signInWithPopup,
-  signInWithRedirect,
   getRedirectResult,
   signOut as fbSignOut,
   onAuthStateChanged,

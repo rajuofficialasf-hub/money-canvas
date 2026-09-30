@@ -1,47 +1,38 @@
 import { todayLocalISO } from '../../lib/date-utils';
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useLanguage } from '../../lib/language-context';
 import { useLedger } from '../../lib/ledger-context';
 import {
   GoldKarat,
-  SilverKarat,
   BajusRatesSnapshot,
   CurrencyFxRate,
 } from '../../types/gold-fx';
 import {
   DEFAULT_BAJUS_RATES,
-  DEFAULT_FX_RATES,
   GRAMS_PER_BHORI,
   ANNA_PER_BHORI,
   RATTI_PER_BHORI,
   toGrams,
-  fromGrams,
   calculateGoldJewelryPrice,
   calculateRemittance,
   getSavedBajusRates,
   saveBajusRates,
   getSavedFxRates,
-  saveFxRates,
   refreshLiveFxRates,
 } from '../../lib/gold-fx-engine';
 import {
   Coins,
   Scale,
   RefreshCw,
-  ArrowRight,
   ArrowLeftRight,
   CheckCircle2,
   AlertCircle,
-  HelpCircle,
   Sliders,
   DollarSign,
-  TrendingUp,
   ShieldCheck,
   PlusCircle,
-  ExternalLink,
   Percent,
   Sparkles,
-  Info,
   Calendar,
 } from 'lucide-react';
 
@@ -50,8 +41,8 @@ interface GoldFxRatesViewProps {
 }
 
 export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) => {
-  const { language, isBn } = useLanguage();
-  const { updateZakatSettings, zakatSettings, createPhysicalAsset } = useLedger();
+  const { isBn } = useLanguage();
+  const { updateZakatSettings, createPhysicalAsset } = useLedger();
 
   const [activeTab, setActiveTab] = useState<'gold' | 'fx' | 'units'>('gold');
 

@@ -4,29 +4,19 @@ import {
   Coins,
   Gift,
   Split,
-  FileText,
-  PlusCircle,
   CheckCircle2,
   Clock,
   ArrowUpRight,
   TrendingUp,
   Percent,
-  Calendar,
-  Building2,
   ShieldCheck,
   AlertCircle,
   X,
-  DollarSign,
   Sparkles,
   Layers,
-  HelpCircle,
 } from 'lucide-react';
 import { useLedger } from '../../lib/ledger-context';
 import {
-  NewDividendInput,
-  NewCorporateActionInput,
-  NewIpoApplicationInput,
-  SettleIpoInput,
   CorporateActionType,
   IpoApplication,
 } from '../../types/accounting';
@@ -162,7 +152,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   // ----------------------------------------------------
   const [caType, setCaType] = useState<CorporateActionType>('bonus');
   const [caStockId, setCaStockId] = useState<string>(stocks[0]?.id || '');
-  const [caBrokerAcc, setCaBrokerAcc] = useState<string>(brokerAccounts[0]?.id || '');
+  const [caBrokerAcc] = useState<string>(brokerAccounts[0]?.id || '');
   const [caRatio, setCaRatio] = useState<string>('10:1');
   const [caAnnounceDate, setCaAnnounceDate] = useState<string>(
     todayLocalISO()

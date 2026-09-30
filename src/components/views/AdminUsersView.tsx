@@ -15,9 +15,6 @@ import {
   Mail,
   Shield,
   CheckCircle2,
-  AlertCircle,
-  KeyRound,
-  ExternalLink,
 } from 'lucide-react';
 
 export const AdminUsersView: React.FC = () => {
@@ -26,7 +23,6 @@ export const AdminUsersView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const loadUsers = async () => {
     setLoading(true);
@@ -45,15 +41,6 @@ export const AdminUsersView: React.FC = () => {
       loadUsers();
     }
   }, [isAdmin]);
-
-  const handleGoogleSignIn = async () => {
-    setIsLoggingIn(true);
-    try {
-      await signInWithGoogle();
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
 
   if (!isAdmin) {
     return (

@@ -6,15 +6,8 @@ import { calculateFdMaturity, round2 } from '../../lib/accounting-engine';
 import {
   Landmark,
   Plus,
-  CheckCircle2,
-  Calendar,
-  Percent,
-  Clock,
-  ArrowRight,
   AlertTriangle,
   X,
-  TrendingUp,
-  ShieldCheck,
 } from 'lucide-react';
 
 export const FixedDepositsView: React.FC = () => {

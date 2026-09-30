@@ -22,12 +22,8 @@ import {
   Sparkles,
   Download,
   Building2,
-  Wallet,
   Check,
-  RotateCcw,
-  Layers,
   BookOpen,
-  Filter,
 } from 'lucide-react';
 
 interface CsvImportViewProps {
@@ -73,7 +69,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
   // Parsed Statement Rows for Step 3
   const [statementRows, setStatementRows] = useState<ParsedStatementRow[]>([]);
   const [rowFilter, setRowFilter] = useState<'all' | 'ready' | 'duplicates' | 'invalid'>('all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery] = useState('');
 
   // Posting State
   const [isPosting, setIsPosting] = useState(false);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
-import { Debt, DebtDirection, DebtStatus } from '../../types/accounting';
+import { Debt, DebtDirection } from '../../types/accounting';
 import {
   Users,
   ArrowUpRight,
@@ -12,10 +12,7 @@ import {
   Phone,
   Calendar,
   X,
-  CreditCard,
   DollarSign,
-  ChevronRight,
-  Filter,
 } from 'lucide-react';
 
 export const DebtsView: React.FC = () => {

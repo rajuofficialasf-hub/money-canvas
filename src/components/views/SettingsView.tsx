@@ -42,10 +42,9 @@ import { useAppUpdate } from '../../lib/update-context';
 
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { user, firebaseUser, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData, deleteAccountAndData } = useAuth();
-  const { language, setLanguage, isBn, toggleLanguage, t } = useLanguage();
-  const { checkForUpdate, downloadApp, isChecking: checkingUpdate, currentVersionName } = useAppUpdate();
+  const { language, setLanguage, isBn } = useLanguage();
+  const { checkForUpdate, downloadApp, isChecking: checkingUpdate } = useAppUpdate();
   const {
-    isSupported,
     isAvailable,
     biometryTypeName,
     isBiometricEnabled,
@@ -95,7 +94,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
   // Form states
   const [fullName, setFullName] = useState(user.fullName);
   const [bio, setBio] = useState(user.bio || '');
-  const [phoneMask, setPhoneMask] = useState(user.phoneMask || '');
+  const [phoneMask] = useState(user.phoneMask || '');
   const [timezone, setTimezone] = useState(user.timezone);
   const [saveSuccess, setSaveSuccess] = useState(false);
 

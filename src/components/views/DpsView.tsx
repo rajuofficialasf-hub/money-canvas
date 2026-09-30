@@ -5,16 +5,8 @@ import { calculateDpsMaturity, round2 } from '../../lib/accounting-engine';
 import {
   CalendarClock,
   Plus,
-  CheckCircle2,
-  Calendar,
-  AlertCircle,
-  Building2,
-  ArrowRight,
-  TrendingUp,
   X,
   Clock,
-  Sparkles,
-  Wallet,
   Receipt,
   FileText,
 } from 'lucide-react';

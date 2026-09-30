@@ -1,22 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
-import { BrokerAccount, BrokerCashTransaction, Broker } from '../../types/accounting';
+import { BrokerCashTransaction } from '../../types/accounting';
 import {
   Building2,
-  Wallet,
   ArrowDownLeft,
   ArrowUpRight,
   Plus,
   ShieldCheck,
-  CreditCard,
-  Calendar,
   AlertCircle,
   CheckCircle2,
   X,
-  TrendingDown,
-  TrendingUp,
   Receipt,
-  Search,
 } from 'lucide-react';
 
 interface BrokerageViewProps {
@@ -30,7 +24,6 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
     brokerCashTransactions,
     brokerCashBalances,
     accounts,
-    accountBalances,
     getAccountBalance,
     createBroker,
     createBrokerAccount,

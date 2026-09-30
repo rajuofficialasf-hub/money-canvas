@@ -241,7 +241,6 @@ export function evaluateSystemAlerts(params: AlertEvaluationContext): SystemAler
   params.loans.forEach((loan) => {
     if (loan.status === 'active') {
       // Approximate next EMI due within monthly cadence from disbursement
-      const diffDays = 5; // Default upcoming window demo trigger
       alerts.push({
         id: `alert-loan-due-${loan.id}`,
         severity: 'warning',

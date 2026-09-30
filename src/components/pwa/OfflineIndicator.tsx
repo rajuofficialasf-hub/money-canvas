@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOnlineStatus } from '../../lib/useOnlineStatus';
-import { WifiOff, Database } from 'lucide-react';
+import { WifiOff } from 'lucide-react';
 
 export const OfflineIndicator: React.FC = () => {
   const isOnline = useOnlineStatus();

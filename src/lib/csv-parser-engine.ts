@@ -487,7 +487,6 @@ export function checkDuplicateTransaction(
   existingTransactions: Transaction[],
   existingLines?: TransactionLine[]
 ): { isDuplicate: boolean; duplicateReason?: string } {
-  const normDesc = description.toLowerCase().replace(/[^a-z0-9]/gi, '');
 
   for (const tx of existingTransactions) {
     // Only check active posted transactions

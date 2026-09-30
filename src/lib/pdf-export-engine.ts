@@ -95,8 +95,6 @@ export interface CapitalGainsReport {
 
 // Palette Constants
 const COLOR_PRIMARY = [15, 23, 42]; // Slate 900
-const COLOR_EMERALD = [16, 185, 129]; // Emerald 500
-const COLOR_MUTED = [100, 116, 139]; // Slate 500
 const COLOR_BORDER = [226, 232, 240]; // Slate 200
 const COLOR_HEADER_BG = [248, 250, 252]; // Slate 50
 

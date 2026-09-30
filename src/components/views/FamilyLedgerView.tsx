@@ -4,7 +4,6 @@ import { useLanguage } from '../../lib/language-context';
 import { FAMILY_CATEGORIES } from '../../lib/family-ledger-engine';
 import {
   FamilyMember,
-  FamilyExpense,
   FamilyMemberRole,
   FamilyRelation,
   ExpenseBenefitTarget,
@@ -19,27 +18,19 @@ import {
   Clock,
   Check,
   X,
-  CreditCard,
   Building2,
   DollarSign,
   PieChart,
-  ShieldCheck,
-  ShieldAlert,
-  ArrowRight,
   TrendingDown,
-  RefreshCw,
-  Eye,
   Filter,
   Receipt,
   UserCheck,
   HeartHandshake,
   Sparkles,
   Lock,
-  ChevronRight,
   Sliders,
   Calendar,
   AlertCircle,
-  HelpCircle,
 } from 'lucide-react';
 
 export const FamilyLedgerView: React.FC = () => {
@@ -72,9 +63,6 @@ export const FamilyLedgerView: React.FC = () => {
     createFamilyMember,
     updateFamilyMember,
     deleteFamilyMember,
-    createJointAccount,
-    updateJointAccount,
-    resetFamilyLedgerData,
   } = useFamilyLedger();
 
   // Active Tab
@@ -103,11 +91,11 @@ export const FamilyLedgerView: React.FC = () => {
   const [expPaidBy, setExpPaidBy] = useState(activeMember.id);
   const [expPaymentSourceType, setExpPaymentSourceType] = useState<'joint' | 'personal'>('joint');
   const [expJointAccountId, setExpJointAccountId] = useState(state.jointAccounts[0]?.id || '');
-  const [expBenefitTarget, setExpBenefitTarget] = useState<ExpenseBenefitTarget>('household');
+  const [expBenefitTarget] = useState<ExpenseBenefitTarget>('household');
   const [expReceipt, setExpReceipt] = useState('');
   const [expMemo, setExpMemo] = useState('');
   const [expFormError, setExpFormError] = useState('');
-  const [expFormNotice, setExpFormNotice] = useState('');
+  const [, setExpFormNotice] = useState('');
 
   // Contribution Form state
   const [cntMemberId, setCntMemberId] = useState(activeMember.id);

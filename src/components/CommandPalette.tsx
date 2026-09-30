@@ -30,7 +30,6 @@ import {
   MessageSquare,
   HeartHandshake,
   Smartphone,
-  Sparkles,
 } from 'lucide-react';
 
 interface CommandPaletteProps {

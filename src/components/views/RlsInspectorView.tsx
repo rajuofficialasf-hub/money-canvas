@@ -17,27 +17,14 @@ import {
   FileCode,
   AlertCircle,
   Database,
-  ArrowRight,
   Shield,
   EyeOff,
   UserCheck,
   CheckCircle2,
-  SlidersHorizontal,
-  ExternalLink,
 } from 'lucide-react';
 
 export const RlsInspectorView: React.FC = () => {
-  const { user, availableProfiles, openAuthModal, signInWithGoogle, isAdmin } = useAuth();
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-
-  const handleGoogleSignIn = async () => {
-    setIsLoggingIn(true);
-    try {
-      await signInWithGoogle();
-    } finally {
-      setIsLoggingIn(false);
-    }
-  };
+  const { user, availableProfiles, openAuthModal, isAdmin } = useAuth();
 
   if (!isAdmin) {
     return (

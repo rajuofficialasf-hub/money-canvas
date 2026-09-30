@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileText, Shield, Scale, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Scale, ArrowLeft } from 'lucide-react';
 
 export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const [lang, setLang] = useState<'en' | 'bn'>('en');

@@ -24,22 +24,12 @@ import {
   Printer,
   ShieldCheck,
   AlertCircle,
-  Calendar,
-  Coins,
-  Building2,
   Percent,
-  Layers,
   Sparkles,
   FileSpreadsheet,
   CheckCircle2,
-  ArrowUpRight,
-  ArrowDownRight,
   Scale,
-  Sliders,
-  Wallet,
-  Activity,
   Receipt,
-  HelpCircle,
 } from 'lucide-react';
 
 interface FinancialAnalyticsAndReportsViewProps {
@@ -89,7 +79,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
   const [fiscalYear, setFiscalYear] = useState<string>('2026-2027');
   const [exemptionThreshold, setExemptionThreshold] = useState<number>(5000000); // 50 Lakh BDT
   const [taxRatePct, setTaxRatePct] = useState<number>(15); // 15% standard capital gains tax rate
-  const [harvestTaxRate, setHarvestTaxRate] = useState<number>(15);
+  const [harvestTaxRate] = useState<number>(15);
 
   // Income Statement date filter
   const [pnlDateRange, setPnlDateRange] = useState<'month' | 'quarter' | 'year' | 'all'>('year');
@@ -152,7 +142,6 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
     return calculateTaxLossHarvesting(stockHoldings, harvestTaxRate);
   }, [stockHoldings, harvestTaxRate]);
 
-  const totalHarvestableLoss = harvestCandidates.reduce((s, h) => s + h.unrealizedLoss, 0);
   const totalPotentialTaxSavings = harvestCandidates.reduce((s, h) => s + h.potentialTaxSavings, 0);
 
   // 3. Sector Allocation

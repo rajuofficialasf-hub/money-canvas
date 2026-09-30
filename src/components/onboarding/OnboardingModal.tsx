@@ -7,7 +7,6 @@ import {
   User,
   Mail,
   Sparkles,
-  CheckCircle2,
   TrendingUp,
 } from 'lucide-react';
 
@@ -17,17 +16,16 @@ interface OnboardingModalProps {
 }
 
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComplete }) => {
-  const { updateProfile, user } = useAuth();
+  const { updateProfile } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [bio, setBio] = useState('');
+  const [bio] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const finalName = name.trim() || 'My Personal Ledger';
-    const finalEmail = email.trim() || 'user@weathfolio.local';
 
     updateProfile({
       fullName: finalName,

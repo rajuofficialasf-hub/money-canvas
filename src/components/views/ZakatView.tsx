@@ -10,13 +10,9 @@ import {
   Camera,
   CheckCircle2,
   AlertCircle,
-  Calendar,
   X,
-  Plus,
   Info,
-  Clock,
   Sliders,
-  Wallet,
 } from 'lucide-react';
 
 export const ZakatView: React.FC = () => {
@@ -25,7 +21,6 @@ export const ZakatView: React.FC = () => {
     accountBalances,
     netWorthSnapshots,
     zakatSettings,
-    physicalAssets,
     debts,
     saveNetWorthSnapshot,
     updateZakatSettings,

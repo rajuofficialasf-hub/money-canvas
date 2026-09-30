@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 import { useBiometrics } from '../../lib/biometric-context';
 import {
   Fingerprint,
-  ShieldCheck,
   Sparkles,
   X,
   RefreshCw,

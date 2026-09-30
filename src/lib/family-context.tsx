@@ -11,7 +11,6 @@ import {
   MemberFinancialSummary,
 } from '../types/family-ledger';
 import {
-  FAMILY_CATEGORIES,
   DEFAULT_MEMBERS,
   DEFAULT_JOINT_ACCOUNTS,
   generateDefaultBudgets,

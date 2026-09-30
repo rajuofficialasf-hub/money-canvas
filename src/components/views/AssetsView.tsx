@@ -9,12 +9,8 @@ import {
   Shield,
   Plus,
   Building,
-  CheckCircle2,
-  Calendar,
   AlertCircle,
   X,
-  CreditCard,
-  DollarSign,
   TrendingUp,
   Tag,
   Briefcase,
@@ -63,7 +59,7 @@ export const AssetsView: React.FC = () => {
 
   // New Liability Form State
   const [liabName, setLiabName] = useState('');
-  const [liabType, setLiabType] = useState('Personal Obligation');
+  const [liabType] = useState('Personal Obligation');
   const [liabAmount, setLiabAmount] = useState<number | ''>(50000);
   const [liabFormError, setLiabFormError] = useState('');
 

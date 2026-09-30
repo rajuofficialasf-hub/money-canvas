@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import {
   computeSpendingTrendsAndInsights,
-  formatMonthLabel,
 } from '../../lib/budget-rollover-engine';
 import {
   TrendingUp,
@@ -13,10 +12,8 @@ import {
   Lightbulb,
   Calendar,
   Layers,
-  ArrowUpRight,
   Info,
   DollarSign,
-  PieChart,
 } from 'lucide-react';
 
 interface SpendingInsightsViewProps {

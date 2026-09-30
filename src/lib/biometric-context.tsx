@@ -5,7 +5,6 @@ import React, {
   useEffect,
   useRef,
   useCallback,
-  ReactNode,
 } from 'react';
 import {
   BiometricAuth,

@@ -5,23 +5,15 @@ import { useLedger } from '../../lib/ledger-context';
 import { exportPortfolioValuationPdf } from '../../lib/pdf-export-engine';
 import { fetchDseMarketQuotes } from '../../lib/dse-market-service';
 import {
-  TrendingUp,
-  TrendingDown,
   Activity,
   BarChart3,
   Scale,
-  Calendar,
   ShieldCheck,
   Plus,
   RefreshCw,
-  Clock,
   Layers,
-  Info,
-  Sliders,
   CheckCircle2,
   X,
-  ArrowUpRight,
-  ArrowDownRight,
   Database,
   Coins,
   ChevronRight,
@@ -43,7 +35,6 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
   const {
     stocks,
     stockHoldings,
-    brokerCashBalances,
     stockPriceHistory,
     benchmarkIndexPrices,
     portfolioSnapshots,

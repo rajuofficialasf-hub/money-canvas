@@ -85,7 +85,7 @@ function AppContent() {
     isAuthModalOpen,
     closeAuthModal,
   } = useAuth();
-  const { language, t } = useLanguage();
+  const { t } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -122,7 +122,7 @@ function AppContent() {
     return false;
   });
 
-  const [pathname, setPathname] = useState(() =>
+  const [pathname] = useState(() =>
     typeof window !== 'undefined' ? window.location.pathname.toLowerCase() : ''
   );
 

@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes, ElementType, ReactNode } from 'react';
+import { forwardRef, InputHTMLAttributes, ElementType, ReactNode } from 'react';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;

@@ -21,8 +21,6 @@ import {
   PieChart,
   Repeat,
   Target,
-  ArrowUpRight,
-  ArrowDownLeft,
   Flame,
 } from 'lucide-react';
 
@@ -34,7 +32,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
 }) => {
   const { user } = useAuth();
-  const { language, isBn, t } = useLanguage();
+  const { isBn } = useLanguage();
   const {
     accounts,
     accountBalances,

@@ -96,6 +96,7 @@ export function runFireSimulation(params: FireInputParameters): FireSimulationRe
   let currentCorpus = params.currentNetWorth;
   let annualContribution = params.monthlySavingsContribution * 12;
   let isSolvent = true;
+  void isSolvent;
   let depletionAge: number | undefined = undefined;
   let achievedFireAge: number | undefined = undefined;
 

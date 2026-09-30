@@ -2,17 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
 import { useBiometrics } from '../../lib/biometric-context';
-import { useLanguage } from '../../lib/language-context';
-import { GoogleIcon } from '../icons/GoogleIcon';
 import {
   Search,
   Shield,
   ChevronDown,
-  User,
   Users,
   LogOut,
   Sliders,
-  CheckCircle2,
   Bell,
   Menu,
   ArrowRight,
@@ -23,8 +19,6 @@ import {
   Fingerprint,
   X,
   Trash2,
-  Globe,
-  Sparkles,
   ArrowUpCircle,
   RefreshCw,
   Download,
@@ -51,15 +45,12 @@ export const Header: React.FC<HeaderProps> = React.memo(({
 }) => {
   const {
     user,
-    availableProfiles,
-    switchProfile,
     signOut,
     isGoogleAuthenticated,
     openAuthModal,
   } = useAuth();
   const { isBiometricEnabled, lockApp } = useBiometrics();
   const { systemAlerts, dismissAlert } = useLedger();
-  const { language, setLanguage, t } = useLanguage();
   const { checkForUpdate, downloadApp, isChecking, currentVersionName } = useAppUpdate();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isAlertsMenuOpen, setIsAlertsMenuOpen] = useState(false);

@@ -3,7 +3,6 @@ import { useLanguage } from '../../lib/language-context';
 import { useLedger } from '../../lib/ledger-context';
 import {
   FireInputParameters,
-  FireMilestoneType,
 } from '../../types/fire-retirement';
 import {
   DEFAULT_FIRE_INPUTS,
@@ -23,13 +22,6 @@ import {
   Calendar,
   Sparkles,
   ShieldCheck,
-  ArrowRight,
-  Info,
-  Clock,
-  PieChart,
-  HelpCircle,
-  Percent,
-  Compass,
 } from 'lucide-react';
 
 interface RetirementFireViewProps {
@@ -37,7 +29,7 @@ interface RetirementFireViewProps {
 }
 
 export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNavigate }) => {
-  const { language, isBn } = useLanguage();
+  const { isBn } = useLanguage();
   const {
     accountBalances,
     accounts,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, Database, CheckCircle2, ArrowLeft, Mail } from 'lucide-react';
+import { ShieldCheck, Lock, Database, CheckCircle2, ArrowLeft } from 'lucide-react';
 
 export const PrivacyPolicyView: React.FC<{ onBack?: () => void }> = ({ onBack }) => {
   const [lang, setLang] = useState<'en' | 'bn'>('en');

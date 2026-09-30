@@ -6,7 +6,6 @@ import {
   suggestCategoryFromDescription,
   checkDuplicateTransaction,
   parseStatementRows,
-  BANK_PRESETS,
 } from '../src/lib/csv-parser-engine';
 import { Transaction, TransactionLine, Category } from '../src/types/accounting';
 

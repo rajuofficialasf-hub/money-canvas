@@ -12,15 +12,10 @@ import {
   Clock,
   AlertCircle,
   Plus,
-  Percent,
-  Layers,
   X,
-  CreditCard,
-  ChevronRight,
   TrendingDown,
   Info,
   Zap,
-  Calculator,
 } from 'lucide-react';
 import { LoanPrepaymentSimulator } from './LoanPrepaymentSimulator';
 

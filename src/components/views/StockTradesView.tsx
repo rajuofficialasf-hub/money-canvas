@@ -1,27 +1,21 @@
 import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
-import { StockTransaction, StockTransactionType, Stock } from '../../types/accounting';
+import { StockTransactionType, Stock } from '../../types/accounting';
 import { calculateTradeValues } from '../../lib/accounting-engine';
 import { fetchDseSingleQuote } from '../../lib/dse-market-service';
 import {
   ArrowUpRight,
   ArrowDownRight,
-  ShieldCheck,
   AlertCircle,
   Plus,
   Coins,
   Building2,
-  Calendar,
-  Percent,
   CheckCircle2,
   X,
   FileSpreadsheet,
-  Filter,
   RefreshCw,
   Loader2,
-  Sparkles,
-  Search,
   ChevronDown,
 } from 'lucide-react';
 
@@ -110,7 +104,6 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
 
   // Selected Stock & BO Details
   const activeStock = stocks.find((s) => s.id === selectedStockId);
-  const activeBo = brokerAccounts.find((b) => b.id === selectedBoAccountId);
   const boCashObj = brokerCashBalances.find((b) => b.brokerAccountId === selectedBoAccountId);
   const availableCash = boCashObj ? boCashObj.cashBalance : 0;
 
