@@ -145,11 +145,32 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
     let apkSizeFormatted: string | undefined = undefined;
     let apkFileName: string | undefined = undefined;
 
+/**
+ * Security: Validates that an update download or release URL strictly originates from
+ * an official, trusted GitHub HTTPS domain. Prevents DNS hijacking or untrusted redirects.
+ */
+export function isTrustedGitHubUrl(urlString?: string | null): boolean {
+  if (!urlString || typeof urlString !== 'string') return false;
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol !== 'https:') return false;
+    const host = parsed.hostname.toLowerCase();
+    return (
+      host === 'github.com' ||
+      host.endsWith('.github.com') ||
+      host === 'objects.githubusercontent.com' ||
+      host.endsWith('.githubusercontent.com')
+    );
+  } catch {
+    return false;
+  }
+}
+
     if (Array.isArray(data.assets) && data.assets.length > 0) {
       const apkAsset = data.assets.find((asset: any) =>
         asset.name?.toLowerCase().endsWith('.apk')
       );
-      if (apkAsset) {
+      if (apkAsset && isTrustedGitHubUrl(apkAsset.browser_download_url)) {
         apkDownloadUrl = apkAsset.browser_download_url;
         apkFileName = apkAsset.name;
         if (apkAsset.size) {
@@ -160,7 +181,8 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
 
     // Fallback: If no .apk asset found, use the release HTML page
     if (!apkDownloadUrl) {
-      apkDownloadUrl = data.html_url || GITHUB_RELEASES_URL;
+      const fallbackUrl = data.html_url || GITHUB_RELEASES_URL;
+      apkDownloadUrl = isTrustedGitHubUrl(fallbackUrl) ? fallbackUrl : GITHUB_RELEASES_URL;
     }
 
     const updateInfo: AppUpdateInfo = {
@@ -171,7 +193,7 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
       releaseNotes: data.body || 'নতুন ফিচার এবং বাগ ফিক্স যুক্ত করা হয়েছে।',
       publishedAt: data.published_at || new Date().toISOString(),
       apkDownloadUrl,
-      releasePageUrl: data.html_url || GITHUB_RELEASES_URL,
+      releasePageUrl: isTrustedGitHubUrl(data.html_url) ? data.html_url : GITHUB_RELEASES_URL,
       apkSizeFormatted,
       apkFileName,
     };
@@ -201,6 +223,10 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
  */
 export function openUpdateUrl(url: string): void {
   if (!url || typeof window === 'undefined') return;
+  if (!isTrustedGitHubUrl(url)) {
+    console.error('Security alert: Refusing to open untrusted update URL:', url);
+    return;
+  }
 
   if (Capacitor.isNativePlatform()) {
     // In native Android, launch the system browser to trigger APK download

@@ -7,3 +7,11 @@ coverage/
 .env*
 !.env.example
 .firebase/
+
+# Android Keystores & Signing Secrets (STEP-2)
+*.jks
+*.keystore
+release-key.jks
+android/release-key.jks
+android/app/*.jks
+android/app/*.keystore
