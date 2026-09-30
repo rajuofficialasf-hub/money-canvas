@@ -59,6 +59,8 @@ import { useAuth } from './lib/auth-context';
 import { LanguageProvider, useLanguage } from './lib/language-context';
 import { FamilyProvider } from './lib/family-context';
 import { LayoutDashboard, Wallet, TrendingUp, History, Bell } from 'lucide-react';
+import { HashRouter, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { getViewFromPath, getPathFromView } from './lib/routes';
 
 function AppContent() {
   const {
@@ -69,7 +71,18 @@ function AppContent() {
     closeAuthModal,
   } = useAuth();
   const { language, t } = useLanguage();
-  const [currentView, setCurrentView] = useState<string>('dashboard');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Resolve active view from URL hash route for browser back/forward and deep linking
+  const currentView = getViewFromPath(location.pathname);
+
+  const setCurrentView = (view: string) => {
+    const targetPath = getPathFromView(view);
+    navigate(targetPath);
+  };
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -133,46 +146,19 @@ function AppContent() {
       localStorage.setItem('mc_enter_app', 'true');
     } catch {}
     setWebShowApp(true);
-    if (typeof window !== 'undefined' && window.location.pathname === '/landing') {
-      try {
-        window.history.pushState({}, '', '/');
-      } catch {}
-      setPathname('/');
-    }
+    navigate('/dashboard');
   };
 
   // 1. Direct Public Routes (accessible without authentication/onboarding)
-  if (pathname === '/privacy' || pathname === '/privacy-policy') {
-    return (
-      <PrivacyPolicyView
-        onBack={() => {
-          if (typeof window !== 'undefined') {
-            try {
-              window.history.pushState({}, '', '/');
-            } catch {}
-            setPathname('/');
-          }
-        }}
-      />
-    );
+  if (currentView === 'privacy' || pathname === '/privacy' || pathname === '/privacy-policy') {
+    return <PrivacyPolicyView onBack={() => navigate('/settings')} />;
   }
 
-  if (pathname === '/terms' || pathname === '/terms-of-service') {
-    return (
-      <TermsOfServiceView
-        onBack={() => {
-          if (typeof window !== 'undefined') {
-            try {
-              window.history.pushState({}, '', '/');
-            } catch {}
-            setPathname('/');
-          }
-        }}
-      />
-    );
+  if (currentView === 'terms' || pathname === '/terms' || pathname === '/terms-of-service') {
+    return <TermsOfServiceView onBack={() => navigate('/settings')} />;
   }
 
-  if (pathname === '/landing') {
+  if (currentView === 'landing' || pathname === '/landing') {
     return <PublicLandingView onLaunchApp={handleLaunchApp} />;
   }
 
@@ -262,7 +248,7 @@ function AppContent() {
             <StockPortfolioView
               onNavigateToTrades={(stockId) => {
                 setTradeStockId(stockId);
-                setCurrentView('trades');
+                navigate(stockId ? `/trades?stockId=${encodeURIComponent(stockId)}` : '/trades');
               }}
               onNavigateToBrokerage={() => setCurrentView('brokerage')}
               onNavigateToPerformance={() => setCurrentView('performance')}
@@ -279,7 +265,7 @@ function AppContent() {
 
           {currentView === 'trades' && (
             <StockTradesView
-              initialStockId={tradeStockId}
+              initialStockId={searchParams.get('stockId') || tradeStockId}
               onNavigateToPortfolio={() => setCurrentView('stocks')}
               onNavigateToBrokerage={() => setCurrentView('brokerage')}
             />
@@ -465,7 +451,9 @@ export default function App() {
           <LanguageProvider>
             <FamilyProvider>
               <UpdateProvider>
-                <AppContent />
+                <HashRouter>
+                  <AppContent />
+                </HashRouter>
               </UpdateProvider>
             </FamilyProvider>
           </LanguageProvider>
