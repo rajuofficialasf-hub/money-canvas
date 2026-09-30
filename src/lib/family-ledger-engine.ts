@@ -204,7 +204,8 @@ export const checkMemberPermission = (
 export const calculateMemberFinancialSummaries = (
   members: FamilyMember[],
   expenses: FamilyExpense[],
-  contributions: JointFundContribution[]
+  contributions: JointFundContribution[],
+  allowanceMonthYear?: string
 ): MemberFinancialSummary[] => {
   return members.map((member) => {
     // Total contributed to joint accounts
@@ -224,10 +225,14 @@ export const calculateMemberFinancialSummaries = (
       .filter((e) => !e.isReimbursed)
       .reduce((sum, e) => sum + e.amount, 0);
 
-    // Allowance tracking
+    // Allowance tracking: the allowance is *monthly*, so spending is scoped to
+    // the given month instead of the member's all-time expense history.
     const allowanceAssigned = member.monthlyAllowance || 0;
     const memberTotalExpenses = expenses.filter(
-      (e) => e.paidByMemberId === member.id && e.status === 'approved'
+      (e) =>
+        e.paidByMemberId === member.id &&
+        e.status === 'approved' &&
+        (!allowanceMonthYear || e.monthYear === allowanceMonthYear)
     );
     const allowanceSpent = memberTotalExpenses.reduce((sum, e) => sum + e.amount, 0);
     const allowanceRemaining = Math.max(0, allowanceAssigned - allowanceSpent);

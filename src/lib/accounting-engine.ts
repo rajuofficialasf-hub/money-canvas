@@ -1332,6 +1332,12 @@ export function calculateCapitalGainsTaxSummary(
 
   const gainItems: CapitalGainItem[] = [];
 
+  // Bangladesh fiscal year runs July 1 – June 30. All trades are processed to
+  // keep WAC correct, but only sells inside the FY window are reported.
+  const fyParts = fiscalYear.split('-').map(Number);
+  const fyStart = fyParts.length === 2 && fyParts[0] > 0 ? `${fyParts[0]}-07-01` : '';
+  const fyEnd = fyParts.length === 2 && fyParts[1] > 0 ? `${fyParts[1]}-06-30` : '9999-12-31';
+
   for (const tx of sortedTxs) {
     let holding = runningHoldings.get(tx.stockId);
     if (!holding) {
@@ -1368,6 +1374,8 @@ export function calculateCapitalGainsTaxSummary(
         }
       }
 
+      const inFiscalYear = tx.tradeDate >= fyStart && tx.tradeDate <= fyEnd;
+      if (inFiscalYear)
       gainItems.push({
         id: tx.id,
         stockId: tx.stockId,
@@ -1567,13 +1575,24 @@ export function generateBalanceSheetReport(
 
   const totalBrokerCash = round2(brokerCashBalances.reduce((s, b) => s + b.cashBalance, 0));
 
+  // Debt entities post into linked receivable/payable accounts, so summing the
+  // account balance AND the debt's initialAmount double-counts; the linked
+  // account balance is also the *remaining* amount after partial repayments.
+  const debtLinkedAccountIds = new Set(debts.map((d) => d.linkedAccountId));
+  const debtRemaining = (d: Debt): number => {
+    const linked = accounts.find((a) => a.accountId === d.linkedAccountId);
+    return linked ? Math.abs(linked.currentBalance) : d.initialAmount;
+  };
+
   const receivableAccounts = accounts.filter(
-    (a) => a.accountType === 'receivable' && a.currentBalance > 0
+    (a) => a.accountType === 'receivable' && a.currentBalance > 0 && !debtLinkedAccountIds.has(a.accountId)
   );
-  const activeLentDebts = debts.filter((d) => d.direction === 'lent' && d.status === 'active');
+  const activeLentDebts = debts
+    .filter((d) => d.direction === 'lent' && d.status === 'active')
+    .filter((d) => debtRemaining(d) > 0);
   const totalReceivables = round2(
     receivableAccounts.reduce((s, a) => s + a.currentBalance, 0) +
-      activeLentDebts.reduce((s, d) => s + d.initialAmount, 0)
+      activeLentDebts.reduce((s, d) => s + debtRemaining(d), 0)
   );
 
   const totalCurrentAssets = round2(totalLiquidCash + totalBrokerCash + totalReceivables);
@@ -1610,12 +1629,14 @@ export function generateBalanceSheetReport(
   );
 
   const payableAccounts = accounts.filter(
-    (a) => a.accountType === 'payable' && a.currentBalance < 0
+    (a) => a.accountType === 'payable' && a.currentBalance < 0 && !debtLinkedAccountIds.has(a.accountId)
   );
-  const activeBorrowedDebts = debts.filter((d) => d.direction === 'borrowed' && d.status === 'active');
+  const activeBorrowedDebts = debts
+    .filter((d) => d.direction === 'borrowed' && d.status === 'active')
+    .filter((d) => debtRemaining(d) > 0);
   const totalPayables = round2(
     payableAccounts.reduce((s, a) => s + Math.abs(a.currentBalance), 0) +
-      activeBorrowedDebts.reduce((s, d) => s + d.initialAmount, 0)
+      activeBorrowedDebts.reduce((s, d) => s + debtRemaining(d), 0)
   );
 
   const totalCurrentLiabilities = round2(totalCreditCards + totalPayables);
@@ -1672,7 +1693,7 @@ export function generateBalanceSheetReport(
         ...activeLentDebts.map((d) => ({
           id: d.id,
           name: d.personName,
-          amount: d.initialAmount,
+          amount: debtRemaining(d),
           details: `Due ${d.dueDate || 'N/A'}`,
         })),
       ],
@@ -1741,7 +1762,7 @@ export function generateBalanceSheetReport(
         ...activeBorrowedDebts.map((d) => ({
           id: d.id,
           name: d.personName,
-          amount: d.initialAmount,
+          amount: debtRemaining(d),
           details: `Due ${d.dueDate || 'N/A'}`,
         })),
       ],

@@ -330,7 +330,12 @@ export function calculatePreMatureEncashment(
   const encash = new Date(encashmentDateStr);
   const diffTime = Math.max(0, encash.getTime() - purchase.getTime());
   const investedDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  const completedYears = Math.floor(investedDays / 365);
+  // Leap-year-safe: count full calendar years by anniversary dates,
+  // not floor(days / 365).
+  let completedYears = 0;
+  while (addMonthsClamped(item.purchaseDate, 12 * (completedYears + 1)) <= encashmentDateStr) {
+    completedYears++;
+  }
 
   let applicableRate = 0;
   let notes = '';
@@ -367,7 +372,10 @@ export function calculatePreMatureEncashment(
   // If monthly profits were already received at full rate
   const profitReceivedSoFar = item.totalProfitReceivedToDate || 0;
   const excessProfitToDeduct = Math.max(0, round2(profitReceivedSoFar - totalProfitPayable));
-  const netPayableAtCounter = round2(item.principalAmount - excessProfitToDeduct);
+  // Payable = principal + reduced-rate profit still owed - profit already paid
+  // out. For at_maturity schemes (nothing received) this correctly adds the
+  // reduced-rate profit instead of returning bare principal.
+  const netPayableAtCounter = round2(item.principalAmount + totalProfitPayable - profitReceivedSoFar);
 
   return {
     investedDays,

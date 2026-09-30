@@ -116,8 +116,8 @@ export const FamilyProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   // Summaries
   const memberSummaries = useMemo(() => {
-    return calculateMemberFinancialSummaries(state.members, state.expenses, state.contributions);
-  }, [state.members, state.expenses, state.contributions]);
+    return calculateMemberFinancialSummaries(state.members, state.expenses, state.contributions, selectedMonth);
+  }, [state.members, state.expenses, state.contributions, selectedMonth]);
 
   const categorySpending = useMemo(() => {
     return calculateCategorySpending(state.expenses, selectedMonth);
