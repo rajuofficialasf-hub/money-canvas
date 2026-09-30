@@ -2,6 +2,7 @@ import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Automatically refresh the page when a new Service Worker takes over (AutoUpdate PWA)
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
@@ -16,6 +17,9 @@ if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <ErrorBoundary isRoot={true}>
+      <App />
+    </ErrorBoundary>
   </StrictMode>,
 );
+

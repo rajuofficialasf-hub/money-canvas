@@ -11,6 +11,7 @@ import { CommandPalette } from './components/CommandPalette';
 import { OfflineIndicator } from './components/pwa/OfflineIndicator';
 import { PWAUpdateToast } from './components/pwa/PWAUpdateToast';
 import { KeyboardShortcutsModal } from './components/pwa/KeyboardShortcutsModal';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { DashboardView } from './components/views/DashboardView';
 import { AccountsView } from './components/views/AccountsView';
 import { LedgerView } from './components/views/LedgerView';
@@ -205,11 +206,16 @@ function AppContent() {
 
         {/* Dynamic Viewport Content */}
         <main className="flex-1 px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto py-6">
-          {currentView === 'dashboard' && (
-            <DashboardView
-              onNavigate={setCurrentView}
-            />
-          )}
+          <ErrorBoundary
+            key={currentView}
+            viewName={currentView}
+            onNavigateHome={() => setCurrentView('dashboard')}
+          >
+            {currentView === 'dashboard' && (
+              <DashboardView
+                onNavigate={setCurrentView}
+              />
+            )}
 
           {currentView === 'accounts' && <AccountsView />}
 
@@ -335,9 +341,10 @@ function AppContent() {
             <PrivacyPolicyView onBack={() => setCurrentView('settings')} />
           )}
 
-          {currentView === 'terms' && (
-            <TermsOfServiceView onBack={() => setCurrentView('settings')} />
-          )}
+            {currentView === 'terms' && (
+              <TermsOfServiceView onBack={() => setCurrentView('settings')} />
+            )}
+          </ErrorBoundary>
         </main>
 
         {/* Global Command Palette */}
