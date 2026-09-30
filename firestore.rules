@@ -7,14 +7,30 @@ service cloud.firestore {
 
     function isAdmin() {
       return isAuthenticated() && (
-        request.auth.token.email == 'raju.official.asf@gmail.com' ||
-        request.auth.token.email == 'owner@weathfolio.local'
+        request.auth.token.admin == true ||
+        request.auth.token.email == 'raju.official.asf@gmail.com'
       );
     }
 
     match /users/{userId} {
-      allow get, list: if isAuthenticated();
-      allow create, update: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Users can only view their own user document, or admins can view any user document
+      allow get: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Only admins can list all registered users
+      allow list: if isAdmin();
+
+      // Users can create their own document, but non-admins cannot assign admin role
+      allow create: if isAuthenticated() && (request.auth.uid == userId || isAdmin()) && (
+        isAdmin() || !('role' in request.resource.data) || request.resource.data.role == 'user'
+      );
+
+      // Users can update their own document, but non-admins cannot change their role
+      allow update: if isAuthenticated() && (request.auth.uid == userId || isAdmin()) && (
+        isAdmin() || (
+          (!('role' in request.resource.data) && !('role' in resource.data)) ||
+          (request.resource.data.role == resource.data.role)
+        )
+      );
+
       allow delete: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
 
       // Multi-device cloud sync: Users can read and write their own financial ledger documents

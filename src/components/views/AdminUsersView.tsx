@@ -29,9 +29,14 @@ export const AdminUsersView: React.FC = () => {
 
   const loadUsers = async () => {
     setLoading(true);
-    const data = await fetchRegisteredUsers();
-    setUsersList(data);
-    setLoading(false);
+    try {
+      const data = await fetchRegisteredUsers();
+      setUsersList(data);
+    } catch (err) {
+      console.warn('Failed to load registered users:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
