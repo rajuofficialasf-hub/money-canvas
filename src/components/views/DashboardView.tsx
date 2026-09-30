@@ -32,7 +32,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   onNavigate,
 }) => {
   const { user } = useAuth();
-  const { isBn } = useLanguage();
+  const { t } = useLanguage();
   const {
     accounts,
     accountBalances,
@@ -114,13 +114,13 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
           >
             <Plus className="h-3.5 w-3.5 stroke-[2.5]" />
-            <span>{isBn ? 'নতুন লেনদেন' : 'New Transaction'}</span>
+            <span>{t('dashNewTransaction')}</span>
           </button>
           <button
             onClick={() => onNavigate('settings')}
             className="border border-slate-800 bg-slate-900/60 px-3 py-1.5 rounded-lg hover:text-white transition-colors"
           >
-            {isBn ? 'সেটিংস' : 'Settings'}
+            {t('dashSettings')}
           </button>
         </div>
       </div>
@@ -537,22 +537,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-white tracking-tight">
-                {isBn ? 'বাংলাদেশ আয়কর ও এনবিআর আইটি-১০বি রিটার্ন প্ল্যানার' : 'BD Income Tax & NBR IT-10B Return Planner'}
+                {t('dashBdIncomeTaxNbrIt')}
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/30">
                 NBR 2023 ACT
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              {isBn
-                ? 'স্ল্যাবভিত্তিক কর হিসাব, বিনিয়োগ কর রেয়াত (DPS, সঞ্চয়পত্র, ডিএসই শেয়ার) ও এক ক্লিকে সম্পূর্ণ সম্পদ ও দায় বিবরণী (IT-10B) প্রস্তুত করুন।'
-                : 'Slab-based income tax calculation, investment tax rebates (DPS, Sanchayapatra, DSE stocks) and 1-click IT-10B wealth statement.'}
+              {t('dashSlabBasedIncomeTaxCalculation')}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold shrink-0">
-          <span>{isBn ? 'রিটার্ন প্ল্যানার খুলুন' : 'Open Tax Planner'}</span>
+          <span>{t('dashOpenTaxPlanner')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>
       </div>
@@ -569,22 +567,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-white tracking-tight">
-                {isBn ? 'সঞ্চয়পত্র, ট্রেজারি বন্ড ও সুকুক ট্র্যাকার' : 'Sanchayapatra, Treasury Bonds & Sukuk Tracker'}
+                {t('dashSanchayapatraTreasuryBondsSukukTracker')}
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 text-[10px] font-mono font-bold border border-sky-500/30">
                 SOVEREIGN YIELD
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              {isBn
-                ? 'পরিবার সঞ্চয়পত্র, ৩-মাস অন্তর মুনাফা, পেনশনার সঞ্চয়পত্র, বাংলাদেশ ব্যাংক ট্রেজারি বন্ড ও ইসলামিক সুকুকের মাসিক/ত্রৈমাসিক ক্যাশফ্লো ও ভাঙ্গানোর হিসাব।'
-                : 'Family Savings Certificates, 3-Month Profit, Pensioner, Bangladesh Bank Treasury Bonds & Sukuk cashflow tracker.'}
+              {t('dashFamilySavingsCertificates3Month')}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-sky-400 text-xs font-semibold shrink-0">
-          <span>{isBn ? 'বন্ড ট্র্যাকার খুলুন' : 'Open Bonds Tracker'}</span>
+          <span>{t('dashOpenBondsTracker')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>
       </div>
@@ -601,22 +597,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-white tracking-tight">
-                {isBn ? 'বাজুস গোল্ড রেট ও কারেন্সি এক্সচেঞ্জ (BAJUS & FX)' : 'BAJUS Gold Rates & Foreign Exchange (FX)'}
+                {t('dashBajusGoldRatesForeignExchange')}
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold border border-amber-500/30">
                 LIVE 22K ৳1,43,526
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              {isBn
-                ? 'বাজুস ২২ ক্যারেট হলমার্ক স্বর্ণের লাইভ দর, রূপার রেট, গহনা মেকিং চার্জ ও মার্কিন ডলার, রিয়াল, ইউরোর রেমিট্যান্স ক্যাশফ্লো ক্যালকুলেটর।'
-                : 'Official BAJUS 22K hallmarked gold & silver rates, jewelry making charges, and USD/SAR/EUR remittance exchange calculator.'}
+              {t('dashOfficialBajus22kHallmarkedGold')}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-amber-400 text-xs font-semibold shrink-0">
-          <span>{isBn ? 'গোল্ড ও কারেন্সি রেট দেখুন' : 'View Gold & FX Rates'}</span>
+          <span>{t('dashViewGoldFxRates')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>
       </div>
@@ -633,22 +627,20 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-white tracking-tight">
-                {isBn ? 'রিটায়ারমেন্ট ও ফায়ার প্ল্যানার (FIRE & Wealth Projection)' : 'Retirement & FIRE Wealth Projection Planner'}
+                {t('dashRetirementFireWealthProjectionPlanner')}
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 text-[10px] font-mono font-bold border border-orange-500/30">
                 EARLY RETIREMENT
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1 max-w-2xl leading-relaxed">
-              {isBn
-                ? 'আর্থিক স্বাধীনতা অর্জনের ফায়ার নাম্বার, মুদ্রাস্ফীতি ও সেফ উইথড্রয়াল রেট (SWR), এবং মাল্টি-ডিকেড সম্পদ প্রক্ষেপণের পূর্ণাঙ্গ সিমুলেটর।'
-                : 'Calculate your exact FIRE corpus, inflation-adjusted wealth trajectory, Safe Withdrawal Rate (SWR), and multi-decade freedom milestone.'}
+              {t('dashCalculateYourExactFireCorpus')}
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-orange-400 text-xs font-semibold shrink-0">
-          <span>{isBn ? 'ফায়ার প্ল্যানার খুলুন' : 'Open FIRE Planner'}</span>
+          <span>{t('dashOpenFirePlanner')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>
       </div>

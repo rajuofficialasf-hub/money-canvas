@@ -29,7 +29,7 @@ interface RetirementFireViewProps {
 }
 
 export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNavigate: _onNavigate }) => {
-  const { isBn } = useLanguage();
+  const { isBn, t } = useLanguage();
   const {
     accountBalances,
     accounts,
@@ -125,18 +125,16 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 mb-1">
             <Flame className="h-4 w-4 text-orange-400" />
-            <span>{isBn ? 'আর্থিক স্বাধীনতা ও অকাল অবসর প্ল্যানার' : 'Financial Independence, Retire Early'}</span>
+            <span>{t('fireFinancialIndependenceRetireEarly')}</span>
             <span className="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-mono text-[10px] font-bold border border-orange-500/30">
               FIRE OS v1
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
-            {isBn ? 'রিটায়ারমেন্ট ও ফায়ার ক্যালকুলেটর' : 'Retirement & FIRE Wealth Projection'}
+            {t('fireRetirementFireWealthProjection')}
           </h1>
           <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
-            {isBn
-              ? 'মুদ্রাস্ফীতি, চক্রবৃদ্ধি মুনাফা ও সেফ উইথড্রয়াল রেট (SWR) সমন্বয় করে আপনার ফায়ার নাম্বার, অবসরের সুনির্দিষ্ট বছর ও মাল্টি-ডিকেড সম্পদ প্রক্ষেপণ।'
-              : 'Calculate your exact FIRE corpus, projected retirement date, safe withdrawal passive cashflow, and multi-decade wealth compounding trajectory.'}
+            {t('fireCalculateYourExactFireCorpus')}
           </p>
         </div>
 
@@ -148,7 +146,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             title="Auto-fill Net Worth and Monthly Expenses from Money Canvas"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            <span>{isBn ? 'লেজার থেকে অটো-ফিল' : 'Sync from Canvas'}</span>
+            <span>{t('fireSyncFromCanvas')}</span>
           </button>
 
           <button
@@ -156,7 +154,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             className="px-3.5 py-2 rounded-xl border border-slate-800 bg-slate-900/60 hover:bg-slate-800 text-slate-300 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
           >
             <RefreshCw className="h-3.5 w-3.5 text-slate-400" />
-            <span>{isBn ? 'ডিফল্ট রিসেট' : 'Reset Defaults'}</span>
+            <span>{t('fireResetDefaults')}</span>
           </button>
         </div>
       </div>
@@ -174,14 +172,14 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
         {/* FIRE Number Today */}
         <div className="p-4 rounded-xl border border-orange-500/40 bg-gradient-to-b from-orange-950/30 to-slate-900/60 shadow-lg shadow-orange-950/20">
           <div className="flex items-center justify-between text-xs text-orange-400 font-semibold mb-1">
-            <span>{isBn ? 'ফায়ার নাম্বার (বর্তমান মূল্যে)' : 'FIRE Number (Today)'}</span>
+            <span>{t('fireFireNumberToday')}</span>
             <Flame className="h-3.5 w-3.5" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-orange-300">
-            ৳{(result.fireNumberToday / 10000000).toFixed(2)} {isBn ? 'কোটি' : 'Cr'}
+            ৳{(result.fireNumberToday / 10000000).toFixed(2)} {t('fireCr')}
           </div>
           <div className="text-[11px] text-slate-400 font-mono mt-1">
-            = ৳{(result.fireNumberToday / 100000).toFixed(1)} {isBn ? 'লাখ' : 'Lakh'}
+            = ৳{(result.fireNumberToday / 100000).toFixed(1)} {t('fireLakh')}
           </div>
         </div>
 
@@ -192,17 +190,17 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <span className="text-[10px] font-mono text-slate-400">ইনফ্লেশন সহ</span>
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-amber-300">
-            ৳{(result.fireNumberFuture / 10000000).toFixed(2)} {isBn ? 'কোটি' : 'Cr'}
+            ৳{(result.fireNumberFuture / 10000000).toFixed(2)} {t('fireCr')}
           </div>
           <div className="text-[11px] text-slate-400 font-mono mt-1">
-            {params.expectedInflationRate}% {isBn ? 'মুদ্রাস্ফীতি সমন্বিত' : 'annual inflation'}
+            {params.expectedInflationRate}% {t('fireAnnualInflation')}
           </div>
         </div>
 
         {/* Target Age & Year */}
         <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60">
           <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
-            <span>{isBn ? 'টার্গেট বয়স ও বছর' : 'Target Year & Age'}</span>
+            <span>{t('fireTargetYearAge')}</span>
             <Calendar className="h-3.5 w-3.5 text-sky-400" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-white">
@@ -216,21 +214,21 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
         {/* Monthly Passive Cashflow */}
         <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60">
           <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
-            <span>{isBn ? 'মাসিক প্যাসিভ আয়' : 'Monthly Passive Cashflow'}</span>
+            <span>{t('fireMonthlyPassiveCashflow')}</span>
             <DollarSign className="h-3.5 w-3.5 text-emerald-400" />
           </div>
           <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-400">
             ৳{(result.monthlyPassiveIncomeAtRetirement / 1000).toFixed(0)}k
           </div>
           <div className="text-[11px] text-slate-400 font-mono mt-1">
-            {params.expectedPostRetirementReturn}% {isBn ? 'সেফ ইল্ডে' : 'safe yield'}
+            {params.expectedPostRetirementReturn}% {t('fireSafeYield')}
           </div>
         </div>
 
         {/* Solvency / Feasibility */}
         <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
-            <span>{isBn ? 'স্থায়িত্ব ও নিরাপত্তা' : 'Solvency & Longevity'}</span>
+            <span>{t('fireSolvencyLongevity')}</span>
             {result.canSustainUntilLifeExpectancy ? (
               <ShieldCheck className="h-4 w-4 text-emerald-400" />
             ) : (
@@ -243,7 +241,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
           <div className="text-[11px] text-slate-400 font-mono mt-1">
             {result.canSustainUntilLifeExpectancy
               ? (isBn ? `বয়স ${params.lifeExpectancyAge}+ পর্যন্ত নিরাপদ` : `Sustainable to Age ${params.lifeExpectancyAge}`)
-              : (isBn ? 'তহবিল ঘাটতির ঝুঁকি' : 'Corpus depletion risk')}
+              : (t('fireCorpusDepletionRisk'))}
           </div>
         </div>
       </div>
@@ -259,7 +257,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
           }`}
         >
           <Flame className="h-4 w-4" />
-          <span>{isBn ? '১. ফায়ার প্ল্যানার ও ট্র্যাজেক্টোরি' : '1. FIRE Planner & Trajectory'}</span>
+          <span>{t('fire1FirePlannerTrajectory')}</span>
         </button>
 
         <button
@@ -271,7 +269,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
           }`}
         >
           <Target className="h-4 w-4" />
-          <span>{isBn ? '২. ফায়ার মাইলস্টোনস (Coast, Lean, Fat)' : '2. FIRE Milestones'}</span>
+          <span>{t('fire2FireMilestones')}</span>
         </button>
 
         <button
@@ -283,7 +281,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
           }`}
         >
           <TrendingUp className="h-4 w-4" />
-          <span>{isBn ? '৩. মাল্টি-ডিকেড ব্যালেন্স শিট টেবিল' : '3. Year-by-Year Simulation'}</span>
+          <span>{t('fire3YearByYearSimulation')}</span>
         </button>
       </div>
 
@@ -297,7 +295,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <div className="flex items-center gap-2 text-white font-bold text-sm">
                 <Sliders className="h-4 w-4 text-orange-400" />
-                <span>{isBn ? 'পরিকল্পনার প্যারামিটার ও স্লাইডার' : 'Simulation Inputs'}</span>
+                <span>{t('fireSimulationInputs')}</span>
               </div>
               <span className="text-[10px] font-mono text-slate-400">Interactive</span>
             </div>
@@ -306,7 +304,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <div className="space-y-3 font-mono text-xs">
               <div>
                 <div className="flex justify-between text-slate-300 mb-1">
-                  <span>{isBn ? 'বর্তমান বয়স (Current Age):' : 'Current Age:'}</span>
+                  <span>{t('fireCurrentAge')}</span>
                   <span className="text-orange-400 font-bold text-sm">{params.currentAge}</span>
                 </div>
                 <input
@@ -321,7 +319,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
               <div>
                 <div className="flex justify-between text-slate-300 mb-1">
-                  <span>{isBn ? 'টার্গেট অবসরের বয়স (Retire Age):' : 'Retirement Target Age:'}</span>
+                  <span>{t('fireRetirementTargetAge')}</span>
                   <span className="text-amber-400 font-bold text-sm">{params.targetRetirementAge}</span>
                 </div>
                 <input
@@ -336,7 +334,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
               <div>
                 <div className="flex justify-between text-slate-300 mb-1">
-                  <span>{isBn ? 'প্রত্যাশিত আয়ুষ্কাল (Life Expectancy):' : 'Life Expectancy:'}</span>
+                  <span>{t('fireLifeExpectancy')}</span>
                   <span className="text-slate-300 font-bold text-sm">{params.lifeExpectancyAge}</span>
                 </div>
                 <input
@@ -354,7 +352,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <div className="space-y-3 pt-2 border-t border-slate-800 text-xs font-mono">
               <div>
                 <label className="block text-slate-400 mb-1">
-                  {isBn ? 'বর্তমান বিনিয়োগকৃত সম্পদ (Net Worth ৳):' : 'Current Liquid Net Worth (৳):'}
+                  {t('fireCurrentLiquidNetWorth')}
                 </label>
                 <input
                   type="number"
@@ -368,7 +366,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-slate-400 mb-1">
-                    {isBn ? 'মাসিক বর্তমান খরচ (৳):' : 'Monthly Expense (৳):'}
+                    {t('fireMonthlyExpense')}
                   </label>
                   <input
                     type="number"
@@ -381,7 +379,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
                 <div>
                   <label className="block text-slate-400 mb-1">
-                    {isBn ? 'মাসিক নতুন সঞ্চয় (৳):' : 'Monthly Savings (৳):'}
+                    {t('fireMonthlySavings')}
                   </label>
                   <input
                     type="number"
@@ -397,7 +395,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
               <div className="grid grid-cols-3 gap-2 pt-1">
                 <div>
                   <label className="block text-slate-400 mb-1 text-[11px]">
-                    {isBn ? 'প্রি-রিটায়ার ROI' : 'Pre-Ret. Return'}
+                    {t('firePreRetReturn')}
                   </label>
                   <div className="relative">
                     <input
@@ -413,7 +411,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
                 <div>
                   <label className="block text-slate-400 mb-1 text-[11px]">
-                    {isBn ? 'পোস্ট-রিটায়ার ROI' : 'Post-Ret. Return'}
+                    {t('firePostRetReturn')}
                   </label>
                   <div className="relative">
                     <input
@@ -429,7 +427,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
                 <div>
                   <label className="block text-slate-400 mb-1 text-[11px]">
-                    {isBn ? 'মুদ্রাস্ফীতি (BD)' : 'Inflation Rate'}
+                    {t('fireInflationRate')}
                   </label>
                   <div className="relative">
                     <input
@@ -448,7 +446,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div>
                   <label className="block text-slate-400 mb-1 text-[11px]">
-                    {isBn ? 'সেফ উইথড্রয়াল রেট (SWR)' : 'Safe Withdrawal (SWR)'}
+                    {t('fireSafeWithdrawalSwr')}
                   </label>
                   <div className="relative">
                     <input
@@ -467,7 +465,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
                 <div>
                   <label className="block text-slate-400 mb-1 text-[11px]">
-                    {isBn ? 'পেনশন / ভাড়া প্যাসিভ আয়' : 'Monthly Pension/Rent'}
+                    {t('fireMonthlyPensionRent')}
                   </label>
                   <input
                     type="number"
@@ -489,16 +487,16 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
               <div className="flex items-center justify-between border-b border-slate-800 pb-3">
                 <div className="flex items-center gap-2 text-white font-bold text-sm">
                   <TrendingUp className="h-4 w-4 text-emerald-400" />
-                  <span>{isBn ? 'সম্পদ বৃদ্ধি ও অবসরের ট্র্যাজেক্টোরি কার্ভ' : 'Wealth Compounding & Drawdown Trajectory'}</span>
+                  <span>{t('fireWealthCompoundingDrawdownTrajectory')}</span>
                 </div>
                 <div className="flex items-center gap-3 text-[11px] font-mono">
                   <span className="flex items-center gap-1.5 text-emerald-400">
                     <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                    <span>{isBn ? 'বৃদ্ধির পর্ব (Accumulation)' : 'Accumulation'}</span>
+                    <span>{t('fireAccumulation')}</span>
                   </span>
                   <span className="flex items-center gap-1.5 text-sky-400">
                     <span className="h-2 w-2 rounded-full bg-sky-400" />
-                    <span>{isBn ? 'অবসর পর্ব (Retirement)' : 'Retirement'}</span>
+                    <span>{t('fireRetirement')}</span>
                   </span>
                 </div>
               </div>
@@ -555,7 +553,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <div className="rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-950/20 via-slate-900 to-slate-950 p-5 space-y-3">
               <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
                 <Sparkles className="h-4 w-4" />
-                <span>{isBn ? 'ফায়ার অ্যানালিটিক্স ও পরামর্শ (Key Insights)' : 'Key FIRE Insights & Recommendations'}</span>
+                <span>{t('fireKeyFireInsightsRecommendations')}</span>
               </div>
 
               <div className="space-y-2.5 text-xs text-slate-300 leading-relaxed font-sans">
@@ -596,7 +594,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                     </div>
                     {m.achieved && (
                       <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold border border-emerald-500/30">
-                        {isBn ? 'অর্জিত' : 'Achieved'}
+                        {t('fireAchieved')}
                       </span>
                     )}
                   </div>
@@ -607,14 +605,14 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
 
                   <div className="mt-4 space-y-1">
                     <div className="flex justify-between text-xs font-mono">
-                      <span className="text-slate-400">{isBn ? 'টার্গেট কর্পাস:' : 'Target Corpus:'}</span>
+                      <span className="text-slate-400">{t('fireTargetCorpus')}</span>
                       <span className="text-white font-bold">
-                        ৳{(m.targetAmount / 10000000).toFixed(2)} {isBn ? 'কোটি' : 'Cr'}
+                        ৳{(m.targetAmount / 10000000).toFixed(2)} {t('fireCr')}
                       </span>
                     </div>
 
                     <div className="flex justify-between text-xs font-mono">
-                      <span className="text-slate-400">{isBn ? 'প্রত্যাশিত বছর ও বয়স:' : 'Projected Age:'}</span>
+                      <span className="text-slate-400">{t('fireProjectedAge')}</span>
                       <span className="text-amber-300">
                         {isBn ? `বয়স ${m.projectedAge} (${m.projectedYear} সাল)` : `Age ${m.projectedAge} (${m.projectedYear})`}
                       </span>
@@ -625,7 +623,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                 {/* Progress Bar */}
                 <div className="mt-5 space-y-1.5 pt-3 border-t border-slate-800/80">
                   <div className="flex justify-between text-[11px] font-mono">
-                    <span className="text-slate-400">{isBn ? 'বর্তমান অগ্রগতি:' : 'Progress:'}</span>
+                    <span className="text-slate-400">{t('fireProgress')}</span>
                     <span className={m.achieved ? 'text-emerald-400 font-bold' : 'text-slate-300'}>
                       {m.progressPercent}%
                     </span>
@@ -653,10 +651,10 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
           <div className="p-4 border-b border-slate-800 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
             <div className="flex items-center gap-2">
               <span className="font-bold text-white">
-                {isBn ? 'বয়স ৩০ থেকে ৮২ পর্যন্ত বছরভিত্তিক ব্যালেন্স শিট প্রক্ষেপণ' : 'Multi-Decade Annual Wealth Trajectory'}
+                {t('fireMultiDecadeAnnualWealthTrajectory')}
               </span>
               <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                {result.projections.length} {isBn ? 'বছর' : 'Years'}
+                {result.projections.length} {t('fireYears')}
               </span>
             </div>
             <div className="text-[11px] text-slate-400 font-mono">
@@ -668,14 +666,14 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             <table className="w-full text-left text-xs font-mono">
               <thead className="bg-slate-950/90 text-slate-400 border-b border-slate-800 sticky top-0 z-10">
                 <tr>
-                  <th className="py-3 px-4 font-semibold">{isBn ? 'বছর ও বয়স' : 'Year & Age'}</th>
-                  <th className="py-3 px-4 font-semibold">{isBn ? 'পর্যায়' : 'Phase'}</th>
-                  <th className="py-3 px-4 font-semibold text-right">{isBn ? 'প্রারম্ভিক মূলধন' : 'Starting Corpus'}</th>
-                  <th className="py-3 px-4 font-semibold text-right">{isBn ? 'বাৎসরিক সঞ্চয়' : 'Contribution'}</th>
-                  <th className="py-3 px-4 font-semibold text-right">{isBn ? 'বিনিয়োগ মুনাফা' : 'Returns'}</th>
-                  <th className="py-3 px-4 font-semibold text-right">{isBn ? 'বাৎসরিক খরচ' : 'Annual Expense'}</th>
-                  <th className="py-3 px-4 font-semibold text-right">{isBn ? 'বছর শেষে সম্পদ' : 'Ending Net Worth'}</th>
-                  <th className="py-3 px-4 font-semibold text-center">{isBn ? 'অবস্থা' : 'Status'}</th>
+                  <th className="py-3 px-4 font-semibold">{t('fireYearAge')}</th>
+                  <th className="py-3 px-4 font-semibold">{t('firePhase')}</th>
+                  <th className="py-3 px-4 font-semibold text-right">{t('fireStartingCorpus')}</th>
+                  <th className="py-3 px-4 font-semibold text-right">{t('fireContribution')}</th>
+                  <th className="py-3 px-4 font-semibold text-right">{t('fireReturns')}</th>
+                  <th className="py-3 px-4 font-semibold text-right">{t('fireAnnualExpense')}</th>
+                  <th className="py-3 px-4 font-semibold text-right">{t('fireEndingNetWorth')}</th>
+                  <th className="py-3 px-4 font-semibold text-center">{t('fireStatus')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/70">
@@ -709,7 +707,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                               : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
                           }`}
                         >
-                          {isRetirement ? (isBn ? 'অবসর ও ড্র-ডাউন' : 'Retirement') : (isBn ? 'সঞ্চয় ও বৃদ্ধি' : 'Accumulation')}
+                          {isRetirement ? (t('fireRetirement2')) : (t('fireAccumulation2'))}
                         </span>
                       </td>
 
