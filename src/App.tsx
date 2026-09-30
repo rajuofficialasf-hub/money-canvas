@@ -2,7 +2,7 @@
  * Weathfolio — Wealth, Investment & Double-Entry Accounting OS
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { AuthProvider } from './lib/auth-context';
 import { LedgerProvider } from './lib/ledger-context';
 import { Header } from './components/layout/Header';
@@ -12,43 +12,6 @@ import { OfflineIndicator } from './components/pwa/OfflineIndicator';
 import { PWAUpdateToast } from './components/pwa/PWAUpdateToast';
 import { KeyboardShortcutsModal } from './components/pwa/KeyboardShortcutsModal';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
-import { DashboardView } from './components/views/DashboardView';
-import { AccountsView } from './components/views/AccountsView';
-import { LedgerView } from './components/views/LedgerView';
-import { CsvImportView } from './components/views/CsvImportView';
-import { SmsParserView } from './components/views/SmsParserView';
-import { FixedDepositsView } from './components/views/FixedDepositsView';
-import { DpsView } from './components/views/DpsView';
-import { SanchayaBondsView } from './components/views/SanchayaBondsView';
-import { GoldFxRatesView } from './components/views/GoldFxRatesView';
-import { RetirementFireView } from './components/views/RetirementFireView';
-import { BudgetsView } from './components/views/BudgetsView';
-import { FamilyLedgerView } from './components/views/FamilyLedgerView';
-import { RecurringView } from './components/views/RecurringView';
-import { GoalsView } from './components/views/GoalsView';
-import { DebtsView } from './components/views/DebtsView';
-import { LoansView } from './components/views/LoansView';
-import { AssetsView } from './components/views/AssetsView';
-import { ZakatView } from './components/views/ZakatView';
-import { StockPortfolioView } from './components/views/StockPortfolioView';
-import { BrokerageView } from './components/views/BrokerageView';
-import { StockTradesView } from './components/views/StockTradesView';
-import { PortfolioAnalyticsView } from './components/views/PortfolioAnalyticsView';
-import { DividendsAndCorporateActionsView } from './components/views/DividendsAndCorporateActionsView';
-import { FinancialAnalyticsAndReportsView } from './components/views/FinancialAnalyticsAndReportsView';
-import { IncomeTaxView } from './components/views/IncomeTaxView';
-import { NotificationsView } from './components/views/NotificationsView';
-import { AuditLogsView } from './components/views/AuditLogsView';
-import { BackupRestoreView } from './components/views/BackupRestoreView';
-import { AdminUsersView } from './components/views/AdminUsersView';
-import { RlsInspectorView } from './components/views/RlsInspectorView';
-import { SettingsView } from './components/views/SettingsView';
-import { PlayStoreKitView } from './components/views/PlayStoreKitView';
-import { UserGuideView } from './components/views/UserGuideView';
-import { PrivacyPolicyView } from './components/views/PrivacyPolicyView';
-import { TermsOfServiceView } from './components/views/TermsOfServiceView';
-import { PublicLandingView } from './components/views/PublicLandingView';
-import { DataDeletionRequestView } from './components/views/DataDeletionRequestView';
 import { ClipboardSmsBanner } from './components/common/ClipboardSmsBanner';
 import { SyncConflictModal } from './components/common/SyncConflictModal';
 import { LedgerHealthBanners } from './components/common/LedgerHealthBanners';
@@ -66,6 +29,52 @@ import { FamilyProvider } from './lib/family-context';
 import { LayoutDashboard, Wallet, TrendingUp, History, Bell } from 'lucide-react';
 import { HashRouter, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { getViewFromPath, getPathFromView } from './lib/routes';
+
+// STEP-19: every view is code-split so the initial bundle stays small;
+// each route chunk loads on first navigation.
+const DashboardView = lazy(() => import('./components/views/DashboardView').then((m) => ({ default: m.DashboardView })));
+const AccountsView = lazy(() => import('./components/views/AccountsView').then((m) => ({ default: m.AccountsView })));
+const LedgerView = lazy(() => import('./components/views/LedgerView').then((m) => ({ default: m.LedgerView })));
+const CsvImportView = lazy(() => import('./components/views/CsvImportView').then((m) => ({ default: m.CsvImportView })));
+const SmsParserView = lazy(() => import('./components/views/SmsParserView').then((m) => ({ default: m.SmsParserView })));
+const FixedDepositsView = lazy(() => import('./components/views/FixedDepositsView').then((m) => ({ default: m.FixedDepositsView })));
+const DpsView = lazy(() => import('./components/views/DpsView').then((m) => ({ default: m.DpsView })));
+const SanchayaBondsView = lazy(() => import('./components/views/SanchayaBondsView').then((m) => ({ default: m.SanchayaBondsView })));
+const GoldFxRatesView = lazy(() => import('./components/views/GoldFxRatesView').then((m) => ({ default: m.GoldFxRatesView })));
+const RetirementFireView = lazy(() => import('./components/views/RetirementFireView').then((m) => ({ default: m.RetirementFireView })));
+const BudgetsView = lazy(() => import('./components/views/BudgetsView').then((m) => ({ default: m.BudgetsView })));
+const FamilyLedgerView = lazy(() => import('./components/views/FamilyLedgerView').then((m) => ({ default: m.FamilyLedgerView })));
+const RecurringView = lazy(() => import('./components/views/RecurringView').then((m) => ({ default: m.RecurringView })));
+const GoalsView = lazy(() => import('./components/views/GoalsView').then((m) => ({ default: m.GoalsView })));
+const DebtsView = lazy(() => import('./components/views/DebtsView').then((m) => ({ default: m.DebtsView })));
+const LoansView = lazy(() => import('./components/views/LoansView').then((m) => ({ default: m.LoansView })));
+const AssetsView = lazy(() => import('./components/views/AssetsView').then((m) => ({ default: m.AssetsView })));
+const ZakatView = lazy(() => import('./components/views/ZakatView').then((m) => ({ default: m.ZakatView })));
+const StockPortfolioView = lazy(() => import('./components/views/StockPortfolioView').then((m) => ({ default: m.StockPortfolioView })));
+const BrokerageView = lazy(() => import('./components/views/BrokerageView').then((m) => ({ default: m.BrokerageView })));
+const StockTradesView = lazy(() => import('./components/views/StockTradesView').then((m) => ({ default: m.StockTradesView })));
+const PortfolioAnalyticsView = lazy(() => import('./components/views/PortfolioAnalyticsView').then((m) => ({ default: m.PortfolioAnalyticsView })));
+const DividendsAndCorporateActionsView = lazy(() => import('./components/views/DividendsAndCorporateActionsView').then((m) => ({ default: m.DividendsAndCorporateActionsView })));
+const FinancialAnalyticsAndReportsView = lazy(() => import('./components/views/FinancialAnalyticsAndReportsView').then((m) => ({ default: m.FinancialAnalyticsAndReportsView })));
+const IncomeTaxView = lazy(() => import('./components/views/IncomeTaxView').then((m) => ({ default: m.IncomeTaxView })));
+const NotificationsView = lazy(() => import('./components/views/NotificationsView').then((m) => ({ default: m.NotificationsView })));
+const AuditLogsView = lazy(() => import('./components/views/AuditLogsView').then((m) => ({ default: m.AuditLogsView })));
+const BackupRestoreView = lazy(() => import('./components/views/BackupRestoreView').then((m) => ({ default: m.BackupRestoreView })));
+const AdminUsersView = lazy(() => import('./components/views/AdminUsersView').then((m) => ({ default: m.AdminUsersView })));
+const RlsInspectorView = lazy(() => import('./components/views/RlsInspectorView').then((m) => ({ default: m.RlsInspectorView })));
+const SettingsView = lazy(() => import('./components/views/SettingsView').then((m) => ({ default: m.SettingsView })));
+const PlayStoreKitView = lazy(() => import('./components/views/PlayStoreKitView').then((m) => ({ default: m.PlayStoreKitView })));
+const UserGuideView = lazy(() => import('./components/views/UserGuideView').then((m) => ({ default: m.UserGuideView })));
+const PrivacyPolicyView = lazy(() => import('./components/views/PrivacyPolicyView').then((m) => ({ default: m.PrivacyPolicyView })));
+const TermsOfServiceView = lazy(() => import('./components/views/TermsOfServiceView').then((m) => ({ default: m.TermsOfServiceView })));
+const PublicLandingView = lazy(() => import('./components/views/PublicLandingView').then((m) => ({ default: m.PublicLandingView })));
+const DataDeletionRequestView = lazy(() => import('./components/views/DataDeletionRequestView').then((m) => ({ default: m.DataDeletionRequestView })));
+
+const ViewLoader: React.FC = () => (
+  <div className="flex items-center justify-center py-24" role="status" aria-label="Loading view">
+    <div className="h-8 w-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin" />
+  </div>
+);
 
 function AppContent() {
   const {
@@ -157,15 +166,15 @@ function AppContent() {
 
   // 1. Direct Public Routes (accessible without authentication/onboarding)
   if (currentView === 'privacy' || pathname === '/privacy' || pathname === '/privacy-policy') {
-    return <PrivacyPolicyView onBack={() => navigate('/settings')} />;
+    return <Suspense fallback={<ViewLoader />}><PrivacyPolicyView onBack={() => navigate('/settings')} /></Suspense>;
   }
 
   if (currentView === 'terms' || pathname === '/terms' || pathname === '/terms-of-service') {
-    return <TermsOfServiceView onBack={() => navigate('/settings')} />;
+    return <Suspense fallback={<ViewLoader />}><TermsOfServiceView onBack={() => navigate('/settings')} /></Suspense>;
   }
 
   if (currentView === 'landing' || pathname === '/landing') {
-    return <PublicLandingView onLaunchApp={handleLaunchApp} />;
+    return <Suspense fallback={<ViewLoader />}><PublicLandingView onLaunchApp={handleLaunchApp} /></Suspense>;
   }
 
   if (
@@ -174,13 +183,13 @@ function AppContent() {
     pathname === '/delete-account' ||
     pathname === '/account-deletion'
   ) {
-    return <DataDeletionRequestView onBack={() => navigate('/settings')} />;
+    return <Suspense fallback={<ViewLoader />}><DataDeletionRequestView onBack={() => navigate('/settings')} /></Suspense>;
   }
 
   // 2. On Web browsers: If user has not onboarded and hasn't clicked Launch App,
   // show public landing page outlining app purpose & features (avoids Google "behind login page" flag)
   if (!Capacitor.isNativePlatform() && !hasCompletedOnboarding && !webShowApp) {
-    return <PublicLandingView onLaunchApp={handleLaunchApp} />;
+    return <Suspense fallback={<ViewLoader />}><PublicLandingView onLaunchApp={handleLaunchApp} /></Suspense>;
   }
 
   return (
@@ -212,6 +221,7 @@ function AppContent() {
             viewName={currentView}
             onNavigateHome={() => setCurrentView('dashboard')}
           >
+            <Suspense fallback={<ViewLoader />}>
             {currentView === 'dashboard' && (
               <DashboardView
                 onNavigate={setCurrentView}
@@ -353,6 +363,7 @@ function AppContent() {
             {currentView === 'data_deletion' && (
               <DataDeletionRequestView onBack={() => setCurrentView('settings')} />
             )}
+            </Suspense>
           </ErrorBoundary>
         </main>
 

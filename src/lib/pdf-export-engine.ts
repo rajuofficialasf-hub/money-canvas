@@ -5,8 +5,20 @@ import { todayLocalISO } from './date-utils';
  * Built with jsPDF & jspdf-autotable with vector typography and cryptographic seals
  */
 
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+// jsPDF + autotable are heavy (~500KB); they are loaded on demand inside the
+// export functions (STEP-19) so they never weigh down the main bundle.
+import type jsPDF from 'jspdf';
+import type autoTableType from 'jspdf-autotable';
+
+type AutoTableFn = typeof autoTableType;
+
+async function loadPdfLibs(): Promise<{ JsPDF: typeof jsPDF; autoTable: AutoTableFn }> {
+  const [jspdfModule, autoTableModule] = await Promise.all([
+    import('jspdf'),
+    import('jspdf-autotable'),
+  ]);
+  return { JsPDF: jspdfModule.default, autoTable: autoTableModule.default };
+}
 import { AuditLogEntry } from '../types/accounting';
 import { UserProfile } from '../types/auth';
 
@@ -283,13 +295,14 @@ function addReportFooters(doc: jsPDF) {
 // ------------------------------------------------------------------------------------------------
 // 1. NBR CAPITAL GAINS TAX STATEMENT PDF
 // ------------------------------------------------------------------------------------------------
-export function exportNbrTaxStatementPdf(
+export async function exportNbrTaxStatementPdf(
   user: UserProfile,
   report: CapitalGainsReport,
   taxYear: string = '2025-2026'
-): boolean {
+): Promise<boolean> {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const { JsPDF, autoTable } = await loadPdfLibs();
+    const doc = new JsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const startY = drawReportHeader(doc, {
       user,
       title: 'NBR Schedule of Capital Gains on Listed Securities',
@@ -435,7 +448,7 @@ export function exportNbrTaxStatementPdf(
 // ------------------------------------------------------------------------------------------------
 // 2. BALANCE SHEET STATEMENT PDF
 // ------------------------------------------------------------------------------------------------
-export function exportBalanceSheetPdf(
+export async function exportBalanceSheetPdf(
   user: UserProfile,
   assets: FinancialStatementItem[],
   liabilities: FinancialStatementItem[],
@@ -444,9 +457,10 @@ export function exportBalanceSheetPdf(
   totalLiabilities: number,
   totalEquity: number,
   asOfDate?: string
-): boolean {
+): Promise<boolean> {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const { JsPDF, autoTable } = await loadPdfLibs();
+    const doc = new JsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const startY = drawReportHeader(doc, {
       user,
       title: 'Statement of Financial Position (Balance Sheet)',
@@ -572,7 +586,7 @@ export function exportBalanceSheetPdf(
 // ------------------------------------------------------------------------------------------------
 // 3. INCOME STATEMENT (P&L) STATEMENT PDF
 // ------------------------------------------------------------------------------------------------
-export function exportIncomeStatementPdf(
+export async function exportIncomeStatementPdf(
   user: UserProfile,
   revenueItems: FinancialStatementItem[],
   expenseItems: FinancialStatementItem[],
@@ -580,9 +594,10 @@ export function exportIncomeStatementPdf(
   totalExpenses: number,
   netIncome: number,
   periodLabel: string = 'Current Financial Year'
-): boolean {
+): Promise<boolean> {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const { JsPDF, autoTable } = await loadPdfLibs();
+    const doc = new JsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const startY = drawReportHeader(doc, {
       user,
       title: 'Statement of Profit or Loss (Income Statement)',
@@ -675,14 +690,15 @@ export function exportIncomeStatementPdf(
 // ------------------------------------------------------------------------------------------------
 // 4. PORTFOLIO VALUATION & PERFORMANCE REPORT PDF
 // ------------------------------------------------------------------------------------------------
-export function exportPortfolioValuationPdf(
+export async function exportPortfolioValuationPdf(
   user: UserProfile,
   holdings: HoldingPosition[],
   metrics: PortfolioMetricSummary,
   benchmarkComparison?: { dsexReturnPct: number; alphaPct: number }
-): boolean {
+): Promise<boolean> {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const { JsPDF, autoTable } = await loadPdfLibs();
+    const doc = new JsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const startY = drawReportHeader(doc, {
       user,
       title: 'DSE Stock Portfolio Valuation & Performance Report',
@@ -821,14 +837,15 @@ export function exportPortfolioValuationPdf(
 // ------------------------------------------------------------------------------------------------
 // 5. FORENSIC AUDIT TRAIL CERTIFICATE PDF
 // ------------------------------------------------------------------------------------------------
-export function exportAuditReportPdf(
+export async function exportAuditReportPdf(
   user: UserProfile,
   logs: AuditLogEntry[],
   isChainValid: boolean,
   verifiedCount: number
-): boolean {
+): Promise<boolean> {
   try {
-    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const { JsPDF, autoTable } = await loadPdfLibs();
+    const doc = new JsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
     const startY = drawReportHeader(doc, {
       user,
       title: 'Cryptographic Forensic Audit Trail Certificate',

@@ -54,9 +54,9 @@ export const AuditLogsView: React.FC = () => {
     }, 450);
   };
 
-  const handleExportAuditPdf = () => {
+  const handleExportAuditPdf = async () => {
     try {
-      const ok = exportAuditReportPdf(
+      const ok = await exportAuditReportPdf(
         user,
         auditLogs,
         lastVerificationResult?.isValid ?? true,

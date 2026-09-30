@@ -332,9 +332,9 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
     showPdfToast('Complete System JSON Audit Backup downloaded.');
   };
 
-  const handleExportTaxPdf = () => {
+  const handleExportTaxPdf = async () => {
     try {
-      const ok = exportNbrTaxStatementPdf(
+      const ok = await exportNbrTaxStatementPdf(
         user,
         {
           fiscalYear,
@@ -376,7 +376,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
     }
   };
 
-  const handleExportBalanceSheetPdf = () => {
+  const handleExportBalanceSheetPdf = async () => {
     try {
       const assetsItems = balanceSheet.currentAssetCategories
         .flatMap((cat) =>
@@ -408,7 +408,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
         { name: 'Retained Earnings & Cumulative Net Surplus', amount: balanceSheet.netWorth, code: 'EQ-3001' },
       ];
 
-      const ok = exportBalanceSheetPdf(
+      const ok = await exportBalanceSheetPdf(
         user,
         assetsItems,
         liabilitiesItems,
@@ -428,7 +428,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
     }
   };
 
-  const handleExportIncomeStatementPdf = () => {
+  const handleExportIncomeStatementPdf = async () => {
     try {
       const revenueItems = incomeStatement.incomeCategories.map((c) => ({
         name: c.categoryName,
@@ -442,7 +442,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
         code: 'EXP-5000',
       }));
 
-      const ok = exportIncomeStatementPdf(
+      const ok = await exportIncomeStatementPdf(
         user,
         revenueItems,
         expenseItems,
