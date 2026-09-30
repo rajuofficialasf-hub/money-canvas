@@ -51,6 +51,7 @@ import { PublicLandingView } from './components/views/PublicLandingView';
 import { DataDeletionRequestView } from './components/views/DataDeletionRequestView';
 import { ClipboardSmsBanner } from './components/common/ClipboardSmsBanner';
 import { SyncConflictModal } from './components/common/SyncConflictModal';
+import { LedgerHealthBanners } from './components/common/LedgerHealthBanners';
 import { Capacitor } from '@capacitor/core';
 import { UserGuideModal } from './components/onboarding/UserGuideModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -404,6 +405,9 @@ function AppContent() {
 
         {/* STEP-15: Multi-device sync fork resolution prompt */}
         <SyncConflictModal />
+
+        {/* STEP-16: Storage quota & ledger integrity warnings */}
+        <LedgerHealthBanners />
 
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav

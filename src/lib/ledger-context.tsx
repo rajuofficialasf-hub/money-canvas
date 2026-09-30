@@ -247,6 +247,8 @@ interface LedgerContextType {
   restoreFromCloud: () => Promise<{ success: boolean; error?: string }>;
   syncConflict: SyncConflictInfo | null;
   resolveSyncConflict: (choice: 'local' | 'cloud') => Promise<void>;
+  storageWarning: string | null;
+  integrityWarning: string | null;
 }
 
 export interface SyncConflictInfo {
@@ -293,6 +295,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [cloudSyncError, setCloudSyncError] = useState<string | null>(null);
   const [cloudSyncWarning, setCloudSyncWarning] = useState<string | null>(null);
   const [syncConflict, setSyncConflict] = useState<SyncConflictInfo | null>(null);
+  const [storageWarning, setStorageWarning] = useState<string | null>(null);
+  const [integrityWarning, setIntegrityWarning] = useState<string | null>(null);
   const conflictCloudBundleRef = useRef<BackupBundle | null>(null);
   const lastSyncedChecksumRef = useRef<string>('');
   const currentLoadedUserIdRef = useRef<string>(userId);
@@ -367,12 +371,22 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   });
 
   useEffect(() => {
-    localStorage.setItem(AUDIT_LOGS_KEY, JSON.stringify(auditLogs));
-  }, [AUDIT_LOGS_KEY, auditLogs]);
+    if (currentLoadedUserIdRef.current !== userId) return;
+    try {
+      localStorage.setItem(AUDIT_LOGS_KEY, JSON.stringify(auditLogs));
+    } catch (e) {
+      console.warn('Failed persisting audit logs', e);
+    }
+  }, [AUDIT_LOGS_KEY, auditLogs, userId]);
 
   useEffect(() => {
-    localStorage.setItem(DISMISSED_ALERTS_KEY, JSON.stringify(dismissedAlertIds));
-  }, [DISMISSED_ALERTS_KEY, dismissedAlertIds]);
+    if (currentLoadedUserIdRef.current !== userId) return;
+    try {
+      localStorage.setItem(DISMISSED_ALERTS_KEY, JSON.stringify(dismissedAlertIds));
+    } catch (e) {
+      console.warn('Failed persisting dismissed alerts', e);
+    }
+  }, [DISMISSED_ALERTS_KEY, dismissedAlertIds, userId]);
 
   // Initialize or load accounts
   const [accounts, setAccounts] = useState<Account[]>(() => {
@@ -810,41 +824,74 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     benchmarkIndexPrices,
   ]);
 
-  // Persist all state to localStorage
+  // Persist all state to localStorage (STEP-16):
+  // - guarded so a user switch never writes the previous tenant's data into
+  //   the new tenant's keys before hydration runs
+  // - debounced (~500ms) with per-collection dirty tracking by reference, so a
+  //   single state change writes one key instead of ~30 full-ledger stringifies
+  const persistTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastPersistedRef = useRef<Map<string, unknown>>(new Map());
+  const flushPersistRef = useRef<() => void>(() => {});
+
   useEffect(() => {
-    try {
-      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
-      localStorage.setItem(CATEGORIES_KEY, JSON.stringify(categories));
-      localStorage.setItem(TRANSACTIONS_KEY, JSON.stringify(transactions));
-      localStorage.setItem(LINES_KEY, JSON.stringify(transactionLines));
-      localStorage.setItem(FD_KEY, JSON.stringify(fixedDeposits));
-      localStorage.setItem(BUDGETS_KEY, JSON.stringify(budgets));
-      localStorage.setItem(RECURRING_KEY, JSON.stringify(recurringTransactions));
-      localStorage.setItem(GOALS_KEY, JSON.stringify(financialGoals));
-      localStorage.setItem(GOAL_CONTRIBS_KEY, JSON.stringify(goalContributions));
-      localStorage.setItem(DPS_KEY, JSON.stringify(dpsAccounts));
-      localStorage.setItem(DPS_INSTALLMENTS_KEY, JSON.stringify(dpsInstallments));
-      localStorage.setItem(DEBTS_KEY, JSON.stringify(debts));
-      localStorage.setItem(LOANS_KEY, JSON.stringify(loans));
-      localStorage.setItem(LOAN_SCHEDULES_KEY, JSON.stringify(loanSchedules));
-      localStorage.setItem(PHYSICAL_ASSETS_KEY, JSON.stringify(physicalAssets));
-      localStorage.setItem(STATIC_LIABILITIES_KEY, JSON.stringify(staticLiabilities));
-      localStorage.setItem(NET_WORTH_SNAPSHOTS_KEY, JSON.stringify(netWorthSnapshots));
-      localStorage.setItem(ZAKAT_SETTINGS_KEY, JSON.stringify(zakatSettings));
-      localStorage.setItem(BROKERS_KEY, JSON.stringify(brokers));
-      localStorage.setItem(BROKER_ACCOUNTS_KEY, JSON.stringify(brokerAccounts));
-      localStorage.setItem(BROKER_CASH_TRANSACTIONS_KEY, JSON.stringify(brokerCashTransactions));
-      localStorage.setItem(STOCKS_KEY, JSON.stringify(stocks));
-      localStorage.setItem(STOCK_TRANSACTIONS_KEY, JSON.stringify(stockTransactions));
-      localStorage.setItem(STOCK_PRICE_HISTORY_KEY, JSON.stringify(stockPriceHistory));
-      localStorage.setItem(BENCHMARK_PRICES_KEY, JSON.stringify(benchmarkIndexPrices));
-      localStorage.setItem(PORTFOLIO_SNAPSHOTS_KEY, JSON.stringify(portfolioSnapshots));
-      localStorage.setItem(DIVIDENDS_KEY, JSON.stringify(dividends));
-      localStorage.setItem(CORPORATE_ACTIONS_KEY, JSON.stringify(corporateActions));
-      localStorage.setItem(IPO_APPLICATIONS_KEY, JSON.stringify(ipoApplications));
-    } catch (e) {
-      console.warn('Failed persisting state to localStorage', e);
-    }
+    if (currentLoadedUserIdRef.current !== userId) return;
+
+    const entries: Array<[string, unknown]> = [
+      [ACCOUNTS_KEY, accounts],
+      [CATEGORIES_KEY, categories],
+      [TRANSACTIONS_KEY, transactions],
+      [LINES_KEY, transactionLines],
+      [FD_KEY, fixedDeposits],
+      [BUDGETS_KEY, budgets],
+      [RECURRING_KEY, recurringTransactions],
+      [GOALS_KEY, financialGoals],
+      [GOAL_CONTRIBS_KEY, goalContributions],
+      [DPS_KEY, dpsAccounts],
+      [DPS_INSTALLMENTS_KEY, dpsInstallments],
+      [DEBTS_KEY, debts],
+      [LOANS_KEY, loans],
+      [LOAN_SCHEDULES_KEY, loanSchedules],
+      [PHYSICAL_ASSETS_KEY, physicalAssets],
+      [STATIC_LIABILITIES_KEY, staticLiabilities],
+      [NET_WORTH_SNAPSHOTS_KEY, netWorthSnapshots],
+      [ZAKAT_SETTINGS_KEY, zakatSettings],
+      [BROKERS_KEY, brokers],
+      [BROKER_ACCOUNTS_KEY, brokerAccounts],
+      [BROKER_CASH_TRANSACTIONS_KEY, brokerCashTransactions],
+      [STOCKS_KEY, stocks],
+      [STOCK_TRANSACTIONS_KEY, stockTransactions],
+      [STOCK_PRICE_HISTORY_KEY, stockPriceHistory],
+      [BENCHMARK_PRICES_KEY, benchmarkIndexPrices],
+      [PORTFOLIO_SNAPSHOTS_KEY, portfolioSnapshots],
+      [DIVIDENDS_KEY, dividends],
+      [CORPORATE_ACTIONS_KEY, corporateActions],
+      [IPO_APPLICATIONS_KEY, ipoApplications],
+    ];
+
+    const flush = () => {
+      if (currentLoadedUserIdRef.current !== userId) return;
+      try {
+        for (const [key, value] of entries) {
+          if (lastPersistedRef.current.get(key) === value) continue;
+          localStorage.setItem(key, JSON.stringify(value));
+          lastPersistedRef.current.set(key, value);
+        }
+        setStorageWarning(null);
+      } catch (e) {
+        console.warn('Failed persisting state to localStorage', e);
+        setStorageWarning(
+          'লোকাল স্টোরেজে ডেটা সংরক্ষণ ব্যর্থ হয়েছে — সম্ভবত জায়গা শেষ। ব্যাকআপ নিন এবং পুরনো ডেটা আর্কাইভ করুন। / Failed to save data locally (storage quota may be full). Please take a backup.'
+        );
+      }
+    };
+    flushPersistRef.current = flush;
+
+    if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
+    persistTimerRef.current = setTimeout(flush, 500);
+
+    return () => {
+      if (persistTimerRef.current) clearTimeout(persistTimerRef.current);
+    };
   }, [
     accounts,
     transactions,
@@ -905,6 +952,37 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     categories,
     CATEGORIES_KEY,
   ]);
+
+  // Flush any pending debounced writes before the tab closes
+  useEffect(() => {
+    const onBeforeUnload = () => flushPersistRef.current();
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, []);
+
+  // STEP-16: lightweight integrity check — every posted transaction's lines
+  // must sum to zero; violations point at corrupted or partially-restored data.
+  useEffect(() => {
+    try {
+      const sums = new Map<string, number>();
+      for (const l of transactionLines) {
+        sums.set(l.transactionId, (sums.get(l.transactionId) || 0) + l.amount);
+      }
+      let violations = 0;
+      for (const tx of transactions) {
+        if (tx.status !== 'posted') continue;
+        if (Math.abs(sums.get(tx.id) ?? 0) > 0.005) violations++;
+      }
+      if (violations > 0) {
+        console.error(`Ledger integrity check failed: ${violations} posted transaction(s) do not sum to zero.`);
+        setIntegrityWarning(
+          `${violations}টি পোস্টেড লেনদেনের ডাবল-এন্ট্রি ব্যালেন্স মিলছে না — ডেটা ক্ষতিগ্রস্ত হতে পারে। অনুগ্রহ করে ব্যাকআপ নিন। / ${violations} posted transaction(s) violate the double-entry sum-to-zero rule.`
+        );
+      } else {
+        setIntegrityWarning(null);
+      }
+    } catch {}
+  }, [transactions, transactionLines]);
 
   // Derived Authoritative Account Balances (v_account_balances view)
   const accountBalances = useMemo(() => {
@@ -4771,6 +4849,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         cloudSyncWarning,
         syncConflict,
         resolveSyncConflict,
+        storageWarning,
+        integrityWarning,
         lastCloudSyncAt,
         cloudSyncError,
         syncWithCloud,
