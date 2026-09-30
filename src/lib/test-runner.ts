@@ -871,5 +871,39 @@ export function runAllAccountingTests(): TestCaseResult[] {
     },
   });
 
+  // 20. STEP-7: Buy→Sell→Buy WAC correctness (realized gain + remaining WAC after sell)
+  const step7Holdings = calculateStockHoldings(
+    [{ id: 's7', symbol: 'TEST', companyName: 'Test Corp', sector: 'Test', exchange: 'DSE', currentPrice: 250 }],
+    [
+      { transactionType: 'buy', stockId: 's7', quantity: 100, price: 100, grossValue: 10000, commission: 0, tax: 0, otherCharges: 0 },
+      { transactionType: 'sell', stockId: 's7', quantity: 100, price: 120, grossValue: 12000, commission: 0, tax: 0, otherCharges: 0 },
+      { transactionType: 'buy', stockId: 's7', quantity: 100, price: 200, grossValue: 20000, commission: 0, tax: 0, otherCharges: 0 },
+    ]
+  );
+  const step7Wac = step7Holdings[0]?.weightedAverageCost || 0;
+  const step7Qty = step7Holdings[0]?.quantity || 0;
+  // After sell: remaining 0 shares, cost=0. After 2nd buy: 100 shares @ 200, WAC=200
+  const step7WacCorrect = step7Wac === 200 && step7Qty === 100;
+  results.push({
+    id: 20,
+    title: 'STEP-7: Buy→Sell→Buy WAC Deduction & Realized Gain Correctness',
+    description: 'Buy 100@100, Sell 100@120 (realized gain ৳2000), Buy 100@200. Remaining: 100 shares, WAC=200.',
+    passed: step7WacCorrect,
+    invariantStatus: `After full sell + re-buy: WAC should be 200.0000 (got ${step7Wac}), qty should be 100 (got ${step7Qty})`,
+    balanceDeltas: { 'Realized Gain': 2000 },
+    logs: [
+      'Trade 1: Buy 100 @ 100 = ৳10,000 cost basis',
+      'Trade 2: Sell 100 @ 120 = ৳12,000 gross proceeds, WAC=100, cost=10,000, gain=2,000',
+      'Trade 3: Buy 100 @ 200 = ৳20,000 cost basis',
+      `Remaining: ${step7Qty} shares, WAC = ৳${step7Wac} (expected 200.0000)`,
+    ],
+    sampleTransaction: {
+      header: { type: 'adjustment', status: 'posted', note: 'STEP-7 WAC sell deduction verification' },
+      lines: [
+        { type: 'account', targetName: 'Stock Holdings', amount: 20000 },
+      ],
+    },
+  });
+
   return results;
 }

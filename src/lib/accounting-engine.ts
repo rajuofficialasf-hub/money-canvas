@@ -117,7 +117,16 @@ export function calculateStockHoldings(
     { remainingShares: number; totalBuyCostBasis: number; totalBuyShares: number }
   >();
 
-  for (const trade of trades) {
+  // STEP-7: Sort trades by date ascending so buys accumulate before sells are processed
+  const sortedTrades = [...trades].sort((a, b) => {
+    // TradeInput may not have tradeDate; preserve original order if missing
+    const dateA = (a as any).tradeDate;
+    const dateB = (b as any).tradeDate;
+    if (dateA && dateB) return dateA.localeCompare(dateB);
+    return 0;
+  });
+
+  for (const trade of sortedTrades) {
     let pos = positions.get(trade.stockId);
     if (!pos) {
       pos = { remainingShares: 0, totalBuyCostBasis: 0, totalBuyShares: 0 };
@@ -130,7 +139,12 @@ export function calculateStockHoldings(
       pos.totalBuyCostBasis += buyCostBasis;
       pos.totalBuyShares += trade.quantity;
     } else {
+      // STEP-7: Deduct sold cost basis (WAC × qty) from remaining cost
+      const wac = pos.totalBuyShares > 0 ? pos.totalBuyCostBasis / pos.totalBuyShares : 0;
+      const soldCostBasis = round2(trade.quantity * wac);
       pos.remainingShares -= trade.quantity;
+      pos.totalBuyCostBasis = Math.max(0, round2(pos.totalBuyCostBasis - soldCostBasis));
+      pos.totalBuyShares = Math.max(0, pos.totalBuyShares - trade.quantity);
     }
   }
 
@@ -760,7 +774,12 @@ export function computeStockHoldings(
     }
   >();
 
-  for (const t of relevantTrades) {
+  // STEP-7: Sort trades by tradeDate ascending so buys accumulate WAC before sells process
+  const sortedTrades = [...relevantTrades].sort(
+    (a, b) => new Date(a.tradeDate).getTime() - new Date(b.tradeDate).getTime()
+  );
+
+  for (const t of sortedTrades) {
     const key = `${t.brokerAccountId}::${t.stockId}`;
     let item = tradeMap.get(key);
     if (!item) {
@@ -779,14 +798,19 @@ export function computeStockHoldings(
       const buyCostBasis = round2(t.grossValue + t.commission + t.tax + t.otherCharges);
       item.totalBuyCostBasis += buyCostBasis;
     } else if (t.transactionType === 'sell') {
+      // STEP-7: Deduct sold cost basis (WAC × qty) from remaining cost
+      const wac = item.totalBoughtShares > 0 ? item.totalBuyCostBasis / item.totalBoughtShares : 0;
+      const soldCostBasis = round2(t.quantity * wac);
       item.totalSoldShares += t.quantity;
+      item.totalBoughtShares = Math.max(0, item.totalBoughtShares - t.quantity);
+      item.totalBuyCostBasis = Math.max(0, round2(item.totalBuyCostBasis - soldCostBasis));
     }
   }
 
   const holdings: StockHolding[] = [];
 
   for (const item of tradeMap.values()) {
-    const remainingShares = round2(item.totalBoughtShares - item.totalSoldShares);
+    const remainingShares = round2(item.totalBoughtShares);
     if (remainingShares <= 0) continue; // Closed positions excluded from active holdings
 
     const stock = stocks.find((s) => s.id === item.stockId);
@@ -795,9 +819,10 @@ export function computeStockHoldings(
     const sector = stock?.sector || 'Diversified';
     const currentMarketPrice = stock?.currentPrice || 0;
 
+    // STEP-7: WAC is now derived from remaining cost / remaining shares (after sell deductions)
     const weightedAverageCost =
-      item.totalBoughtShares > 0
-        ? round4(item.totalBuyCostBasis / item.totalBoughtShares)
+      remainingShares > 0
+        ? round4(item.totalBuyCostBasis / remainingShares)
         : 0;
 
     const investedValue = round2(remainingShares * weightedAverageCost);
@@ -1058,8 +1083,12 @@ export function computePortfolioPerformanceMetrics(
   let totalRealizedGain = 0;
   // Calculate realized capital gain across all sells
   // WAC at trade time
+  // STEP-7: Sort trades by tradeDate ascending to correctly accumulate WAC before sells
+  const sortedStockTxs = [...stockTransactions].sort(
+    (a, b) => new Date(a.tradeDate).getTime() - new Date(b.tradeDate).getTime()
+  );
   const buyCostMap = new Map<string, { totalShares: number; totalCost: number }>();
-  for (const st of stockTransactions) {
+  for (const st of sortedStockTxs) {
     let acc = buyCostMap.get(st.stockId);
     if (!acc) {
       acc = { totalShares: 0, totalCost: 0 };
@@ -1075,7 +1104,9 @@ export function computePortfolioPerformanceMetrics(
       const netSellProceeds = st.grossValue - st.commission - st.tax - st.otherCharges;
       const gain = netSellProceeds - costOfSharesSold;
       totalRealizedGain += gain;
-      acc.totalShares -= st.quantity;
+      // STEP-7: Deduct sold shares and their cost from running totals
+      acc.totalShares = Math.max(0, acc.totalShares - st.quantity);
+      acc.totalCost = Math.max(0, round2(acc.totalCost - costOfSharesSold));
     }
   }
   totalRealizedGain = round2(totalRealizedGain);
