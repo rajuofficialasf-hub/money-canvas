@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { Loan, LoanType, LoanInterestMethod, LoanPaymentScheduleItem } from '../../types/accounting';
@@ -47,7 +48,7 @@ export const LoansView: React.FC = () => {
   const [annualInterestRate, setAnnualInterestRate] = useState<number | ''>(9.0);
   const [tenureMonths, setTenureMonths] = useState<number | ''>(12);
   const [disbursementAccountId, setDisbursementAccountId] = useState('');
-  const [disbursementDate, setDisbursementDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [disbursementDate, setDisbursementDate] = useState(() => todayLocalISO());
   const [formError, setFormError] = useState('');
 
   // Payment Form State

@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useRef } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { useAuth } from '../../lib/auth-context';
@@ -403,7 +404,7 @@ export const BackupRestoreView: React.FC = () => {
       const bundle = exportFullBackup();
       const encrypted = await encryptBackupBundle(bundle, exportPassphrase, exportHint);
       const content = JSON.stringify(encrypted, null, 2);
-      const filename = `money-canvas-encrypted-backup-${user.fullName.replace(/\s+/g, '_')}-${new Date().toISOString().split('T')[0]}.json`;
+      const filename = `money-canvas-encrypted-backup-${user.fullName.replace(/\s+/g, '_')}-${todayLocalISO()}.json`;
       downloadFile(filename, content, 'application/json');
       setShowEncryptedExportModal(false);
       setExportPassphrase('');
@@ -522,14 +523,14 @@ export const BackupRestoreView: React.FC = () => {
     setTimeout(() => {
       const bundle = exportFullBackup();
       const content = JSON.stringify(bundle, null, 2);
-      const filename = `money-canvas-backup-${user.fullName.replace(/\s+/g, '_')}-${new Date().toISOString().split('T')[0]}.json`;
+      const filename = `money-canvas-backup-${user.fullName.replace(/\s+/g, '_')}-${todayLocalISO()}.json`;
       downloadFile(filename, content, 'application/json');
       setIsExporting(false);
     }, 400);
   };
 
   const handleExportCsv = (type: 'accounts' | 'ledger' | 'trades' | 'dividends') => {
-    const dateStr = new Date().toISOString().split('T')[0];
+    const dateStr = todayLocalISO();
     if (type === 'accounts') {
       const csv = exportAccountsToCsv(accounts, accountBalances);
       downloadFile(`accounts-registry-${dateStr}.csv`, csv, 'text/csv');

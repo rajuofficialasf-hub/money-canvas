@@ -1,3 +1,4 @@
+import { toLocalISO } from './date-utils';
 /**
  * Money Canvas — Loan Prepayment & Early Payoff Simulator Engine (FEAT-7)
  *
@@ -150,7 +151,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
 
     schedule.push({
       month: m,
-      dueDate: monthDueDate.toISOString().split('T')[0],
+      dueDate: toLocalISO(monthDueDate),
       beginningBalance,
       scheduledEmi: scheduledEmiAmount,
       extraPrepayment: extraPrincipal,
@@ -188,7 +189,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
       monthlyEmi: baseEmi,
       totalInterest: origTotalInterest,
       totalPayment: origTotalPayment,
-      payoffDate: origPayoffDate.toISOString().split('T')[0],
+      payoffDate: toLocalISO(origPayoffDate),
     },
     newSummary: {
       tenureMonths: simulatedMonths,
@@ -196,7 +197,7 @@ export function simulateLoanPrepayment(input: PrepaymentSimulationInput): LoanPr
       totalInterest: totalInterestNew,
       totalPrepaymentPaid: totalPrepaymentNew,
       totalPayment: newTotalPayment,
-      payoffDate: newPayoffDate.toISOString().split('T')[0],
+      payoffDate: toLocalISO(newPayoffDate),
     },
     comparison: {
       interestSaved,

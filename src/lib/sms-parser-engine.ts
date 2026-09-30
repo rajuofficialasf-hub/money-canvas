@@ -1,3 +1,4 @@
+import { todayLocalISO } from './date-utils';
 import { newId } from './id-utils';
 /**
  * 100% Free Offline Client-Side SMS & Notification Parser
@@ -65,7 +66,7 @@ function parseAmountNumber(val: string): number {
  * Parses date string from SMS or returns today in YYYY-MM-DD
  */
 function extractDate(text: string): { date: string; time?: string } {
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayLocalISO();
 
   // Pattern 1: 26-Sep-2026 or 26 Sep 2026 or 26-09-2026
   const textDateMatch = text.match(/\b(\d{1,2})[-/\s]([A-Za-z]{3}|\d{1,2})[-/\s](\d{4}|\d{2})\b/);

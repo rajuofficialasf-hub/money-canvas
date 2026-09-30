@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { RecurringFrequency } from '../../types/accounting';
@@ -32,7 +33,7 @@ export const RecurringView: React.FC = () => {
   // Form State
   const [formName, setFormName] = useState('');
   const [formFrequency, setFormFrequency] = useState<RecurringFrequency>('monthly');
-  const [formStartDate, setFormStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [formStartDate, setFormStartDate] = useState(todayLocalISO());
   const [formType, setFormType] = useState<'expense' | 'income' | 'transfer'>('expense');
   const [formAccountId, setFormAccountId] = useState('');
   const [formCategoryId, setFormCategoryId] = useState('');

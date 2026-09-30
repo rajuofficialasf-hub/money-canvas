@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import {
@@ -49,7 +50,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
   // Form State for Quick / Guided Transaction
   const [entryMode, setEntryMode] = useState<'expense' | 'income' | 'transfer' | 'split'>('expense');
-  const [txDate, setTxDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
+  const [txDate, setTxDate] = useState<string>(() => todayLocalISO());
   const [txNote, setTxNote] = useState('');
   const [amount, setAmount] = useState<string>('');
   const [selectedAccount, setSelectedAccount] = useState<string>(accounts[0]?.id || '');

@@ -1,3 +1,4 @@
+import { todayLocalISO } from './date-utils';
 /**
  * Dhaka Stock Exchange (DSE) Market Data Service Layer
  * Target API: stockchartbd.com (v1 Developer Feed)
@@ -320,7 +321,7 @@ export async function fetchStockHistory(
       const json = await response.json();
       const list = Array.isArray(json) ? json : json?.data || json?.history || [];
       const records: HistoricalPriceRecord[] = list.map((r: any) => ({
-        date: r.date || r.trade_date || r.time?.split('T')[0] || new Date().toISOString().split('T')[0],
+        date: r.date || r.trade_date || r.time?.split('T')[0] || todayLocalISO(),
         open: Number(r.open || r.open_price || r.close || 0),
         high: Number(r.high || r.day_high || r.close || 0),
         low: Number(r.low || r.day_low || r.close || 0),

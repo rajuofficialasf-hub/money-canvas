@@ -1,3 +1,4 @@
+import { toLocalISO } from './date-utils';
 /**
  * Bangladesh National Savings Certificates (সঞ্চয়পত্র),
  * Treasury Bonds (ট্রেজারি বন্ড) & Islamic Sukuk Engine
@@ -287,7 +288,7 @@ export function generateUpcomingSchedule(
   limitDate.setMonth(limitDate.getMonth() + monthsAhead);
 
   while (curr <= limitDate && curr <= maturity) {
-    const dateStr = curr.toISOString().split('T')[0];
+    const dateStr = toLocalISO(curr);
     result.push({
       id: `${item.id}-${dateStr}`,
       investmentId: item.id,

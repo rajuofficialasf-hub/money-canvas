@@ -1,3 +1,4 @@
+import { todayLocalISO, toLocalISO } from './date-utils';
 /**
  * Money Canvas — Comprehensive CSV & Bank Statement Parser Engine (FEAT-3)
  *
@@ -308,7 +309,7 @@ export function normalizeDateToISO(dateString: string): string | null {
   // Fallback to Date parser
   const parsed = new Date(normalized);
   if (!isNaN(parsed.getTime())) {
-    return parsed.toISOString().split('T')[0];
+    return toLocalISO(parsed);
   }
 
   return null;
@@ -622,7 +623,7 @@ export function parseStatementRows(
     parsedRows.push({
       rowNumber: idx + 1,
       rawDate,
-      isoDate: isoDate || new Date().toISOString().split('T')[0],
+      isoDate: isoDate || todayLocalISO(),
       rawDescription: rawDesc,
       cleanDescription: cleanDesc,
       rawAmount,

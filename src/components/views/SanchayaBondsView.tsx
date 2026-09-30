@@ -1,3 +1,4 @@
+import { todayLocalISO, toLocalISO } from '../../lib/date-utils';
 import { newId } from '../../lib/id-utils';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLanguage } from '../../lib/language-context';
@@ -94,7 +95,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
   const [certificateNumber, setCertificateNumber] = useState('');
   const [issuer, setIssuer] = useState('Sonali Bank PLC');
   const [issueOfficeBranch, setIssueOfficeBranch] = useState('Motijheel Corporate Branch');
-  const [purchaseDate, setPurchaseDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [purchaseDate, setPurchaseDate] = useState(() => todayLocalISO());
   const [principalAmount, setPrincipalAmount] = useState('500000');
   const [customRate, setCustomRate] = useState('11.52');
   const [customTenure, setCustomTenure] = useState('5');
@@ -204,7 +205,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
     // Calculate maturity date
     const pDate = new Date(purchaseDate);
     pDate.setFullYear(pDate.getFullYear() + parsedTenure);
-    const maturityDate = pDate.toISOString().split('T')[0];
+    const maturityDate = toLocalISO(pDate);
 
     const fallbackTitle = preset ? (isBn ? preset.nameBn : preset.nameEn) : (isBn ? 'সঞ্চয়পত্র' : 'Savings Certificate');
 
@@ -300,14 +301,14 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
 
     const encashCalc = calculatePreMatureEncashment(
       encashModalItem,
-      new Date().toISOString().split('T')[0],
+      todayLocalISO(),
       isBn
     );
     const targetAccountId = encashModalItem.linkedBankAccountId || accounts.find((a) => a.accountType === 'bank')?.id;
 
     if (targetAccountId) {
       postTransaction({
-        date: new Date().toISOString().split('T')[0],
+        date: todayLocalISO(),
         type: 'income',
         note: isBn
           ? `মেয়াদপূর্ব সঞ্চয়পত্র ভাঙ্গানো: ${encashModalItem.title} (${encashModalItem.certificateNumber})`
@@ -331,7 +332,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           ? {
               ...b,
               status: 'encashed',
-              encashedDate: new Date().toISOString().split('T')[0],
+              encashedDate: todayLocalISO(),
               encashedAmount: encashCalc.netPayableAtCounter,
             }
           : b
@@ -1396,7 +1397,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             {(() => {
               const encashCalc = calculatePreMatureEncashment(
                 encashModalItem,
-                new Date().toISOString().split('T')[0],
+                todayLocalISO(),
                 isBn
               );
 

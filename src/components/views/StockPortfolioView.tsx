@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useEffect, useRef } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { Stock, StockHolding } from '../../types/accounting';
@@ -293,7 +294,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `dse_market_prices_${new Date().toISOString().split('T')[0]}.csv`);
+    link.setAttribute('download', `dse_market_prices_${todayLocalISO()}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

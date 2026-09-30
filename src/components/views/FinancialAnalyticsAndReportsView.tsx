@@ -1,3 +1,4 @@
+import { todayLocalISO, toLocalISO } from '../../lib/date-utils';
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
@@ -95,7 +96,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
 
   const { pnlStartDate, pnlEndDate } = useMemo(() => {
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = toLocalISO(today);
     if (pnlDateRange === 'month') {
       const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
         .toISOString()
@@ -327,7 +328,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
     };
 
     const jsonStr = JSON.stringify(backupData, null, 2);
-    downloadBrowserFile(jsonStr, `Finance_OS_Full_Audit_Backup_${new Date().toISOString().split('T')[0]}.json`, 'application/json');
+    downloadBrowserFile(jsonStr, `Finance_OS_Full_Audit_Backup_${todayLocalISO()}.json`, 'application/json');
     showPdfToast('Complete System JSON Audit Backup downloaded.');
   };
 

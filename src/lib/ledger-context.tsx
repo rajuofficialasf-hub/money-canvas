@@ -1,3 +1,4 @@
+import { todayLocalISO, toLocalISO } from './date-utils';
 import { newId } from './id-utils';
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useAuth } from './auth-context';
@@ -982,7 +983,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       initialTx = {
         id: txId,
         userId,
-        date: new Date().toISOString().split('T')[0],
+        date: todayLocalISO(),
         type: 'opening_balance',
         status: 'posted',
         version: 1,
@@ -1166,7 +1167,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const reversalTx: Transaction = {
       id: reversalTxId,
       userId,
-      date: new Date().toISOString().split('T')[0],
+      date: todayLocalISO(),
       type: 'adjustment',
       status: 'posted',
       version: 1,
@@ -1228,7 +1229,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const startDateObj = new Date(input.startDate);
     const maturityDateObj = new Date(startDateObj);
     maturityDateObj.setMonth(maturityDateObj.getMonth() + input.tenureMonths);
-    const maturityDateStr = maturityDateObj.toISOString().split('T')[0];
+    const maturityDateStr = toLocalISO(maturityDateObj);
 
     const fdAccount: Account = {
       id: fdAccountId,
@@ -1326,7 +1327,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     const txId = newId('tx-fd-mat');
-    const maturityDate = new Date().toISOString().split('T')[0];
+    const maturityDate = todayLocalISO();
 
     const lines: TransactionLine[] = [
       {
@@ -1416,7 +1417,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     const txId = newId('tx-fd-brk');
-    const txDate = new Date().toISOString().split('T')[0];
+    const txDate = todayLocalISO();
 
     const lines: TransactionLine[] = [
       {
@@ -1594,7 +1595,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const rec = recurringTransactions.find((r) => r.id === id);
     if (!rec) return { success: false, error: 'Recurring schedule not found.' };
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     const txInput: NewTransactionInput = {
       ...rec.templateTransaction,
       date: todayStr,
@@ -1664,7 +1665,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         id: newId('gc'),
         goalId,
         amount: round2(input.initialDeposit),
-        contributionDate: new Date().toISOString().split('T')[0],
+        contributionDate: todayLocalISO(),
         note: 'Initial tracking goal deposit',
         createdAt: new Date().toISOString(),
       };
@@ -1687,7 +1688,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const parsedAmt = round2(amount);
     if (parsedAmt <= 0) return { success: false, error: 'Contribution must be greater than zero.' };
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
 
     if (goal.goalMode === 'tracking_goal') {
       // Lock 3: tracking_goal does NOT post to double-entry ledger or manufacture an expense
@@ -1759,7 +1760,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const startObj = new Date(input.startDate);
     const maturityObj = new Date(startObj);
     maturityObj.setMonth(maturityObj.getMonth() + input.tenureMonths);
-    const maturityDateStr = maturityObj.toISOString().split('T')[0];
+    const maturityDateStr = toLocalISO(maturityObj);
 
     // 1. Create DPS Account in canonical accounts table
     const dpsAccount: Account = {
@@ -1806,7 +1807,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         id: `inst-${dpsId}-${i}`,
         dpsAccountId: dpsId,
         installmentNumber: i,
-        dueDate: d.toISOString().split('T')[0],
+        dueDate: toLocalISO(d),
         expectedAmount: round2(input.monthlyInstallment),
         status: i === 1 ? 'paid' : 'pending',
         paidAmount: i === 1 ? round2(input.monthlyInstallment) : undefined,
@@ -1886,7 +1887,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     const txId = newId('tx-dps-pay');
 
     // Double-entry transfer
@@ -1960,7 +1961,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     );
 
     const txId = newId('tx-dps-mat');
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
 
     // Double-entry maturity liquidation:
     // 1. DPS Account: -accumulatedPrincipal
@@ -2044,7 +2045,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createDebt = (input: NewDebtInput) => {
     const debtId = newId('debt');
     const isLent = input.direction === 'lent';
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
 
     // Business Logic Guard: When lending money, check source account balance
     if (isLent) {
@@ -2142,7 +2143,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const debt = debts.find((d) => d.id === debtId);
     if (!debt) return { success: false, error: 'Debt record not found' };
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     const isLent = debt.direction === 'lent';
 
     // Business Logic Guard: When repaying borrowed debt, check settlement account balance
@@ -2230,7 +2231,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createLoan = (input: NewLoanInput) => {
     const loanId = newId('loan');
     const loanAccId = newId('acc-loan');
-    const todayStr = input.disbursementDate || new Date().toISOString().split('T')[0];
+    const todayStr = input.disbursementDate || todayLocalISO();
 
     const { emi } =
       input.interestMethod === 'reducing'
@@ -2347,7 +2348,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     const txId = newId('tx-emi');
 
     // Section 9.4:
@@ -2444,7 +2445,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     const assetId = newId('asset');
     const assetAccId = newId('acc-asset');
-    const todayStr = input.purchaseDate || new Date().toISOString().split('T')[0];
+    const todayStr = input.purchaseDate || todayLocalISO();
 
     const assetAccount: Account = {
       id: assetAccId,
@@ -2557,7 +2558,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const createStaticLiability = (name: string, type: string, amount: number, sourceAccountId?: string) => {
     const liabId = newId('liab');
     const liabAccId = newId('acc-liab');
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
 
     const liabAccount: Account = {
       id: liabAccId,
@@ -2642,7 +2643,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Action: Capture Balance Sheet Snapshot
    */
   const saveNetWorthSnapshot = (notes?: string): NetWorthSnapshot => {
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     let totalAssets = 0;
     let totalLiabilities = 0;
 
@@ -2697,7 +2698,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = todayLocalISO();
     const txId = newId('tx-zakat');
 
     const lines: TransactionLine[] = [
@@ -2785,7 +2786,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return { success: false, error: 'Deposit amount must be greater than zero.' };
     }
 
-    const todayStr = input.date || new Date().toISOString().split('T')[0];
+    const todayStr = input.date || todayLocalISO();
     const txId = newId('tx-bkdep');
     let boAcc = brokerAccounts.find((b) => b.id === input.brokerAccountId) || brokerAccounts.find((b) => b.isDefault) || brokerAccounts[0];
     
@@ -2920,7 +2921,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       };
     }
 
-    const todayStr = input.date || new Date().toISOString().split('T')[0];
+    const todayStr = input.date || todayLocalISO();
     const txId = newId('tx-bkwdr');
     const brokerName = brokers.find((b) => b.id === boAcc?.brokerId)?.name || 'Brokerage';
 
@@ -3034,7 +3035,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const stock = stocks.find((s) => s.id === input.stockId);
     const stockSymbol = stock?.symbol || 'STOCK';
     const tradeId = newId('st-tx');
-    const tradeDate = input.tradeDate || new Date().toISOString().split('T')[0];
+    const tradeDate = input.tradeDate || todayLocalISO();
     const settlementDate = input.settlementDate || tradeDate;
 
     const newTrade: StockTransaction = {
@@ -3188,7 +3189,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Phase 5 & 6 Action: Update Live Stock Market Price & Record to History
    */
   const updateStockPrice = (stockId: string, newPrice: number) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayLocalISO();
     setStocks((prev) =>
       prev.map((s) => (s.id === stockId ? { ...s, currentPrice: round2(newPrice) } : s))
     );
@@ -3310,7 +3311,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         return { success: false, message: error || 'No prices fetched', updatedCount: 0, source: 'failed' };
       }
 
-      const today = new Date().toISOString().split('T')[0];
+      const today = todayLocalISO();
       let updatedCount = 0;
       const newHistories: StockPriceHistory[] = [];
 
@@ -3392,7 +3393,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   const batchUpdateStockPrices = (updates: Array<{ stockId: string; price: number }>) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayLocalISO();
     const updateMap = new Map<string, number>();
     updates.forEach((u) => {
       if (u.price > 0) updateMap.set(u.stockId, round2(u.price));
@@ -3520,7 +3521,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Phase 6 Action: Record Live Portfolio Snapshot (Table 24)
    */
   const recordPortfolioSnapshot = (dateStr?: string): PortfolioSnapshot => {
-    const todayStr = dateStr || new Date().toISOString().split('T')[0];
+    const todayStr = dateStr || todayLocalISO();
     const totalInvested = stockHoldings.reduce((sum, h) => sum + (h.totalCostBasis ?? h.investedValue), 0);
     const mv = stockHoldings.reduce((sum, h) => sum + (h.marketValue ?? h.currentMarketValue), 0);
     const cash = brokerCashBalances.reduce((sum, b) => sum + b.cashBalance, 0);
@@ -3562,7 +3563,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
    * Phase 6 Action: Backfill Historical Snapshots
    */
   const backfillHistoricalSnapshots = () => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayLocalISO();
     recordPortfolioSnapshot(today);
   };
 
@@ -3832,7 +3833,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const app = ipoApplications.find((a) => a.id === input.applicationId);
     if (!app) return { success: false, error: 'IPO application not found.' };
 
-    const dateStr = input.allotmentDate || new Date().toISOString().split('T')[0];
+    const dateStr = input.allotmentDate || todayLocalISO();
 
     // Ensure stock exists in catalog
     let stock = stocks.find((s) => s.symbol.toUpperCase() === app.symbol.toUpperCase());

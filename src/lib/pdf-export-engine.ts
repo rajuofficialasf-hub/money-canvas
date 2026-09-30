@@ -1,3 +1,4 @@
+import { todayLocalISO } from './date-utils';
 /**
  * Weathfolio — Custom Financial PDF Export Engine
  * Generates professional, publication-grade financial PDFs formatted for Bangladesh (BDT / Tk)
@@ -449,7 +450,7 @@ export function exportBalanceSheetPdf(
     const startY = drawReportHeader(doc, {
       user,
       title: 'Statement of Financial Position (Balance Sheet)',
-      subtitle: `Authoritative Double-Entry Accounting Statement as of ${asOfDate || new Date().toISOString().split('T')[0]}`,
+      subtitle: `Authoritative Double-Entry Accounting Statement as of ${asOfDate || todayLocalISO()}`,
     });
 
     const rows: any[][] = [];

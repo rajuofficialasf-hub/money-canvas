@@ -1,3 +1,4 @@
+import { todayLocalISO, toLocalISO } from './date-utils';
 /**
  * Personal Finance & Investment Manager — Authoritative Accounting Engine
  * Implements deterministic calculation rules matching PostgreSQL views & stored functions.
@@ -532,7 +533,7 @@ export function advanceRecurringDate(
       d.setFullYear(d.getFullYear() + 1);
       break;
   }
-  return d.toISOString().split('T')[0];
+  return toLocalISO(d);
 }
 
 /**
@@ -580,7 +581,7 @@ export function generateLoanAmortizationSchedule(
     // Advance due date by 1 month
     currentDate = new Date(currentDate);
     currentDate.setMonth(currentDate.getMonth() + 1);
-    const dueDateStr = currentDate.toISOString().split('T')[0];
+    const dueDateStr = toLocalISO(currentDate);
 
     let scheduledInterest = 0;
     let scheduledPrincipal = 0;
@@ -894,7 +895,7 @@ export function computeBrokerCashBalances(
 export function computePortfolioExternalCashFlows(
   cashTransactions: BrokerCashTransaction[],
   currentPortfolioValue: number,
-  asOfDate: string = new Date().toISOString().split('T')[0]
+  asOfDate: string = todayLocalISO()
 ): PortfolioCashFlow[] {
   const flows: PortfolioCashFlow[] = [];
 
@@ -1562,7 +1563,7 @@ export function generateBalanceSheetReport(
   brokerCashBalances: BrokerCashBalance[],
   stockHoldings: StockHolding[],
   debts: Debt[] = [],
-  asOfDate: string = new Date().toISOString().split('T')[0]
+  asOfDate: string = todayLocalISO()
 ): BalanceSheetReport {
   // Current Assets
   const liquidCashAccounts = accounts.filter(

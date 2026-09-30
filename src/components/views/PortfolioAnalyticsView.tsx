@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
@@ -66,10 +67,10 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
 
   // Form states
   const [newPriceStockId, setNewPriceStockId] = useState(selectedStockId);
-  const [newPriceDate, setNewPriceDate] = useState(new Date().toISOString().split('T')[0]);
+  const [newPriceDate, setNewPriceDate] = useState(todayLocalISO());
   const [newPriceClose, setNewPriceClose] = useState<number | ''>(280);
 
-  const [newBenchDate, setNewBenchDate] = useState(new Date().toISOString().split('T')[0]);
+  const [newBenchDate, setNewBenchDate] = useState(todayLocalISO());
   const [newBenchValue, setNewBenchValue] = useState<number | ''>(6280);
 
   const notify = (msg: string) => {
@@ -84,7 +85,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
       const symbols = stocks.map((s) => s.symbol);
       const res = await fetchDseMarketQuotes(symbols);
       let updatedCount = 0;
-      const today = new Date().toISOString().split('T')[0];
+      const today = todayLocalISO();
 
       if (res && res.quotes) {
         Object.entries(res.quotes).forEach(([sym, quote]) => {

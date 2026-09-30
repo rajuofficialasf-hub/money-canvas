@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Coins,
@@ -110,10 +111,10 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   const [divPerShare, setDivPerShare] = useState<number>(10.0);
   const [divTaxRate, setDivTaxRate] = useState<number>(10.0);
   const [divRecordDate, setDivRecordDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
+    todayLocalISO()
   );
   const [divPaymentDate, setDivPaymentDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
+    todayLocalISO()
   );
   const [divIsExternal, setDivIsExternal] = useState<boolean>(false);
   const [divNotes, setDivNotes] = useState<string>('');
@@ -164,10 +165,10 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   const [caBrokerAcc, setCaBrokerAcc] = useState<string>(brokerAccounts[0]?.id || '');
   const [caRatio, setCaRatio] = useState<string>('10:1');
   const [caAnnounceDate, setCaAnnounceDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
+    todayLocalISO()
   );
   const [caEffectiveDate, setCaEffectiveDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
+    todayLocalISO()
   );
   const [caCashComponent, setCaCashComponent] = useState<number>(10.0);
   const [caNotes, setCaNotes] = useState<string>('');
@@ -228,7 +229,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   const [ipoLotSize, setIpoLotSize] = useState<number>(500);
   const [ipoOfferPrice, setIpoOfferPrice] = useState<number>(10.0);
   const [ipoAppDate, setIpoAppDate] = useState<string>(
-    new Date().toISOString().split('T')[0]
+    todayLocalISO()
   );
   const [ipoNotes, setIpoNotes] = useState<string>('');
   const [ipoError, setIpoError] = useState<string | null>(null);
@@ -283,7 +284,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
   const [settleStatus, setSettleStatus] = useState<'allotted' | 'refunded' | 'partially_allotted'>('allotted');
   const [settleShares, setSettleShares] = useState<number>(0);
   const [settleRefund, setSettleRefund] = useState<number>(0);
-  const [settleDate, setSettleDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [settleDate, setSettleDate] = useState<string>(todayLocalISO());
   const [settleError, setSettleError] = useState<string | null>(null);
 
   const openSettleModal = (app: IpoApplication) => {
@@ -291,7 +292,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
     setSettleStatus('allotted');
     setSettleShares(app.lotSize);
     setSettleRefund(0);
-    setSettleDate(new Date().toISOString().split('T')[0]);
+    setSettleDate(todayLocalISO());
     setSettleError(null);
   };
 

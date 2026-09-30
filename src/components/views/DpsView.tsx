@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { calculateDpsMaturity, round2 } from '../../lib/accounting-engine';
@@ -42,7 +43,7 @@ export const DpsView: React.FC = () => {
   const [formInstallment, setFormInstallment] = useState('');
   const [formTenure, setFormTenure] = useState('36');
   const [formRate, setFormRate] = useState('8.50');
-  const [formStartDate, setFormStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [formStartDate, setFormStartDate] = useState(todayLocalISO());
   const [formTaxRate, setFormTaxRate] = useState('10.0');
   const [formError, setFormError] = useState('');
 

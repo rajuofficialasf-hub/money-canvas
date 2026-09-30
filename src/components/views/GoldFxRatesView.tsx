@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '../../lib/language-context';
 import { useLedger } from '../../lib/ledger-context';
@@ -157,7 +158,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       assetName: name,
       assetCategory: 'gold_jewelry',
       purchasePrice: jewelryCalc.totalPrice,
-      purchaseDate: new Date().toISOString().split('T')[0],
+      purchaseDate: todayLocalISO(),
       fundingMethod: 'opening_balance',
       description: `Gold jewelry valued according to BAJUS ${calcKarat.toUpperCase()} benchmark. Weight: ${calculatedGrams}g, Making charge: ৳${jewelryCalc.makingChargeTotal}.`,
     });

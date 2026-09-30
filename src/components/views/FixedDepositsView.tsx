@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { CompoundingFrequency, NewFdInput } from '../../types/accounting';
@@ -39,7 +40,7 @@ export const FixedDepositsView: React.FC = () => {
   const [principalAmount, setPrincipalAmount] = useState<string>('100000');
   const [interestRate, setInterestRate] = useState<string>('8.5');
   const [tenureMonths, setTenureMonths] = useState<string>('12');
-  const [startDate, setStartDate] = useState<string>(() => new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState<string>(() => todayLocalISO());
   const [compoundingFrequency, setCompoundingFrequency] = useState<CompoundingFrequency>('annually');
   const [taxRate, setTaxRate] = useState<string>('10');
   const [createError, setCreateError] = useState<string | null>(null);

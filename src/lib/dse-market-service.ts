@@ -1,3 +1,4 @@
+import { todayLocalISO } from './date-utils';
 /**
  * Dhaka Stock Exchange (DSE) & StockChartBD Market Data Service
  * 
@@ -278,7 +279,7 @@ export async function fetchDseSingleQuote(symbol: string): Promise<DseMarketQuot
           volume: Number(q.volume || 0),
           trades: Number(q.trades || 0),
           valueMn: Number(q.value_mn || 0),
-          date: q.date || new Date().toISOString().split('T')[0],
+          date: q.date || todayLocalISO(),
           updatedAt: new Date().toISOString(),
         };
 
@@ -526,7 +527,7 @@ export function generateDsePriceCsv(stocks: Stock[]): string {
     s.currentPrice.toFixed(2),
     (s.ycp ?? s.currentPrice).toFixed(2),
     `"${s.category || 'A'}"`,
-    `"${s.lastSyncedAt || new Date().toISOString().split('T')[0]}"`,
+    `"${s.lastSyncedAt || todayLocalISO()}"`,
   ]);
 
   return [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');

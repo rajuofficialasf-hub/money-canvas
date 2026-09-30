@@ -1,3 +1,4 @@
+import { toLocalISO } from './date-utils';
 import { newId } from './id-utils';
 /**
  * Phase 9 Audit Trail, Alert Engine & Export Utilities
@@ -147,7 +148,7 @@ export interface AlertEvaluationContext {
 export function evaluateSystemAlerts(params: AlertEvaluationContext): SystemAlert[] {
   const alerts: SystemAlert[] = [];
   const today = new Date();
-  const todayStr = today.toISOString().split('T')[0];
+  const todayStr = toLocalISO(today);
   const currentMonthYear = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 
   const archivedMap = new Map(params.accounts.map((a) => [a.id, a.isArchived]));

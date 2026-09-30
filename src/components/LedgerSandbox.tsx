@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../lib/date-utils';
 import { newId } from '../lib/id-utils';
 import React, { useState } from 'react';
 import {
@@ -108,7 +109,7 @@ export const LedgerSandbox: React.FC = () => {
     const newTx: Transaction = {
       id: newTxId,
       userId: 'u-1',
-      date: new Date().toISOString().split('T')[0],
+      date: todayLocalISO(),
       type: txType,
       status: 'posted',
       version: 1,

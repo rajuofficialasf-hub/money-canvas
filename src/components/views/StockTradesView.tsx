@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState, useMemo, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { StockTransaction, StockTransactionType, Stock } from '../../types/accounting';
@@ -71,7 +72,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
   const [commissionRatePct, setCommissionRatePct] = useState<number | ''>(0.4); // Standard DSE 0.4%
   const [taxAmount, setTaxAmount] = useState<number | ''>(0); // 0.05% AIT for sell
   const [otherCharges, setOtherCharges] = useState<number | ''>(0);
-  const [tradeDate, setTradeDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [tradeDate, setTradeDate] = useState(() => todayLocalISO());
   const [tradeReference, setTradeReference] = useState('');
   const [formError, setFormError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');

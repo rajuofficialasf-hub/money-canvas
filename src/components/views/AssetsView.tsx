@@ -1,3 +1,4 @@
+import { todayLocalISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { PhysicalAsset, PhysicalAssetCategory, FundingMethod } from '../../types/accounting';
@@ -37,7 +38,7 @@ export const AssetsView: React.FC = () => {
   const [assetName, setAssetName] = useState('');
   const [assetCategory, setAssetCategory] = useState<PhysicalAssetCategory>('vehicle');
   const [purchasePrice, setPurchasePrice] = useState<number | ''>(2000000);
-  const [purchaseDate, setPurchaseDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [purchaseDate, setPurchaseDate] = useState(() => todayLocalISO());
   const [fundingMethod, setFundingMethod] = useState<FundingMethod>('full_cash');
   const [fundingAccountId, setFundingAccountId] = useState('');
   const [cashDownpayment, setCashDownpayment] = useState<number | ''>(500000);
