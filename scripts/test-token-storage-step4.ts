@@ -100,14 +100,14 @@ async function mockDriveApiCallWithRetry(
   return { success: false, attempts };
 }
 
-let refreshCalled = false;
+let refreshCalled: boolean = false;
 const mockRefreshToken = async () => {
   refreshCalled = true;
   return { success: true, token: 'fresh_refreshed_token' };
 };
 
 const retryTest = await mockDriveApiCallWithRetry('expired_token', mockRefreshToken);
-assert(refreshCalled === true, '401 Unauthorized must trigger refreshTokenFn');
+assert(refreshCalled, '401 Unauthorized must trigger refreshTokenFn');
 assert(retryTest.success === true, 'Drive operation must succeed after token refresh retry');
 assert(retryTest.attempts === 2, 'Must perform exactly 1 retry with the new token');
 
