@@ -125,9 +125,12 @@ export interface TaxCalculationResult {
     rentalRepairAllowance: number; // 25% residential or 30% commercial
     agriProductionCost: number; // 60% standard deduction
     dividendExemption: number;
+    capitalGainsListedExemption?: number;
     totalExemptions: number;
   };
   netTaxableIncome: number;
+  taxableOrdinaryIncome?: number;
+  capitalGainsTax?: number;
   slabs: TaxSlabBreakdownItem[];
   grossTaxLiability: number;
   rebate: {
@@ -171,55 +174,140 @@ export interface IT10BStatementResult {
   surchargeRatePct: number;
 }
 
+export interface TaxSlabConfig {
+  label: string;
+  size: number | null; // null represents remaining balance
+  ratePct: number;
+}
+
+export interface TaxYearConfig {
+  assessmentYear: string;
+  incomeYear: string;
+  exemptions: Record<TaxpayerCategory, number>;
+  disabledDependentAllowance: number;
+  slabs: TaxSlabConfig[];
+  minimumTax: Record<TaxZoneLocation, number>;
+  rebateRatePct: number;
+  rebateIncomeLimitPct: number;
+  rebateMaxStatutoryCeiling: number;
+  capitalGainsListedExemption: number;
+  capitalGainsListedTaxRatePct: number;
+}
+
+export const TAX_YEAR_CONFIGS: Record<string, TaxYearConfig> = {
+  // Assessment Year 2026-2027 (Income Year 2025-2026 - Finance Ordinance 2025)
+  '2026-2027': {
+    assessmentYear: '2026-2027',
+    incomeYear: '2025-2026',
+    exemptions: {
+      general_male: 375000,
+      female_or_senior: 425000,
+      third_gender_or_disabled: 500000,
+      freedom_fighter: 525000,
+    },
+    disabledDependentAllowance: 50000,
+    slabs: [
+      { label: 'Next ৳ 3,00,000 (পরবর্তী ৩ লাখ)', size: 300000, ratePct: 10 },
+      { label: 'Next ৳ 4,00,000 (পরবর্তী ৪ লাখ)', size: 400000, ratePct: 15 },
+      { label: 'Next ৳ 5,00,000 (পরবর্তী ৫ লাখ)', size: 500000, ratePct: 20 },
+      { label: 'Next ৳ 20,00,000 (পরবর্তী ২০ লাখ)', size: 2000000, ratePct: 25 },
+      { label: 'Remaining balance (অবশিষ্টাংশ)', size: null, ratePct: 30 },
+    ],
+    minimumTax: {
+      dhaka_chattogram_city: 5000,
+      other_city_corporation: 5000,
+      non_city_areas: 5000,
+    },
+    rebateRatePct: 15,
+    rebateIncomeLimitPct: 3,
+    rebateMaxStatutoryCeiling: 1000000,
+    capitalGainsListedExemption: 5000000,
+    capitalGainsListedTaxRatePct: 15,
+  },
+  // Assessment Year 2025-2026 (Income Year 2024-2025 - Finance Act 2024)
+  '2025-2026': {
+    assessmentYear: '2025-2026',
+    incomeYear: '2024-2025',
+    exemptions: {
+      general_male: 350000,
+      female_or_senior: 400000,
+      third_gender_or_disabled: 475000,
+      freedom_fighter: 500000,
+    },
+    disabledDependentAllowance: 50000,
+    slabs: [
+      { label: 'Next ৳ 1,00,000 (পরবর্তী ১ লাখ)', size: 100000, ratePct: 5 },
+      { label: 'Next ৳ 4,00,000 (পরবর্তী ৪ লাখ)', size: 400000, ratePct: 10 },
+      { label: 'Next ৳ 5,00,000 (পরবর্তী ৫ লাখ)', size: 500000, ratePct: 15 },
+      { label: 'Next ৳ 5,00,000 (পরবর্তী ৫ লাখ)', size: 500000, ratePct: 20 },
+      { label: 'Remaining balance (অবশিষ্টাংশ)', size: null, ratePct: 25 },
+    ],
+    minimumTax: {
+      dhaka_chattogram_city: 5000,
+      other_city_corporation: 4000,
+      non_city_areas: 3000,
+    },
+    rebateRatePct: 15,
+    rebateIncomeLimitPct: 3,
+    rebateMaxStatutoryCeiling: 1000000,
+    capitalGainsListedExemption: 5000000,
+    capitalGainsListedTaxRatePct: 15,
+  },
+};
+
+// Aliases for short forms ('2026-27', '2025-26')
+TAX_YEAR_CONFIGS['2026-27'] = TAX_YEAR_CONFIGS['2026-2027'];
+TAX_YEAR_CONFIGS['2025-26'] = TAX_YEAR_CONFIGS['2025-2026'];
+
+export const TAX_SLABS: Record<string, TaxSlabConfig[]> = {
+  '2026-2027': TAX_YEAR_CONFIGS['2026-2027'].slabs,
+  '2026-27': TAX_YEAR_CONFIGS['2026-2027'].slabs,
+  '2025-2026': TAX_YEAR_CONFIGS['2025-2026'].slabs,
+  '2025-26': TAX_YEAR_CONFIGS['2025-2026'].slabs,
+};
+
 /**
- * Get base exemption threshold under BD Income Tax Act 2023
+ * Retrieve configuration for a specific assessment year. Defaults to AY 2026-2027.
+ */
+export function getTaxYearConfig(assessmentYear?: string): TaxYearConfig {
+  if (assessmentYear && TAX_YEAR_CONFIGS[assessmentYear]) {
+    return TAX_YEAR_CONFIGS[assessmentYear];
+  }
+  return TAX_YEAR_CONFIGS['2026-2027'];
+}
+
+/**
+ * Get base exemption threshold under BD Income Tax Act 2023 & relevant Finance Act/Ordinance
  */
 export function getExemptionThreshold(
   category: TaxpayerCategory,
   hasDisabledDependent: boolean = false,
-  disabledCount: number = 0
+  disabledCount: number = 0,
+  assessmentYear: string = '2026-2027'
 ): number {
-  let base = 350000;
-  switch (category) {
-    case 'female_or_senior':
-      base = 400000;
-      break;
-    case 'third_gender_or_disabled':
-      base = 475000;
-      break;
-    case 'freedom_fighter':
-      base = 500000;
-      break;
-    case 'general_male':
-    default:
-      base = 350000;
-      break;
-  }
+  const config = getTaxYearConfig(assessmentYear);
+  let base = config.exemptions[category] ?? config.exemptions.general_male;
 
   if (hasDisabledDependent && disabledCount > 0) {
-    base += disabledCount * 50000;
+    base += disabledCount * config.disabledDependentAllowance;
   }
 
   return base;
 }
 
 /**
- * Get minimum tax based on location
+ * Get minimum tax based on location and assessment year
  */
-export function getMinimumTax(location: TaxZoneLocation): number {
-  switch (location) {
-    case 'dhaka_chattogram_city':
-      return 5000;
-    case 'other_city_corporation':
-      return 4000;
-    case 'non_city_areas':
-    default:
-      return 3000;
-  }
+export function getMinimumTax(
+  location: TaxZoneLocation,
+  assessmentYear: string = '2026-2027'
+): number {
+  const config = getTaxYearConfig(assessmentYear);
+  return config.minimumTax[location] ?? 5000;
 }
 
 /**
- * Calculate BD Income Tax based on NBR Slabs
+ * Calculate BD Income Tax based on NBR Slabs, ITA 2023 §78 Rebate, and Capital Gains rules
  */
 export function calculateBangladeshTax(
   profile: TaxpayerProfile,
@@ -228,10 +316,12 @@ export function calculateBangladeshTax(
   netWealthForSurcharge: number = 0,
   hasMultipleCarsOrLargeFlat: boolean = false
 ): TaxCalculationResult {
+  const config = getTaxYearConfig(profile.assessmentYear);
   const threshold = getExemptionThreshold(
     profile.category,
     profile.hasDisabledDependent,
-    profile.disabledDependentsCount
+    profile.disabledDependentsCount,
+    profile.assessmentYear
   );
 
   // 1. Calculate Statutory Deductions
@@ -254,8 +344,13 @@ export function calculateBangladeshTax(
   // Business: Net Profit
   const taxableBusiness = Math.max(0, income.businessNetProfit);
 
-  // Capital Gains: Listed shares (individual threshold or regular)
-  const capitalGains = Math.max(0, income.capitalGainsListedShares) +
+  // Capital Gains: Listed shares (exempt up to 50L, flat 15% on excess) vs Other capital gains
+  const listedGains = Math.max(0, income.capitalGainsListedShares);
+  const listedGainsExemption = Math.min(listedGains, config.capitalGainsListedExemption);
+  const taxableListedGains = Math.max(0, listedGains - listedGainsExemption);
+  const listedGainsTax = round2(taxableListedGains * (config.capitalGainsListedTaxRatePct / 100));
+
+  const otherCapitalGains =
     Math.max(0, income.capitalGainsRealEstate) +
     Math.max(0, income.capitalGainsOther);
 
@@ -271,7 +366,8 @@ export function calculateBangladeshTax(
     rentalGross +
     agriGross +
     income.businessGrossRevenue +
-    capitalGains +
+    listedGains +
+    otherCapitalGains +
     bankInterest +
     dpsProfit +
     sanchayapatraProfit +
@@ -279,14 +375,20 @@ export function calculateBangladeshTax(
     otherIncome
   );
 
-  const totalExemptions = round2(salaryExemption + rentalRepairAllowance + agriCost);
+  const totalExemptions = round2(
+    salaryExemption +
+    rentalRepairAllowance +
+    agriCost +
+    listedGainsExemption
+  );
 
-  const netTaxableIncome = round2(
+  // Ordinary taxable income for progressive slabs (excludes listed share gains which have flat 15% rate above 50L)
+  const taxableOrdinaryIncome = round2(
     taxableSalary +
     taxableRental +
     taxableAgri +
     taxableBusiness +
-    capitalGains +
+    otherCapitalGains +
     bankInterest +
     dpsProfit +
     sanchayapatraProfit +
@@ -294,9 +396,12 @@ export function calculateBangladeshTax(
     otherIncome
   );
 
-  // 2. Slab Calculation
-  let remaining = netTaxableIncome;
-  let grossTax = 0;
+  // Total net taxable income (Ordinary + Taxable Listed Share Gains)
+  const netTaxableIncome = round2(taxableOrdinaryIncome + taxableListedGains);
+
+  // 2. Slab Calculation on Taxable Ordinary Income
+  let remaining = taxableOrdinaryIncome;
+  let ordinaryGrossTax = 0;
   let cumulative = 0;
   const slabs: TaxSlabBreakdownItem[] = [];
 
@@ -311,83 +416,58 @@ export function calculateBangladeshTax(
   });
   remaining = Math.max(0, remaining - s1Taxable);
 
-  // Slab 2: Next ৳ 1,00,000 @ 5%
-  const s2Size = 100000;
-  const s2Taxable = Math.min(remaining, s2Size);
-  const s2Tax = round2(s2Taxable * 0.05);
-  grossTax += s2Tax;
-  cumulative += s2Tax;
-  slabs.push({
-    slabLabel: `Next ৳ 1,00,000 (পরবর্তী ১ লাখ)`,
-    ratePct: 5,
-    taxableInSlab: round2(s2Taxable),
-    taxAmount: s2Tax,
-    cumulativeTax: round2(cumulative),
-  });
-  remaining = Math.max(0, remaining - s2Taxable);
+  // Progressive slabs from config
+  for (const slab of config.slabs) {
+    if (slab.size !== null) {
+      const taxableInSlab = Math.min(remaining, slab.size);
+      const taxAmount = round2(taxableInSlab * (slab.ratePct / 100));
+      ordinaryGrossTax = round2(ordinaryGrossTax + taxAmount);
+      cumulative = round2(cumulative + taxAmount);
+      slabs.push({
+        slabLabel: slab.label,
+        ratePct: slab.ratePct,
+        taxableInSlab: round2(taxableInSlab),
+        taxAmount,
+        cumulativeTax: round2(cumulative),
+      });
+      remaining = Math.max(0, remaining - taxableInSlab);
+    } else {
+      // Remaining balance slab
+      if (remaining > 0) {
+        const taxAmount = round2(remaining * (slab.ratePct / 100));
+        ordinaryGrossTax = round2(ordinaryGrossTax + taxAmount);
+        cumulative = round2(cumulative + taxAmount);
+        slabs.push({
+          slabLabel: slab.label,
+          ratePct: slab.ratePct,
+          taxableInSlab: round2(remaining),
+          taxAmount,
+          cumulativeTax: round2(cumulative),
+        });
+        remaining = 0;
+      }
+    }
+  }
 
-  // Slab 3: Next ৳ 4,00,000 @ 10%
-  const s3Size = 400000;
-  const s3Taxable = Math.min(remaining, s3Size);
-  const s3Tax = round2(s3Taxable * 0.10);
-  grossTax += s3Tax;
-  cumulative += s3Tax;
-  slabs.push({
-    slabLabel: `Next ৳ 4,00,000 (পরবর্তী ৪ লাখ)`,
-    ratePct: 10,
-    taxableInSlab: round2(s3Taxable),
-    taxAmount: s3Tax,
-    cumulativeTax: round2(cumulative),
-  });
-  remaining = Math.max(0, remaining - s3Taxable);
-
-  // Slab 4: Next ৳ 5,00,000 @ 15%
-  const s4Size = 500000;
-  const s4Taxable = Math.min(remaining, s4Size);
-  const s4Tax = round2(s4Taxable * 0.15);
-  grossTax += s4Tax;
-  cumulative += s4Tax;
-  slabs.push({
-    slabLabel: `Next ৳ 5,00,000 (পরবর্তী ৫ লাখ)`,
-    ratePct: 15,
-    taxableInSlab: round2(s4Taxable),
-    taxAmount: s4Tax,
-    cumulativeTax: round2(cumulative),
-  });
-  remaining = Math.max(0, remaining - s4Taxable);
-
-  // Slab 5: Next ৳ 5,00,000 @ 20%
-  const s5Size = 500000;
-  const s5Taxable = Math.min(remaining, s5Size);
-  const s5Tax = round2(s5Taxable * 0.20);
-  grossTax += s5Tax;
-  cumulative += s5Tax;
-  slabs.push({
-    slabLabel: `Next ৳ 5,00,000 (পরবর্তী ৫ লাখ)`,
-    ratePct: 20,
-    taxableInSlab: round2(s5Taxable),
-    taxAmount: s5Tax,
-    cumulativeTax: round2(cumulative),
-  });
-  remaining = Math.max(0, remaining - s5Taxable);
-
-  // Slab 6: Remaining @ 25%
-  if (remaining > 0) {
-    const s6Tax = round2(remaining * 0.25);
-    grossTax += s6Tax;
-    cumulative += s6Tax;
+  // If there are taxable listed share capital gains (> 50L @ 15%), add to slabs breakdown
+  if (taxableListedGains > 0) {
+    cumulative = round2(cumulative + listedGainsTax);
     slabs.push({
-      slabLabel: `Remaining balance (অবশিষ্টাংশ)`,
-      ratePct: 25,
-      taxableInSlab: round2(remaining),
-      taxAmount: s6Tax,
+      slabLabel: `শেয়ারবাজার মূলধনী লাভ (৫০ লাখের অতিরিক্ত অংশ)`,
+      ratePct: config.capitalGainsListedTaxRatePct,
+      taxableInSlab: round2(taxableListedGains),
+      taxAmount: listedGainsTax,
       cumulativeTax: round2(cumulative),
     });
   }
 
+  const grossTaxLiability = round2(ordinaryGrossTax + listedGainsTax);
+
   // 3. Investment Tax Rebate (ধারা ৭৮ ও ষষ্ঠ তফসিল অংশ ৩)
-  // Ceiling: Lowest of: (a) actual eligible investment, (b) 20% of taxable income, (c) ৳ 1,00,00,000
-  // Note: DPS has statutory cap of ৳ 1,20,000 and Sanchayapatra has statutory cap of ৳ 5,00,000
+  // Ceiling under ITA 2023 §78: Lowest of:
+  // (a) 3% of total taxable income
+  // (b) 15% of actual eligible investment
+  // (c) ৳ 10,00,000 (10 Lakh)
   const allowedDps = Math.min(Math.max(0, investments.dpsContribution), 120000);
   const allowedSanchaya = Math.min(Math.max(0, investments.sanchayapatraPurchase), 500000);
   const otherInvestments =
@@ -398,17 +478,21 @@ export function calculateBangladeshTax(
     Math.max(0, investments.benevolentFundOrGroupInsurance);
 
   const totalEligibleInvestment = round2(allowedDps + allowedSanchaya + otherInvestments);
-  const allowableCeiling = round2(Math.min(netTaxableIncome * 0.20, 10000000));
-  const allowableInvestment = Math.min(totalEligibleInvestment, allowableCeiling);
 
-  // BD Tax Rebate rule: 15% on allowable investment
-  const rebateAmount = round2(allowableInvestment * 0.15);
-  const maxPotentialRebate = round2(allowableCeiling * 0.15);
-  const recommendedAdditionalInvestment = round2(Math.max(0, allowableCeiling - allowableInvestment));
+  // Statutory limits under §78
+  const limitByIncome = round2(netTaxableIncome * (config.rebateIncomeLimitPct / 100));
+  const limitByInvestment = round2(totalEligibleInvestment * (config.rebateRatePct / 100));
+  const limitByStatutoryCap = config.rebateMaxStatutoryCeiling;
+
+  const rebateAmount = Math.min(limitByIncome, limitByInvestment, limitByStatutoryCap);
+  const maxPotentialRebate = Math.min(limitByIncome, limitByStatutoryCap);
+  const allowableInvestmentCeiling = round2(maxPotentialRebate / (config.rebateRatePct / 100));
+  const allowableInvestment = Math.min(totalEligibleInvestment, allowableInvestmentCeiling);
+  const recommendedAdditionalInvestment = round2(Math.max(0, allowableInvestmentCeiling - totalEligibleInvestment));
 
   // 4. Net Tax Liability & Minimum Tax Check
-  let taxAfterRebate = Math.max(0, round2(grossTax - rebateAmount));
-  const minTax = getMinimumTax(profile.location);
+  let taxAfterRebate = Math.max(0, round2(grossTaxLiability - rebateAmount));
+  const minTax = getMinimumTax(profile.location, profile.assessmentYear);
 
   // Under NBR rules, if total income exceeds the threshold, the tax payable cannot be less than minimum tax
   let finalTaxBeforeSurcharge = 0;
@@ -466,14 +550,17 @@ export function calculateBangladeshTax(
       rentalRepairAllowance: round2(rentalRepairAllowance),
       agriProductionCost: round2(agriCost),
       dividendExemption: 0,
+      capitalGainsListedExemption: round2(listedGainsExemption),
       totalExemptions,
     },
     netTaxableIncome,
+    taxableOrdinaryIncome,
+    capitalGainsTax: listedGainsTax,
     slabs,
-    grossTaxLiability: round2(grossTax),
+    grossTaxLiability,
     rebate: {
       totalEligibleInvestment,
-      allowableInvestmentCeiling: allowableCeiling,
+      allowableInvestmentCeiling,
       allowableInvestment,
       rebateAmount,
       maxPotentialRebate,

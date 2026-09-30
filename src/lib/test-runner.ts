@@ -22,6 +22,14 @@ import {
   generateIncomeStatementReport,
   round2,
 } from './accounting-engine';
+import {
+  calculateBangladeshTax,
+  getExemptionThreshold,
+  getMinimumTax,
+  TaxpayerProfile,
+  IncomeHeadsInput,
+  EligibleInvestmentsInput,
+} from './tax-engine';
 
 export function runAllAccountingTests(): TestCaseResult[] {
   const results: TestCaseResult[] = [];
@@ -737,6 +745,128 @@ export function runAllAccountingTests(): TestCaseResult[] {
       lines: [
         { type: 'account', targetName: 'Capital Gains Assessment', amount: taxReport.netCapitalGain },
         { type: 'account', targetName: 'Advance Tax Credits', amount: taxReport.totalAdvanceTaxCredits },
+      ],
+    },
+  });
+
+  // 19. Bangladesh Income Tax Engine (AY 2026-27 & AY 2025-26, ITA 2023 §78, Capital Gains)
+  const emptyIncome: IncomeHeadsInput = {
+    salaryGross: 0,
+    salaryBasic: 0,
+    salaryAllowances: 0,
+    salaryBonus: 0,
+    rentalIncomeGross: 0,
+    rentalType: 'residential',
+    rentalMunicipalTax: 0,
+    agricultureGross: 0,
+    hasAgriAccounts: false,
+    businessGrossRevenue: 1200000,
+    businessNetProfit: 1200000,
+    capitalGainsListedShares: 0,
+    capitalGainsRealEstate: 0,
+    capitalGainsOther: 0,
+    bankInterestGross: 0,
+    bankInterestTds: 0,
+    dpsProfitGross: 0,
+    sanchayapatraProfitGross: 0,
+    sanchayapatraTds: 0,
+    cashDividendsGross: 0,
+    dividendTds: 0,
+    otherIncomeGross: 0,
+    advanceTaxAitPaid: 0,
+    taxPaidWithPriorReturn: 0,
+  };
+
+  const sampleInvestments: EligibleInvestmentsInput = {
+    dpsContribution: 120000,
+    sanchayapatraPurchase: 80000,
+    dseStockPurchase: 0,
+    lifeInsurancePremium: 0,
+    providentFundContribution: 0,
+    govtTreasuryBond: 0,
+    benevolentFundOrGroupInsurance: 0,
+  };
+
+  const profile26: TaxpayerProfile = {
+    name: 'Taxpayer 2026',
+    tin: '123456789012',
+    assessmentYear: '2026-2027',
+    incomeYear: '2025-2026',
+    category: 'general_male',
+    location: 'dhaka_chattogram_city',
+    hasDisabledDependent: false,
+    disabledDependentsCount: 0,
+  };
+
+  const res26 = calculateBangladeshTax(profile26, emptyIncome, sampleInvestments);
+
+  // With capital gains on listed shares (> ৳50L statutory threshold)
+  const incomeWithGains: IncomeHeadsInput = {
+    ...emptyIncome,
+    capitalGainsListedShares: 6000000, // 50L exempt, 10L @ 15% = ৳1,50,000
+  };
+  const res26WithGains = calculateBangladeshTax(profile26, incomeWithGains, sampleInvestments);
+
+  // Test AY 2025-2026
+  const profile25: TaxpayerProfile = {
+    ...profile26,
+    assessmentYear: '2025-2026',
+    incomeYear: '2024-2025',
+  };
+  const res25 = calculateBangladeshTax(profile25, emptyIncome, sampleInvestments);
+
+  // Assertions:
+  // AY 2026-27: 12L taxable ordinary income gives ৳1,15,000 gross slab tax
+  // 375k @ 0% (0) + 300k @ 10% (30k) + 400k @ 15% (60k) + 125k @ 20% (25k) = 1,15,000
+  const pass26Slab = res26.grossTaxLiability === 115000;
+  // Rebate: lowest of (12L * 3% = 36k, 2L * 15% = 30k, 10L cap) = 30,000
+  const pass26Rebate = res26.rebate.rebateAmount === 30000 && res26.taxAfterRebate === 85000;
+  // Capital gains: 60L listed gain -> 50L exempt, 10L @ 15% = 1.5L tax -> Total gross = 1,15,000 + 1,50,000 = 2,65,000
+  const pass26Gains = res26WithGains.grossTaxLiability === 265000 && res26WithGains.capitalGainsTax === 150000;
+  // Unified minimum tax in AY 2026-27 is ৳5,000 across all locations
+  const pass26MinTax =
+    getMinimumTax('dhaka_chattogram_city', '2026-2027') === 5000 &&
+    getMinimumTax('other_city_corporation', '2026-2027') === 5000 &&
+    getMinimumTax('non_city_areas', '2026-2027') === 5000;
+
+  // AY 2025-26: 12L taxable ordinary income gives ৳97,500 gross slab tax
+  // 350k @ 0% (0) + 100k @ 5% (5k) + 400k @ 10% (40k) + 350k @ 15% (52.5k) = 97,500
+  const pass25Slab = res25.grossTaxLiability === 97500;
+  // Tiered minimum tax in AY 2025-26: 5000, 4000, 3000
+  const pass25MinTax =
+    getMinimumTax('dhaka_chattogram_city', '2025-2026') === 5000 &&
+    getMinimumTax('other_city_corporation', '2025-2026') === 4000 &&
+    getMinimumTax('non_city_areas', '2025-2026') === 3000;
+
+  const phase9Passed =
+    pass26Slab && pass26Rebate && pass26Gains && pass26MinTax && pass25Slab && pass25MinTax;
+
+  results.push({
+    id: 19,
+    title: 'Bangladesh Tax Engine (FY 2025-26 Slabs, ITA 2023 §78 Rebate, Listed Capital Gains & Minimum Tax)',
+    description: `AY 2026-27: 12L taxable income -> ৳1,15,000 gross tax; Rebate -> ৳30,000; 60L listed gain -> ৳1,50,000 CG tax (50L exempt); AY 2025-26: 12L taxable income -> ৳97,500 gross tax.`,
+    passed: phase9Passed,
+    invariantStatus: 'Finance Ordinance 2025 Slabs + ITA 2023 §78 Rebate + Flat 15% Listed Gains + Unified Minimum Tax Verified',
+    balanceDeltas: {
+      'AY 2026-27 Gross Tax': res26.grossTaxLiability,
+      'AY 2026-27 Rebate': res26.rebate.rebateAmount,
+      'AY 2026-27 Tax With CG': res26WithGains.grossTaxLiability,
+      'AY 2025-26 Gross Tax': res25.grossTaxLiability,
+    },
+    logs: [
+      `AY 2026-27 Exemption Threshold (Male): ৳${getExemptionThreshold('general_male', false, 0, '2026-2027').toLocaleString()}`,
+      `AY 2026-27 Gross Tax on ৳12L: ৳${res26.grossTaxLiability.toLocaleString()} [Pass: ${pass26Slab}]`,
+      `AY 2026-27 ITA 2023 §78 Rebate on ৳2L Investment: ৳${res26.rebate.rebateAmount.toLocaleString()} [Pass: ${pass26Rebate}]`,
+      `AY 2026-27 Listed Shares Capital Gain ৳60L: Exempt ৳50L, Taxable ৳10L @ 15% = ৳${res26WithGains.capitalGainsTax?.toLocaleString()} [Pass: ${pass26Gains}]`,
+      `AY 2026-27 Minimum Tax: Unified ৳5,000 across all zones [Pass: ${pass26MinTax}]`,
+      `AY 2025-26 Gross Tax on ৳12L: ৳${res25.grossTaxLiability.toLocaleString()} [Pass: ${pass25Slab}]`,
+      `AY 2025-26 Tiered Minimum Tax: ৳5,000 / ৳4,000 / ৳3,000 [Pass: ${pass25MinTax}]`,
+    ],
+    sampleTransaction: {
+      header: { type: 'adjustment', status: 'posted', note: 'Phase 9 tax engine verification' },
+      lines: [
+        { type: 'account', targetName: 'Gross Tax Liability', amount: res26.grossTaxLiability },
+        { type: 'account', targetName: 'Investment Rebate', amount: res26.rebate.rebateAmount },
       ],
     },
   });

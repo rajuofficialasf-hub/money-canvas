@@ -59,8 +59,8 @@ export const IncomeTaxView: React.FC = () => {
   const [profile, setProfile] = useState<TaxpayerProfile>({
     name: user.fullName || 'Registered Taxpayer',
     tin: '123456789012',
-    assessmentYear: '2025-2026',
-    incomeYear: '2024-2025',
+    assessmentYear: '2026-2027',
+    incomeYear: '2025-2026',
     category: 'general_male',
     location: 'dhaka_chattogram_city',
     hasDisabledDependent: false,
@@ -469,7 +469,25 @@ export const IncomeTaxView: React.FC = () => {
                 <span className="text-[11px] text-slate-400">অর্থবছর: {profile.incomeYear}</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-[11px] font-mono text-slate-300 mb-1">
+                    কর বছর (Assessment Year)
+                  </label>
+                  <select
+                    value={profile.assessmentYear}
+                    onChange={(e) => {
+                      const ay = e.target.value;
+                      const iy = ay === '2026-2027' ? '2025-2026' : '2024-2025';
+                      setProfile({ ...profile, assessmentYear: ay, incomeYear: iy });
+                    }}
+                    className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
+                  >
+                    <option value="2026-2027">২০২৬-২০২৭ (অধ্যাদেশ ২০২৫)</option>
+                    <option value="2025-2026">২০২৫-২০২৬ (আইন ২০২৪)</option>
+                  </select>
+                </div>
+
                 <div>
                   <label className="block text-[11px] font-mono text-slate-300 mb-1">
                     করদাতার শ্রেণি (Taxpayer Category)
@@ -481,10 +499,18 @@ export const IncomeTaxView: React.FC = () => {
                     }
                     className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
                   >
-                    <option value="general_male">সাধারণ পুরুষ (করমুক্ত: ৳ ৩,৫০,০০০)</option>
-                    <option value="female_or_senior">নারী ও জ্যেষ্ঠ নাগরিক ৬৫+ (করমুক্ত: ৳ ৪,০০,০০০)</option>
-                    <option value="third_gender_or_disabled">প্রতিবন্ধী ব্যক্তি ও ৩য় লিঙ্গ (করমুক্ত: ৳ ৪,৭৫,০০০)</option>
-                    <option value="freedom_fighter">গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধা (করমুক্ত: ৳ ৫,০০,০০০)</option>
+                    <option value="general_male">
+                      সাধারণ পুরুষ (করমুক্ত: {formatBDT(getExemptionThreshold('general_male', false, 0, profile.assessmentYear))})
+                    </option>
+                    <option value="female_or_senior">
+                      নারী ও জ্যেষ্ঠ নাগরিক ৬৫+ (করমুক্ত: {formatBDT(getExemptionThreshold('female_or_senior', false, 0, profile.assessmentYear))})
+                    </option>
+                    <option value="third_gender_or_disabled">
+                      প্রতিবন্ধী ব্যক্তি ও ৩য় লিঙ্গ (করমুক্ত: {formatBDT(getExemptionThreshold('third_gender_or_disabled', false, 0, profile.assessmentYear))})
+                    </option>
+                    <option value="freedom_fighter">
+                      গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধা (করমুক্ত: {formatBDT(getExemptionThreshold('freedom_fighter', false, 0, profile.assessmentYear))})
+                    </option>
                   </select>
                 </div>
 
@@ -499,9 +525,15 @@ export const IncomeTaxView: React.FC = () => {
                     }
                     className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs font-medium focus:border-emerald-500 outline-none"
                   >
-                    <option value="dhaka_chattogram_city">ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন (ন্যূনতম: ৳ ৫,০০০)</option>
-                    <option value="other_city_corporation">অন্যান্য সিটি কর্পোরেশন (ন্যূনতম: ৳ ৪,০০০)</option>
-                    <option value="non_city_areas">পৌরসভা / সিটি কর্পোরেশন বহির্ভূত (ন্যূনতম: ৳ ৩,০০০)</option>
+                    <option value="dhaka_chattogram_city">
+                      ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন (ন্যূনতম: {formatBDT(getMinimumTax('dhaka_chattogram_city', profile.assessmentYear))})
+                    </option>
+                    <option value="other_city_corporation">
+                      অন্যান্য সিটি কর্পোরেশন (ন্যূনতম: {formatBDT(getMinimumTax('other_city_corporation', profile.assessmentYear))})
+                    </option>
+                    <option value="non_city_areas">
+                      পৌরসভা / সিটি কর্পোরেশন বহির্ভূত (ন্যূনতম: {formatBDT(getMinimumTax('non_city_areas', profile.assessmentYear))})
+                    </option>
                   </select>
                 </div>
               </div>
@@ -687,7 +719,10 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <div>
-                    <label className="text-[10px] text-slate-400">ডিএসই স্টক ক্যাপিটাল গেইন</label>
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] text-slate-400">ডিএসই স্টক ক্যাপিটাল গেইন</label>
+                      <span className="text-[9px] text-emerald-400 font-mono">৫০ লাখ পর্যন্ত করমুক্ত</span>
+                    </div>
                     <input
                       type="number"
                       value={income.capitalGainsListedShares || ''}
@@ -1035,7 +1070,7 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-between text-slate-300">
-                  <span>অনুমোদিত বিনিয়োগ সিলিং (২০% বা ১ কোটি):</span>
+                  <span>অনুমোদিত বিনিয়োগ সিলিং (ধারা ৭৮):</span>
                   <span className="font-bold text-white">{formatBDT(taxResult.rebate.allowableInvestmentCeiling)}</span>
                 </div>
 
@@ -1065,7 +1100,7 @@ export const IncomeTaxView: React.FC = () => {
                     <span>আরও কর বাঁচানোর সুযোগ!</span>
                   </div>
                   <p className="text-xs text-slate-300 leading-relaxed">
-                    আপনার মোট করযোগ্য আয়ের ২০% সিলিং পূর্ণ করতে আপনি আরও{' '}
+                    আপনার ধারা ৭৮ অনুযায়ী সর্বোচ্চ কর রেয়াত অর্জন করতে আপনি আরও{' '}
                     <strong className="text-white font-mono">{formatBDT(taxResult.rebate.recommendedAdditionalInvestment)}</strong>{' '}
                     টাকা ডিপিএস বা শেয়ারবাজারে বিনিয়োগ করতে পারেন। এতে আপনার আরও{' '}
                     <strong className="text-emerald-400 font-mono">
