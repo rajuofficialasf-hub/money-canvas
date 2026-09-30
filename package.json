@@ -17,6 +17,7 @@
     "@capacitor/android": "^8.5.2",
     "@capacitor/cli": "^8.5.2",
     "@capacitor/core": "^8.5.2",
+    "@capacitor/local-notifications": "^8.3.1",
     "@capgo/capacitor-social-login": "^8.5.11",
     "@google/genai": "^2.4.0",
     "@tailwindcss/vite": "^4.3.3",
