@@ -22,7 +22,14 @@ export interface CloudSyncResult {
   syncedAt?: string;
   recordCount?: number;
   error?: string;
+  /** Set when the upload succeeded but the bundle is approaching the Firestore 1 MiB document limit. */
+  warning?: string;
+  sizeBytes?: number;
 }
+
+/** Firestore hard document limit is 1,048,576 bytes; leave headroom for field overhead. */
+const FIRESTORE_DOC_HARD_LIMIT_BYTES = 1000 * 1024;
+const SYNC_SIZE_WARNING_BYTES = 900 * 1024;
 
 /**
  * Remove undefined values recursively to ensure Firestore document compliance
@@ -100,18 +107,33 @@ export async function saveLedgerToFirestore(
     const sanitizedBundle = sanitizeForFirestore(bundle);
     const totalRecords = calculateBundleRecordCount(bundle);
 
-    // 1. Save complete ledger bundle in user's cloud_ledger subcollection
+    // Guard against the Firestore 1 MiB document limit *before* uploading, so
+    // an oversized ledger surfaces as a visible error instead of a silent
+    // console failure on every sync.
+    const serialized = JSON.stringify(sanitizedBundle);
+    const sizeBytes = new TextEncoder().encode(serialized).length;
+    if (sizeBytes > FIRESTORE_DOC_HARD_LIMIT_BYTES) {
+      return {
+        success: false,
+        sizeBytes,
+        error: `সিঙ্ক ডেটা খুব বড় (${(sizeBytes / 1024).toFixed(0)} KB > ${(FIRESTORE_DOC_HARD_LIMIT_BYTES / 1024).toFixed(0)} KB সীমা)। পুরনো লেনদেন আর্কাইভ করুন বা এনক্রিপ্টেড ফাইল ব্যাকআপ ব্যবহার করুন। / Sync bundle exceeds the cloud document size limit; use file backup or archive old records.`,
+      };
+    }
+    const warning =
+      sizeBytes > SYNC_SIZE_WARNING_BYTES
+        ? `সিঙ্ক ডেটা ক্লাউড সীমার কাছাকাছি (${(sizeBytes / 1024).toFixed(0)} KB / ${(FIRESTORE_DOC_HARD_LIMIT_BYTES / 1024).toFixed(0)} KB)। শীঘ্রই সিঙ্ক ব্যর্থ হতে পারে। / Sync bundle is nearing the cloud size limit.`
+        : undefined;
+
+    // 1. Save complete ledger bundle in user's cloud_ledger subcollection.
+    // Full-document replace (no merge): the bundle is authoritative, and merge
+    // would resurrect top-level fields deleted locally.
     const ledgerDocRef = doc(db, 'users', userId, 'cloud_ledger', 'current');
-    await setDoc(
-      ledgerDocRef,
-      {
-        ...sanitizedBundle,
-        syncedAt: nowISO,
-        updatedAtServer: serverTimestamp(),
-        totalRecords,
-      },
-      { merge: true }
-    );
+    await setDoc(ledgerDocRef, {
+      ...sanitizedBundle,
+      syncedAt: nowISO,
+      updatedAtServer: serverTimestamp(),
+      totalRecords,
+    });
 
     // 2. Update user profile document with sync metadata
     try {
@@ -130,6 +152,8 @@ export async function saveLedgerToFirestore(
       success: true,
       syncedAt: nowISO,
       recordCount: totalRecords,
+      warning,
+      sizeBytes,
     };
   } catch (err: any) {
     console.error('Failed to save ledger to Firestore cloud:', err);

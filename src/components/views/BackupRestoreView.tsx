@@ -96,6 +96,7 @@ export const BackupRestoreView: React.FC = () => {
     cloudSyncStatus,
     lastCloudSyncAt,
     cloudSyncError,
+    cloudSyncWarning,
     syncWithCloud,
     restoreFromCloud,
   } = useLedger();
@@ -850,6 +851,22 @@ export const BackupRestoreView: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {cloudSyncStatus === 'error' && cloudSyncError && (
+          <div className="relative z-10 flex items-start gap-2 bg-red-500/10 border border-red-500/30 text-red-300 text-xs rounded-xl p-3" role="alert">
+            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold">ক্লাউড সিঙ্ক ব্যর্থ (Cloud sync failed)</p>
+              <p className="mt-0.5 leading-relaxed">{cloudSyncError}</p>
+            </div>
+          </div>
+        )}
+        {cloudSyncStatus !== 'error' && cloudSyncWarning && (
+          <div className="relative z-10 flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs rounded-xl p-3" role="alert">
+            <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+            <p className="leading-relaxed">{cloudSyncWarning}</p>
+          </div>
+        )}
       </div>
 
       {/* Card 2: Google Drive File Backup & Restore */}

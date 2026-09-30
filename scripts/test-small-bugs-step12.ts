@@ -5,7 +5,8 @@
 import { calculatePreMatureEncashment } from '../src/lib/sanchaya-bond-engine';
 import { calculateCapitalGainsTaxSummary, generateBalanceSheetReport } from '../src/lib/accounting-engine';
 import { calculateMemberFinancialSummaries } from '../src/lib/family-ledger-engine';
-import type { SanchayaBondItem, StockTransaction, Stock, Debt, AccountBalanceView } from '../src/types/accounting';
+import type { StockTransaction, Stock, Debt, AccountBalanceView } from '../src/types/accounting';
+import type { SanchayaBondItem } from '../src/types/sanchaya-bond';
 import type { FamilyMember, FamilyExpense } from '../src/types/family-ledger';
 
 function assert(cond: boolean, msg: string): void {
@@ -45,8 +46,7 @@ const trades = [
   { id: 't3', stockId: 's1', transactionType: 'sell', quantity: 50, price: 130, grossValue: 6500, commission: 0, tax: 0, otherCharges: 0, tradeDate: '2026-08-10' }, // FY 2026-2027
 ] as unknown as StockTransaction[];
 const fy = calculateCapitalGainsTaxSummary(trades, stocks, [], 0, '2026-2027');
-assert(fy.items ? fy.items.length === 1 : (fy as any).gainItems?.length === 1 || true, 'summary object returned');
-const items = (fy as any).items ?? (fy as any).gainItems ?? [];
+const items = fy.gainItems;
 assert(items.length === 1 && items[0].tradeDate === '2026-08-10', `FY filter keeps only in-window sell: ${items.length}`);
 assert(items[0].realizedGainLoss === 1500, `WAC still correct across all history: ${items[0].realizedGainLoss}`);
 
