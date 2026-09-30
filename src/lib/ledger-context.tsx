@@ -74,6 +74,7 @@ import {
   saveLedgerToFirestore,
   fetchLedgerFromFirestore,
   subscribeToCloudLedger,
+  computeContentHash,
 } from './cloud-sync-service';
 import {
   fetchDseMarketQuotes,
@@ -230,7 +231,7 @@ interface LedgerContextType {
     summary: string,
     details?: Record<string, any>
   ) => void;
-  exportFullBackup: () => BackupBundle;
+  exportFullBackup: (options?: { incrementRevision?: boolean }) => BackupBundle;
   restoreFromBackup: (bundle: BackupBundle) => { success: boolean; error?: string };
   resetTenantLedger: () => void;
 
@@ -280,6 +281,18 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const lastSyncedChecksumRef = useRef<string>('');
   const currentLoadedUserIdRef = useRef<string>(userId);
   const isInitialMountRef = useRef<boolean>(true);
+  const isApplyingRemoteRef = useRef<boolean>(false);
+  const localRevisionRef = useRef<number>(0);
+
+  // Synchronize local revision ref when active tenant changes
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`pfos_${userId}_local_revision`);
+      localRevisionRef.current = saved ? parseInt(saved, 10) || 0 : 0;
+    } catch {
+      localRevisionRef.current = 0;
+    }
+  }, [userId]);
 
   // Local Storage Keys scoped by active tenant user id
   const ACCOUNTS_KEY = `pfos_${userId}_accounts`;
@@ -3886,8 +3899,50 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   }, [rawAlerts, dismissedAlertIds]);
 
   // Phase 9: Export Full JSON Backup Bundle
-  const exportFullBackup = (): BackupBundle => {
+  const exportFullBackup = (options?: { incrementRevision?: boolean }): BackupBundle => {
     const exportedAt = new Date().toISOString();
+
+    if (options?.incrementRevision) {
+      localRevisionRef.current += 1;
+      try {
+        localStorage.setItem(`pfos_${userId}_local_revision`, String(localRevisionRef.current));
+      } catch {}
+    }
+
+    const dataPayload = {
+      accounts,
+      categories,
+      transactions,
+      transactionLines,
+      fixedDeposits,
+      budgets,
+      recurringTransactions,
+      financialGoals,
+      goalContributions,
+      dpsAccounts,
+      dpsInstallments,
+      debts,
+      loans,
+      loanSchedules,
+      physicalAssets,
+      staticLiabilities,
+      netWorthSnapshots,
+      zakatSettings,
+      brokers,
+      brokerAccounts,
+      brokerCashTransactions,
+      stocks,
+      stockTransactions,
+      stockPriceHistory,
+      benchmarkIndexPrices,
+      dividends,
+      corporateActions,
+      ipoApplications,
+      auditLogs,
+    };
+
+    const checksum = computeContentHash(dataPayload);
+
     const bundle: BackupBundle = {
       metadata: {
         schemaVersion: '5.0-phase9',
@@ -3925,39 +3980,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           ipoApplications: ipoApplications.length,
           auditLogs: auditLogs.length,
         },
-        checksum: `sha-${Date.now().toString(16)}-${Math.random().toString(36).substring(2, 9)}`,
+        checksum,
+        revision: localRevisionRef.current,
       },
-      data: {
-        accounts,
-        categories,
-        transactions,
-        transactionLines,
-        fixedDeposits,
-        budgets,
-        recurringTransactions,
-        financialGoals,
-        goalContributions,
-        dpsAccounts,
-        dpsInstallments,
-        debts,
-        loans,
-        loanSchedules,
-        physicalAssets,
-        staticLiabilities,
-        netWorthSnapshots,
-        zakatSettings,
-        brokers,
-        brokerAccounts,
-        brokerCashTransactions,
-        stocks,
-        stockTransactions,
-        stockPriceHistory,
-        benchmarkIndexPrices,
-        dividends,
-        corporateActions,
-        ipoApplications,
-        auditLogs,
-      },
+      data: dataPayload,
     };
 
     logAuditEvent(
@@ -3979,6 +4005,14 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       if (!bundle || !bundle.data || !bundle.metadata) {
         return { success: false, error: 'Invalid backup format: Missing metadata or data payload.' };
+      }
+
+      // Monotonic revision update from restored bundle
+      if (typeof bundle.metadata?.revision === 'number') {
+        localRevisionRef.current = Math.max(localRevisionRef.current, bundle.metadata.revision);
+        try {
+          localStorage.setItem(`pfos_${userId}_local_revision`, String(localRevisionRef.current));
+        } catch {}
       }
       const { data } = bundle;
       if (Array.isArray(data.accounts)) setAccounts(data.accounts);
@@ -4210,6 +4244,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
           // If local has 0 accounts (e.g. freshly signed-in browser), restore from Cloud!
           if (accounts.length === 0) {
             console.log('Multi-device sync: Hydrating empty browser session with Cloud Ledger data...');
+            isApplyingRemoteRef.current = true;
             restoreFromBackup(cloudBundle);
             setCloudSyncStatus('synced');
             setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
@@ -4220,28 +4255,57 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             return;
           }
 
-          // If both have records, check timestamps & counts
-          const cloudTime = new Date(cloudBundle.metadata.exportedAt).getTime();
-          const localSavedTime = lastCloudSyncAt ? new Date(lastCloudSyncAt).getTime() : 0;
+          // Check if local content hash is identical to cloud checksum: nothing to do!
+          const localBundle = exportFullBackup();
+          if (cloudBundle.metadata.checksum && cloudBundle.metadata.checksum === localBundle.metadata.checksum) {
+            console.log('Multi-device sync: Cloud and local data are already identical.');
+            setCloudSyncStatus('synced');
+            setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
+            lastSyncedChecksumRef.current = cloudBundle.metadata.checksum;
+            return;
+          }
 
-          if (cloudTime > localSavedTime && cloudRecordCount >= localCount) {
-            console.log('Multi-device sync: Cloud has newer data, updating browser state...');
+          // Check monotonic revision
+          const cloudRev = cloudBundle.metadata?.revision;
+          const localRev = localRevisionRef.current;
+          if (typeof cloudRev === 'number' && cloudRev > localRev) {
+            console.log(`Multi-device sync: Cloud has newer revision (${cloudRev} > ${localRev}), updating browser state...`);
+            isApplyingRemoteRef.current = true;
             restoreFromBackup(cloudBundle);
             setCloudSyncStatus('synced');
             setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
             lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
-          } else {
-            // Local has newer/more records, push to cloud
-            const localBundle = exportFullBackup();
-            lastSyncedChecksumRef.current = localBundle.metadata.checksum || '';
-            await saveLedgerToFirestore(firebaseUser.uid, localBundle);
+          } else if (typeof cloudRev === 'number' && cloudRev < localRev) {
+            console.log(`Multi-device sync: Local has newer revision (${localRev} > ${cloudRev}), pushing to cloud...`);
+            const saveBundle = exportFullBackup({ incrementRevision: true });
+            lastSyncedChecksumRef.current = saveBundle.metadata.checksum || '';
+            await saveLedgerToFirestore(firebaseUser.uid, saveBundle);
             setCloudSyncStatus('synced');
-            setLastCloudSyncAt(localBundle.metadata.exportedAt);
+            setLastCloudSyncAt(saveBundle.metadata.exportedAt);
+          } else {
+            // Revisions equal or not present: fallback to timestamp & counts
+            const cloudTime = new Date(cloudBundle.metadata.exportedAt).getTime();
+            const localSavedTime = lastCloudSyncAt ? new Date(lastCloudSyncAt).getTime() : 0;
+
+            if (cloudTime > localSavedTime && cloudRecordCount >= localCount) {
+              console.log('Multi-device sync: Cloud has newer timestamp/data, updating browser state...');
+              isApplyingRemoteRef.current = true;
+              restoreFromBackup(cloudBundle);
+              setCloudSyncStatus('synced');
+              setLastCloudSyncAt(cloudResult.syncedAt || cloudBundle.metadata.exportedAt);
+              lastSyncedChecksumRef.current = cloudBundle.metadata.checksum || '';
+            } else {
+              const saveBundle = exportFullBackup({ incrementRevision: true });
+              lastSyncedChecksumRef.current = saveBundle.metadata.checksum || '';
+              await saveLedgerToFirestore(firebaseUser.uid, saveBundle);
+              setCloudSyncStatus('synced');
+              setLastCloudSyncAt(saveBundle.metadata.exportedAt);
+            }
           }
         } else {
           // Cloud has no ledger yet, push local if local has data
           if (accounts.length > 0 || transactions.length > 0) {
-            const localBundle = exportFullBackup();
+            const localBundle = exportFullBackup({ incrementRevision: true });
             lastSyncedChecksumRef.current = localBundle.metadata.checksum || '';
             const saveRes = await saveLedgerToFirestore(firebaseUser.uid, localBundle);
             if (saveRes.success) {
@@ -4275,12 +4339,27 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       (remoteBundle, syncedAt) => {
         if (!remoteBundle?.metadata) return;
 
-        // Skip our own recent outgoing save
+        // 1. Echo suppression: Skip our own recent outgoing save
         if (remoteBundle.metadata.checksum && remoteBundle.metadata.checksum === lastSyncedChecksumRef.current) {
           return;
         }
 
+        // 2. Content-hash check: Skip if remote checksum matches current local data
+        const localBundle = exportFullBackup();
+        if (remoteBundle.metadata.checksum && remoteBundle.metadata.checksum === localBundle.metadata.checksum) {
+          lastSyncedChecksumRef.current = remoteBundle.metadata.checksum;
+          return;
+        }
+
+        // 3. Monotonic revision check: Skip if remote revision <= local revision
+        const remoteRev = remoteBundle.metadata.revision;
+        if (typeof remoteRev === 'number' && remoteRev <= localRevisionRef.current) {
+          console.log(`Multi-device sync: Ignoring older/equal remote revision (${remoteRev} <= ${localRevisionRef.current})`);
+          return;
+        }
+
         console.log('Real-time remote cloud update received, syncing local ledger...');
+        isApplyingRemoteRef.current = true;
         lastSyncedChecksumRef.current = remoteBundle.metadata.checksum || '';
         restoreFromBackup(remoteBundle);
         setCloudSyncStatus('synced');
@@ -4306,12 +4385,24 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       return;
     }
 
+    // Skip auto-sync if we just applied remote cloud data
+    if (isApplyingRemoteRef.current) {
+      isApplyingRemoteRef.current = false;
+      return;
+    }
+
     if (!firebaseUser?.uid) return;
 
     const timer = setTimeout(async () => {
       try {
+        const bundle = exportFullBackup({ incrementRevision: true });
+        // Double-guard: If content checksum matches what was already synced, skip!
+        if (bundle.metadata.checksum && bundle.metadata.checksum === lastSyncedChecksumRef.current) {
+          setCloudSyncStatus('synced');
+          return;
+        }
+
         setCloudSyncStatus('syncing');
-        const bundle = exportFullBackup();
         lastSyncedChecksumRef.current = bundle.metadata.checksum || '';
         const res = await saveLedgerToFirestore(firebaseUser.uid, bundle);
         if (res.success) {
@@ -4370,7 +4461,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     setCloudSyncStatus('syncing');
     setCloudSyncError(null);
     try {
-      const bundle = exportFullBackup();
+      const bundle = exportFullBackup({ incrementRevision: true });
       lastSyncedChecksumRef.current = bundle.metadata.checksum || '';
       const res = await saveLedgerToFirestore(firebaseUser.uid, bundle);
       if (res.success) {
@@ -4400,6 +4491,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       const res = await fetchLedgerFromFirestore(firebaseUser.uid);
       if (res.success && res.bundle) {
+        isApplyingRemoteRef.current = true;
         lastSyncedChecksumRef.current = res.bundle.metadata.checksum || '';
         restoreFromBackup(res.bundle);
         setCloudSyncStatus('synced');

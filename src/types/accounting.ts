@@ -1095,6 +1095,7 @@ export interface BackupMetadata {
   userEmail: string;
   recordCounts: Record<string, number>;
   checksum: string;
+  revision?: number;
 }
 
 export interface BackupBundle {

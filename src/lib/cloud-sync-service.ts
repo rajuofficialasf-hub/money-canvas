@@ -65,6 +65,25 @@ export function calculateBundleRecordCount(bundle: BackupBundle): number {
 }
 
 /**
+ * Fast deterministic FNV-1a 64-bit content hash formatted as hex string.
+ * Generates an identical checksum for identical JSON payload structure.
+ */
+export function computeContentHash(data: any): string {
+  if (!data) return 'sha-0000000000000000';
+  const str = typeof data === 'string' ? data : JSON.stringify(data);
+  let h1 = 0x811c9dc5;
+  let h2 = 0x9e3779b9;
+  for (let i = 0; i < str.length; i++) {
+    const ch = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ ch, 0x01000193);
+    h2 = Math.imul(h2 ^ (ch >>> 4), 0x01000193);
+  }
+  const hex1 = (h1 >>> 0).toString(16).padStart(8, '0');
+  const hex2 = (h2 >>> 0).toString(16).padStart(8, '0');
+  return `sha-${hex1}${hex2}`;
+}
+
+/**
  * Saves the user's complete financial ledger bundle to Firestore Cloud
  */
 export async function saveLedgerToFirestore(
