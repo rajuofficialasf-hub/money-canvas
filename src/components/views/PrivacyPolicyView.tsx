@@ -183,11 +183,25 @@ export const PrivacyPolicyView: React.FC<{ onBack?: () => void }> = ({ onBack })
 
               <section className="space-y-2">
                 <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
-                  6. User Data Retention & Deletion
+                  6. User Data Retention & Deletion (Google Play Compliance)
                 </h2>
                 <p>
-                  You have full control over your data. You may export a complete JSON backup at any time, or permanently delete your local records and account data directly through the in-app Settings (<strong className="text-rose-400">"Wipe Data & Reset"</strong>).
+                  You have full control over your data. In compliance with Google Play Store policies:
                 </p>
+                <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-300">
+                  <li>
+                    <strong>In-App Immediate Deletion:</strong> You can permanently delete your Firebase user account, cloud-synced ledgers, encrypted vaults, and local device records at any time from <strong>Settings &gt; Danger Zone &gt; Delete My Account &amp; Data</strong>.
+                  </li>
+                  <li>
+                    <strong>Web-Based Deletion Portal:</strong> If you have uninstalled the app or lost device access, you can submit an account &amp; data deletion request via our public web portal:{' '}
+                    <a href="#/data-deletion" className="text-rose-400 hover:text-rose-300 underline font-semibold">
+                      Online Account &amp; Data Deletion Request Portal
+                    </a>.
+                  </li>
+                  <li>
+                    <strong>Zero Data Retained:</strong> Upon deletion, no financial transactions, profiles, or encryption keys are retained on our servers.
+                  </li>
+                </ul>
               </section>
 
               <section className="space-y-2 border-t border-slate-800 pt-4">
@@ -236,11 +250,22 @@ export const PrivacyPolicyView: React.FC<{ onBack?: () => void }> = ({ onBack })
 
               <section className="space-y-2">
                 <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
-                  ৪. ডাটা মুছে ফেলা
+                  ৪. অ্যাকাউন্ট ও ডাটা সম্পূর্ণ মুছে ফেলা (Google Play Compliance)
                 </h2>
                 <p>
-                  আপনি যেকোনো সময় অ্যাপের সেটিংস থেকে সম্পূর্ণ ডাটা মুছে ফেলতে পারেন অথবা JSON ব্যাকআপ ডাউনলোড করে নিতে পারেন।
+                  গুগল প্লে স্টোর নীতি অনুযায়ী ব্যবহারকারী যেকোনো সময় তার অ্যাকাউন্ট ও তথ্য সম্পূর্ণ অপসারণ করতে পারেন:
                 </p>
+                <ul className="list-disc pl-5 space-y-1.5 text-xs text-slate-300">
+                  <li>
+                    <strong>অ্যাপ থেকে সরাসরি:</strong> সেটিংসের বিপদজনক এলাকা থেকে <strong>&quot;Delete Account &amp; All Data&quot;</strong> চেপে তাৎক্ষণিকভাবে ফায়ারবেস অথেনটিকেশন, ক্লাউড সিঙ্ক এবং ডিভাইসের সব তথ্য স্থায়ীভাবে মুছে ফেলা যায়।
+                  </li>
+                  <li>
+                    <strong>অনলাইন ওয়েব পোর্টাল:</strong> অ্যাপ আনইনস্টল করে থাকলে আমাদের ডেডিকেটেড ওয়েব লিঙ্ক:{' '}
+                    <a href="#/data-deletion" className="text-rose-400 hover:text-rose-300 underline font-semibold">
+                      অনলাইন অ্যাকাউন্ট ও ডেটা অপসারণ অনুরোধ পোর্টাল
+                    </a>-এ গিয়ে ইমেইল জমা দিয়ে ২৪-৪৮ ঘণ্টার মধ্যে ডেটা মুছে ফেলার অনুরোধ করা যায়।
+                  </li>
+                </ul>
               </section>
 
               <section className="space-y-2 border-t border-slate-800 pt-4">

@@ -25,6 +25,11 @@ import {
   ArrowUpCircle,
   ExternalLink,
   Download,
+  X,
+  ShieldAlert,
+  KeyRound,
+  AlertTriangle,
+  Info,
 } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
 import {
@@ -36,7 +41,7 @@ import {
 import { useAppUpdate } from '../../lib/update-context';
 
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
-  const { user, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData } = useAuth();
+  const { user, firebaseUser, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData, deleteAccountAndData } = useAuth();
   const { language, setLanguage, isBn, toggleLanguage, t } = useLanguage();
   const { checkForUpdate, downloadApp, isChecking: checkingUpdate, currentVersionName } = useAppUpdate();
   const {
@@ -98,6 +103,37 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
   const [isCreatingProfile, setIsCreatingProfile] = useState(false);
   const [newProfileName, setNewProfileName] = useState('');
   const [newProfileEmail, setNewProfileEmail] = useState('');
+
+  // Account Deletion State (Google Play Store compliance)
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
+  const [isDeletingAccount, setIsDeletingAccount] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+
+  const handleDeleteAccount = async () => {
+    if (deleteConfirmText.trim().toUpperCase() !== 'DELETE') {
+      setDeleteError(isBn ? 'নিশ্চিত করতে "DELETE" টাইপ করুন।' : 'Please type "DELETE" to confirm.');
+      return;
+    }
+
+    setDeleteError(null);
+    setIsDeletingAccount(true);
+    try {
+      const res = await deleteAccountAndData(deletePassword);
+      if (res.success) {
+        alert(isBn ? 'আপনার অ্যাকাউন্ট ও সকল ডেটা সফলভাবে মুছে ফেলা হয়েছে।' : 'Your account and all associated data have been permanently deleted.');
+        window.location.href = '#/landing';
+        window.location.reload();
+      } else {
+        setDeleteError(res.error || (isBn ? 'অ্যাকাউন্ট ডিলিট করা যায়নি।' : 'Failed to delete account.'));
+      }
+    } catch (err: any) {
+      setDeleteError(err?.message || (isBn ? 'অপ্রত্যাশিত ত্রুটি ঘটেছে।' : 'An unexpected error occurred.'));
+    } finally {
+      setIsDeletingAccount(false);
+    }
+  };
   const [newProfileRole, setNewProfileRole] = useState<'owner' | 'auditor'>('owner');
 
   const handleSaveProfile = (e: React.FormEvent) => {
@@ -647,49 +683,230 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
             </div>
           </div>
 
-          {/* Google Play Privacy Policy Card */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
-              <ShieldCheck className="h-4 w-4" />
-              <span>Google Play Privacy Policy</span>
+          {/* Google Play Compliance Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Google Play Privacy Policy Card */}
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
+              <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
+                <ShieldCheck className="h-4 w-4" />
+                <span>Google Play Privacy Policy</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Google Play Store compliance and user data protection policy for Google Sign-In & Google Drive integration.
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowPrivacyPolicy(true)}
+                className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <FileText className="h-3.5 w-3.5 text-emerald-400" />
+                <span>Read Full Privacy Policy</span>
+              </button>
             </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              Google Play Store compliance and user data protection policy for Google Sign-In & Google Drive integration.
-            </p>
-            <button
-              type="button"
-              onClick={() => setShowPrivacyPolicy(true)}
-              className="px-3.5 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-colors"
-            >
-              <FileText className="h-3.5 w-3.5 text-emerald-400" />
-              <span>Read Full Privacy Policy</span>
-            </button>
+
+            {/* Play Store Account & Data Deletion Portal Link */}
+            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
+              <div className="flex items-center gap-2 text-rose-400 text-xs font-bold">
+                <ShieldAlert className="h-4 w-4" />
+                <span>Play Store Data Deletion URL</span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-relaxed">
+                Google Play policy requires a dedicated public webpage where users can request account and data deletion.
+              </p>
+              <button
+                type="button"
+                onClick={() => onNavigate?.('data_deletion')}
+                className="px-3.5 py-2 rounded-lg bg-rose-950/40 hover:bg-rose-900/40 border border-rose-800/50 text-rose-300 text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+              >
+                <ExternalLink className="h-3.5 w-3.5 text-rose-400" />
+                <span>Open Deletion Request Portal</span>
+              </button>
+            </div>
           </div>
 
-          {/* Reset to Fresh Slate */}
-          <div className="rounded-xl border border-rose-900/40 bg-rose-950/20 p-5 space-y-3">
-            <div className="flex items-center gap-2 text-rose-400 text-xs font-bold">
-              <Trash2 className="h-4 w-4" />
-              <span>Clean Slate / Reset Ledger</span>
+          {/* Danger Zone: Local Reset & Account Deletion */}
+          <div className="rounded-2xl border border-rose-900/40 bg-rose-950/10 p-5 sm:p-6 space-y-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-rose-400 text-sm font-bold">
+                <AlertTriangle className="h-5 w-5" />
+                <span>বিপজ্জনক এলাকা (Danger Zone)</span>
+              </div>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-800/40">
+                Irreversible
+              </span>
             </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed">
-              Clear all saved device storage and restart the onboarding wizard to create a brand new personal profile from scratch.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                if (window.confirm('Are you sure you want to clear all data and start completely fresh?')) {
-                  resetAllUserData();
-                }
-              }}
-              className="px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 border border-rose-700/50 text-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              <span>Wipe Data & Restart Setup</span>
-            </button>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Reset to Fresh Slate (Local) */}
+              <div className="rounded-xl border border-rose-900/30 bg-slate-950/60 p-4 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-amber-400 text-xs font-bold mb-1.5">
+                    <RotateCcw className="h-4 w-4" />
+                    <span>Clean Slate / স্থানীয় ডেটা রিসেট</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    এই ডিভাইসের লোকাল স্টোরেজ ও ক্যাশ মুছে দিয়ে অনবোর্ডিং উইজার্ড পুনরায় চালু করে।
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm('Are you sure you want to clear local storage and start completely fresh?')) {
+                      resetAllUserData();
+                    }
+                  }}
+                  className="w-full px-3 py-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 border border-amber-700/50 text-amber-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span>Wipe Local Cache & Reset</span>
+                </button>
+              </div>
+
+              {/* Permanent Account Deletion (Google Play Compliance) */}
+              <div className="rounded-xl border border-rose-900/50 bg-rose-950/20 p-4 space-y-3 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-2 text-rose-400 text-xs font-bold mb-1.5">
+                    <Trash2 className="h-4 w-4" />
+                    <span>Delete Account & All Data (স্থায়ী ডিলিট)</span>
+                  </div>
+                  <p className="text-[11px] text-rose-300/80 leading-relaxed">
+                    Firestore ক্লাউড ভল্ট, গুগল অথেনটিকেশন ও ডিভাইসের সকল তথ্য স্থায়ীভাবে ধ্বংস করে।
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDeleteConfirmText('');
+                    setDeletePassword('');
+                    setDeleteError(null);
+                    setShowDeleteAccountModal(true);
+                  }}
+                  className="w-full px-3 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-rose-950/60"
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  <span>Delete My Account & Data</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal for Permanent Account Deletion */}
+      {showDeleteAccountModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="relative w-full max-w-lg rounded-2xl bg-slate-900 border border-rose-900/80 shadow-2xl p-6 sm:p-7 space-y-5 text-slate-100">
+            {/* Modal Header */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30">
+                  <ShieldAlert className="h-6 w-6" />
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold text-white">
+                    Permanently Delete Account
+                  </h3>
+                  <p className="text-xs text-rose-400 font-mono">
+                    {firebaseUser?.email || user.email || 'Local User Profile'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDeleteAccountModal(false)}
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Warning Details */}
+            <div className="p-3.5 rounded-xl bg-rose-950/40 border border-rose-900/50 space-y-2 text-xs text-rose-200/90 leading-relaxed">
+              <p className="font-semibold text-rose-300">
+                ⚠️ এই অ্যাকশন সম্পূর্ণ অপরিবর্তনীয়! নিশ্চিত করলে সাথে সাথে:
+              </p>
+              <ul className="list-disc pl-4 space-y-1 text-[11px] text-rose-200">
+                <li>Firestore ক্লাউড ব্যাকআপ ও AES-256 এনক্রিপ্টেড ভল্ট মুছে যাবে।</li>
+                <li>Firebase একাউন্ট ও গুগল লগইন পারমিশন বাতিল হবে।</li>
+                <li>লোকাল ডিভাইসের সব একাউন্ট, লেনদেন ও বায়োমেট্রিক ডেটা মুছে যাবে।</li>
+              </ul>
+            </div>
+
+            {deleteError && (
+              <div className="p-3 rounded-xl bg-rose-950 border border-rose-500/50 text-rose-300 text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+                <span>{deleteError}</span>
+              </div>
+            )}
+
+            {/* Password input if email/password auth */}
+            {firebaseUser?.providerData.some((p) => p.providerId === 'password') && (
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                  <KeyRound className="h-3.5 w-3.5 text-slate-400" />
+                  <span>বর্তমান পাসওয়ার্ড লিখুন (Enter Current Password):</span>
+                </label>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder="Your password"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs placeholder:text-slate-600 focus:outline-none focus:border-rose-500"
+                />
+              </div>
+            )}
+
+            {/* Google provider notice */}
+            {firebaseUser?.providerData.some((p) => p.providerId === 'google.com') && (
+              <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 flex items-center gap-2">
+                <Info className="h-4 w-4 text-sky-400 shrink-0" />
+                <span>ডিলিট বাটনে ক্লিক করলে আপনার গুগল একাউন্ট রি-অথেনটিকেশন পপআপ প্রদর্শিত হবে।</span>
+              </div>
+            )}
+
+            {/* Confirmation string input */}
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-slate-300">
+                নিশ্চিত করতে নিচে <strong className="text-rose-400 font-mono tracking-wider">DELETE</strong> টাইপ করুন:
+              </label>
+              <input
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder="Type DELETE to confirm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono uppercase placeholder:text-slate-600 focus:outline-none focus:border-rose-500"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                disabled={isDeletingAccount}
+                onClick={() => setShowDeleteAccountModal(false)}
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-colors"
+              >
+                Cancel / বাতিল
+              </button>
+              <button
+                type="button"
+                disabled={isDeletingAccount || deleteConfirmText.trim().toUpperCase() !== 'DELETE'}
+                onClick={handleDeleteAccount}
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:bg-rose-950 disabled:text-slate-600 disabled:cursor-not-allowed text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
+              >
+                {isDeletingAccount ? (
+                  <span>Deleting Account & Data...</span>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4" />
+                    <span>Permanently Delete Everything</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -48,6 +48,7 @@ import { UserGuideView } from './components/views/UserGuideView';
 import { PrivacyPolicyView } from './components/views/PrivacyPolicyView';
 import { TermsOfServiceView } from './components/views/TermsOfServiceView';
 import { PublicLandingView } from './components/views/PublicLandingView';
+import { DataDeletionRequestView } from './components/views/DataDeletionRequestView';
 import { Capacitor } from '@capacitor/core';
 import { UserGuideModal } from './components/onboarding/UserGuideModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -161,6 +162,15 @@ function AppContent() {
 
   if (currentView === 'landing' || pathname === '/landing') {
     return <PublicLandingView onLaunchApp={handleLaunchApp} />;
+  }
+
+  if (
+    currentView === 'data_deletion' ||
+    pathname === '/data-deletion' ||
+    pathname === '/delete-account' ||
+    pathname === '/account-deletion'
+  ) {
+    return <DataDeletionRequestView onBack={() => navigate('/settings')} />;
   }
 
   // 2. On Web browsers: If user has not onboarded and hasn't clicked Launch App,
@@ -334,6 +344,10 @@ function AppContent() {
 
             {currentView === 'terms' && (
               <TermsOfServiceView onBack={() => setCurrentView('settings')} />
+            )}
+
+            {currentView === 'data_deletion' && (
+              <DataDeletionRequestView onBack={() => setCurrentView('settings')} />
             )}
           </ErrorBoundary>
         </main>

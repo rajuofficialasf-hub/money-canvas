@@ -175,6 +175,9 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             <a href="/terms" className="text-slate-400 hover:text-emerald-400 transition-colors">
               Terms of Service
             </a>
+            <a href="#/data-deletion" className="text-slate-400 hover:text-rose-400 transition-colors">
+              Data Deletion
+            </a>
             <a href="mailto:raju.official.asf@gmail.com" className="text-slate-400 hover:text-emerald-400 transition-colors">
               Contact Developer
             </a>

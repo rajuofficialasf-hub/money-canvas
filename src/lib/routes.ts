@@ -40,6 +40,7 @@ export const ROUTE_MAP: Record<string, string> = {
   privacy: '/privacy',
   terms: '/terms',
   landing: '/landing',
+  data_deletion: '/data-deletion',
 };
 
 // Inverse map for O(1) route lookup
@@ -55,6 +56,8 @@ Object.entries(ROUTE_MAP).forEach(([view, path]) => {
 PATH_TO_VIEW_MAP['/'] = 'dashboard';
 PATH_TO_VIEW_MAP['/privacy-policy'] = 'privacy';
 PATH_TO_VIEW_MAP['/terms-of-service'] = 'terms';
+PATH_TO_VIEW_MAP['/delete-account'] = 'data_deletion';
+PATH_TO_VIEW_MAP['/account-deletion'] = 'data_deletion';
 
 /**
  * Resolve a URL path to its canonical view identifier. Defaults to 'dashboard'.

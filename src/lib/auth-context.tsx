@@ -11,6 +11,10 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithCredential,
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  reauthenticateWithPopup,
 } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
 import { SocialLogin } from '@capgo/capacitor-social-login';
@@ -23,6 +27,8 @@ import {
   getDocs,
   query,
   orderBy,
+  deleteDoc,
+  addDoc,
 } from 'firebase/firestore';
 import { auth, googleProvider, db } from './firebase';
 
@@ -76,6 +82,8 @@ interface AuthContextType {
   updateProfile: (input: ProfileUpdateInput) => void;
   createProfile: (fullName: string, email: string, role?: 'owner' | 'auditor') => void;
   resetAllUserData: () => void;
+  deleteAccountAndData: (password?: string) => Promise<{ success: boolean; error?: string }>;
+  submitWebDeletionRequest: (email: string, reason?: string) => Promise<{ success: boolean; error?: string }>;
   fetchRegisteredUsers: () => Promise<FirebaseAppUser[]>;
   updateUserDriveSyncStatus: (status: 'synced' | 'pending' | 'none' | 'error', lastBackupAt?: string) => Promise<void>;
 }
@@ -624,6 +632,146 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  /**
+   * Google Play Store Compliance — Permanent Account & Associated Data Deletion
+   * Wipes cloud documents, Firebase Auth record, and all local storage.
+   */
+  const deleteAccountAndData = async (password?: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        const providerId = currentUser.providerData[0]?.providerId;
+
+        // 1. Re-authenticate user before destructive deletion
+        if (providerId === 'password' || (currentUser.email && password)) {
+          if (!password) {
+            return {
+              success: false,
+              error: 'অ্যাকাউন্ট ডিলিট করতে বর্তমান পাসওয়ার্ড প্রয়োজন।',
+            };
+          }
+          const cred = EmailAuthProvider.credential(currentUser.email!, password);
+          await reauthenticateWithCredential(currentUser, cred);
+        } else if (providerId === 'google.com') {
+          if (Capacitor.isNativePlatform()) {
+            try {
+              const nativeResult = await SocialLogin.login({
+                provider: 'google',
+                options: {
+                  style: 'standard',
+                  filterByAuthorizedAccounts: true,
+                },
+              });
+              const loginData = (nativeResult?.result || nativeResult) as any;
+              if (loginData?.idToken) {
+                const cred = GoogleAuthProvider.credential(
+                  loginData.idToken,
+                  loginData.accessToken?.token || loginData.accessToken
+                );
+                await reauthenticateWithCredential(currentUser, cred);
+              }
+            } catch (nativeErr: any) {
+              console.warn('Native Google re-auth notice:', nativeErr);
+            }
+          } else {
+            try {
+              await reauthenticateWithPopup(currentUser, googleProvider);
+            } catch (popupErr: any) {
+              if (popupErr?.code === 'auth/popup-closed-by-user') {
+                return { success: false, error: 'গুগল ভেরিফিকেশন বাতিল করা হয়েছে।' };
+              }
+              console.warn('Google re-auth notice:', popupErr);
+            }
+          }
+        }
+
+        const uid = currentUser.uid;
+
+        // 2. Remote Firestore Cloud Purge (Ledger, Vault, User profile)
+        try {
+          await deleteDoc(doc(db, 'users', uid, 'cloud_ledger', 'current'));
+        } catch (e) {
+          console.warn('Could not delete cloud_ledger doc:', e);
+        }
+
+        try {
+          await deleteDoc(doc(db, 'users', uid, 'cloud_vault', 'current'));
+        } catch (e) {
+          console.warn('Could not delete cloud_vault doc:', e);
+        }
+
+        try {
+          await deleteDoc(doc(db, 'users', uid));
+        } catch (e) {
+          console.warn('Could not delete user doc:', e);
+        }
+
+        // 3. Delete Firebase Authentication User Record
+        try {
+          await deleteUser(currentUser);
+        } catch (delUserErr: any) {
+          if (delUserErr?.code === 'auth/requires-recent-login') {
+            return {
+              success: false,
+              error: 'নিরাপত্তার কারণে অ্যাকাউন্ট মুছে ফেলার আগে পুনরায় লগইন করা প্রয়োজন (Recent login required)।',
+            };
+          }
+          throw delUserErr;
+        }
+      }
+
+      // 4. Wipe Local Storage, Session Storage and cached tokens
+      try {
+        localStorage.clear();
+        sessionStorage.clear();
+      } catch (err) {
+        console.warn('Storage clear notice:', err);
+      }
+
+      setFirebaseUser(null);
+      setGoogleAccessToken(null);
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('Account deletion failed:', err);
+      return {
+        success: false,
+        error: err?.message || 'অ্যাকাউন্ট ডিলিট প্রক্রিয়া সম্পন্ন করা সম্ভব হয়নি। আবার চেষ্টা করুন।',
+      };
+    }
+  };
+
+  /**
+   * Play Store Web Portal Deletion Request Submission
+   */
+  const submitWebDeletionRequest = async (
+    email: string,
+    reason?: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      if (!email || !email.includes('@')) {
+        return { success: false, error: 'অনুগ্রহ করে একটি সঠিক ইমেইল এড্রেস লিখুন।' };
+      }
+
+      await addDoc(collection(db, 'deletion_requests'), {
+        email: email.trim().toLowerCase(),
+        reason: reason?.trim() || 'Play Store Web Deletion Request',
+        requestedAt: new Date().toISOString(),
+        status: 'pending',
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'web-client',
+      });
+
+      return { success: true };
+    } catch (err: any) {
+      console.error('Failed to submit deletion request:', err);
+      return {
+        success: false,
+        error: err?.message || 'রিকোয়েস্ট জমা নেওয়া সম্ভব হয়নি। অনুগ্রহ করে raju.official.asf@gmail.com এ যোগাযোগ করুন।',
+      };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -649,6 +797,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         updateProfile,
         createProfile,
         resetAllUserData,
+        deleteAccountAndData,
+        submitWebDeletionRequest,
         fetchRegisteredUsers,
         updateUserDriveSyncStatus,
       }}

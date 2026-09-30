@@ -39,6 +39,12 @@ service cloud.firestore {
       }
     }
 
+    // Play Store compliance: Web-based data deletion requests
+    match /deletion_requests/{requestId} {
+      allow create: if request.resource.data.email is string;
+      allow read, update, delete: if isAdmin();
+    }
+
     match /{document=**} {
       allow read, write: if false;
     }
