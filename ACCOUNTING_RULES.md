@@ -70,11 +70,11 @@ Category lines exist **strictly for budget and income/expense reporting**. They 
 | Event | Signed Amount in `transaction_lines` | Reporting Effect |
 |---|---:|---|
 | **Expense** | `+` (Positive) | Increases reported expense for that category. |
-| **Income** | `+` (Positive) | Increases reported income for that category. |
+| **Income** | `-` (Signed Negative) | Increases reported gross income for that category (balances `+` asset debit to satisfy sum-to-zero). |
 | **Expense Refund / Reversal** | `-` (Signed Negative in SAME category) | Directly cancels/reverses original expense amount. |
-| **Income Reversal / Chargeback** | `-` (Signed Negative in SAME category) | Directly cancels/reverses original income amount. |
+| **Income Reversal / Offset** | `+` (Signed Positive in SAME category) | Directly cancels/reverses original income amount. |
 
-> **Crucial Rule:** Because category lines are signed, an expense refund of ৳1,000 recorded with `-1,000` against the `Shopping` category reduces total `Shopping` expense by ৳1,000. It does NOT invent an artificial income category.
+> **Universal Sum-to-Zero Posting Convention (STEP-6):** In transaction posting (`LedgerView`, `SmsParserView`, `RecurringView`), all lines strictly sum to zero (`SUM(lines) = 0.00`). Consequently, gross income category lines are signed **negative** (`-X`), and income offsets/refunds are signed **positive** (`+X`).
 
 ---
 
@@ -86,7 +86,7 @@ Any transaction moving to `status = 'posted'` MUST satisfy its event-specific in
 |---|---:|---|---|
 | **Transfer** | `0.00` | No category lines allowed | `SUM(amount WHERE line_type='account') = 0` |
 | **Expense** | `-X` | Category lines = `+X` | `SUM(account) + SUM(category) = 0` |
-| **Income** | `+X` | Category lines = `+X` | `SUM(account) - SUM(category) = 0` |
+| **Income** | `+X` | Category lines = `-X` | `SUM(account) + SUM(category) = 0` |
 | **Split Expense** | `-X` | Sum of category lines = `+X` | `SUM(account) + SUM(category) = 0` |
 | **Expense Refund** | `+X` (Asset increase) | Category line = `-X` (Same category) | `SUM(account) + SUM(category) = 0` |
 | **Loan Disbursement** | `0.00` (Bank +L, Loan -L) | No category lines | `Bank (+L) + Loan Account (-L) = 0` |
@@ -105,9 +105,9 @@ Net Account Total: -2,000.00 | Net Expense Total: +2,000.00
 
 ### 4.2 Salary Income (৳100,000 into Bank)
 ```text
-Category: Salary Income   +100,000.00  (line_type=category)
-Account:  City Bank        +100,000.00  (line_type=account)
-Net Account Total: +100,000.00 | Net Income Total: +100,000.00
+Category: Salary Income   -100,000.00  (line_type=category, credit income)
+Account:  City Bank        +100,000.00  (line_type=account, debit asset)
+Net Account Total: +100,000.00 | Net Operating Income: +100,000.00 | Total Line Sum: 0.00
 ```
 
 ### 4.3 Transfer (৳10,000 from Bank to bKash)

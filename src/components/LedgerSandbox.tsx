@@ -142,7 +142,7 @@ export const LedgerSandbox: React.FC = () => {
         transactionId: newTxId,
         lineType: 'category',
         categoryId: txCategory,
-        amount: amt,
+        amount: -amt,
         createdAt: new Date().toISOString(),
       });
       newLines.push({

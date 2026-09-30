@@ -56,19 +56,19 @@ export function runAllAccountingTests(): TestCaseResult[] {
     title: 'Salary Income',
     description: 'Monthly salary of ৳120,000.00 deposited into City Bank.',
     passed: true,
-    invariantStatus: 'Account line (+120,000.00) matches Category line (+120,000.00)',
+    invariantStatus: 'Account line (+120,000.00) + Category line (-120,000.00) = 0.00',
     balanceDeltas: { 'City Bank': 120000.0 },
     logs: [
       'Posting income header: id=tx-2, type=income',
-      'Created Category line: Salary Income = +120,000.00',
+      'Created Category line: Salary Income = -120,000.00',
       'Created Account line: City Bank = +120,000.00',
-      'Invariant validated: Account (+120k) - Category (+120k) = 0.00',
+      'Invariant validated: Account (+120k) + Category (-120k) = 0.00',
       'City Bank balance increased by ৳120,000.00.',
     ],
     sampleTransaction: {
       header: { type: 'income', status: 'posted', note: 'September 2026 Salary' },
       lines: [
-        { type: 'category', targetName: 'Salary Income', amount: 120000.0 },
+        { type: 'category', targetName: 'Salary Income', amount: -120000.0 },
         { type: 'account', targetName: 'City Bank', amount: 120000.0 },
       ],
     },
@@ -692,7 +692,7 @@ export function runAllAccountingTests(): TestCaseResult[] {
       { id: 'tx-2', userId: 'u1', date: '2026-08-05', type: 'expense', status: 'posted', version: 1, createdBy: 'u1', createdAt: '', updatedAt: '' },
     ],
     [
-      { id: 'l1', transactionId: 'tx-1', lineType: 'category', categoryId: 'c-inc', amount: 25000, createdAt: '' },
+      { id: 'l1', transactionId: 'tx-1', lineType: 'category', categoryId: 'c-inc', amount: -25000, createdAt: '' }, // negative category line for gross income
       { id: 'l2', transactionId: 'tx-2', lineType: 'category', categoryId: 'c-exp', amount: 10000, createdAt: '' },
       { id: 'l3', transactionId: 'tx-2', lineType: 'category', categoryId: 'c-exp', amount: -2000, createdAt: '' }, // Lock 6 refund
     ],
@@ -709,15 +709,16 @@ export function runAllAccountingTests(): TestCaseResult[] {
   const hhiValid = sectorAlloc.herfindahlIndex > 0;
   const bsBalanced = bsReport.isBalanced && bsReport.netWorth === (bsReport.totalAssets - bsReport.totalLiabilities);
   const lock6Compliant = pnlReport.totalExpenses === 8000; // 10000 - 2000 refund offset
+  const incomeMatches = pnlReport.operatingIncome === 25000 && pnlReport.totalIncome === (25000 + taxReport.netCapitalGain) && pnlReport.netSurplus === (pnlReport.totalIncome - pnlReport.totalExpenses);
 
-  const phase8Passed = gainMatches && aitMatches && hhiValid && bsBalanced && lock6Compliant;
+  const phase8Passed = gainMatches && aitMatches && hhiValid && bsBalanced && lock6Compliant && incomeMatches;
 
   results.push({
     id: 18,
     title: 'Phase 8: Capital Gains, Sector HHI & Balance Sheet Reconciliation',
-    description: `Realized Gain = ৳${taxReport.netCapitalGain.toLocaleString()}. Advance AIT = ৳${taxReport.totalAdvanceTaxCredits}. HHI = ${sectorAlloc.herfindahlIndex}. Net Worth = ৳${bsReport.netWorth.toLocaleString()}. Lock 6 Expense = ৳${pnlReport.totalExpenses.toLocaleString()}.`,
+    description: `Realized Gain = ৳${taxReport.netCapitalGain.toLocaleString()}. Advance AIT = ৳${taxReport.totalAdvanceTaxCredits}. HHI = ${sectorAlloc.herfindahlIndex}. Net Worth = ৳${bsReport.netWorth.toLocaleString()}. Operating Income = ৳${pnlReport.operatingIncome.toLocaleString()}. Lock 6 Expense = ৳${pnlReport.totalExpenses.toLocaleString()}. Net Surplus = ৳${pnlReport.netSurplus.toLocaleString()}.`,
     passed: phase8Passed,
-    invariantStatus: 'NBR Capital Gains + AIT Credits + HHI Concentration + Balanced Financial Statements Verified',
+    invariantStatus: 'NBR Capital Gains + AIT Credits + HHI Concentration + Balanced Financial Statements + Operating Income Verified',
     balanceDeltas: {
       'Realized Gain': taxReport.netCapitalGain,
       'AIT Credits': taxReport.totalAdvanceTaxCredits,

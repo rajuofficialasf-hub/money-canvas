@@ -247,11 +247,11 @@ export function validateTransactionPosting(
     }
 
     case 'income': {
-      // Invariant: AccountSum - CategorySum == 0 (e.g. Account +20000, Category +20000)
-      if (round2(accountSum - categorySum) !== 0) {
+      // Invariant: AccountSum + CategorySum == 0 (e.g. Account +20000, Category -20000)
+      if (round2(accountSum + categorySum) !== 0) {
         return {
           valid: false,
-          reason: `Income invariant violated: Account sum (${accountSum}) must match Category sum (${categorySum}).`,
+          reason: `Income invariant violated: Account sum (${accountSum}) + Category sum (${categorySum}) must equal 0.00.`,
         };
       }
       return { valid: true };
@@ -1794,10 +1794,11 @@ export function generateIncomeStatementReport(
         rec = { gross: 0, offsets: 0, name: cat.name };
         incomeCatMap.set(cat.id, rec);
       }
-      if (line.amount > 0) {
-        rec.gross = round2(rec.gross + line.amount);
-      } else {
-        rec.offsets = round2(rec.offsets + Math.abs(line.amount));
+      // Sum-to-zero rule: Income category line is negative for gross income, positive for refund/reversal offsets
+      if (line.amount < 0) {
+        rec.gross = round2(rec.gross + Math.abs(line.amount));
+      } else if (line.amount > 0) {
+        rec.offsets = round2(rec.offsets + line.amount);
       }
     } else if (cat.type === 'expense') {
       let rec = expenseCatMap.get(cat.id);
@@ -1808,7 +1809,7 @@ export function generateIncomeStatementReport(
       // Lock 6 Rule: Positive amount is expense, negative amount is refund offset
       if (line.amount > 0) {
         rec.gross = round2(rec.gross + line.amount);
-      } else {
+      } else if (line.amount < 0) {
         rec.offsets = round2(rec.offsets + Math.abs(line.amount));
       }
     }
