@@ -13,6 +13,8 @@ export interface GoogleDriveFindResult {
   error?: string;
 }
 
+export type GoogleTokenRefreshFn = () => Promise<{ success: boolean; token?: string; error?: string }>;
+
 /**
  * Uploads or updates the BackupBundle file in the user's Google Drive.
  * Files are saved in the user's Google Drive so both Mobile App (Capacitor)
@@ -20,15 +22,22 @@ export interface GoogleDriveFindResult {
  */
 export async function uploadBackupToGoogleDrive(
   accessToken: string,
-  bundle: BackupBundle | EncryptedBackupBundle
+  bundle: BackupBundle | EncryptedBackupBundle,
+  refreshTokenFn?: GoogleTokenRefreshFn
 ): Promise<{ success: boolean; fileId?: string; lastBackupAt?: string; error?: string; isAuthError?: boolean }> {
   try {
     if (!accessToken) {
+      if (refreshTokenFn) {
+        const refreshRes = await refreshTokenFn();
+        if (refreshRes.success && refreshRes.token) {
+          return uploadBackupToGoogleDrive(refreshRes.token, bundle);
+        }
+      }
       return { success: false, isAuthError: true, error: 'Google OAuth Access Token is missing. Please sign in with Google.' };
     }
 
     // 1. Search if backup file already exists in Drive (checking both current and legacy names)
-    const existingSearch = await findBackupInGoogleDrive(accessToken);
+    const existingSearch = await findBackupInGoogleDrive(accessToken, refreshTokenFn);
 
     if (existingSearch.isAuthError) {
       return { success: false, isAuthError: true, error: existingSearch.error || 'Google session expired. Please sign in again.' };
@@ -73,6 +82,13 @@ export async function uploadBackupToGoogleDrive(
       console.error('Drive upload failed:', res.status, errText);
 
       if (res.status === 401) {
+        if (refreshTokenFn) {
+          const refreshRes = await refreshTokenFn();
+          if (refreshRes.success && refreshRes.token) {
+            // Retry upload with freshly acquired token
+            return uploadBackupToGoogleDrive(refreshRes.token, bundle);
+          }
+        }
         return {
           success: false,
           isAuthError: true,
@@ -114,10 +130,17 @@ export async function uploadBackupToGoogleDrive(
  * for both new ('money_canvas_ledger_backup.json') and legacy ('wealthfolio_ledger_backup.json') files.
  */
 export async function findBackupInGoogleDrive(
-  accessToken: string
+  accessToken: string,
+  refreshTokenFn?: GoogleTokenRefreshFn
 ): Promise<GoogleDriveFindResult> {
   try {
     if (!accessToken) {
+      if (refreshTokenFn) {
+        const refreshRes = await refreshTokenFn();
+        if (refreshRes.success && refreshRes.token) {
+          return findBackupInGoogleDrive(refreshRes.token);
+        }
+      }
       return { found: false, isAuthError: true, error: 'Google OAuth token is missing' };
     }
 
@@ -142,6 +165,12 @@ export async function findBackupInGoogleDrive(
         });
 
         if (res.status === 401) {
+          if (refreshTokenFn) {
+            const refreshRes = await refreshTokenFn();
+            if (refreshRes.success && refreshRes.token) {
+              return findBackupInGoogleDrive(refreshRes.token);
+            }
+          }
           authError = true;
           lastError = 'গুগল সাইন-ইন সেশন শেষ হয়ে গেছে। অনুগ্রহ করে আবার Sign In with Google করুন।';
           break;
@@ -189,7 +218,8 @@ export async function findBackupInGoogleDrive(
  */
 export async function downloadBackupFromGoogleDrive(
   accessToken: string,
-  fileId: string
+  fileId: string,
+  refreshTokenFn?: GoogleTokenRefreshFn
 ): Promise<{
   bundle: BackupBundle | null;
   encryptedBundle?: EncryptedBackupBundle | null;
@@ -203,6 +233,12 @@ export async function downloadBackupFromGoogleDrive(
     });
 
     if (!res.ok) {
+      if (res.status === 401 && refreshTokenFn) {
+        const refreshRes = await refreshTokenFn();
+        if (refreshRes.success && refreshRes.token) {
+          return downloadBackupFromGoogleDrive(refreshRes.token, fileId);
+        }
+      }
       return { bundle: null, error: `Failed to download file from Google Drive (${res.status})` };
     }
 

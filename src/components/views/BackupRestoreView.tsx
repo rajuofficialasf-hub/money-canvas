@@ -69,7 +69,7 @@ import {
 import { Modal } from '../ui/Modal';
 
 export const BackupRestoreView: React.FC = () => {
-  const { user, firebaseUser, googleAccessToken, isGoogleAuthenticated, signInWithGoogle, updateUserDriveSyncStatus } = useAuth();
+  const { user, firebaseUser, googleAccessToken, isGoogleAuthenticated, signInWithGoogle, refreshGoogleAccessToken, updateUserDriveSyncStatus } = useAuth();
   const activeUserId = firebaseUser?.uid || user?.id;
   const {
     accounts,
@@ -210,7 +210,7 @@ export const BackupRestoreView: React.FC = () => {
     await updateUserDriveSyncStatus('pending');
 
     const bundle = exportFullBackup();
-    const result = await uploadBackupToGoogleDrive(googleAccessToken, bundle);
+    const result = await uploadBackupToGoogleDrive(googleAccessToken, bundle, refreshGoogleAccessToken);
 
     setIsDriveBackingUp(false);
 
@@ -244,7 +244,7 @@ export const BackupRestoreView: React.FC = () => {
     setIsDriveRestoring(true);
     setDriveMsg(null);
 
-    const backupInfo = await findBackupInGoogleDrive(googleAccessToken);
+    const backupInfo = await findBackupInGoogleDrive(googleAccessToken, refreshGoogleAccessToken);
 
     if (!backupInfo.found || !backupInfo.fileId) {
       setIsDriveRestoring(false);
@@ -262,7 +262,7 @@ export const BackupRestoreView: React.FC = () => {
       return;
     }
 
-    const { bundle, encryptedBundle, isEncrypted, error } = await downloadBackupFromGoogleDrive(googleAccessToken, backupInfo.fileId);
+    const { bundle, encryptedBundle, isEncrypted, error } = await downloadBackupFromGoogleDrive(googleAccessToken, backupInfo.fileId, refreshGoogleAccessToken);
 
     setIsDriveRestoring(false);
 
@@ -327,7 +327,7 @@ export const BackupRestoreView: React.FC = () => {
       const bundle = exportFullBackup();
       const encrypted = await encryptBackupBundle(bundle, driveExportPassphrase, driveExportHint);
       await updateUserDriveSyncStatus('pending');
-      const result = await uploadBackupToGoogleDrive(googleAccessToken, encrypted);
+      const result = await uploadBackupToGoogleDrive(googleAccessToken, encrypted, refreshGoogleAccessToken);
       setIsDriveEncrypting(false);
       setShowDriveEncryptedModal(false);
       setDriveExportPassphrase('');

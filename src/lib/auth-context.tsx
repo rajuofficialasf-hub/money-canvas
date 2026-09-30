@@ -38,6 +38,15 @@ const PROFILES_STORAGE_KEY = 'pfos_user_profiles';
 const ONBOARDED_STORAGE_KEY = 'pfos_has_onboarded';
 const GOOGLE_TOKEN_KEY = 'pfos_google_access_token';
 
+// STEP-4: Store OAuth tokens strictly in-memory (never in localStorage or sessionStorage)
+let inMemoryGoogleAccessToken: string | null = null;
+export function getInMemoryGoogleAccessToken(): string | null {
+  return inMemoryGoogleAccessToken;
+}
+export function setInMemoryGoogleAccessToken(token: string | null): void {
+  inMemoryGoogleAccessToken = token;
+}
+
 // Admin emails (The app owner)
 const ADMIN_EMAILS = ['raju.official.asf@gmail.com'];
 
@@ -78,6 +87,7 @@ interface AuthContextType {
   signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   signInWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>;
+  refreshGoogleAccessToken: () => Promise<{ success: boolean; token?: string; error?: string }>;
   signOutGoogle: () => Promise<void>;
   signOut: () => void;
   switchProfile: (profileId: string) => void;
@@ -97,13 +107,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const openAuthModal = () => setIsAuthModalOpen(true);
   const closeAuthModal = () => setIsAuthModalOpen(false);
-  const [googleAccessToken, setGoogleAccessToken] = useState<string | null>(() => {
+  // STEP-4: In-memory token state only (not loaded from storage)
+  const [googleAccessToken, setGoogleAccessTokenState] = useState<string | null>(() => inMemoryGoogleAccessToken);
+
+  const setGoogleAccessToken = useCallback((token: string | null) => {
+    setInMemoryGoogleAccessToken(token);
+    setGoogleAccessTokenState(token);
+  }, []);
+
+  // STEP-4: Proactively purge legacy tokens from localStorage / sessionStorage on startup
+  useEffect(() => {
     try {
-      return sessionStorage.getItem(GOOGLE_TOKEN_KEY) || localStorage.getItem(GOOGLE_TOKEN_KEY);
-    } catch {
-      return null;
-    }
-  });
+      localStorage.removeItem(GOOGLE_TOKEN_KEY);
+      sessionStorage.removeItem(GOOGLE_TOKEN_KEY);
+    } catch {}
+  }, []);
 
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean>(() => {
     try {
@@ -224,10 +242,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const token = credential?.accessToken;
             if (token) {
               setGoogleAccessToken(token);
-              try {
-                sessionStorage.setItem(GOOGLE_TOKEN_KEY, token);
-                localStorage.setItem(GOOGLE_TOKEN_KEY, token);
-              } catch {}
             }
             await syncGoogleUserToFirestore(result.user);
           }
@@ -304,13 +318,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             );
             const userCredential = await signInWithCredential(auth, credential);
 
-            const token = loginData.accessToken?.token || loginData.accessToken || loginData.idToken;
+            // STEP-4: Do NOT fallback to idToken as an OAuth access token (access token strictly from Google OAuth)
+            const token = loginData.accessToken?.token || loginData.accessToken || null;
             if (token) {
               setGoogleAccessToken(token);
-              try {
-                sessionStorage.setItem(GOOGLE_TOKEN_KEY, token);
-                localStorage.setItem(GOOGLE_TOKEN_KEY, token);
-              } catch {}
             }
 
             if (userCredential.user) {
@@ -373,10 +384,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (token) {
         setGoogleAccessToken(token);
-        try {
-          sessionStorage.setItem(GOOGLE_TOKEN_KEY, token);
-          localStorage.setItem(GOOGLE_TOKEN_KEY, token);
-        } catch {}
       }
 
       if (result.user) {
@@ -493,11 +500,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await fbSignOut(auth);
       setFirebaseUser(null);
       setGoogleAccessToken(null);
-      sessionStorage.removeItem(GOOGLE_TOKEN_KEY);
-      localStorage.removeItem(GOOGLE_TOKEN_KEY);
+      try {
+        sessionStorage.removeItem(GOOGLE_TOKEN_KEY);
+        localStorage.removeItem(GOOGLE_TOKEN_KEY);
+      } catch {}
       setActiveProfileId(DEFAULT_PROFILES[0].id);
     } catch (err) {
       console.error('Sign out error:', err);
+    }
+  };
+
+  // STEP-4: Re-acquire fresh Google Access Token when expired (401 handling)
+  const refreshGoogleAccessToken = async (): Promise<{ success: boolean; token?: string; error?: string }> => {
+    try {
+      if (Capacitor.isNativePlatform()) {
+        try {
+          const webClientId = '258283545047-n5hsnjc0lv63pqduefv8n70i6nqbqqft.apps.googleusercontent.com';
+          await SocialLogin.initialize({
+            google: { webClientId },
+          });
+          const nativeResult = await SocialLogin.login({
+            provider: 'google',
+            options: { style: 'standard', filterByAuthorizedAccounts: false },
+          });
+          const loginData = (nativeResult?.result || nativeResult) as any;
+          const token = loginData.accessToken?.token || loginData.accessToken || null;
+          if (token) {
+            setGoogleAccessToken(token);
+            return { success: true, token };
+          }
+        } catch (e: any) {
+          console.warn('Native Google token refresh error:', e);
+          return { success: false, error: e?.message || 'Failed to refresh Google token on device' };
+        }
+      } else {
+        // Web: call popup to reacquire fresh token
+        const result = await signInWithPopup(auth, googleProvider);
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        const token = credential?.accessToken;
+        if (token) {
+          setGoogleAccessToken(token);
+          return { success: true, token };
+        }
+      }
+      return { success: false, error: 'Could not obtain fresh Google access token' };
+    } catch (err: any) {
+      console.warn('refreshGoogleAccessToken failed:', err);
+      return { success: false, error: err?.message || 'Token refresh failed' };
     }
   };
 
@@ -823,6 +872,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,
+        refreshGoogleAccessToken,
         signOutGoogle,
         signOut,
         switchProfile,
