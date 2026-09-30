@@ -83,6 +83,27 @@ function formatFileSize(bytes: number): string {
 }
 
 /**
+ * Security: Validates that an update download or release URL strictly originates from
+ * an official, trusted GitHub HTTPS domain. Prevents DNS hijacking or untrusted redirects.
+ */
+export function isTrustedGitHubUrl(urlString?: string | null): boolean {
+  if (!urlString || typeof urlString !== 'string') return false;
+  try {
+    const parsed = new URL(urlString);
+    if (parsed.protocol !== 'https:') return false;
+    const host = parsed.hostname.toLowerCase();
+    return (
+      host === 'github.com' ||
+      host.endsWith('.github.com') ||
+      host === 'objects.githubusercontent.com' ||
+      host.endsWith('.githubusercontent.com')
+    );
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Fetch latest release from GitHub
  */
 export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
@@ -144,27 +165,6 @@ export async function checkForAppUpdate(force = false): Promise<AppUpdateInfo> {
     let apkDownloadUrl: string | null = null;
     let apkSizeFormatted: string | undefined = undefined;
     let apkFileName: string | undefined = undefined;
-
-/**
- * Security: Validates that an update download or release URL strictly originates from
- * an official, trusted GitHub HTTPS domain. Prevents DNS hijacking or untrusted redirects.
- */
-export function isTrustedGitHubUrl(urlString?: string | null): boolean {
-  if (!urlString || typeof urlString !== 'string') return false;
-  try {
-    const parsed = new URL(urlString);
-    if (parsed.protocol !== 'https:') return false;
-    const host = parsed.hostname.toLowerCase();
-    return (
-      host === 'github.com' ||
-      host.endsWith('.github.com') ||
-      host === 'objects.githubusercontent.com' ||
-      host.endsWith('.githubusercontent.com')
-    );
-  } catch {
-    return false;
-  }
-}
 
     if (Array.isArray(data.assets) && data.assets.length > 0) {
       const apkAsset = data.assets.find((asset: any) =>
