@@ -15,6 +15,7 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   reauthenticateWithPopup,
+  updateProfile as updateFirebaseProfile,
 } from 'firebase/auth';
 import { Capacitor } from '@capacitor/core';
 import { SocialLogin } from '@capgo/capacitor-social-login';
@@ -75,7 +76,8 @@ interface AuthContextType {
   signIn: (email: string, fullName?: string) => Promise<void>;
   signUp: (email: string, fullName: string) => Promise<void>;
   signInWithGoogle: () => Promise<{ success: boolean; error?: string }>;
-  signInWithEmail: (email: string, password?: string) => Promise<{ success: boolean; error?: string }>;
+  signInWithEmail: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<{ success: boolean; error?: string }>;
   signOutGoogle: () => Promise<void>;
   signOut: () => void;
   switchProfile: (profileId: string) => void;
@@ -390,69 +392,98 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Sign In or Register with Email & Password (works 100% on Mobile APK & Web)
+  // Sign In with Email & Password (Strict server authentication, no silent fallbacks)
   const signInWithEmail = async (
     email: string,
-    password?: string
+    password: string
   ): Promise<{ success: boolean; error?: string }> => {
     const trimmedEmail = email.trim().toLowerCase();
-    const isAdmin = isAdminEmail(trimmedEmail);
+    if (!trimmedEmail) {
+      return { success: false, error: 'ইমেইল ঠিকানা প্রদান করুন। / Please enter your email.' };
+    }
+    if (!password) {
+      return { success: false, error: 'পাসওয়ার্ড প্রদান করুন। / Please enter your password.' };
+    }
 
     try {
-      if (password && password.length >= 6) {
-        try {
-          const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, password);
-          if (userCredential.user) {
-            await syncGoogleUserToFirestore(userCredential.user);
-          }
-        } catch (fbErr: any) {
-          if (
-            fbErr.code === 'auth/user-not-found' ||
-            fbErr.code === 'auth/invalid-credential' ||
-            fbErr.code === 'auth/wrong-password'
-          ) {
-            try {
-              const newCred = await createUserWithEmailAndPassword(auth, trimmedEmail, password);
-              if (newCred.user) {
-                await syncGoogleUserToFirestore(newCred.user);
-              }
-            } catch (createErr: any) {
-              console.warn('Firebase createUser error (continuing with local auth):', createErr?.message);
-            }
-          } else {
-            console.warn('Firebase signInWithEmail error (continuing with local auth):', fbErr?.message);
+      const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, password);
+      if (userCredential.user) {
+        await syncGoogleUserToFirestore(userCredential.user);
+      }
+      return { success: true };
+    } catch (fbErr: any) {
+      const code = fbErr?.code;
+      console.warn('Firebase signInWithEmail error:', code, fbErr?.message);
+
+      let errorMsg = 'লগইন সম্পন্ন করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।';
+      if (code === 'auth/user-not-found') {
+        errorMsg = 'এই ইমেইলে কোনো একাউন্ট পাওয়া যায়নি। অনুগ্রহ করে নতুন একাউন্ট তৈরি (Sign Up) করুন।';
+      } else if (code === 'auth/wrong-password' || code === 'auth/invalid-credential') {
+        errorMsg = 'ভুল পাসওয়ার্ড অথবা ইমেইল। সঠিক তথ্য দিয়ে আবার চেষ্টা করুন।';
+      } else if (code === 'auth/invalid-email') {
+        errorMsg = 'ইমেইল ফরম্যাট সঠিক নয়। সঠিক ইমেইল ঠিকানা দিন।';
+      } else if (code === 'auth/user-disabled') {
+        errorMsg = 'আপনার একাউন্টটি নিষ্ক্রিয় করা হয়েছে। অ্যাডমিনের সাথে যোগাযোগ করুন।';
+      } else if (code === 'auth/too-many-requests') {
+        errorMsg = 'একাধিক ভুল চেষ্টার কারণে এক্সেস সাময়িকভাবে বন্ধ। কিছুক্ষণ পর চেষ্টা করুন।';
+      } else if (code === 'auth/network-request-failed') {
+        errorMsg = 'ইন্টারনেট সংযোগ পাওয়া যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
+      } else if (fbErr?.message) {
+        errorMsg = fbErr.message;
+      }
+      return { success: false, error: errorMsg };
+    }
+  };
+
+  // Sign Up / Register with Email & Password
+  const signUpWithEmail = async (
+    email: string,
+    password: string,
+    fullName?: string
+  ): Promise<{ success: boolean; error?: string }> => {
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!trimmedEmail) {
+      return { success: false, error: 'ইমেইল ঠিকানা প্রদান করুন। / Please enter your email.' };
+    }
+    if (!password || password.length < 6) {
+      return {
+        success: false,
+        error: 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে। / Password must be at least 6 characters.',
+      };
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, trimmedEmail, password);
+      if (userCredential.user) {
+        if (fullName && fullName.trim()) {
+          try {
+            await updateFirebaseProfile(userCredential.user, { displayName: fullName.trim() });
+          } catch (profileErr) {
+            console.warn('Failed to update displayName on user:', profileErr);
           }
         }
+        await syncGoogleUserToFirestore(userCredential.user);
       }
-
-      // Only authenticated Firebase accounts with verified raju email can be admin
-      let targetProfile = profiles.find((p) => p.email.toLowerCase() === trimmedEmail);
-      if (!targetProfile) {
-        targetProfile = {
-          id: `usr-${Date.now()}`,
-          email: trimmedEmail,
-          fullName: trimmedEmail.split('@')[0],
-          baseCurrency: 'BDT',
-          timezone: 'Asia/Dhaka',
-          role: 'owner',
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        };
-        setProfiles((prev) => [targetProfile!, ...prev.filter((p) => p.email !== trimmedEmail)]);
-      } else {
-        targetProfile = {
-          ...targetProfile,
-          role: targetProfile.role || 'owner',
-          updatedAt: new Date().toISOString(),
-        };
-        setProfiles((prev) => [targetProfile!, ...prev.filter((p) => p.id !== targetProfile!.id)]);
-      }
-
-      setActiveProfileId(targetProfile.id);
       return { success: true };
-    } catch (err: any) {
-      console.error('Email sign in error:', err);
-      return { success: false, error: err?.message || 'Login failed' };
+    } catch (fbErr: any) {
+      const code = fbErr?.code;
+      console.warn('Firebase signUpWithEmail error:', code, fbErr?.message);
+
+      let errorMsg = 'অ্যাকাউন্ট তৈরি করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন।';
+      if (code === 'auth/email-already-in-use') {
+        errorMsg = 'এই ইমেইলটি দিয়ে ইতিমধ্যে অ্যাকাউন্ট রয়েছে। অনুগ্রহ করে সাইন ইন করুন।';
+      } else if (code === 'auth/weak-password') {
+        errorMsg = 'পাসওয়ার্ডটি দুর্বল। কমপক্ষে ৬টি অক্ষর বা সংখ্যার শক্তিশালী পাসওয়ার্ড দিন।';
+      } else if (code === 'auth/invalid-email') {
+        errorMsg = 'ইমেইল ফরম্যাট সঠিক নয়। সঠিক ইমেইল ঠিকানা দিন।';
+      } else if (code === 'auth/operation-not-allowed') {
+        errorMsg = 'ইমেইল/পাসওয়ার্ড সাইন-আপ বর্তমানে সাময়িকভাবে বন্ধ রয়েছে।';
+      } else if (code === 'auth/network-request-failed') {
+        errorMsg = 'ইন্টারনেট সংযোগ পাওয়া যায়নি। সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।';
+      } else if (fbErr?.message) {
+        errorMsg = fbErr.message;
+      }
+      return { success: false, error: errorMsg };
     }
   };
 
@@ -781,7 +812,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isGoogleAuthenticated: !!firebaseUser,
         availableProfiles: profiles,
         tenants,
-        isAuthenticated: true,
+        isAuthenticated: !!firebaseUser,
         hasCompletedOnboarding,
         completeOnboarding,
         isAuthModalOpen,
@@ -791,6 +822,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         signUp,
         signInWithGoogle,
         signInWithEmail,
+        signUpWithEmail,
         signOutGoogle,
         signOut,
         switchProfile,
