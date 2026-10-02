@@ -980,6 +980,19 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
   }, []);
 
+  // Last-line defense: reference/seed lists must never be empty, no matter
+  // which code path (sync restore, hydration, legacy poisoned bundle) emptied
+  // them — empty dropdowns make the whole app unusable.
+  useEffect(() => {
+    if (categories.length === 0) setCategories(DEFAULT_CATEGORIES);
+  }, [categories]);
+  useEffect(() => {
+    if (brokers.length === 0) setBrokers(buildDefaultBrokers(userId));
+  }, [brokers, userId]);
+  useEffect(() => {
+    if (stocks.length === 0) setStocks(buildDefaultStocks());
+  }, [stocks]);
+
   // STEP-16: lightweight integrity check — every posted transaction's lines
   // must sum to zero; violations point at corrupted or partially-restored data.
   useEffect(() => {
