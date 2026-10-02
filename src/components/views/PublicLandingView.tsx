@@ -1,6 +1,6 @@
 import React from 'react';
+import appIcon from '../../assets/icon.png';
 import {
-  Wallet,
   TrendingUp,
   ShieldCheck,
   Lock,
@@ -20,9 +20,11 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <Wallet className="h-5 w-5 text-slate-950 font-bold" />
-            </div>
+            <img
+              src={appIcon}
+              alt="Money Canvas"
+              className="w-9 h-9 rounded-xl shadow-lg shadow-emerald-500/20"
+            />
             <div>
               <span className="font-bold text-lg text-white tracking-tight">Money Canvas</span>
               <span className="hidden sm:inline-block ml-2 text-xs text-emerald-400 font-mono bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">

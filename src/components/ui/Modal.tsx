@@ -39,6 +39,14 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousActiveElementRef = useRef<HTMLElement | null>(null);
+  // Latest-ref pattern: views pass inline `onClose={() => ...}` handlers, so a
+  // new function arrives on every keystroke of a controlled form. The focus
+  // trap must re-run ONLY on open/close — re-running it per render steals
+  // focus from the active input and dismisses the mobile keyboard.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+  const closeOnEscapeRef = useRef(closeOnEscape);
+  closeOnEscapeRef.current = closeOnEscape;
   const generatedTitleId = useId();
   const generatedDescId = useId();
 
@@ -64,9 +72,9 @@ export const Modal: React.FC<ModalProps> = ({
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (closeOnEscape && e.key === 'Escape') {
+      if (closeOnEscapeRef.current && e.key === 'Escape') {
         e.preventDefault();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -99,7 +107,7 @@ export const Modal: React.FC<ModalProps> = ({
         previousActiveElementRef.current.focus();
       }
     };
-  }, [isOpen, closeOnEscape, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 

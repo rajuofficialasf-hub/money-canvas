@@ -1,3 +1,4 @@
+import appIcon from '../../assets/icon.png';
 import React from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
@@ -92,9 +93,11 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
           {/* Brand Wordmark & Mobile Close */}
           <div className="flex items-center justify-between px-2 pt-1 pb-2 border-b border-slate-900">
             <div className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-md shadow-emerald-500/20 text-slate-950 font-black">
-                <TrendingUp className="h-4.5 w-4.5 text-slate-950 stroke-[2.5]" />
-              </div>
+              <img
+                src={appIcon}
+                alt="Money Canvas"
+                className="h-8 w-8 rounded-lg shadow-md shadow-emerald-500/20"
+              />
               <div>
                 <div className="text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
                   <span>Money Canvas</span>
