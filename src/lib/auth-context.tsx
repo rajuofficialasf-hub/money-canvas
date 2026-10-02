@@ -790,23 +790,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         const uid = currentUser.uid;
 
-        // 2. Remote Firestore Cloud Purge (Ledger, Vault, User profile)
+        // 2. Remote Firestore Cloud Purge (Ledger, Vault, User profile).
+        // These MUST succeed before the auth user is deleted: once the user is
+        // gone, nobody has permission to clean these documents, so a swallowed
+        // failure here would strand the user's financial data in the cloud
+        // while reporting success.
         try {
           await deleteDoc(doc(db, 'users', uid, 'cloud_ledger', 'current'));
-        } catch (e) {
-          console.warn('Could not delete cloud_ledger doc:', e);
-        }
-
-        try {
           await deleteDoc(doc(db, 'users', uid, 'cloud_vault', 'current'));
-        } catch (e) {
-          console.warn('Could not delete cloud_vault doc:', e);
-        }
-
-        try {
           await deleteDoc(doc(db, 'users', uid));
-        } catch (e) {
-          console.warn('Could not delete user doc:', e);
+        } catch (e: any) {
+          console.error('Cloud data purge failed, aborting account deletion:', e);
+          return {
+            success: false,
+            error:
+              'ক্লাউড থেকে ডেটা মুছতে ব্যর্থ — অ্যাকাউন্ট ডিলিট বাতিল করা হয়েছে। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন। / Failed to purge cloud data; account deletion aborted so no data is left orphaned.',
+          };
         }
 
         // 3. Delete Firebase Authentication User Record
