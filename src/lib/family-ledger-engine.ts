@@ -300,12 +300,12 @@ export const loadInitialFamilyLedgerState = (userId: string, currentMonth: strin
           const cleanedAccounts = (parsed.jointAccounts || []).filter(
             (a: JointAccount) => !['joint-acc-cashbox', 'joint-acc-bank', 'joint-acc-mfs'].includes(a.id)
           );
-          const cleanedExpenses = (parsed.expenses || []).filter(
-            (e: FamilyExpense) => !e.id.startsWith('famexp-')
-          );
-          const cleanedContributions = (parsed.contributions || []).filter(
-            (c: JointFundContribution) => !c.id.startsWith('famcnt-')
-          );
+          // NOTE: real user expenses/contributions use the same 'famexp-'/'famcnt-'
+          // id prefixes the old demo data did, so prefix-based purging deleted
+          // every user entry on each reload. The demo generators have been empty
+          // for a long time — keep user data untouched.
+          const cleanedExpenses = parsed.expenses || [];
+          const cleanedContributions = parsed.contributions || [];
           const cleanedMembers = (parsed.members || []).filter(
             (m: FamilyMember) => m.id === 'fam-mbr-head' || (!m.id.startsWith('fam-mbr-spouse') && !m.id.startsWith('fam-mbr-child') && !m.id.startsWith('fam-mbr-manager'))
           );
