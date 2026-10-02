@@ -5,7 +5,7 @@ import {
   AppUpdateInfo,
   openUpdateUrl,
 } from './github-updater';
-import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_RELEASES_URL, GITHUB_LATEST_APK_URL } from './app-version';
+import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_LATEST_APK_URL } from './app-version';
 import { AppUpdateModal } from '../components/common/AppUpdateModal';
 import { CheckCircle2, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
@@ -86,33 +86,26 @@ export const UpdateProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   };
 
-  // Download Android APK app (especially for web users)
+  // Download Android APK app (especially for web users).
+  // Uses the permanent /releases/latest/download/ link directly: it needs no
+  // GitHub API call, so API rate limits can never bounce the user to the
+  // release page instead of a direct download.
   const downloadApp = async () => {
+    openUpdateUrl(GITHUB_LATEST_APK_URL);
+    showToast('অ্যান্ড্রয়েড অ্যাপ APK ডাউনলোড শুরু হয়েছে!', 'success');
+    // Best-effort enrichment for the update modal (size/notes); never blocks
+    // or redirects the actual download above.
     try {
       setIsChecking(true);
-      let info = appUpdateInfo;
-      if (!info || !info.apkDownloadUrl) {
-        info = await checkForAppUpdate(true);
-        setAppUpdateInfo(info);
-      }
-      setIsUpdateModalOpen(true);
-      if (info.apkDownloadUrl) {
-        openUpdateUrl(info.apkDownloadUrl);
-        showToast('অ্যান্ড্রয়েড অ্যাপ APK ডাউনলোড শুরু হয়েছে!', 'success');
-      } else {
-        openUpdateUrl(info.releasePageUrl || GITHUB_RELEASES_URL);
-        showToast('রিলিজ পেজ খোলা হয়েছে। সেখান থেকে APK ডাউনলোড করুন।', 'info');
-      }
+      const info = await checkForAppUpdate(true);
+      setAppUpdateInfo(info);
     } catch (err) {
-      // API unreachable (offline, rate limit): fall back to the permanent
-      // latest-release APK link, which needs no API call.
-      console.warn('Download app failed, falling back to permanent APK link:', err);
-      openUpdateUrl(GITHUB_LATEST_APK_URL);
-      showToast('সরাসরি ডাউনলোড লিংক খোলা হয়েছে (latest APK)।', 'info');
+      console.warn('Release info refresh failed (download already started):', err);
     } finally {
       setIsChecking(false);
     }
   };
+
 
   // Silent check 3.5 seconds after app launch (ONLY for Native Android APK!)
   useEffect(() => {
