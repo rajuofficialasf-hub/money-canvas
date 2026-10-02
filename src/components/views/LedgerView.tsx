@@ -11,7 +11,7 @@ import {
   Plus,
   Search,
   ShieldCheck,
-  RotateCcw,
+  Pencil,
   AlertCircle,
   X,
   Calendar,
@@ -44,6 +44,10 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<string>('all');
   const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+  // When set, the post modal is correcting this transaction: on submit the new
+  // entry is posted first and the original is auto-reversed (the ledger is
+  // immutable — corrections are always void + counter-entry, never in-place).
+  const [editingTxId, setEditingTxId] = useState<string | null>(null);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
 
   // Form State for Quick / Guided Transaction
@@ -257,19 +261,82 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
       return;
     }
 
+    // Editing = correction-by-replacement: void the original now that the
+    // corrected entry has been posted successfully.
+    if (editingTxId) {
+      const rev = reverseTransaction(editingTxId, 'Superseded by corrected entry');
+      if (!rev.success) {
+        alert(
+          `সংশোধিত এন্ট্রি পোস্ট হয়েছে, কিন্তু পুরনোটি বাতিল করা যায়নি — তালিকা থেকে পুরনো এন্ট্রিটি নিজে Delete করুন। (${rev.error || ''})`
+        );
+      }
+    }
+
     // Reset & close
     setAmount('');
     setTxNote('');
+    setEditingTxId(null);
     setIsPostModalOpen(false);
   };
 
-  const handleReverseClick = (txId: string) => {
-    if (confirm('Are you sure you want to reverse this transaction?')) {
-      const res = reverseTransaction(txId, 'User requested correction');
+  const handleDeleteClick = (txId: string) => {
+    if (
+      confirm(
+        'এই এন্ট্রিটি মুছতে চান? অডিট-নিরাপদ ডাবল-এন্ট্রি নিয়মে এটি একটি ব্যালান্সড reversal এন্ট্রি পোস্ট করে বাতিল করা হবে।\nDelete this entry? A balanced reversal will be posted (audit-safe).'
+      )
+    ) {
+      const res = reverseTransaction(txId, 'User requested deletion');
       if (!res.success) {
-        alert(res.error || 'Failed to reverse transaction.');
+        alert(res.error || 'Failed to delete (reverse) transaction.');
       }
     }
+  };
+
+  const EDITABLE_TYPES = ['expense', 'income', 'transfer', 'split_expense'];
+
+  const openEditModal = (txId: string) => {
+    const tx = transactions.find((t) => t.id === txId);
+    if (!tx) return;
+    const lines = transactionLines.filter((l) => l.transactionId === txId);
+    const accountLines = lines.filter((l) => l.lineType === 'account');
+    const categoryLines = lines.filter((l) => l.lineType === 'category');
+
+    setFormError(null);
+    setIsCreatingInlineCategory(false);
+    setTxDate(tx.date);
+    setTxNote(tx.note || '');
+
+    if (tx.type === 'transfer') {
+      const src = accountLines.find((l) => l.amount < 0);
+      const dst = accountLines.find((l) => l.amount > 0);
+      setEntryMode('transfer');
+      setSelectedAccount(src?.accountId || accounts[0]?.id || '');
+      setDestinationAccount(dst?.accountId || accounts[1]?.id || '');
+      setAmount(String(Math.abs(src?.amount || dst?.amount || 0)));
+    } else if (tx.type === 'split_expense') {
+      const src = accountLines.find((l) => l.amount < 0);
+      setEntryMode('split');
+      setSelectedAccount(src?.accountId || accounts[0]?.id || '');
+      setAmount(String(Math.abs(src?.amount || 0)));
+      setSplitLines(
+        categoryLines.map((l) => ({
+          categoryId: l.categoryId || '',
+          amount: String(Math.abs(l.amount)),
+          memo: l.memo || '',
+        }))
+      );
+    } else {
+      const isIncome = tx.type === 'income';
+      const acc = accountLines[0];
+      const cat = categoryLines[0];
+      setEntryMode(isIncome ? 'income' : 'expense');
+      setSelectedAccount(acc?.accountId || accounts[0]?.id || '');
+      setSelectedCategory(cat?.categoryId || '');
+      setAmount(String(Math.abs(cat?.amount || acc?.amount || 0)));
+    }
+
+    setEditingTxId(txId);
+    setIsPostModalOpen(true);
   };
 
   return (
@@ -413,14 +480,24 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                     #{tx.id.replace('tx-', '').slice(0, 10)}
                   </span>
 
+                  {!isVoided && !isReversal && EDITABLE_TYPES.includes(tx.type) && (
+                    <button
+                      onClick={() => openEditModal(tx.id)}
+                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-emerald-400 transition-colors px-2 py-0.5 rounded hover:bg-emerald-950/30 border border-transparent hover:border-emerald-900/50"
+                      title="Correct this entry: posts a fixed copy and auto-reverses the original"
+                    >
+                      <Pencil className="h-3 w-3" />
+                      <span>Edit</span>
+                    </button>
+                  )}
                   {!isVoided && !isReversal && (
                     <button
-                      onClick={() => handleReverseClick(tx.id)}
+                      onClick={() => handleDeleteClick(tx.id)}
                       className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-400 transition-colors px-2 py-0.5 rounded hover:bg-rose-950/30 border border-transparent hover:border-rose-900/50"
-                      title="Post a balanced reversal for this transaction"
+                      title="Delete by posting a balanced reversal (audit-safe)"
                     >
-                      <RotateCcw className="h-3 w-3" />
-                      <span>Reverse</span>
+                      <Trash2 className="h-3 w-3" />
+                      <span>Delete</span>
                     </button>
                   )}
                 </div>
@@ -542,14 +619,25 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
       {/* Modal: Post New Transaction */}
       <Modal
         isOpen={isPostModalOpen}
-        onClose={() => setIsPostModalOpen(false)}
+        onClose={() => {
+          setIsPostModalOpen(false);
+          setEditingTxId(null);
+        }}
         title={
           <span className="flex items-center gap-2">
-            <Plus className="h-4 w-4 text-emerald-400" />
-            <span>Post Double-Entry Transaction</span>
+            {editingTxId ? (
+              <Pencil className="h-4 w-4 text-amber-400" />
+            ) : (
+              <Plus className="h-4 w-4 text-emerald-400" />
+            )}
+            <span>{editingTxId ? 'Edit Transaction (Correction)' : 'Post Double-Entry Transaction'}</span>
           </span>
         }
-        description="Record income, expenses, transfers, or multi-item splits."
+        description={
+          editingTxId
+            ? 'সংশোধিত এন্ট্রি পোস্ট হবে এবং পুরনোটি স্বয়ংক্রিয়ভাবে reverse হবে (অডিট-নিরাপদ)।'
+            : 'Record income, expenses, transfers, or multi-item splits.'
+        }
         maxWidth="xl"
         className="max-h-[90vh] overflow-y-auto"
       >
