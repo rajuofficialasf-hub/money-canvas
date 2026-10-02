@@ -73,6 +73,7 @@ import {
 } from './audit-and-alerts';
 import {
   saveLedgerToFirestore,
+  deleteEncryptedVaultFromFirestore,
   fetchLedgerFromFirestore,
   subscribeToCloudLedger,
   computeContentHash,
@@ -235,6 +236,7 @@ interface LedgerContextType {
   exportFullBackup: (options?: { incrementRevision?: boolean }) => BackupBundle;
   restoreFromBackup: (bundle: BackupBundle) => { success: boolean; error?: string };
   resetTenantLedger: () => Promise<void>;
+  wipeCloudLedger: (options?: { includeVault?: boolean }) => Promise<{ success: boolean; error?: string }>;
 
 }
 
@@ -4262,71 +4264,82 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   // Phase 9: Hard Reset Ledger State for Active Tenant
-  const resetTenantLedger = async (): Promise<void> => {
-    // Cloud-aware wipe: pushing an EMPTY ledger at a *higher* revision first
-    // makes the cloud copy and every synced device accept the wipe. Without
-    // this, the initial-sync hydration restores everything from Firestore the
-    // moment the page reloads ("reset did nothing" bug).
-    if (firebaseUser?.uid) {
-      const emptyData = {
-        accounts: [],
-        categories: [],
-        transactions: [],
-        transactionLines: [],
-        fixedDeposits: [],
-        budgets: [],
-        recurringTransactions: [],
-        financialGoals: [],
-        goalContributions: [],
-        dpsAccounts: [],
-        dpsInstallments: [],
-        debts: [],
-        loans: [],
-        loanSchedules: [],
-        physicalAssets: [],
-        staticLiabilities: [],
-        netWorthSnapshots: [],
-        zakatSettings,
-        brokers: [],
-        brokerAccounts: [],
-        brokerCashTransactions: [],
-        stocks: [],
-        stockTransactions: [],
-        benchmarkIndexPrices: [],
-        dividends: [],
-        corporateActions: [],
-        ipoApplications: [],
-        stockPriceHistory: [],
-        auditLogs: [],
-      };
-      const wipeBundle: BackupBundle = {
-        metadata: {
-          schemaVersion: '5.0-phase9',
-          bundleFormatVersion: 1,
-          exportedAt: new Date().toISOString(),
-          userId,
-          userFullName: user.fullName,
-          userEmail: user.email,
-          recordCounts: { accounts: 0, transactions: 0, transactionLines: 0 },
-          checksum: computeContentHash(emptyData),
-          revision: localRevisionRef.current + 1,
-        },
-        data: emptyData as BackupBundle['data'],
-      };
-      try {
-        lastSyncedChecksumRef.current = wipeBundle.metadata.checksum;
-        const res = await saveLedgerToFirestore(firebaseUser.uid, wipeBundle);
-        if (!res.success) {
-          alert(
-            `ক্লাউডের ডেটা মুছতে ব্যর্থ হয়েছে — রিসেট বাতিল করা হলো (নাহলে রিলোডের পর ক্লাউড থেকে সব ডেটা ফিরে আসত)। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।\nCloud wipe failed; reset aborted: ${res.error || ''}`
-          );
-          return;
-        }
-      } catch (e) {
-        console.error('Cloud wipe failed during reset:', e);
-        alert('ক্লাউডের ডেটা মুছতে ব্যর্থ — রিসেট বাতিল করা হলো। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।');
-        return;
+  // Pushes an EMPTY ledger to the cloud at a *higher* revision so the cloud
+  // copy and every synced device accept the wipe. Optionally also deletes the
+  // encrypted cloud vault snapshot.
+  const wipeCloudLedger = async (
+    options?: { includeVault?: boolean }
+  ): Promise<{ success: boolean; error?: string }> => {
+    if (!firebaseUser?.uid) return { success: true };
+    const emptyData = {
+      accounts: [],
+      categories: [],
+      transactions: [],
+      transactionLines: [],
+      fixedDeposits: [],
+      budgets: [],
+      recurringTransactions: [],
+      financialGoals: [],
+      goalContributions: [],
+      dpsAccounts: [],
+      dpsInstallments: [],
+      debts: [],
+      loans: [],
+      loanSchedules: [],
+      physicalAssets: [],
+      staticLiabilities: [],
+      netWorthSnapshots: [],
+      zakatSettings,
+      brokers: [],
+      brokerAccounts: [],
+      brokerCashTransactions: [],
+      stocks: [],
+      stockTransactions: [],
+      benchmarkIndexPrices: [],
+      dividends: [],
+      corporateActions: [],
+      ipoApplications: [],
+      stockPriceHistory: [],
+      auditLogs: [],
+    };
+    const wipeBundle: BackupBundle = {
+      metadata: {
+        schemaVersion: '5.0-phase9',
+        bundleFormatVersion: 1,
+        exportedAt: new Date().toISOString(),
+        userId,
+        userFullName: user.fullName,
+        userEmail: user.email,
+        recordCounts: { accounts: 0, transactions: 0, transactionLines: 0 },
+        checksum: computeContentHash(emptyData),
+        revision: localRevisionRef.current + 1,
+      },
+      data: emptyData as BackupBundle['data'],
+    };
+    try {
+      lastSyncedChecksumRef.current = wipeBundle.metadata.checksum;
+      const res = await saveLedgerToFirestore(firebaseUser.uid, wipeBundle);
+      if (!res.success) return { success: false, error: res.error };
+      if (options?.includeVault) {
+        const vaultRes = await deleteEncryptedVaultFromFirestore(firebaseUser.uid);
+        if (!vaultRes.success) return { success: false, error: vaultRes.error };
       }
+      return { success: true };
+    } catch (e: unknown) {
+      console.error('Cloud wipe failed:', e);
+      return { success: false, error: e instanceof Error ? e.message : 'Cloud wipe failed' };
+    }
+  };
+
+  const resetTenantLedger = async (): Promise<void> => {
+    // Cloud-aware wipe: without this, the initial-sync hydration restores
+    // everything from Firestore the moment the page reloads.
+    const wipeRes = await wipeCloudLedger();
+    if (!wipeRes.success) {
+      alert(
+        `ক্লাউডের ডেটা মুছতে ব্যর্থ হয়েছে — রিসেট বাতিল করা হলো (নাহলে রিলোডের পর ক্লাউড থেকে সব ডেটা ফিরে আসত)। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।\nCloud wipe failed; reset aborted: ${wipeRes.error || ''}`
+      );
+      return;
     }
 
     localStorage.removeItem(ACCOUNTS_KEY);
@@ -4363,6 +4376,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     try {
       localStorage.removeItem(`pfos_${userId}_local_revision`);
       localStorage.removeItem(`pfos_${userId}_last_cloud_sync`);
+      localStorage.removeItem(`pfos_${userId}_family_ledger_v1`);
     } catch {}
     window.location.reload();
   };
@@ -4910,6 +4924,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       exportFullBackup,
       restoreFromBackup,
       resetTenantLedger,
+      wipeCloudLedger,
     }),
     [
       accounts,

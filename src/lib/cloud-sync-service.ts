@@ -9,6 +9,7 @@ import {
   getDoc,
   setDoc,
   updateDoc,
+  deleteDoc,
   onSnapshot,
   Unsubscribe,
   serverTimestamp,
@@ -273,6 +274,22 @@ export async function saveEncryptedBackupToFirestore(
       success: false,
       error: err?.message || 'Failed to save encrypted backup to Firestore vault',
     };
+  }
+}
+
+/**
+ * Deletes the user's encrypted backup snapshot from the Firestore Cloud Vault.
+ */
+export async function deleteEncryptedVaultFromFirestore(
+  userId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    if (!userId) return { success: false, error: 'User ID is required' };
+    await deleteDoc(doc(db, 'users', userId, 'cloud_vault', 'current'));
+    return { success: true };
+  } catch (err: any) {
+    console.error('Failed to delete encrypted vault from Firestore:', err);
+    return { success: false, error: err?.message || 'Failed to delete cloud vault' };
   }
 }
 

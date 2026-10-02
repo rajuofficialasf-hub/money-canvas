@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../lib/auth-context';
+import { useLedger } from '../../lib/ledger-context';
 import { useBiometrics } from '../../lib/biometric-context';
 import { useLanguage } from '../../lib/language-context';
 import { PrivacyPolicyView } from './PrivacyPolicyView';
@@ -43,6 +44,7 @@ import { useAppUpdate } from '../../lib/update-context';
 export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { user, firebaseUser, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData, deleteAccountAndData } = useAuth();
   const { language, setLanguage, isBn } = useLanguage();
+  const { wipeCloudLedger } = useLedger();
   const { checkForUpdate, downloadApp, isChecking: checkingUpdate } = useAppUpdate();
   const {
     isAvailable,
@@ -744,23 +746,35 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     <span>Clean Slate / স্থানীয় ডেটা রিসেট</span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    এই ডিভাইসের লোকাল স্টোরেজ ও ক্যাশ মুছে দিয়ে অনবোর্ডিং উইজার্ড পুনরায় চালু করে।
+                    সব অ্যাকাউন্ট, লেনদেন, পোর্টফোলিও ও সেটিংস মুছে একদম নতুন করে শুরু করে (অনবোর্ডিং উইজার্ডসহ)। Google অ্যাকাউন্টটি থেকে যায়।
                   </p>
                   <p className="text-[10px] text-amber-400/90 leading-relaxed">
-                    ⚠️ ক্লাউড সিঙ্ক চালু থাকলে রিলোডের পর ডেটা ক্লাউড থেকে ফিরে আসবে। সব ডেটা স্থায়ীভাবে মুছতে Backup পেজের "Reset Tenant Data" ব্যবহার করুন (ক্লাউডসহ মুছে দেয়)।
+                    ⚠️ এটি এই ডিভাইসের সব ডেটা এবং ক্লাউডে (Firestore) সিঙ্ক হওয়া লেজার ও এনক্রিপ্টেড ভল্ট — সবকিছু স্থায়ীভাবে মুছে দেবে।
                   </p>
                 </div>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (window.confirm('Are you sure you want to clear local storage and start completely fresh?')) {
-                      resetAllUserData();
+                  onClick={async () => {
+                    if (
+                      !window.confirm(
+                        'এই ডিভাইস এবং ক্লাউড — সব ডেটা স্থায়ীভাবে মুছে যাবে। আপনি কি নিশ্চিত?\nThis permanently wipes ALL data on this device AND in the cloud. Continue?'
+                      )
+                    ) {
+                      return;
                     }
+                    const res = await wipeCloudLedger({ includeVault: true });
+                    if (!res.success) {
+                      alert(
+                        `ক্লাউডের ডেটা মুছতে ব্যর্থ — রিসেট বাতিল করা হলো। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন। (${res.error || ''})`
+                      );
+                      return;
+                    }
+                    resetAllUserData();
                   }}
                   className="w-full px-3 py-2 rounded-lg bg-amber-950/40 hover:bg-amber-900/40 border border-amber-700/50 text-amber-200 text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
-                  <span>Wipe Local Cache & Reset</span>
+                  <span>Wipe ALL Data (Device + Cloud)</span>
                 </button>
               </div>
 
