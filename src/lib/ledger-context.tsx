@@ -284,6 +284,55 @@ const DEFAULT_CATEGORIES: Category[] = [
   { id: 'cat-adj-1', userId: 'system', name: 'Opening Balance Equity', type: 'income', isSystem: true, color: '#6B7280' },
 ];
 
+// Reference/seed data that every fresh tenant starts with (STEP-16 reset fix):
+// a data wipe must never erase these, or every category/broker/stock dropdown
+// across the app goes empty.
+function buildDefaultBrokers(userId: string): Broker[] {
+  return [
+    {
+      id: `broker-brac-epl`,
+      userId,
+      name: 'BRAC EPL Stock Brokerage Ltd.',
+      licenseNumber: 'DSE-TREC-083',
+      contactNumber: '+8802-9852441',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: `broker-lankabangla`,
+      userId,
+      name: 'LankaBangla Securities Ltd.',
+      licenseNumber: 'DSE-TREC-132',
+      contactNumber: '+8802-9563501',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: `broker-idlc`,
+      userId,
+      name: 'IDLC Securities Limited',
+      licenseNumber: 'DSE-TREC-060',
+      contactNumber: '+8802-9571170',
+      createdAt: new Date().toISOString(),
+    },
+    {
+      id: `broker-ucb`,
+      userId,
+      name: 'UCB Stock Brokerage Ltd.',
+      licenseNumber: 'DSE-TREC-181',
+      contactNumber: '+8802-9854420',
+      createdAt: new Date().toISOString(),
+    },
+  ];
+}
+
+function buildDefaultStocks(): Stock[] {
+  return DEFAULT_DSE_SECURITIES.map((s) => ({
+    ...s,
+    id: `stock-${s.symbol.toLowerCase()}`,
+    createdAt: new Date().toISOString(),
+  }));
+}
+
+
 export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, firebaseUser } = useAuth();
   const userId = user.id;
@@ -614,44 +663,14 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [brokers, setBrokers] = useState<Broker[]>(() => {
     try {
       const stored = localStorage.getItem(BROKERS_KEY);
-      if (stored) return JSON.parse(stored);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
     } catch (e) {
       console.warn('Failed reading brokers from localStorage', e);
     }
-    return [
-      {
-        id: `broker-brac-epl`,
-        userId,
-        name: 'BRAC EPL Stock Brokerage Ltd.',
-        licenseNumber: 'DSE-TREC-083',
-        contactNumber: '+8802-9852441',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: `broker-lankabangla`,
-        userId,
-        name: 'LankaBangla Securities Ltd.',
-        licenseNumber: 'DSE-TREC-132',
-        contactNumber: '+8802-9563501',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: `broker-idlc`,
-        userId,
-        name: 'IDLC Securities Limited',
-        licenseNumber: 'DSE-TREC-060',
-        contactNumber: '+8802-9571170',
-        createdAt: new Date().toISOString(),
-      },
-      {
-        id: `broker-ucb`,
-        userId,
-        name: 'UCB Stock Brokerage Ltd.',
-        licenseNumber: 'DSE-TREC-181',
-        contactNumber: '+8802-9854420',
-        createdAt: new Date().toISOString(),
-      },
-    ];
+    return buildDefaultBrokers(userId);
   });
 
   // Phase 5: Broker Accounts (BO Accounts) State
@@ -676,11 +695,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     } catch (e) {
       console.warn('Failed reading stocks from localStorage', e);
     }
-    return DEFAULT_DSE_SECURITIES.map((s) => ({
-      ...s,
-      id: `stock-${s.symbol.toLowerCase()}`,
-      createdAt: new Date().toISOString(),
-    }));
+    return buildDefaultStocks();
   });
 
   // Phase 5: Stock Transactions State
@@ -4217,7 +4232,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       }
       const { data } = bundle;
       if (Array.isArray(data.accounts)) setAccounts(data.accounts);
-      if (Array.isArray(data.categories)) setCategories(data.categories);
+      if (Array.isArray(data.categories)) setCategories(data.categories.length > 0 ? data.categories : DEFAULT_CATEGORIES);
       if (Array.isArray(data.transactions)) setTransactions(data.transactions);
       if (Array.isArray(data.transactionLines)) setTransactionLines(data.transactionLines);
       if (Array.isArray(data.fixedDeposits)) setFixedDeposits(data.fixedDeposits);
@@ -4234,10 +4249,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (Array.isArray(data.staticLiabilities)) setStaticLiabilities(data.staticLiabilities);
       if (Array.isArray(data.netWorthSnapshots)) setNetWorthSnapshots(data.netWorthSnapshots);
       if (data.zakatSettings) setZakatSettings(data.zakatSettings);
-      if (Array.isArray(data.brokers)) setBrokers(data.brokers);
+      if (Array.isArray(data.brokers)) setBrokers(data.brokers.length > 0 ? data.brokers : buildDefaultBrokers(userId));
       if (Array.isArray(data.brokerAccounts)) setBrokerAccounts(data.brokerAccounts);
       if (Array.isArray(data.brokerCashTransactions)) setBrokerCashTransactions(data.brokerCashTransactions);
-      if (Array.isArray(data.stocks)) setStocks(data.stocks);
+      if (Array.isArray(data.stocks)) setStocks(data.stocks.length > 0 ? data.stocks : buildDefaultStocks());
       if (Array.isArray(data.stockTransactions)) setStockTransactions(data.stockTransactions);
       if (Array.isArray(data.stockPriceHistory)) setStockPriceHistory(data.stockPriceHistory);
       if (Array.isArray(data.benchmarkIndexPrices)) setBenchmarkIndexPrices(data.benchmarkIndexPrices);
@@ -4273,7 +4288,7 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     if (!firebaseUser?.uid) return { success: true };
     const emptyData = {
       accounts: [],
-      categories: [],
+      categories: DEFAULT_CATEGORIES,
       transactions: [],
       transactionLines: [],
       fixedDeposits: [],
@@ -4290,10 +4305,10 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       staticLiabilities: [],
       netWorthSnapshots: [],
       zakatSettings,
-      brokers: [],
+      brokers: buildDefaultBrokers(userId),
       brokerAccounts: [],
       brokerCashTransactions: [],
-      stocks: [],
+      stocks: buildDefaultStocks(),
       stockTransactions: [],
       benchmarkIndexPrices: [],
       dividends: [],
@@ -4389,8 +4404,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       else setAccounts([]);
 
       const storedCat = localStorage.getItem(`pfos_${targetUserId}_categories`);
-      if (storedCat) setCategories(JSON.parse(storedCat));
-      else setCategories(DEFAULT_CATEGORIES);
+      const parsedCat = storedCat ? JSON.parse(storedCat) : [];
+      setCategories(Array.isArray(parsedCat) && parsedCat.length > 0 ? parsedCat : DEFAULT_CATEGORIES);
 
       const storedTx = localStorage.getItem(`pfos_${targetUserId}_transactions`);
       if (storedTx) setTransactions(JSON.parse(storedTx));
@@ -4456,7 +4471,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       if (storedZakat) setZakatSettings(JSON.parse(storedZakat));
 
       const storedBrokers = localStorage.getItem(`pfos_${targetUserId}_brokers`);
-      if (storedBrokers) setBrokers(JSON.parse(storedBrokers));
+      const parsedBrokers = storedBrokers ? JSON.parse(storedBrokers) : [];
+      setBrokers(Array.isArray(parsedBrokers) && parsedBrokers.length > 0 ? parsedBrokers : buildDefaultBrokers(targetUserId));
 
       const storedBo = localStorage.getItem(`pfos_${targetUserId}_broker_accounts`);
       if (storedBo) setBrokerAccounts(JSON.parse(storedBo));
@@ -4467,7 +4483,8 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       else setBrokerCashTransactions([]);
 
       const storedStocks = localStorage.getItem(`pfos_${targetUserId}_stocks`);
-      if (storedStocks) setStocks(JSON.parse(storedStocks));
+      const parsedStocks = storedStocks ? JSON.parse(storedStocks) : [];
+      setStocks(Array.isArray(parsedStocks) && parsedStocks.length > 0 ? parsedStocks : buildDefaultStocks());
 
       const storedStockTx = localStorage.getItem(`pfos_${targetUserId}_stock_txs`);
       if (storedStockTx) setStockTransactions(JSON.parse(storedStockTx));
