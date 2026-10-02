@@ -5,7 +5,7 @@ import {
   AppUpdateInfo,
   openUpdateUrl,
 } from './github-updater';
-import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_RELEASES_URL } from './app-version';
+import { CURRENT_APP_VERSION, CURRENT_APP_VERSION_NAME, GITHUB_RELEASES_URL, GITHUB_LATEST_APK_URL } from './app-version';
 import { AppUpdateModal } from '../components/common/AppUpdateModal';
 import { CheckCircle2, AlertCircle, Sparkles, X } from 'lucide-react';
 import { Capacitor } from '@capacitor/core';
@@ -104,8 +104,11 @@ export const UpdateProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         showToast('রিলিজ পেজ খোলা হয়েছে। সেখান থেকে APK ডাউনলোড করুন।', 'info');
       }
     } catch (err) {
-      console.warn('Download app failed:', err);
-      showToast('অ্যাপ ডাউনলোড লিংক পেতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+      // API unreachable (offline, rate limit): fall back to the permanent
+      // latest-release APK link, which needs no API call.
+      console.warn('Download app failed, falling back to permanent APK link:', err);
+      openUpdateUrl(GITHUB_LATEST_APK_URL);
+      showToast('সরাসরি ডাউনলোড লিংক খোলা হয়েছে (latest APK)।', 'info');
     } finally {
       setIsChecking(false);
     }

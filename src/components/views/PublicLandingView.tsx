@@ -9,7 +9,9 @@ import {
   Database,
   Building2,
   Receipt,
+  Download,
 } from 'lucide-react';
+import { GITHUB_LATEST_APK_URL } from '../../lib/app-version';
 
 export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLaunchApp }) => {
   return (
@@ -75,6 +77,14 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             <span>Open Money Canvas</span>
             <ArrowRight className="h-4 w-4" />
           </button>
+          <a
+            href={GITHUB_LATEST_APK_URL}
+            rel="noopener"
+            className="w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-emerald-300 border border-emerald-500/30 font-semibold rounded-xl transition-all text-sm flex items-center justify-center gap-2"
+          >
+            <Download className="h-4 w-4" />
+            <span>Download Android App (APK)</span>
+          </a>
           <a
             href="/privacy"
             className="w-full sm:w-auto px-6 py-3.5 bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-semibold rounded-xl transition-all text-sm flex items-center justify-center gap-2"

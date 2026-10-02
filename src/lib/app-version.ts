@@ -10,6 +10,14 @@ export const GITHUB_RELEASES_URL = `https://github.com/${GITHUB_REPO_OWNER}/${GI
 export const GITHUB_LATEST_RELEASE_API = `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/releases/latest`;
 
 /**
+ * Permanent "always latest" APK link (hybrid distribution): GitHub redirects
+ * this to the newest release's asset, so download buttons never go stale.
+ * Requires every release to attach its APK under this exact file name.
+ */
+export const APK_ASSET_NAME = 'money-canvas.apk';
+export const GITHUB_LATEST_APK_URL = `${GITHUB_RELEASES_URL}/latest/download/${APK_ASSET_NAME}`;
+
+/**
  * Compare two semver strings (e.g. "1.0.1" vs "1.0.0", "v1.2.0" vs "v1.1.9").
  * Returns:
  *   1 if v1 > v2 (v1 is newer)
