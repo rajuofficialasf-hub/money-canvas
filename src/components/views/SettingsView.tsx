@@ -746,6 +746,9 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   <p className="text-[11px] text-slate-400 leading-relaxed">
                     এই ডিভাইসের লোকাল স্টোরেজ ও ক্যাশ মুছে দিয়ে অনবোর্ডিং উইজার্ড পুনরায় চালু করে।
                   </p>
+                  <p className="text-[10px] text-amber-400/90 leading-relaxed">
+                    ⚠️ ক্লাউড সিঙ্ক চালু থাকলে রিলোডের পর ডেটা ক্লাউড থেকে ফিরে আসবে। সব ডেটা স্থায়ীভাবে মুছতে Backup পেজের "Reset Tenant Data" ব্যবহার করুন (ক্লাউডসহ মুছে দেয়)।
+                  </p>
                 </div>
                 <button
                   type="button"
