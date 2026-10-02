@@ -980,14 +980,30 @@ export const LedgerProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     return () => window.removeEventListener('beforeunload', onBeforeUnload);
   }, []);
 
-  // Last-line defense: reference/seed lists must never be empty, no matter
-  // which code path (sync restore, hydration, legacy poisoned bundle) emptied
-  // them — empty dropdowns make the whole app unusable.
+  // Last-line defense: reference/seed data must never silently vanish, no
+  // matter which code path (sync restore, hydration, legacy poisoned bundle)
+  // dropped it. If the ENTIRE default set is gone (not a deliberate single
+  // deletion), merge the defaults back in next to the user's custom entries.
   useEffect(() => {
-    if (categories.length === 0) setCategories(DEFAULT_CATEGORIES);
+    if (categories.length === 0) {
+      setCategories(DEFAULT_CATEGORIES);
+      return;
+    }
+    const hasAnySystemCategory = categories.some((c) => c.isSystem === true);
+    if (!hasAnySystemCategory) {
+      setCategories((prev) => [...DEFAULT_CATEGORIES, ...prev]);
+    }
   }, [categories]);
   useEffect(() => {
-    if (brokers.length === 0) setBrokers(buildDefaultBrokers(userId));
+    if (brokers.length === 0) {
+      setBrokers(buildDefaultBrokers(userId));
+      return;
+    }
+    const defaultIds = buildDefaultBrokers(userId).map((b) => b.id);
+    const hasAnyDefaultBroker = brokers.some((b) => defaultIds.includes(b.id));
+    if (!hasAnyDefaultBroker) {
+      setBrokers((prev) => [...buildDefaultBrokers(userId), ...prev]);
+    }
   }, [brokers, userId]);
   useEffect(() => {
     if (stocks.length === 0) setStocks(buildDefaultStocks());
