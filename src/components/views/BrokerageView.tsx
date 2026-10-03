@@ -695,7 +695,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
               <Field label="Deposit Amount (BDT)" required>
                 <Input
                   type="number"
-                  step="1"
+                  step="any"
                   min="1"
                   required
                   icon={TakaIcon}
@@ -780,7 +780,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
           <Field label="Withdrawal Amount (BDT)" required>
             <Input
               type="number"
-              step="1"
+              step="any"
               min="1"
               required
               icon={TakaIcon}

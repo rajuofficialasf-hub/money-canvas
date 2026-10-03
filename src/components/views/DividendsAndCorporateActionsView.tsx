@@ -988,7 +988,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               <Input
                 type="number"
                 min="0.01"
-                step="0.01"
+                step="any"
                 value={divPerShare}
                 onChange={(e) => setDivPerShare(Number(e.target.value))}
                 className="font-mono"
@@ -1159,7 +1159,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               <Field label="Subscription Price (৳)">
                 <Input
                   type="number"
-                  step="0.1"
+                  step="any"
                   min="1"
                   value={caCashComponent}
                   onChange={(e) => setCaCashComponent(Number(e.target.value))}
@@ -1359,7 +1359,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               <Input
                 type="number"
                 min="1"
-                step="0.1"
+                step="any"
                 value={ipoOfferPrice}
                 onChange={(e) => setIpoOfferPrice(Number(e.target.value))}
                 className="font-mono"
@@ -1495,7 +1495,7 @@ BENGALI_LINE                </>
                 <Input
                   type="number"
                   min="0"
-                  step="0.01"
+                  step="any"
                   value={settleRefund}
                   onChange={(e) => setSettleRefund(Number(e.target.value))}
                   className="font-mono"

@@ -665,7 +665,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
                         <span className="text-xs text-slate-400 font-mono">৳</span>
                         <input
                           type="number"
-                          step="0.01"
+                          step="any"
                           value={item.amount || ''}
                           onChange={(e) => updateItemField(item.id, 'amount', parseFloat(e.target.value) || 0)}
                           className={`w-28 text-right font-mono font-bold text-sm bg-slate-950 border border-slate-800 rounded px-2 py-0.5 ${

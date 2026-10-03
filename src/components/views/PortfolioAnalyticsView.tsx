@@ -1093,7 +1093,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
           <Field label="Closing Price (BDT ৳)">
             <Input
               type="number"
-              step="0.1"
+              step="any"
               min="0.1"
               value={newPriceClose}
               onChange={(e) => setNewPriceClose(e.target.value === '' ? '' : parseFloat(e.target.value))}
@@ -1137,7 +1137,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
           <Field label="DSEX Index Close">
             <Input
               type="number"
-              step="0.1"
+              step="any"
               min="1000"
               value={newBenchValue}
               onChange={(e) => setNewBenchValue(e.target.value === '' ? '' : parseFloat(e.target.value))}

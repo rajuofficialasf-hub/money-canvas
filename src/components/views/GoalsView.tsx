@@ -345,7 +345,7 @@ export const GoalsView: React.FC = () => {
                       <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Contribution Amount (BDT)</label>
                       <input
                         type="number"
-                        step="100"
+                        step="any"
                         placeholder="e.g. 10000"
                         value={contribAmount}
                         onChange={(e) => setContribAmount(e.target.value)}
@@ -445,7 +445,7 @@ export const GoalsView: React.FC = () => {
                   <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Target Amount (BDT)</label>
                   <input
                     type="number"
-                    step="1000"
+                    step="any"
                     placeholder="e.g. 500000"
                     value={targetAmount}
                     onChange={(e) => setTargetAmount(e.target.value)}
@@ -511,7 +511,7 @@ export const GoalsView: React.FC = () => {
                 <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Initial Allocation (Optional)</label>
                 <input
                   type="number"
-                  step="100"
+                  step="any"
                   placeholder="e.g. 50000"
                   value={initialDeposit}
                   onChange={(e) => setInitialDeposit(e.target.value)}

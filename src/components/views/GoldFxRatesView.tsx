@@ -1011,7 +1011,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                 <Input
                   type="number"
                   min="1000"
-                  step="1000"
+                  step="any"
                   value={reverseBdtAmount}
                   onChange={(e) => setReverseBdtAmount(e.target.value === '' ? '' : parseFloat(e.target.value))}
                   placeholder="e.g. 100000"

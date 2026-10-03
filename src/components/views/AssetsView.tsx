@@ -529,7 +529,7 @@ export const AssetsView: React.FC = () => {
                   </label>
                   <input
                     type="number"
-                    step="1000"
+                    step="any"
                     min="1"
                     required
                     value={purchasePrice}
@@ -595,7 +595,7 @@ export const AssetsView: React.FC = () => {
                     </label>
                     <input
                       type="number"
-                      step="1000"
+                      step="any"
                       value={cashDownpayment}
                       onChange={(e) => setCashDownpayment(e.target.value ? parseFloat(e.target.value) : '')}
                       className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white font-mono"
@@ -607,7 +607,7 @@ export const AssetsView: React.FC = () => {
                     </label>
                     <input
                       type="number"
-                      step="1000"
+                      step="any"
                       value={loanFinancedAmount}
                       onChange={(e) => setLoanFinancedAmount(e.target.value ? parseFloat(e.target.value) : '')}
                       className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white font-mono"
@@ -694,7 +694,7 @@ export const AssetsView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="100"
+                  step="any"
                   min="1"
                   required
                   value={liabAmount}

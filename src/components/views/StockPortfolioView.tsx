@@ -953,7 +953,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <Field label="Current Market Price / LTP (BDT)">
                 <Input
                   type="number"
-                  step="0.05"
+                  step="any"
                   min="0.05"
                   required
                   icon={TakaPrefix}
@@ -1037,7 +1037,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                           <td className="py-2 px-3 text-right">
                             <input
                               type="number"
-                              step="0.1"
+                              step="any"
                               min="0.1"
                               value={curVal}
                               onChange={(e) => {
@@ -1286,7 +1286,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <Field label="Current Market Price / LTP (BDT)" required>
                 <Input
                   type="number"
-                  step="0.1"
+                  step="any"
                   min="0.1"
                   required
                   value={initialPrice}

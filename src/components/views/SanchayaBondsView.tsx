@@ -890,7 +890,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               <Field label={isBn ? 'বিনিয়োগের পরিমাণ (টাকা)' : 'Investment Amount (BDT)'}>
                 <Input
                   type="number"
-                  step="10000"
+                  step="any"
                   value={principalAmount}
                   onChange={(e) => setPrincipalAmount(e.target.value)}
                   className="font-mono"
@@ -1209,7 +1209,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             <Field label={isBn ? 'মূলধন পরিমাণ (টাকা)' : 'Principal Amount (BDT)'} required>
               <Input
                 type="number"
-                step="10000"
+                step="any"
                 required
                 value={principalAmount}
                 onChange={(e) => setPrincipalAmount(e.target.value)}
@@ -1220,7 +1220,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             <Field label={isBn ? 'বার্ষিক মুনাফার হার (%)' : 'Annual Profit Rate (%)'} required>
               <Input
                 type="number"
-                step="0.01"
+                step="any"
                 required
                 value={customRate}
                 onChange={(e) => setCustomRate(e.target.value)}

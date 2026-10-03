@@ -415,7 +415,7 @@ export const LedgerSandbox: React.FC = () => {
                 <label className="block text-slate-400 mb-1">Amount (BDT)</label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="any"
                   value={txAmount}
                   onChange={(e) => setTxAmount(e.target.value)}
                   className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"

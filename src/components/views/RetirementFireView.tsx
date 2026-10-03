@@ -356,7 +356,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                 </label>
                 <input
                   type="number"
-                  step="50000"
+                  step="any"
                   value={params.currentNetWorth}
                   onChange={(e) => handleParamChange('currentNetWorth', parseFloat(e.target.value) || 0)}
                   className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-orange-400 focus:outline-none"
@@ -370,7 +370,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   </label>
                   <input
                     type="number"
-                    step="5000"
+                    step="any"
                     value={params.monthlyLivingExpense}
                     onChange={(e) => handleParamChange('monthlyLivingExpense', parseFloat(e.target.value) || 0)}
                     className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white font-mono focus:border-orange-400 focus:outline-none"
@@ -383,7 +383,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   </label>
                   <input
                     type="number"
-                    step="5000"
+                    step="any"
                     value={params.monthlySavingsContribution}
                     onChange={(e) => handleParamChange('monthlySavingsContribution', parseFloat(e.target.value) || 0)}
                     className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-emerald-400 font-bold focus:border-emerald-400 focus:outline-none"
@@ -400,7 +400,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.5"
+                      step="any"
                       value={params.expectedPreRetirementReturn}
                       onChange={(e) => handleParamChange('expectedPreRetirementReturn', parseFloat(e.target.value) || 0)}
                       className="w-full rounded-lg border border-slate-800 bg-slate-950 px-2 py-1.5 text-white text-xs font-mono focus:border-orange-400 focus:outline-none"
@@ -416,7 +416,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.5"
+                      step="any"
                       value={params.expectedPostRetirementReturn}
                       onChange={(e) => handleParamChange('expectedPostRetirementReturn', parseFloat(e.target.value) || 0)}
                       className="w-full rounded-lg border border-slate-800 bg-slate-950 px-2 py-1.5 text-white text-xs font-mono focus:border-orange-400 focus:outline-none"
@@ -432,7 +432,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.5"
+                      step="any"
                       value={params.expectedInflationRate}
                       onChange={(e) => handleParamChange('expectedInflationRate', parseFloat(e.target.value) || 0)}
                       className="w-full rounded-lg border border-slate-800 bg-slate-950 px-2 py-1.5 text-white text-xs font-mono focus:border-orange-400 focus:outline-none"
@@ -451,7 +451,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   <div className="relative">
                     <input
                       type="number"
-                      step="0.1"
+                      step="any"
                       min="3"
                       max="7"
                       value={params.safeWithdrawalRatePercent}
@@ -469,7 +469,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                   </label>
                   <input
                     type="number"
-                    step="5000"
+                    step="any"
                     value={params.pensionOrPassiveMonthlyIncome}
                     onChange={(e) => handleParamChange('pensionOrPassiveMonthlyIncome', parseFloat(e.target.value) || 0)}
                     className="w-full rounded-lg border border-slate-800 bg-slate-950 px-2 py-1.5 text-white text-xs font-mono focus:border-orange-400 focus:outline-none"

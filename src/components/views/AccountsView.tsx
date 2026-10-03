@@ -356,7 +356,7 @@ export const AccountsView: React.FC = () => {
             <Field label="Initial Balance (৳)">
               <Input
                 type="number"
-                step="0.01"
+                step="any"
                 value={initialBalance}
                 onChange={(e) => setInitialBalance(e.target.value)}
               />
@@ -367,7 +367,7 @@ export const AccountsView: React.FC = () => {
             <Field label="Credit Limit (৳)">
               <Input
                 type="number"
-                step="0.01"
+                step="any"
                 placeholder="e.g. 150000"
                 value={creditLimit}
                 onChange={(e) => setCreditLimit(e.target.value)}

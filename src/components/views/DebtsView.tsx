@@ -516,7 +516,7 @@ export const DebtsView: React.FC = () => {
                   </label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="any"
                     min="1"
                     required
                     placeholder="e.g. 20000"
@@ -642,7 +642,7 @@ export const DebtsView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="0.01"
+                  step="any"
                   min="1"
                   max={getRemainingBalance(settlingDebt)}
                   required

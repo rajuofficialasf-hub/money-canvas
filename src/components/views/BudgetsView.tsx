@@ -636,7 +636,7 @@ export const BudgetsView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="100"
+                  step="any"
                   placeholder="e.g. 25000"
                   value={formAmount}
                   onChange={(e) => setFormAmount(e.target.value)}

@@ -694,7 +694,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                 <Field label="Total Amount (৳)" required>
                   <Input
                     type="number"
-                    step="0.01"
+                    step="any"
                     placeholder="e.g. 2500"
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}

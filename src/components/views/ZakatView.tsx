@@ -525,7 +525,7 @@ export const ZakatView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="1"
+                  step="any"
                   min="1"
                   required
                   value={disburseAmount}
@@ -628,7 +628,7 @@ export const ZakatView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="1"
+                  step="any"
                   required
                   value={silverRate}
                   onChange={(e) => setSilverRate(parseFloat(e.target.value))}
@@ -645,7 +645,7 @@ export const ZakatView: React.FC = () => {
                 </label>
                 <input
                   type="number"
-                  step="50"
+                  step="any"
                   required
                   value={goldRate}
                   onChange={(e) => setGoldRate(parseFloat(e.target.value))}

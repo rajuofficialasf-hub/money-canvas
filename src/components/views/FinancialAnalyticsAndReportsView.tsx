@@ -726,7 +726,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   <div className="w-36">
                     <Input
                       type="number"
-                      step="100000"
+                      step="any"
                       value={exemptionThreshold}
                       onChange={(e) => setExemptionThreshold(parseFloat(e.target.value) || 0)}
                     />
@@ -745,7 +745,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   <div className="w-20">
                     <Input
                       type="number"
-                      step="1"
+                      step="any"
                       min="0"
                       max="50"
                       value={taxRatePct}

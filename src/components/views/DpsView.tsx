@@ -688,7 +688,7 @@ export const DpsView: React.FC = () => {
                   <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Monthly Installment (BDT)</label>
                   <input
                     type="number"
-                    step="500"
+                    step="any"
                     placeholder="e.g. 10000"
                     value={formInstallment}
                     onChange={(e) => setFormInstallment(e.target.value)}
@@ -718,7 +718,7 @@ export const DpsView: React.FC = () => {
                   <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Interest Rate (%)</label>
                   <input
                     type="number"
-                    step="0.05"
+                    step="any"
                     value={formRate}
                     onChange={(e) => setFormRate(e.target.value)}
                     className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"

@@ -144,7 +144,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                     </label>
                     <input
                       type="number"
-                      step="0.1"
+                      step="any"
                       value={customRate}
                       onChange={(e) => setCustomRate(Number(e.target.value) || 0)}
                       className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
@@ -250,7 +250,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 type="range"
                 min="0"
                 max={Math.max(50000, Math.round(effectivePrincipal * 0.05))}
-                step="1000"
+                step="any"
                 value={monthlyExtra}
                 onChange={(e) => setMonthlyExtra(Number(e.target.value))}
                 className="w-full accent-emerald-500 cursor-pointer"
@@ -283,7 +283,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 type="range"
                 min="0"
                 max={Math.max(500000, effectivePrincipal)}
-                step="10000"
+                step="any"
                 value={lumpSum}
                 onChange={(e) => setLumpSum(Number(e.target.value))}
                 className="w-full accent-amber-500 cursor-pointer"

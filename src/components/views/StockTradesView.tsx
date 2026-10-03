@@ -946,7 +946,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   </div>
                   <Input
                     type="number"
-                    step="0.1"
+                    step="any"
                     min="0.1"
                     required
                     value={price}
@@ -969,7 +969,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   <Field label="Commission (%)">
                     <Input
                       type="number"
-                      step="0.01"
+                      step="any"
                       min="0"
                       value={commissionRatePct}
                       onChange={(e) =>
@@ -981,7 +981,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   <Field label="AIT Tax (BDT)">
                     <Input
                       type="number"
-                      step="1"
+                      step="any"
                       min="0"
                       value={taxAmount}
                       onChange={(e) =>
@@ -993,7 +993,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   <Field label="CDBL/Other (BDT)">
                     <Input
                       type="number"
-                      step="1"
+                      step="any"
                       min="0"
                       value={otherCharges}
                       onChange={(e) =>

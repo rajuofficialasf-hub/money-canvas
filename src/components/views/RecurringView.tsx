@@ -366,7 +366,7 @@ export const RecurringView: React.FC = () => {
                   <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Amount (BDT)</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="any"
                     placeholder="e.g. 2500"
                     value={formAmount}
                     onChange={(e) => setFormAmount(e.target.value)}

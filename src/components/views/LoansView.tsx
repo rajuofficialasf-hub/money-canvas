@@ -542,7 +542,7 @@ export const LoansView: React.FC = () => {
                   </label>
                   <input
                     type="number"
-                    step="1000"
+                    step="any"
                     min="1000"
                     required
                     value={principal}
@@ -560,7 +560,7 @@ export const LoansView: React.FC = () => {
                   </label>
                   <input
                     type="number"
-                    step="0.05"
+                    step="any"
                     min="0.1"
                     required
                     value={annualInterestRate}

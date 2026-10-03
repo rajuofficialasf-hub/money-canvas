@@ -371,7 +371,7 @@ export const FixedDepositsView: React.FC = () => {
                   <label className="block text-slate-400 mb-1">Principal Amount (৳) *</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="any"
                     value={principalAmount}
                     onChange={(e) => setPrincipalAmount(e.target.value)}
                     className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-bold"
@@ -383,7 +383,7 @@ export const FixedDepositsView: React.FC = () => {
                   <label className="block text-slate-400 mb-1">Annual Interest Rate (%) *</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="any"
                     placeholder="e.g. 8.5"
                     value={interestRate}
                     onChange={(e) => setInterestRate(e.target.value)}
@@ -423,7 +423,7 @@ export const FixedDepositsView: React.FC = () => {
                   <label className="block text-slate-400 mb-1">Tax Rate (%)</label>
                   <input
                     type="number"
-                    step="0.01"
+                    step="any"
                     value={taxRate}
                     onChange={(e) => setTaxRate(e.target.value)}
                     className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
@@ -590,7 +590,7 @@ export const FixedDepositsView: React.FC = () => {
                 <label className="block text-slate-400 mb-1">Penalty Interest Rate (%)</label>
                 <input
                   type="number"
-                  step="0.1"
+                  step="any"
                   value={penaltyRate}
                   onChange={(e) => setPenaltyRate(e.target.value)}
                   className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
