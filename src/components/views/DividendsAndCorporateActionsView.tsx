@@ -482,7 +482,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('dividends')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'dividends'
-                ? 'bg-accent-deep text-ink shadow-sm'
+                ? 'bg-accent-deep text-white shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -492,7 +492,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('corporate_actions')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'corporate_actions'
-                ? 'bg-accent-deep text-ink shadow-sm'
+                ? 'bg-accent-deep text-white shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -502,7 +502,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('ipo')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'ipo'
-                ? 'bg-accent-deep text-ink shadow-sm'
+                ? 'bg-accent-deep text-white shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -1241,7 +1241,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             </Button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
+              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
             >
               Apply Corporate Action
             </button>
@@ -1418,7 +1418,7 @@ BENGALI_LINE                </>
             <button
               type="submit"
               disabled={availableBrokerCash < ipoTotalAmount}
-              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
+              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
             >
               Apply &amp; Block Funds (৳{ipoTotalAmount.toLocaleString()})
             </button>
@@ -1525,7 +1525,7 @@ BENGALI_LINE                </>
               </Button>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
+                className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
               >
                 Confirm Settlement
               </button>

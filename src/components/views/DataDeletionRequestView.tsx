@@ -75,7 +75,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
         </div>
 
         {/* Header Banner */}
-        <div className="rounded-2xl border border-rose-900/40 bg-gradient-to-br from-rose-950/30 via-slate-900/90 to-slate-950 p-6 sm:p-8 space-y-4 shadow-xl shadow-rose-950/10">
+        <div className="rounded-2xl border border-rose-900/40 bg-gradient-to-br from-rose-950/30 via-surface/90 to-canvas p-6 sm:p-8 space-y-4 shadow-xl shadow-rose-950/10">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-xl bg-negative/10 border border-negative/20 text-negative">
               <Trash2 className="h-7 w-7" />
@@ -242,7 +242,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                 <button
                   type="submit"
                   disabled={isSubmitting || !email || !agreeChecked}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-ink-faint disabled:cursor-not-allowed text-ink font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-ink-faint disabled:cursor-not-allowed text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
                 >
                   {isSubmitting ? (
                     <span>Submitting Request...</span>

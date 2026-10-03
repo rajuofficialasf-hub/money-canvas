@@ -393,7 +393,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                   <span>Alerts & Reminders</span>
                 </div>
                 {unreadAlertsCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-negative text-[10px] font-mono font-bold text-ink">
+                  <span className="px-1.5 py-0.2 rounded-full bg-negative text-[10px] font-mono font-bold text-white">
                     {unreadAlertsCount}
                   </span>
                 )}

@@ -295,7 +295,7 @@ export const IncomeTaxView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Top Header Card */}
-      <div className="rounded-2xl border border-edge bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
+      <div className="rounded-2xl border border-edge bg-gradient-to-r from-canvas via-surface to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
           <Landmark className="h-48 w-48 text-accent-strong" />
         </div>
@@ -376,7 +376,7 @@ export const IncomeTaxView: React.FC = () => {
             </div>
           </div>
 
-          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
+          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-surface/80">
             <div className="text-[11px] font-mono text-accent-strong">রিটার্নের সাথে প্রদেয় কর (Net Payable)</div>
             <div className={`text-base sm:text-lg font-bold mt-0.5 ${taxResult.netTaxableIncome <= taxResult.exemptionThreshold ? 'text-accent-strong' : 'text-warning'}`}>
               {taxResult.netTaxPayableOrRefund > 0
@@ -837,7 +837,7 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 {/* Final Net Payable Box */}
-                <div className="mt-3 p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-slate-950 border-2 border-accent/50 flex items-center justify-between">
+                <div className="mt-3 p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-canvas border-2 border-accent/50 flex items-center justify-between">
                   <div>
                     <div className="text-[10px] uppercase font-bold text-accent-strong tracking-wider">
                       রিটার্নের সাথে প্রদেয় কর (Net Payable)
@@ -1025,7 +1025,7 @@ export const IncomeTaxView: React.FC = () => {
 
           {/* Rebate Optimization Advice Box */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-950 p-6 space-y-4">
+            <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-surface to-canvas p-6 space-y-4">
               <div className="flex items-center gap-2 text-accent-strong font-bold text-sm">
                 <Sparkles className="h-5 w-5" />
                 <span>ট্যাক্স রিবেট সামারি ও সেভিংস অ্যাডভাইজার</span>

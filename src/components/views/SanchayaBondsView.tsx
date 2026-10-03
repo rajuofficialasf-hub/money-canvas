@@ -362,7 +362,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Top Banner Card */}
-      <div className="rounded-2xl border border-edge bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
+      <div className="rounded-2xl border border-edge bg-gradient-to-r from-canvas via-surface to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
           <Landmark className="h-48 w-48 text-accent-strong" />
         </div>
@@ -464,7 +464,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             </div>
           </div>
 
-          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
+          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-surface/80">
             <div className="text-[11px] font-mono text-accent-strong">
               {isBn ? 'গড় মুনাফার হার (Yield)' : 'Weighted Avg Yield'}
             </div>

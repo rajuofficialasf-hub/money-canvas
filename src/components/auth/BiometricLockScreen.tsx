@@ -78,7 +78,7 @@ export const BiometricLockScreen: React.FC = () => {
 
         {/* User Card */}
         <div className="w-full p-3 rounded-2xl bg-surface/60 border border-slate-850 flex items-center gap-3 text-left">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-ink text-sm shadow">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-white text-sm shadow">
             {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">

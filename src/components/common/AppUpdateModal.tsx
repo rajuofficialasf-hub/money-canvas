@@ -69,7 +69,7 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="update-modal-title"
-        className="relative w-full max-w-lg rounded-2xl bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border border-accent/30 shadow-2xl shadow-emerald-950/50 overflow-hidden animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg rounded-2xl bg-gradient-to-b from-surface via-surface to-canvas border border-accent/30 shadow-2xl shadow-emerald-950/50 overflow-hidden animate-in zoom-in-95 duration-200"
       >
         {/* Top Glow Ambient Banner */}
         <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-emerald-500/15 via-emerald-500/5 to-transparent pointer-events-none" />

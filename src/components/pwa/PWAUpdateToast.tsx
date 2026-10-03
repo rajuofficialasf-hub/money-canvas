@@ -13,7 +13,7 @@ export const PWAUpdateToast: React.FC = () => {
     <div
       role="alert"
       aria-live="assertive"
-      className="fixed bottom-5 right-5 z-50 max-w-md w-[calc(100vw-2.5rem)] rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/80 border-2 border-accent/60 p-4 shadow-2xl shadow-emerald-950/50 backdrop-blur-xl animate-in slide-in-from-bottom-5 duration-300"
+      className="fixed bottom-5 right-5 z-50 max-w-md w-[calc(100vw-2.5rem)] rounded-2xl bg-gradient-to-r from-surface via-surface to-emerald-950/80 border-2 border-accent/60 p-4 shadow-2xl shadow-emerald-950/50 backdrop-blur-xl animate-in slide-in-from-bottom-5 duration-300"
     >
       <div className="flex items-start gap-3.5">
         <div className="p-2.5 rounded-xl bg-accent/20 text-accent-strong shrink-0 border border-accent/30">

@@ -755,7 +755,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleCloudSync}
                 disabled={isCloudSyncingManual || cloudSyncStatus === 'syncing'}
-                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <RefreshCw className={`h-4 w-4 ${isCloudSyncingManual || cloudSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
                 <span>{isCloudSyncingManual ? 'সিঙ্ক হচ্ছে...' : 'এখনই সিঙ্ক করুন'}</span>
@@ -776,7 +776,7 @@ export const BackupRestoreView: React.FC = () => {
                   setVaultError(null);
                   setShowCloudVaultModal(true);
                 }}
-                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all cursor-pointer"
               >
                 <ShieldCheck className="h-4 w-4" />
                 <span>এনক্রিপ্টেড ক্লাউড ভল্ট</span>
@@ -900,7 +900,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleBackupToDrive}
                 disabled={isDriveBackingUp}
-                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudUpload className={`h-4 w-4 ${isDriveBackingUp ? 'animate-bounce' : ''}`} />
                 <span>{isDriveBackingUp ? 'ড্রাইভে সেভ হচ্ছে...' : 'Backup to Drive'}</span>
@@ -912,7 +912,7 @@ export const BackupRestoreView: React.FC = () => {
                   setDriveExportError(null);
                 }}
                 disabled={isDriveBackingUp}
-                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <Lock className="h-4 w-4" />
                 <span>ড্রাইভ এনক্রিপ্ট ব্যাকআপ</span>
@@ -1159,7 +1159,7 @@ export const BackupRestoreView: React.FC = () => {
             </div>
             <button
               onClick={() => handleExportPdfStatement('nbr_tax')}
-              className="w-full py-2 rounded-lg bg-rose-600/90 hover:bg-negative text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-rose-600/90 hover:bg-negative text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Tax PDF</span>
@@ -1173,7 +1173,7 @@ export const BackupRestoreView: React.FC = () => {
             </div>
             <button
               onClick={() => handleExportPdfStatement('balance_sheet')}
-              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Balance Sheet PDF</span>
@@ -1187,7 +1187,7 @@ export const BackupRestoreView: React.FC = () => {
             </div>
             <button
               onClick={() => handleExportPdfStatement('pnl')}
-              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>P&L PDF</span>
@@ -1201,7 +1201,7 @@ export const BackupRestoreView: React.FC = () => {
             </div>
             <button
               onClick={() => handleExportPdfStatement('valuation')}
-              className="w-full py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Valuation PDF</span>
@@ -1215,7 +1215,7 @@ export const BackupRestoreView: React.FC = () => {
             </div>
             <button
               onClick={() => handleExportPdfStatement('audit')}
-              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Audit PDF</span>
@@ -1403,7 +1403,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleExecuteReset}
                 disabled={confirmResetText.trim() !== 'CONFIRM RESET'}
-                className="px-4 py-1.5 rounded bg-rose-600 hover:bg-negative text-ink font-semibold transition-colors disabled:opacity-30"
+                className="px-4 py-1.5 rounded bg-rose-600 hover:bg-negative text-white font-semibold transition-colors disabled:opacity-30"
               >
                 Permanently Purge
               </button>
@@ -1633,7 +1633,7 @@ export const BackupRestoreView: React.FC = () => {
                 type="button"
                 onClick={handleExecuteDriveEncryptedBackup}
                 disabled={isDriveEncrypting || !driveExportPassphrase || !driveExportPassphraseConfirm}
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
               >
                 <CloudUpload className={`h-4 w-4 ${isDriveEncrypting ? 'animate-bounce' : ''}`} />
                 <span>{isDriveEncrypting ? 'এনক্রিপ্ট ও আপলোড হচ্ছে...' : 'এনক্রিপ্ট করে ড্রাইভে সেভ'}</span>
@@ -1751,7 +1751,7 @@ export const BackupRestoreView: React.FC = () => {
                 }}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   vaultMode === 'export'
-                    ? 'bg-indigo-600 text-ink shadow-sm'
+                    ? 'bg-indigo-600 text-white shadow-sm'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -1765,7 +1765,7 @@ export const BackupRestoreView: React.FC = () => {
                 }}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   vaultMode === 'restore'
-                    ? 'bg-indigo-600 text-ink shadow-sm'
+                    ? 'bg-indigo-600 text-white shadow-sm'
                     : 'text-ink-muted hover:text-ink'
                 }`}
               >
@@ -1866,7 +1866,7 @@ export const BackupRestoreView: React.FC = () => {
                   type="button"
                   onClick={handleSaveToCloudVault}
                   disabled={isVaultOperating || !vaultPassphrase || !vaultPassphraseConfirm}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
                 >
                   <Lock className={`h-4 w-4 ${isVaultOperating ? 'animate-spin' : ''}`} />
                   <span>{isVaultOperating ? 'ভল্টে সেভ হচ্ছে...' : 'ভল্টে এনক্রিপ্ট করে সেভ'}</span>
@@ -1876,7 +1876,7 @@ export const BackupRestoreView: React.FC = () => {
                   type="button"
                   onClick={handleRestoreFromCloudVault}
                   disabled={isVaultOperating || !vaultPassphrase}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
                 >
                   <Unlock className={`h-4 w-4 ${isVaultOperating ? 'animate-spin' : ''}`} />
                   <span>{isVaultOperating ? 'ডিক্রিপ্ট হচ্ছে...' : 'ডিক্রিপ্ট ও রিস্টোর করুন'}</span>

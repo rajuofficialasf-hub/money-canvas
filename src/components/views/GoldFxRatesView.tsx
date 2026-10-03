@@ -351,7 +351,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {/* Top Benchmark KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         {/* 22K Gold */}
-        <div className="p-4 rounded-xl border border-warning/40 bg-gradient-to-b from-amber-950/30 to-slate-900/60 shadow-lg shadow-amber-950/20">
+        <div className="p-4 rounded-xl border border-warning/40 bg-gradient-to-b from-amber-950/30 to-surface/60 shadow-lg shadow-amber-950/20">
           <div className="flex items-center justify-between text-xs text-warning font-semibold mb-1">
             <span>{isBn ? '২২ ক্যারেট সোনা' : '22K Gold (916)'}</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-warning/20 font-mono text-warning">
@@ -410,7 +410,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
         </div>
 
         {/* USD Remittance Rate */}
-        <div className="p-4 rounded-xl border border-accent/30 bg-gradient-to-b from-emerald-950/20 to-slate-900/60 col-span-2 lg:col-span-1">
+        <div className="p-4 rounded-xl border border-accent/30 bg-gradient-to-b from-emerald-950/20 to-surface/60 col-span-2 lg:col-span-1">
           <div className="flex items-center justify-between text-xs text-accent-strong font-semibold mb-1">
             <span>{isBn ? 'ইউএস ডলার (USD)' : 'US Dollar (USD)'}</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/20 font-mono text-accent-strong">
@@ -677,7 +677,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       type="button"
                       onClick={() => setWeightMode('bhori')}
                       className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-                        weightMode === 'bhori' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-ink'
+                        weightMode === 'bhori' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-white'
                       }`}
                     >
                       {isBn ? 'ভরি-আনা-রতি' : 'Bhori / Anna'}
@@ -686,7 +686,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       type="button"
                       onClick={() => setWeightMode('grams')}
                       className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-                        weightMode === 'grams' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-ink'
+                        weightMode === 'grams' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-white'
                       }`}
                     >
                       {isBn ? 'গ্রাম (Grams)' : 'Grams'}
@@ -773,7 +773,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             </div>
 
             {/* Right: Bill Breakdown & One-Click Actions */}
-            <div className="lg:col-span-6 rounded-xl border border-warning/30 bg-gradient-to-b from-amber-950/20 via-slate-900 to-slate-950 p-5 space-y-4 flex flex-col justify-between">
+            <div className="lg:col-span-6 rounded-xl border border-warning/30 bg-gradient-to-b from-amber-950/20 via-surface to-canvas p-5 space-y-4 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between border-b border-edge/80 pb-3">
                   <div className="text-sm font-bold text-ink flex items-center gap-2">
@@ -846,7 +846,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {activeTab === 'fx' && (
         <div className="space-y-6">
           {/* Remittance Calculator Banner */}
-          <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 space-y-4">
+          <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-emerald-950/40 via-surface to-canvas p-5 space-y-4">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-edge pb-3">
               <div>
                 <div className="flex items-center gap-2 text-ink font-bold text-sm">

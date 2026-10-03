@@ -281,8 +281,8 @@ export const AuditLogsView: React.FC = () => {
         <div
           className={`rounded-2xl border p-5 transition-all shadow-lg ${
             lastVerificationResult.isValid
-              ? 'border-accent/30 bg-gradient-to-r from-emerald-950/30 via-slate-900/80 to-slate-900/60 text-accent-strong'
-              : 'border-negative/40 bg-gradient-to-r from-rose-950/40 via-slate-900/80 to-slate-900/60 text-negative'
+              ? 'border-accent/30 bg-gradient-to-r from-emerald-950/30 via-surface/80 to-surface/60 text-accent-strong'
+              : 'border-negative/40 bg-gradient-to-r from-rose-950/40 via-surface/80 to-surface/60 text-negative'
           }`}
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

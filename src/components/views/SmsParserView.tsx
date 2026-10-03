@@ -314,7 +314,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
       </div>
 
       {/* 2. Free & Offline Guarantee Card (Answers user question) */}
-      <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/40 via-slate-900/80 to-slate-900 border border-accent/20">
+      <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-950/40 via-surface/80 to-surface border border-accent/20">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-lg bg-accent/10 text-accent-strong shrink-0 mt-0.5">
             <ShieldCheck className="h-5 w-5" />

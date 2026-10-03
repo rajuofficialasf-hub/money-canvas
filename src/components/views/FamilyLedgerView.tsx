@@ -331,7 +331,7 @@ export const FamilyLedgerView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Simulation Member Switcher Bar */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-accent/30 p-4 shadow-xl">
+      <div className="rounded-2xl bg-gradient-to-r from-surface via-surface to-emerald-950/40 border border-accent/30 p-4 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-md ${activeMember.avatarColor}`}>

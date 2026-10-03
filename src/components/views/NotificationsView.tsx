@@ -211,7 +211,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
       </div>
 
       {/* FEAT-5: Device Reminder & Push Notification Scheduler Center */}
-      <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/20 via-slate-900/90 to-slate-950 p-5 sm:p-6 space-y-4 shadow-xl">
+      <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/20 via-surface/90 to-canvas p-5 sm:p-6 space-y-4 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20">
@@ -252,7 +252,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
               type="button"
               disabled={isScheduling}
               onClick={handleSyncReminders}
-              className="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-sky-950 text-xs font-bold text-ink flex items-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/40"
+              className="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-sky-950 text-xs font-bold text-white flex items-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/40"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isScheduling ? 'animate-spin' : ''}`} />
               <span>{isScheduling ? 'শিডিউল হচ্ছে...' : 'রিমাইন্ডার সিঙ্ক করুন'}</span>

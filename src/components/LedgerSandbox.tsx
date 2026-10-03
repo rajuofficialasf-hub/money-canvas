@@ -216,7 +216,7 @@ export const LedgerSandbox: React.FC = () => {
       </div>
 
       {/* Authoritative Live Net Worth Dashboard Card */}
-      <div className="rounded-xl border border-edge bg-gradient-to-r from-slate-900/80 to-slate-950/80 p-6">
+      <div className="rounded-xl border border-edge bg-gradient-to-r from-surface/80 to-canvas/80 p-6">
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs font-mono uppercase tracking-wider text-ink-muted">
             Authoritative Live Net Worth (v_net_worth view)

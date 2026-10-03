@@ -115,7 +115,7 @@ ${errorInfo?.componentStack || 'No component stack'}
             isRoot ? 'min-h-screen bg-canvas text-ink' : 'min-h-[420px] my-6'
           }`}
         >
-          <div className="w-full max-w-2xl rounded-2xl border border-negative/30 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
+          <div className="w-full max-w-2xl rounded-2xl border border-negative/30 bg-gradient-to-b from-surface/95 via-surface/90 to-canvas/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
             {/* Header Icon & Title */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="h-14 w-14 rounded-2xl bg-negative/10 border border-negative/30 flex items-center justify-center shrink-0 shadow-inner">

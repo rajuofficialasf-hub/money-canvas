@@ -334,7 +334,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
                       isActive
                         ? 'bg-accent text-accent-ink font-bold'
                         : isPast
-                        ? 'bg-emerald-950 text-accent-strong border border-accent/30'
+                        ? 'bg-accent/15 text-accent-strong border border-accent/30'
                         : 'bg-raised text-ink-muted'
                     }`}
                   >

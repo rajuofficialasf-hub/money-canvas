@@ -442,7 +442,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       : dseSyncStatus.status === 'syncing' || isSyncingLocal
                       ? 'bg-sky-950 text-sky-300 border border-sky-800 animate-pulse'
                       : dseSyncStatus.status === 'success'
-                      ? 'bg-emerald-950 text-accent-strong border border-emerald-800'
+                      ? 'bg-accent/15 text-accent-strong border border-accent/30'
                       : 'bg-raised text-ink-muted'
                   }`}>
                     {dseSyncStatus.isManualOnly

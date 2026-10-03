@@ -156,7 +156,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Fresh Account Getting Started Banner */}
       {isFreshAccount && (
-        <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-emerald-950/30 via-slate-900/60 to-slate-950 p-6 space-y-4">
+        <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-emerald-950/30 via-surface/60 to-canvas p-6 space-y-4">
           <div className="flex items-center gap-2 text-accent-strong text-xs font-mono">
             <Scale className="h-4 w-4" />
             <span>WELCOME TO YOUR FRESH WEATHFOLIO ENVIRONMENT</span>
@@ -528,7 +528,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Bangladesh Income Tax & NBR IT-10B Quick Callout */}
       <div
         onClick={() => onNavigate('tax')}
-        className="rounded-2xl border border-accent/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-accent/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-emerald-950/20"
+        className="rounded-2xl border border-accent/30 bg-gradient-to-r from-emerald-950/40 via-surface to-canvas p-5 cursor-pointer hover:border-accent/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-emerald-950/20"
       >
         <div className="flex items-center gap-3.5">
           <div className="p-3 rounded-xl bg-accent/20 text-accent-strong border border-accent/30 shrink-0">
@@ -558,7 +558,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Sanchayapatra, Treasury Bonds & Sukuk Quick Callout */}
       <div
         onClick={() => onNavigate('sanchaya_bonds')}
-        className="rounded-2xl border border-sky-500/30 bg-gradient-to-r from-sky-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-sky-500/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-sky-950/20"
+        className="rounded-2xl border border-sky-500/30 bg-gradient-to-r from-sky-950/40 via-surface to-canvas p-5 cursor-pointer hover:border-sky-500/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-sky-950/20"
       >
         <div className="flex items-center gap-3.5">
           <div className="p-3 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 shrink-0">
@@ -588,7 +588,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* BAJUS Gold & FX Rates Quick Callout */}
       <div
         onClick={() => onNavigate('gold_fx')}
-        className="rounded-2xl border border-warning/30 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-warning/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-amber-950/20"
+        className="rounded-2xl border border-warning/30 bg-gradient-to-r from-amber-950/40 via-surface to-canvas p-5 cursor-pointer hover:border-warning/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-amber-950/20"
       >
         <div className="flex items-center gap-3.5">
           <div className="p-3 rounded-xl bg-warning/20 text-warning border border-warning/30 shrink-0">
@@ -618,7 +618,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* Retirement & FIRE Planner Quick Callout */}
       <div
         onClick={() => onNavigate('fire')}
-        className="rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-orange-500/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-orange-950/20"
+        className="rounded-2xl border border-orange-500/30 bg-gradient-to-r from-orange-950/40 via-surface to-canvas p-5 cursor-pointer hover:border-orange-500/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-orange-950/20"
       >
         <div className="flex items-center gap-3.5">
           <div className="p-3 rounded-xl bg-orange-500/20 text-orange-400 border border-orange-500/30 shrink-0">

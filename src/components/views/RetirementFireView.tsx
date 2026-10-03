@@ -170,7 +170,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
       {/* Top Executive KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         {/* FIRE Number Today */}
-        <div className="p-4 rounded-xl border border-orange-500/40 bg-gradient-to-b from-orange-950/30 to-slate-900/60 shadow-lg shadow-orange-950/20">
+        <div className="p-4 rounded-xl border border-orange-500/40 bg-gradient-to-b from-orange-950/30 to-surface/60 shadow-lg shadow-orange-950/20">
           <div className="flex items-center justify-between text-xs text-orange-400 font-semibold mb-1">
             <span>{t('fireFireNumberToday')}</span>
             <Flame className="h-3.5 w-3.5" />
@@ -550,7 +550,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
             </div>
 
             {/* Analytical Insights & Recommendations */}
-            <div className="rounded-xl border border-warning/30 bg-gradient-to-br from-amber-950/20 via-slate-900 to-slate-950 p-5 space-y-3">
+            <div className="rounded-xl border border-warning/30 bg-gradient-to-br from-amber-950/20 via-surface to-canvas p-5 space-y-3">
               <div className="flex items-center gap-2 text-warning font-bold text-xs">
                 <Sparkles className="h-4 w-4" />
                 <span>{t('fireKeyFireInsightsRecommendations')}</span>
@@ -580,7 +580,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                 key={m.type}
                 className={`p-5 rounded-xl border flex flex-col justify-between transition-all ${
                   m.achieved
-                    ? 'border-accent/40 bg-gradient-to-b from-emerald-950/30 to-slate-900/60 shadow-lg shadow-emerald-950/20'
+                    ? 'border-accent/40 bg-gradient-to-b from-emerald-950/30 to-surface/60 shadow-lg shadow-emerald-950/20'
                     : 'border-edge bg-surface/50 hover:border-slate-700'
                 }`}
               >

@@ -831,7 +831,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             </Button>
             <button
               type="submit"
-              className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-ink rounded-lg text-xs font-medium transition-colors"
+              className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-colors"
             >
               Confirm Withdrawal
             </button>

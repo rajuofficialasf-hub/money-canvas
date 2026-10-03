@@ -118,7 +118,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
           <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
             <button
               type="submit"
-              className="flex-1 py-2.5 px-4 bg-accent-deep hover:bg-accent text-ink font-semibold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-950/50"
+              className="flex-1 py-2.5 px-4 bg-accent-deep hover:bg-accent text-white font-semibold rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-emerald-950/50"
             >
               <span>Create My Ledger</span>
               <ArrowRight className="h-4 w-4" />

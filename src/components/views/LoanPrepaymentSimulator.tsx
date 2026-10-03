@@ -328,7 +328,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
         {/* Right Column: Simulation Results & Analytics */}
         <div className="lg:col-span-7 space-y-5">
           {/* Main Hero Card: Savings Breakdown */}
-          <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-slate-900/90 to-slate-950 p-6 space-y-6 shadow-2xl shadow-emerald-950/20">
+          <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-surface/90 to-canvas p-6 space-y-6 shadow-2xl shadow-emerald-950/20">
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono uppercase tracking-wider text-accent-strong font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />

@@ -601,7 +601,7 @@ export const BudgetsView: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleCreateCustomCategory}
-                        className="px-3 py-1.5 bg-accent-deep hover:bg-accent text-ink rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
+                        className="px-3 py-1.5 bg-accent-deep hover:bg-accent text-white rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
                       >
                         Add
                       </button>

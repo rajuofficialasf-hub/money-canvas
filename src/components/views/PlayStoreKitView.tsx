@@ -386,7 +386,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                   {/* Image Preview Container */}
                   <div
                     onClick={() => setSelectedPreview(asset.pngUrl)}
-                    className="relative rounded-lg overflow-hidden border border-edge bg-canvas cursor-pointer group-hover:border-accent/50 transition-colors flex items-center justify-center p-2 mb-4 bg-gradient-to-b from-slate-900 to-slate-950"
+                    className="relative rounded-lg overflow-hidden border border-edge bg-canvas cursor-pointer group-hover:border-accent/50 transition-colors flex items-center justify-center p-2 mb-4 bg-gradient-to-b from-surface to-canvas"
                   >
                     <img
                       src={asset.pngUrl}

@@ -582,7 +582,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     onClick={() => handleTradeTypeToggle('buy')}
                     className={`py-2 px-3 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border ${
                       tradeType === 'buy'
-                        ? 'bg-accent-deep text-ink border-accent shadow-md shadow-emerald-950'
+                        ? 'bg-accent-deep text-white border-accent shadow-md shadow-emerald-950'
                         : 'bg-canvas text-ink-muted border-edge hover:text-ink-soft'
                     }`}
                   >
@@ -594,7 +594,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     onClick={() => handleTradeTypeToggle('sell')}
                     className={`py-2 px-3 rounded-lg text-xs font-bold transition-colors flex items-center justify-center gap-1.5 border ${
                       tradeType === 'sell'
-                        ? 'bg-rose-600 text-ink border-negative shadow-md shadow-rose-950'
+                        ? 'bg-rose-600 text-white border-negative shadow-md shadow-rose-950'
                         : 'bg-canvas text-ink-muted border-edge hover:text-ink-soft'
                     }`}
                   >
@@ -1158,8 +1158,8 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   }
                   className={`w-full sm:w-auto px-5 py-2.5 rounded-lg text-xs font-bold transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed text-center ${
                     tradeType === 'buy'
-                      ? 'bg-accent-deep hover:bg-accent text-ink'
-                      : 'bg-rose-600 hover:bg-negative text-ink'
+                      ? 'bg-accent-deep hover:bg-accent text-white'
+                      : 'bg-rose-600 hover:bg-negative text-white'
                   }`}
                 >
                   {tradeType === 'buy' ? 'Confirm Buy Order' : 'Confirm Sell Order'}

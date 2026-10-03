@@ -626,7 +626,7 @@ export const FixedDepositsView: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleBreakSubmit(activeFdToBreak.id)}
-                className="px-4 py-2 rounded-lg bg-negative hover:bg-negative text-ink font-semibold font-mono text-xs transition-colors"
+                className="px-4 py-2 rounded-lg bg-negative hover:bg-negative text-white font-semibold font-mono text-xs transition-colors"
               >
                 Confirm Early Liquidation
               </button>

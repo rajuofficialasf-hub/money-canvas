@@ -596,7 +596,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
           </div>
 
           {/* Application Updates & Version Status Card */}
-          <div className="rounded-xl border border-accent/40 bg-gradient-to-br from-emerald-950/20 via-slate-900/60 to-slate-950 p-5 space-y-4 shadow-lg shadow-emerald-950/20">
+          <div className="rounded-xl border border-accent/40 bg-gradient-to-br from-emerald-950/20 via-surface/60 to-canvas p-5 space-y-4 shadow-lg shadow-emerald-950/20">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-accent-strong text-xs font-bold">
                 <Sparkles className="h-4 w-4" />
@@ -714,7 +714,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
           </div>
 
           {/* Google Play Console Publishing Kit & Assets Card */}
-          <div className="rounded-xl border border-accent/40 bg-gradient-to-br from-emerald-950/30 to-slate-900/80 p-5 space-y-3">
+          <div className="rounded-xl border border-accent/40 bg-gradient-to-br from-emerald-950/30 to-surface/80 p-5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-accent-strong text-xs font-bold">
                 <Sparkles className="h-4 w-4" />
@@ -852,7 +852,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     setDeleteError(null);
                     setShowDeleteAccountModal(true);
                   }}
-                  className="w-full px-3 py-2 rounded-lg bg-rose-600 hover:bg-negative text-ink text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-rose-950/60"
+                  className="w-full px-3 py-2 rounded-lg bg-rose-600 hover:bg-negative text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-rose-950/60"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   <span>Delete My Account & Data</span>
@@ -963,7 +963,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 type="button"
                 disabled={isDeletingAccount || deleteConfirmText.trim().toUpperCase() !== 'DELETE'}
                 onClick={handleDeleteAccount}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-slate-600 disabled:cursor-not-allowed text-ink text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-slate-600 disabled:cursor-not-allowed text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
               >
                 {isDeletingAccount ? (
                   <span>Deleting Account & Data...</span>
