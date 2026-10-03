@@ -265,6 +265,14 @@ export const DpsView: React.FC = () => {
                         >
                           {dps.status}
                         </span>
+                        {!isMatured && pendingNext && (
+                          <span
+                            className="text-[10px] font-mono px-2 py-0.5 rounded bg-canvas border border-edge text-ink-soft"
+                            title={`Next installment #${pendingNext.installmentNumber} due`}
+                          >
+                            Next due {pendingNext.dueDate}
+                          </span>
+                        )}
                       </div>
                       <div className="text-xs text-ink-muted font-mono flex flex-wrap items-center gap-x-3 gap-y-1">
                         <span>Monthly: <strong className="text-ink">৳{dps.monthlyInstallment.toLocaleString()}</strong></span>
@@ -401,12 +409,12 @@ export const DpsView: React.FC = () => {
                     </div>
                   )}
 
-                  <div className="p-3 rounded-lg bg-canvas border border-edge font-mono text-xs space-y-1">
-                    <div className="text-ink-muted">Installment Amount:</div>
+                  <div
+                    className="p-3 rounded-lg bg-canvas border border-edge font-mono text-xs space-y-1"
+                    title={`Creates double-entry transfer (Bank Account -৳${dps.monthlyInstallment} / DPS Account +৳${dps.monthlyInstallment}).`}
+                  >
+                    <div className="text-ink-muted">Installment Amount (double-entry: Bank → DPS):</div>
                     <div className="text-xl font-bold text-ink">৳{dps.monthlyInstallment.toLocaleString()}</div>
-                    <div className="text-[10px] text-ink-faint">
-                      Creates double-entry transfer (Bank Account -৳{dps.monthlyInstallment} / DPS Account +৳{dps.monthlyInstallment}).
-                    </div>
                   </div>
 
                   <form onSubmit={handlePayInstallment} className="space-y-4 text-xs font-mono">
@@ -426,6 +434,33 @@ export const DpsView: React.FC = () => {
                             </option>
                           ))}
                       </select>
+
+                      {/* Source balance context (informational — engine validates on post) */}
+                      {paySourceAccountId && (() => {
+                        const srcBalance = getAccountBalance(paySourceAccountId);
+                        const afterDebit = srcBalance - dps.monthlyInstallment;
+                        const shortfall = afterDebit < 0;
+                        return (
+                          <div
+                            className={`mt-2 rounded-lg border p-3 flex items-center justify-between gap-3 ${
+                              shortfall ? 'border-negative/40 bg-negative/10' : 'border-edge bg-canvas'
+                            }`}
+                          >
+                            <div>
+                              <div className="text-[10px] uppercase text-ink-faint">Source Balance Now</div>
+                              <div className="text-ink font-semibold">
+                                ৳{srcBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-[10px] uppercase text-ink-faint">কাটার পর থাকবে (After Payment)</div>
+                              <div className={`font-bold ${shortfall ? 'text-negative' : 'text-accent-strong'}`}>
+                                ৳{afterDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     <div className="flex justify-end gap-3 pt-3 border-t border-edge">
@@ -683,6 +718,33 @@ export const DpsView: React.FC = () => {
                 </select>
               </div>
 
+              {/* Source balance context (informational — first installment debits on open) */}
+              {formSourceId && (() => {
+                const srcBalance = getAccountBalance(formSourceId);
+                const afterDebit = srcBalance - parsedInstallment;
+                const shortfall = afterDebit < 0;
+                return (
+                  <div
+                    className={`rounded-lg border p-3 flex items-center justify-between gap-3 ${
+                      shortfall ? 'border-negative/40 bg-negative/10' : 'border-edge bg-canvas'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-[10px] uppercase text-ink-faint">Source Balance Now</div>
+                      <div className="text-ink font-semibold">
+                        ৳{srcBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] uppercase text-ink-faint">কাটার পর থাকবে (After 1st Installment)</div>
+                      <div className={`font-bold ${shortfall ? 'text-negative' : 'text-accent-strong'}`}>
+                        ৳{afterDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Monthly Installment (BDT)</label>
@@ -750,9 +812,15 @@ export const DpsView: React.FC = () => {
 
               {/* Live Maturity Preview Card */}
               {parsedInstallment > 0 && (
-                <div className="p-3.5 rounded-lg border border-edge bg-canvas space-y-1.5">
+                <div className="p-3.5 rounded-lg border border-edge bg-canvas space-y-2">
                   <div className="text-[11px] font-semibold text-accent-strong">Live Mathematical Projection:</div>
-                  <div className="grid grid-cols-3 gap-2 text-[11px]">
+                  <div>
+                    <div className="text-[10px] uppercase text-ink-faint">Net Maturity Value</div>
+                    <div className="text-2xl font-bold font-mono text-warning tracking-tight">
+                      ৳{previewCalc.netMaturityAmount.toLocaleString()}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-edge/70">
                     <div>
                       <div className="text-ink-faint">Total Invested:</div>
                       <div className="text-ink font-medium">৳{previewCalc.totalPrincipal.toLocaleString()}</div>
@@ -760,10 +828,6 @@ export const DpsView: React.FC = () => {
                     <div>
                       <div className="text-ink-faint">Gross Compound:</div>
                       <div className="text-accent-strong font-medium">৳{previewCalc.grossInterest.toLocaleString()}</div>
-                    </div>
-                    <div>
-                      <div className="text-ink-faint">Net Maturity Value:</div>
-                      <div className="text-warning font-bold">৳{previewCalc.netMaturityAmount.toLocaleString()}</div>
                     </div>
                   </div>
                   <div className="text-[10px] text-ink-faint pt-1">

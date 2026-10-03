@@ -40,7 +40,7 @@ const DEMO_BOND_IDS = new Set(['sb-001', 'sb-002', 'sb-003', 'sb-004']);
 
 export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }> = ({ onNavigate }) => {
   const { isBn } = useLanguage();
-  const { accounts, postTransaction } = useLedger();
+  const { accounts, postTransaction, getAccountBalance } = useLedger();
 
   // Primary list state with localStorage persistence, filtering out all testing/demo data
   const [bonds, setBonds] = useState<SanchayaBondItem[]>(() => {
@@ -379,10 +379,15 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2.5">
               <span>{isBn ? 'সঞ্চয়পত্র, ট্রেজারি বন্ড ও সুকুক ট্র্যাকার' : 'Sanchayapatra, Treasury Bonds & Sukuk Tracker'}</span>
             </h1>
-            <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
-              {isBn
+            <p
+              className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl truncate"
+              title={isBn
                 ? 'পরিবার সঞ্চয়পত্র, ৩-মাস অন্তর মুনাফা, পেনশনার সঞ্চয়পত্র, বাংলাদেশ ব্যাংক ট্রেজারি বন্ড (BGTB) ও সরকারি ইসলামিক সুকুকের মাসিক ক্যাশফ্লো এবং এনবিআর কর রেয়াত ব্যবস্থাপনা।'
                 : 'Track monthly cash flows, maturity schedules, AIT deductions, and NBR tax rebates for Poribar, 3-Month, Pensioner, Bangladesh Bank Treasury Bonds (BGTB), and Govt Islamic Sukuk.'}
+            >
+              {isBn
+                ? 'পরিবার, পেনশনার, BGTB ও সুকুক — মাসিক মুনাফা, মেয়াদ ও কর এক ট্র্যাকারে।'
+                : 'Poribar, Pensioner, BGTB & Sukuk — monthly profits, maturities and tax in one tracker.'}
             </p>
           </div>
 
@@ -596,6 +601,9 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 bond.taxDeductionRate
               );
 
+              // Next upcoming payout (existing schedule helper; skip badge when none)
+              const nextSched = generateUpcomingSchedule(bond, 1)[0];
+
               const freqLabel =
                 bond.payoutFrequency === 'monthly'
                   ? (isBn ? 'মাসিক' : 'Monthly')
@@ -633,6 +641,12 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                             {categoryBadge}
                           </span>
                           <span className="text-xs text-ink-muted font-mono">#{bond.certificateNumber}</span>
+                          {nextSched && (
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-canvas border border-edge text-ink-soft flex items-center gap-1">
+                              <CalendarClock className="h-3 w-3 text-accent-strong" />
+                              <span>{isBn ? 'পরবর্তী মুনাফা: ' : 'Next payout: '}{nextSched.paymentDate}</span>
+                            </span>
+                          )}
                         </div>
                         <h3 className="text-base font-bold text-ink mt-1">{bond.title}</h3>
                         <p className="text-xs text-ink-muted mt-0.5 flex items-center gap-1.5">
@@ -907,6 +921,14 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
 
                 return (
                   <div className="p-4 rounded-xl bg-canvas border border-edge space-y-3 font-mono text-xs mt-4">
+                    <div className="pb-2 border-b border-edge">
+                      <div className="text-[10px] uppercase text-ink-muted">
+                        {isBn ? 'প্রতি কিস্তিতে নিট জমা (EFT)' : 'Net Deposit per Period (EFT)'}
+                      </div>
+                      <div className="text-2xl font-extrabold text-accent-strong tracking-tight">
+                        {formatBDT(out.netPerPeriod)}
+                      </div>
+                    </div>
                     <div className="flex items-center justify-between text-ink-soft">
                       <span>{isBn ? 'বাৎসরিক মুনাফা হার:' : 'Annual Profit Rate:'}</span>
                       <span className="font-bold text-ink">{rate}%</span>
@@ -925,13 +947,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                       <span>{isBn ? 'কিস্তিতে কর কর্তন:' : 'Tax Deducted per Period:'}</span>
                       <span className="font-bold text-negative">- {formatBDT(out.taxPerPeriod)}</span>
                     </div>
-                    <div className="pt-2 border-t border-edge flex items-center justify-between text-sm">
-                      <span className="text-accent-strong font-bold">
-                        {isBn ? 'প্রতি কিস্তিতে নিট জমা (EFT):' : 'Net Deposit per Period (EFT):'}
-                      </span>
-                      <span className="text-lg font-extrabold text-accent-strong">{formatBDT(out.netPerPeriod)}</span>
-                    </div>
-                    <div className="flex items-center justify-between text-[11px] text-ink-muted">
+                    <div className="pt-2 border-t border-edge flex items-center justify-between text-[11px] text-ink-muted">
                       <span>{isBn ? 'বাৎসরিক নিট মোট প্যাসিভ আয়:' : 'Total Annual Net Passive Income:'}</span>
                       <span className="font-bold text-ink">{formatBDT(out.annualNet)}</span>
                     </div>
@@ -1292,6 +1308,37 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               />
             </Field>
           </div>
+
+          {/* Linked account balance context (informational only) */}
+          {linkedBankAccountId && (() => {
+            const srcBalance = getAccountBalance(linkedBankAccountId);
+            const afterDebit = srcBalance - (parseFloat(principalAmount) || 0);
+            const shortfall = afterDebit < 0;
+            return (
+              <div
+                className={`rounded-lg border p-3 flex items-center justify-between gap-3 text-xs font-mono ${
+                  shortfall ? 'border-negative/40 bg-negative/10' : 'border-edge bg-canvas'
+                }`}
+              >
+                <div>
+                  <div className="text-[10px] uppercase text-ink-faint">
+                    {isBn ? 'বর্তমান ব্যালেন্স' : 'Account Balance Now'}
+                  </div>
+                  <div className="text-ink font-semibold">
+                    ৳{srcBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-[10px] uppercase text-ink-faint">
+                    {isBn ? 'কাটার পর থাকবে' : 'After Purchase Debit'}
+                  </div>
+                  <div className={`font-bold ${shortfall ? 'text-negative' : 'text-accent-strong'}`}>
+                    ৳{afterDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
             <Button type="button" variant="secondary" onClick={() => setIsAddModalOpen(false)}>

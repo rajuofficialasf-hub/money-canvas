@@ -423,6 +423,38 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         </div>
       </div>
 
+      {/* UX-7: one-line portfolio summary strip (invested / market value / P-L / cash) */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 bg-surface/60 border border-edge rounded-xl px-4 py-2.5">
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-ink-muted">মোট Invested</span>
+          <span className="font-mono text-sm font-bold text-ink">
+            ৳{totalCostBasis.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </span>
+        </div>
+        <span className="text-ink-faint hidden sm:inline">·</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-ink-muted">বর্তমান Market Value</span>
+          <span className="font-mono text-sm font-bold text-ink">
+            ৳{totalMarketValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </span>
+        </div>
+        <span className="text-ink-faint hidden sm:inline">·</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-ink-muted">Unrealized P/L</span>
+          <span className={`font-mono text-sm font-bold ${totalUnrealizedGain >= 0 ? 'text-positive' : 'text-negative'}`}>
+            {totalUnrealizedGain >= 0 ? '+' : ''}৳{totalUnrealizedGain.toLocaleString(undefined, { maximumFractionDigits: 0 })}{' '}
+            ({totalUnrealizedGain >= 0 ? '+' : ''}{totalUnrealizedGainPct.toFixed(2)}%)
+          </span>
+        </div>
+        <span className="text-ink-faint hidden sm:inline">·</span>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[10px] uppercase tracking-wider text-ink-muted">Broker Cash</span>
+          <span className="font-mono text-sm font-bold text-ink">
+            ৳{totalBrokerCash.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </span>
+        </div>
+      </div>
+
       {/* DSE Live Market Feed & Multi-tier Synchronization Bar */}
       <div className="bg-surface/80 border border-edge rounded-xl p-3.5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
@@ -588,12 +620,15 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         />
       </div>
 
-      {/* Lock 4 & WAC Invariant Explanation Box */}
-      <div className="p-3.5 bg-surface/80 border border-accent/20 rounded-xl flex items-start gap-3">
-        <ShieldCheck className="h-5 w-5 text-accent-strong shrink-0 mt-0.5" />
-        <div className="text-xs text-ink-soft leading-relaxed">
-          <span className="font-semibold text-ink">Resilient Price Architecture:</span> Stock prices can be synced in real-time from StockChartBD or manually adjusted anytime. In all cases, buy trade charges are capitalized into WAC cost basis (<code className="text-accent-strong font-mono text-[11px]">Cost Basis = Gross + Charges</code>) and realized gains follow strict weighted cost standards.
-        </div>
+      {/* Lock 4 & WAC Invariant — compact one-liner, full explanation in tooltip (UX-7 declutter) */}
+      <div
+        className="px-3.5 py-2 bg-surface/80 border border-accent/20 rounded-xl flex items-center gap-2 text-xs text-ink-soft"
+        title="Resilient Price Architecture: Stock prices can be synced in real-time from StockChartBD or manually adjusted anytime. In all cases, buy trade charges are capitalized into WAC cost basis (Cost Basis = Gross + Charges) and realized gains follow strict weighted cost standards."
+      >
+        <ShieldCheck className="h-4 w-4 text-accent-strong shrink-0" />
+        <span className="truncate">
+          <span className="font-semibold text-ink">Resilient Price Architecture:</span> API/manual price sync · <code className="text-accent-strong font-mono text-[11px]">WAC Cost Basis = Gross + Charges</code>
+        </span>
       </div>
 
       {/* Filters and Search Bar */}

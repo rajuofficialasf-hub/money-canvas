@@ -255,10 +255,15 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             {isBn ? 'বাজুস স্বর্ণের দর ও কারেন্সি এক্সচেঞ্জ' : 'BAJUS Gold & FX Exchange Rates'}
           </h1>
-          <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
-            {isBn
+          <p
+            className="text-ink-muted text-xs sm:text-sm mt-1 max-w-3xl truncate"
+            title={isBn
               ? 'বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS) নির্ধারিত হলমার্কযুক্ত ২২, ২১, ১৮ ক্যারেট সোনা-রূপার দর, গহনা মেকিং চার্জ এবং বাংলাদেশ ব্যাংক ও খোলা বাজার বৈদেশিক মুদ্রা বিনিময়।'
               : 'Official BAJUS hallmarked gold & silver benchmark rates, jewelry making charges, and Bangladesh Bank / Kerb market foreign currency exchange.'}
+          >
+            {isBn
+              ? 'বাজুস সোনা-রূপার দর, মেকিং চার্জ ও কারেন্সি রেট — এক পাতাতে।'
+              : 'BAJUS gold & silver rates, making charges and FX rates — in one place.'}
           </p>
         </div>
 
@@ -785,6 +790,16 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   </span>
                 </div>
 
+                {/* One-glance result summary */}
+                <div className="mt-3 p-3.5 rounded-xl bg-canvas border border-warning/40">
+                  <div className="text-[10px] font-mono uppercase text-ink-muted">
+                    {isBn ? 'সর্বমোট ক্রয়মূল্য (Total Retail)' : 'Total Retail Price'}
+                  </div>
+                  <div className="text-3xl font-bold font-mono text-warning tracking-tight">
+                    ৳{jewelryCalc.totalPrice.toLocaleString()}
+                  </div>
+                </div>
+
                 <div className="divide-y divide-edge/70 text-xs font-mono mt-3 space-y-2">
                   <div className="flex justify-between text-ink-muted pt-2">
                     <span>{isBn ? 'স্বর্ণের বিশুদ্ধ মূল্য (Gold Net Cost):' : 'Pure Gold Value:'}</span>
@@ -806,12 +821,6 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                     <span className="text-accent-strong font-bold">+৳{jewelryCalc.vatAmount.toLocaleString()}</span>
                   </div>
 
-                  <div className="flex justify-between items-center text-sm font-bold pt-3 text-ink border-t-2 border-warning/40">
-                    <span className="text-warning">{isBn ? 'সর্বমোট ক্রয়মূল্য (Total Retail):' : 'Total Retail Price:'}</span>
-                    <span className="text-xl text-warning font-mono">
-                      ৳{jewelryCalc.totalPrice.toLocaleString()}
-                    </span>
-                  </div>
                 </div>
               </div>
 

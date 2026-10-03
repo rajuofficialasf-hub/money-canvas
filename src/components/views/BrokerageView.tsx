@@ -665,31 +665,6 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                   Direct Cash directly increases your total wealth &amp; BO ledger. Bank transfer moves funds from your bank.
                 </p>
 
-                {/* Insufficient Funds Guidance Banner */}
-                {(() => {
-                  const isBankSelected = depositBankAccountId !== 'direct_deposit' && depositBankAccountId !== 'external_cash';
-                  const selectedBankAcc = accounts.find((a) => a.id === depositBankAccountId);
-                  const selectedBankBal = selectedBankAcc ? getAccountBalance(selectedBankAcc.id) : 0;
-                  const parsedDepAmt = typeof depositAmount === 'number' ? depositAmount : parseFloat(depositAmount as string) || 0;
-                  const isBankInsufficient = isBankSelected && parsedDepAmt > selectedBankBal;
-
-                  if (!isBankInsufficient) return null;
-
-                  return (
-                    <div className="mt-2.5 p-3 bg-warning/10 border border-warning/30 rounded-xl text-xs text-warning space-y-1.5 animate-in fade-in">
-                      <div className="flex items-center gap-1.5 font-semibold text-amber-200">
-                        <AlertCircle className="w-4 h-4 text-warning shrink-0" />
-                        <span>অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই (Insufficient Funds)</span>
-                      </div>
-                      <div className="text-[11px] text-ink-soft leading-relaxed">
-                        "{selectedBankAcc?.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold font-mono text-warning">৳{selectedBankBal.toLocaleString()}</span>, কিন্তু আপনি <span className="font-bold font-mono text-ink">৳{parsedDepAmt.toLocaleString()}</span> ট্রান্সফার করতে চেয়েছেন।
-                      </div>
-                      <div className="text-[11px] text-accent-strong font-medium bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-lg">
-                        💡 <span className="font-bold">করণীয়:</span> বিও অ্যাকাউন্টে টাকা পাঠানোর পূর্বে অনুগ্রহ করে প্রথমে আপনার ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। অথবা নগদ অর্থ জমা দেওয়ার জন্য উপরের ড্রপডাউনে <span className="underline font-bold text-emerald-200">'Direct Cash (Fresh Capital)'</span> নির্বাচন করুন।
-                      </div>
-                    </div>
-                  );
-                })()}
               </div>
 
               <Field label="Deposit Amount (BDT)" required>
@@ -705,6 +680,56 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                   }
                 />
               </Field>
+
+              {/* UX-7: funding-source balance context (UX-2 pattern) — replaces the old 3-block guidance banner */}
+              {(() => {
+                const amt = typeof depositAmount === 'number' ? depositAmount : 0;
+                const isBank = depositBankAccountId !== 'direct_deposit' && depositBankAccountId !== 'external_cash';
+                const srcAcc = isBank ? accounts.find((a) => a.id === depositBankAccountId) : undefined;
+                const bankBal = isBank ? getAccountBalance(depositBankAccountId) : 0;
+                const bankAfter = bankBal - amt;
+                const targetBo = depositBoAccountId || brokerAccounts[0]?.id;
+                const boBal = brokerCashBalances.find((b) => b.brokerAccountId === targetBo)?.cashBalance || 0;
+                const boAfter = boBal + amt;
+                const short = isBank && amt > 0 && bankAfter < 0;
+                return (
+                  <div
+                    className={`rounded-lg border p-2.5 space-y-1 text-xs font-mono ${
+                      short ? 'bg-rose-950/40 border-negative/50' : 'bg-canvas border-edge'
+                    }`}
+                    title={
+                      short
+                        ? `"${srcAcc?.name || 'Bank'}" — আগে ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন, অথবা উপরের ড্রপডাউনে 'Direct Cash (Fresh Capital)' নির্বাচন করুন। / Deposit into the bank account first, or select 'Direct Cash (Fresh Capital)' above.`
+                        : undefined
+                    }
+                  >
+                    {isBank ? (
+                      <div className="flex items-center justify-between">
+                        <span className={short ? 'text-negative' : 'text-ink-soft'}>
+                          ব্যাংকে আছে: ৳{bankBal.toLocaleString()}
+                        </span>
+                        <span className={short ? 'text-negative font-bold' : 'text-ink font-bold'}>
+                          ডিপোজিটের পর: ৳{bankAfter.toLocaleString()}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="text-ink-muted">Direct Cash / External — Fresh Capital</div>
+                    )}
+                    <div className="flex items-center justify-between text-ink-soft">
+                      <span>BO ক্যাশ এখন: ৳{boBal.toLocaleString()}</span>
+                      <span className="text-ink font-bold">জমার পর: ৳{boAfter.toLocaleString()}</span>
+                    </div>
+                    {short && (
+                      <div className="flex items-center gap-1.5 text-negative font-sans">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>
+                          অপর্যাপ্ত ব্যালেন্স — আগে ব্যাংকে টাকা জমা করুন, অথবা 'Direct Cash (Fresh Capital)' নির্বাচন করুন (Insufficient funds)
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               <Field label="Notes / Reference">
                 <Input

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
 import { useLanguage } from '../../lib/language-context';
+import { Button } from '../ui';
 import {
   Wallet,
   CreditCard,
@@ -22,6 +23,11 @@ import {
   Repeat,
   Target,
   Flame,
+  TrendingDown,
+  ArrowLeftRight,
+  CandlestickChart,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 
 interface DashboardViewProps {
@@ -38,6 +44,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     accountBalances,
     transactions,
     transactionLines,
+    categories,
     budgets,
     recurringTransactions,
     financialGoals,
@@ -51,6 +58,45 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
     getCategorySpent,
     systemAlerts,
   } = useLedger();
+
+  // UX-5: collapsible "More features" group (default collapsed)
+  const [showMoreFeatures, setShowMoreFeatures] = useState(false);
+
+  // UX-5: hero at-a-glance numbers (liquid cash, this month's income/expense, net cashflow)
+  const heroStats = useMemo(() => {
+    const liquidTypes = new Set(['cash', 'bank', 'mobile_wallet']);
+    const liquidCash = accountBalances.reduce((sum, b) => {
+      const acc = accounts.find((a) => a.id === b.accountId);
+      if (!acc || acc.isArchived || !liquidTypes.has(acc.accountType)) return sum;
+      return sum + b.currentBalance;
+    }, 0);
+
+    const month = new Date().toISOString().slice(0, 7);
+    const postedMonthTxIds = new Set(
+      transactions
+        .filter((tx) => tx.status === 'posted' && tx.date.slice(0, 7) === month)
+        .map((tx) => tx.id)
+    );
+    const categoryTypeById = new Map(categories.map((c) => [c.id, c.type]));
+
+    let monthIncome = 0;
+    let monthExpense = 0;
+    for (const line of transactionLines) {
+      if (line.lineType !== 'category' || !line.categoryId) continue;
+      if (!postedMonthTxIds.has(line.transactionId)) continue;
+      const catType = categoryTypeById.get(line.categoryId);
+      // App convention: income category lines are NEGATIVE, expense category lines POSITIVE
+      if (catType === 'income') monthIncome += -line.amount;
+      else if (catType === 'expense') monthExpense += line.amount;
+    }
+
+    return {
+      liquidCash,
+      monthIncome,
+      monthExpense,
+      netCashflow: monthIncome - monthExpense,
+    };
+  }, [accounts, accountBalances, transactions, transactionLines, categories]);
 
   // Invariant-derived state from ledger
   const activeBalances = accountBalances.filter((b) => {
@@ -125,6 +171,78 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
+      {/* UX-5: Hero At-a-Glance Band */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Total Liquid Cash */}
+        <div className="rounded-xl border border-edge bg-surface/50 p-5 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-ink-muted">
+              মোট লিকুইড ক্যাশ · Liquid Cash
+            </span>
+            <Wallet className="h-4 w-4 text-accent-strong shrink-0" />
+          </div>
+          <div className="text-3xl font-bold font-mono text-ink tracking-tight">
+            ৳{heroStats.liquidCash.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </div>
+          <div className="text-[11px] text-ink-faint font-mono">
+            ব্যাংক + ক্যাশ + মোবাইল ওয়ালেট
+          </div>
+        </div>
+
+        {/* This Month Income & Expense */}
+        <div className="rounded-xl border border-edge bg-surface/50 p-5 space-y-2">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-ink-muted">
+            এ মাসের আয় ও ব্যয় · This Month
+          </div>
+          <div className="flex items-baseline gap-5 flex-wrap">
+            <div>
+              <div className="text-2xl font-bold font-mono text-positive tracking-tight">
+                ৳{heroStats.monthIncome.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </div>
+              <div className="text-[10px] font-mono uppercase text-ink-faint">আয় · Income</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold font-mono text-negative tracking-tight">
+                ৳{heroStats.monthExpense.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+              </div>
+              <div className="text-[10px] font-mono uppercase text-ink-faint">ব্যয় · Expense</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Net Cashflow */}
+        <div className="rounded-xl border border-edge bg-surface/50 p-5 space-y-2">
+          <div className="text-[11px] font-mono uppercase tracking-wider text-ink-muted">
+            নেট ক্যাশফ্লো · Net Cashflow
+          </div>
+          <div
+            className={`text-3xl font-bold font-mono tracking-tight ${
+              heroStats.netCashflow >= 0 ? 'text-positive' : 'text-negative'
+            }`}
+          >
+            {heroStats.netCashflow < 0 ? '-' : ''}৳
+            {Math.abs(heroStats.netCashflow).toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </div>
+          <div className="text-[11px] text-ink-faint font-mono">আয় − ব্যয় (posted)</div>
+        </div>
+      </div>
+
+      {/* UX-5: Quick Actions Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <Button variant="secondary" size="lg" icon={TrendingDown} onClick={() => onNavigate('ledger')} className="w-full">
+          খরচ লিখুন
+        </Button>
+        <Button variant="secondary" size="lg" icon={TrendingUp} onClick={() => onNavigate('ledger')} className="w-full">
+          আয় লিখুন
+        </Button>
+        <Button variant="secondary" size="lg" icon={ArrowLeftRight} onClick={() => onNavigate('ledger')} className="w-full">
+          ট্রান্সফার
+        </Button>
+        <Button variant="secondary" size="lg" icon={CandlestickChart} onClick={() => onNavigate('trades')} className="w-full">
+          ট্রেড
+        </Button>
+      </div>
+
       {/* Financial Reminders & Alerts Callout */}
       {systemAlerts.length > 0 && (
         <div
@@ -168,6 +286,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             Weathfolio is initialized completely clean with zero demo data. You can start by setting up your real accounts (Cash, Bank, Mobile Wallets), recording initial opening balances or journal entries, and tracking your stock portfolio.
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-1">
+            {accounts.length === 0 && (
+              <Button
+                variant="primary"
+                size="md"
+                icon={Plus}
+                onClick={() => onNavigate('accounts')}
+              >
+                প্রথম অ্যাকাউন্ট যোগ করুন
+              </Button>
+            )}
             <button
               onClick={() => onNavigate('accounts')}
               className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink text-xs font-semibold font-mono transition-colors shadow-sm"
@@ -350,6 +478,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
       </div>
 
+      {/* UX-5: More Features — collapsible group of less-used callouts (nothing removed, only collapsed) */}
+      <div className="space-y-6">
+        <button
+          type="button"
+          onClick={() => setShowMoreFeatures((v) => !v)}
+          aria-expanded={showMoreFeatures}
+          className="w-full flex items-center justify-between rounded-xl border border-edge bg-surface/40 hover:bg-raised/40 px-4 py-3 transition-colors cursor-pointer"
+        >
+          <span className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-ink-soft">
+            <span>আরও ফিচার (More features)</span>
+            <span className="px-1.5 py-0.5 rounded bg-raised text-ink-muted text-[10px] font-bold">
+              12
+            </span>
+          </span>
+          {showMoreFeatures ? (
+            <ChevronUp className="h-4 w-4 text-ink-muted shrink-0" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-ink-muted shrink-0" />
+          )}
+        </button>
+
+        {showMoreFeatures && (
+          <>
       {/* Credit, Assets & Wealth Overview Widgets */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -643,6 +794,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <span>{t('dashOpenFirePlanner')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>
+      </div>
+          </>
+        )}
       </div>
 
       {/* Two Column Grid: Accounts Overview & Recent Movements */}

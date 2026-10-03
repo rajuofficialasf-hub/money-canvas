@@ -360,6 +360,10 @@ export const AccountsView: React.FC = () => {
                 value={initialBalance}
                 onChange={(e) => setInitialBalance(e.target.value)}
               />
+              <p className="mt-1 text-[10px] text-ink-muted font-sans leading-relaxed">
+                এই টাকা একটি ওপেনিং-ব্যালেন্স জার্নাল এন্ট্রি হিসেবে লেজারে পোস্ট হবে।{' '}
+                Posted to the ledger as an opening-balance journal entry.
+              </p>
             </Field>
           </div>
 

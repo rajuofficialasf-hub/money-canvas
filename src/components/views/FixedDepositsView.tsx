@@ -235,10 +235,18 @@ export const FixedDepositsView: React.FC = () => {
                       )}
                     </div>
 
-                    <div>
+                    <div className="flex flex-col items-end gap-1">
                       {isActive && (
                         <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/40 text-accent-strong border border-accent/30">
                           Active · {daysRemaining}d left
+                        </span>
+                      )}
+                      {isActive && (
+                        <span
+                          className="text-[10px] font-mono px-2 py-0.5 rounded bg-canvas text-ink-soft border border-edge"
+                          title="Maturity date"
+                        >
+                          Matures {fd.maturityDate}
                         </span>
                       )}
                       {isMatured && (
@@ -366,6 +374,33 @@ export const FixedDepositsView: React.FC = () => {
                 </div>
               </div>
 
+              {/* Source balance context (informational — engine validates on submit) */}
+              {sourceAccountId && (() => {
+                const srcBalance = getAccountBalance(sourceAccountId);
+                const afterDebit = srcBalance - parsedPrincipal;
+                const shortfall = afterDebit < 0;
+                return (
+                  <div
+                    className={`rounded-lg border p-3 flex items-center justify-between gap-3 text-xs font-mono ${
+                      shortfall ? 'border-negative/40 bg-negative/10' : 'border-edge bg-canvas'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-[10px] uppercase text-ink-faint">Source Balance Now</div>
+                      <div className="text-ink font-semibold">
+                        ৳{srcBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[10px] uppercase text-ink-faint">কাটার পর থাকবে (After FD Debit)</div>
+                      <div className={`font-bold ${shortfall ? 'text-negative' : 'text-accent-strong'}`}>
+                        ৳{afterDebit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-ink-muted mb-1">Principal Amount (৳) *</label>
@@ -461,7 +496,14 @@ export const FixedDepositsView: React.FC = () => {
                   <span className="text-accent-strong font-semibold">{compoundingFrequency} compounding</span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-edge/80">
+                <div className="pt-2 border-t border-edge/80">
+                  <div className="text-[10px] uppercase text-ink-faint">Net Maturity Value</div>
+                  <div className="text-2xl font-bold font-mono text-accent-strong tracking-tight">
+                    ৳{previewCalc.netMaturityAmount.toLocaleString()}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 pt-1 border-t border-edge/80">
                   <div>
                     <span className="text-ink-faint">Gross Interest: </span>
                     <span className="text-ink font-semibold">৳{previewCalc.grossInterest.toLocaleString()}</span>
@@ -473,10 +515,6 @@ export const FixedDepositsView: React.FC = () => {
                   <div>
                     <span className="text-ink-faint">Net Interest: </span>
                     <span className="text-accent-strong font-semibold">৳{previewCalc.netInterest.toLocaleString()}</span>
-                  </div>
-                  <div>
-                    <span className="text-ink-faint">Net Maturity Value: </span>
-                    <span className="text-sky-400 font-bold">৳{previewCalc.netMaturityAmount.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -578,11 +616,11 @@ export const FixedDepositsView: React.FC = () => {
               </button>
             </div>
 
-            <div className="rounded-lg bg-rose-950/20 p-4 border border-negative/30 space-y-2 font-mono">
-              <div className="text-negative font-semibold">Warning: Premature Breaking</div>
-              <p className="text-ink-muted text-[11px] font-sans">
-                Early withdrawal incurs bank penalties. Original interest rate was {activeFdToBreak.interestRate}%.
-              </p>
+            <div
+              className="rounded-lg bg-rose-950/20 p-3 border border-negative/30 font-mono text-negative font-semibold"
+              title={`Early withdrawal incurs bank penalties. Original interest rate was ${activeFdToBreak.interestRate}%.`}
+            >
+              Warning: Premature break — penalty applies (original rate {activeFdToBreak.interestRate}%)
             </div>
 
             <div className="font-mono space-y-3">

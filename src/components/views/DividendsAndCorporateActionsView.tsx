@@ -337,19 +337,22 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
       {/* Top Header & Actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-gray-200 pb-5">
         <div>
-          <div className="flex items-center gap-2">
+          {/* UX-7 declutter: badge row + long subtitle merged into one line; full text in tooltip */}
+          <div
+            className="flex items-center gap-2"
+            title="DSE / CSE Regulatory Sub-Ledger — deterministic gross cash dividend tracking, 10% AIT tax withholding, bonus dilution, stock splits, and IPO subscriptions."
+          >
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
               Tax Compliant
             </span>
-            <span className="text-xs text-gray-500">DSE / CSE Regulatory Sub-Ledger</span>
+            <span className="text-xs text-gray-500 truncate">
+              DSE/CSE Sub-Ledger · dividends · 10% AIT · bonus/split · IPO
+            </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 flex items-center gap-2.5">
             <Coins className="w-6 h-6 sm:w-7 h-7 text-accent-deep shrink-0" />
             Dividends & Corporate Actions
           </h1>
-          <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
-            Deterministic gross cash dividend tracking, 10% AIT tax withholding, bonus dilution, stock splits, and IPO subscriptions.
-          </p>
         </div>
 
         {/* Action Buttons */}
@@ -1056,6 +1059,24 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                 </span>
               </div>
             </div>
+            {/* UX-7: receiving BO cash — now vs after credit */}
+            {(() => {
+              const boCash =
+                brokerCashBalances.find((b) => b.brokerAccountId === divBrokerAcc)?.cashBalance || 0;
+              const boAfter = boCash + liveDivPreview.netDividend;
+              return (
+                <div className="flex items-center justify-between pt-2 border-t border-edge/60 font-mono text-[11px]">
+                  <span className="text-ink-muted">
+                    BO ক্যাশ এখন: ৳{boCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </span>
+                  <span className="text-ink font-bold">
+                    {divIsExternal
+                      ? 'ক্রেডিটের পর: অপরিবর্তিত (External Bank Payout)'
+                      : `ক্রেডিটের পর: ৳${boAfter.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+                  </span>
+                </div>
+              );
+            })()}
           </div>
 
           <Field label="Notes & Reference">
@@ -1383,6 +1404,17 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-canvas border border-edge rounded-lg text-indigo-400">
                 ৳{ipoTotalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
+              {/* UX-7: post-application remaining BO cash */}
+              <div
+                className={`mt-1 flex items-center justify-between font-mono text-[11px] ${
+                  availableBrokerCash - ipoTotalAmount < 0 ? 'text-negative' : 'text-ink-muted'
+                }`}
+              >
+                <span>আবেদনের পর থাকবে:</span>
+                <span className="font-bold">
+                  ৳{(availableBrokerCash - ipoTotalAmount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </span>
+              </div>
             </Field>
           </div>
 
@@ -1390,10 +1422,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
           {availableBrokerCash < ipoTotalAmount && (
             <ErrorBanner
               variant="warning"
-              message={
-                <>
-BENGALI_LINE                </>
-              }
+              message={`অপর্যাপ্ত ব্যালেন্স: বিও অ্যাকাউন্টে আছে ৳${availableBrokerCash.toLocaleString()}, কিন্তু সাবস্ক্রিপশনে দরকার ৳${ipoTotalAmount.toLocaleString()}। আবেদনের আগে বিও অ্যাকাউন্টে টাকা ডিপোজিট করুন। / Insufficient BO cash: available ৳${availableBrokerCash.toLocaleString()}, required ৳${ipoTotalAmount.toLocaleString()}. Deposit cash into the BO account first.`}
             />
           )}
 

@@ -21,6 +21,8 @@ import {
   FolderPlus,
   MessageSquare,
   FileSpreadsheet,
+  Upload,
+  ChevronDown,
 } from 'lucide-react';
 import { Modal, Field, Input, Select, Button, ErrorBanner } from '../ui';
 
@@ -49,6 +51,8 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
   // immutable — corrections are always void + counter-entry, never in-place).
   const [editingTxId, setEditingTxId] = useState<string | null>(null);
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  // UX-6: compact header "Import" dropdown (CSV import + SMS parser)
+  const [isImportMenuOpen, setIsImportMenuOpen] = useState(false);
 
   // Form State for Quick / Guided Transaction
   const [entryMode, setEntryMode] = useState<'expense' | 'income' | 'transfer' | 'split'>('expense');
@@ -358,25 +362,71 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
         <div className="flex items-center gap-2 flex-wrap">
           {onNavigate && (
-            <>
+            <div className="relative">
               <button
-                onClick={() => onNavigate('csv_import')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 text-sky-300 text-xs font-semibold border border-sky-500/30 transition-all shadow-sm cursor-pointer"
-                title="Import transactions from Bank / bKash / Nagad statement CSV"
+                type="button"
+                onClick={() => setIsImportMenuOpen((v) => !v)}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface hover:bg-raised text-ink-soft text-xs font-semibold border border-edge transition-all shadow-sm cursor-pointer"
+                title="Import transactions from CSV statements or SMS alerts"
+                aria-haspopup="menu"
+                aria-expanded={isImportMenuOpen}
               >
-                <FileSpreadsheet className="h-3.5 w-3.5 text-sky-400" />
-                <span>CSV স্টেটমেন্ট ইমপোর্ট</span>
+                <Upload className="h-3.5 w-3.5 text-accent-strong" />
+                <span>Import</span>
+                <ChevronDown
+                  className={`h-3 w-3 text-ink-muted transition-transform ${isImportMenuOpen ? 'rotate-180' : ''}`}
+                />
               </button>
 
-              <button
-                onClick={() => onNavigate('sms_parser')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent-strong text-xs font-semibold border border-accent/30 transition-all shadow-sm cursor-pointer"
-                title="Parse SMS from bKash, Nagad, Rocket or Bank alerts"
-              >
-                <MessageSquare className="h-3.5 w-3.5 text-accent-strong" />
-                <span>SMS পার্সার (100% Free)</span>
-              </button>
-            </>
+              {isImportMenuOpen && (
+                <>
+                  {/* click-away backdrop */}
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setIsImportMenuOpen(false)}
+                    aria-hidden="true"
+                  />
+                  <div
+                    role="menu"
+                    className="absolute right-0 mt-1.5 w-64 rounded-lg border border-edge bg-raised shadow-lg z-20 p-1"
+                  >
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsImportMenuOpen(false);
+                        onNavigate('csv_import');
+                      }}
+                      className="w-full flex items-start gap-2 px-3 py-2 rounded-md hover:bg-surface text-left transition-colors cursor-pointer"
+                      title="Import transactions from Bank / bKash / Nagad statement CSV"
+                    >
+                      <FileSpreadsheet className="h-3.5 w-3.5 text-sky-400 mt-0.5 shrink-0" />
+                      <span className="min-w-0">
+                        <span className="block text-xs font-semibold text-ink">CSV স্টেটমেন্ট ইমপোর্ট</span>
+                        <span className="block text-[10px] text-ink-muted">Bank / bKash / Nagad statement CSV</span>
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setIsImportMenuOpen(false);
+                        onNavigate('sms_parser');
+                      }}
+                      className="w-full flex items-start gap-2 px-3 py-2 rounded-md hover:bg-surface text-left transition-colors cursor-pointer"
+                      title="Parse SMS from bKash, Nagad, Rocket or Bank alerts"
+                    >
+                      <MessageSquare className="h-3.5 w-3.5 text-accent-strong mt-0.5 shrink-0" />
+                      <span className="min-w-0">
+                        <span className="block text-xs font-semibold text-ink">SMS পার্সার (100% Free)</span>
+                        <span className="block text-[10px] text-ink-muted">bKash, Nagad, Rocket or Bank alerts</span>
+                      </span>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           )}
 
           <Button
@@ -782,6 +832,118 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                   </Select>
                 </div>
               )}
+
+              {/* UX-6: Balance context card — live balance & after-post preview (informational, never blocks) */}
+              {(() => {
+                const srcAcc = accounts.find((a) => a.id === selectedAccount);
+                if (!srcAcc) return null;
+
+                const parsedAmt = parseFloat(amount) || 0;
+                const srcBal = getAccountBalance(srcAcc.id);
+                // Per-mode signed effect on the selected (source) account:
+                //   expense/split: -amount (split uses the total field — same as the posted account line)
+                //   income:        +amount
+                //   transfer:      source -amount, destination +amount
+                const srcAfter = entryMode === 'income' ? srcBal + parsedAmt : srcBal - parsedAmt;
+
+                const dstAcc =
+                  entryMode === 'transfer'
+                    ? accounts.find((a) => a.id === destinationAccount)
+                    : undefined;
+                const dstBal = dstAcc ? getAccountBalance(dstAcc.id) : 0;
+                const dstAfter = dstBal + parsedAmt;
+
+                const isLiquidType = ['cash', 'bank', 'mobile_wallet'].includes(srcAcc.accountType);
+                const wouldOverdraw =
+                  entryMode !== 'income' && parsedAmt > 0 && isLiquidType && srcAfter < 0;
+
+                const fmt = (n: number) =>
+                  n < 0
+                    ? `-৳${Math.abs(n).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+                    : `৳${n.toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+
+                return (
+                  <div
+                    className={`rounded-xl border p-3 transition-colors ${
+                      wouldOverdraw ? 'border-negative/50 bg-negative/10' : 'bg-canvas border-edge'
+                    }`}
+                  >
+                    {entryMode === 'transfer' ? (
+                      <div className="space-y-1.5">
+                        <div className="text-[10px] uppercase font-mono text-ink-faint">
+                          ট্রান্সফার প্রিভিউ (Transfer Preview)
+                        </div>
+                        <div className="flex items-center justify-between gap-2 text-xs font-mono">
+                          <span className="text-ink-soft truncate min-w-0">{srcAcc.name}</span>
+                          <span className="shrink-0 whitespace-nowrap">
+                            <span className="text-ink">{fmt(srcBal)}</span>
+                            <span className="text-warning"> −{fmt(parsedAmt)} → </span>
+                            <span className={`font-bold ${srcAfter < 0 ? 'text-negative' : 'text-ink'}`}>
+                              {fmt(srcAfter)}
+                            </span>
+                          </span>
+                        </div>
+                        {dstAcc && (
+                          <div className="flex items-center justify-between gap-2 text-xs font-mono">
+                            <span className="text-ink-soft truncate min-w-0">{dstAcc.name}</span>
+                            <span className="shrink-0 whitespace-nowrap">
+                              <span className="text-ink">{fmt(dstBal)}</span>
+                              <span className="text-positive"> +{fmt(parsedAmt)} → </span>
+                              <span className="font-bold text-ink">{fmt(dstAfter)}</span>
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-edge/80">
+                        <div>
+                          <div className="text-[10px] uppercase font-mono text-ink-faint">
+                            ব্যালেন্স এখন (Now)
+                          </div>
+                          <div className="text-sm sm:text-base font-bold font-mono text-ink mt-0.5">
+                            {fmt(srcBal)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase font-mono text-ink-faint">
+                            {entryMode === 'income' ? 'জমা হবে' : 'খরচ হবে'}
+                          </div>
+                          <div
+                            className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                              entryMode === 'income' ? 'text-positive' : 'text-warning'
+                            }`}
+                          >
+                            {entryMode === 'income' ? '+' : '−'}
+                            {fmt(parsedAmt)}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase font-mono text-ink-faint">
+                            পোস্টের পর (After)
+                          </div>
+                          <div
+                            className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                              srcAfter < 0 ? 'text-negative' : 'text-ink'
+                            }`}
+                          >
+                            {fmt(srcAfter)}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {wouldOverdraw && (
+                      <p
+                        className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed"
+                        role="alert"
+                      >
+                        ⚠️ পোস্ট করলে &quot;{srcAcc.name}&quot; অ্যাকাউন্টের ব্যালেন্স শূন্যের নিচে চলে যাবে ({fmt(srcAfter)})।{' '}
+                        This would push the account balance below zero — review before posting.
+                      </p>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Category for Expense / Income */}
               {(entryMode === 'expense' || entryMode === 'income') && (
