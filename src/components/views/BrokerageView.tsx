@@ -791,6 +791,27 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             />
           </Field>
 
+          {/* UX-2: post-withdrawal balance preview */}
+          {(() => {
+            const wdBal =
+              brokerCashBalances.find((b) => b.brokerAccountId === withdrawBoAccountId)?.cashBalance || 0;
+            const amt = typeof withdrawAmount === 'number' ? withdrawAmount : 0;
+            const after = wdBal - amt;
+            const short = amt > 0 && after < 0;
+            return (
+              <div
+                className={`rounded-lg border p-2.5 flex items-center justify-between text-xs font-mono ${
+                  short ? 'bg-rose-950/40 border-rose-500/50 text-rose-300' : 'bg-slate-950 border-slate-800 text-slate-300'
+                }`}
+              >
+                <span>ক্যাশ আছে: ৳{wdBal.toLocaleString()}</span>
+                <span className={short ? 'text-rose-300 font-bold' : after === wdBal ? 'text-slate-500' : 'text-white font-bold'}>
+                  উত্তোলনের পর: ৳{after.toLocaleString()}
+                </span>
+              </div>
+            );
+          })()}
+
           <Field label="Notes / Reference">
             <Input
               type="text"

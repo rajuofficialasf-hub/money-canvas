@@ -128,6 +128,15 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
     otherCharges: numOther,
   });
 
+  // UX-2: balance context — what this order does to the BO cash position
+  const cashAfterTrade =
+    tradeType === 'buy' ? availableCash - liveValues.netValue : availableCash + liveValues.netValue;
+  const sharesAfterTrade =
+    tradeType === 'sell' ? Math.max(0, availableSharesToSell - numQty) : availableSharesToSell + numQty;
+  const hasInsufficientCash = tradeType === 'buy' && numQty > 0 && availableCash < liveValues.netValue;
+  const hasInsufficientShares = tradeType === 'sell' && numQty > 0 && availableSharesToSell < numQty;
+  const hasBlockingIssue = hasInsufficientCash || hasInsufficientShares;
+
   const [isRefreshingLivePrice, setIsRefreshingLivePrice] = useState(false);
   const [livePriceFeedback, setLivePriceFeedback] = useState<string | null>(null);
 
@@ -621,6 +630,69 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                 </Select>
               </div>
 
+              {/* UX-2: Balance Context Panel — always-visible cash position */}
+              <div
+                className={`rounded-xl border p-3 transition-colors ${
+                  hasBlockingIssue
+                    ? 'bg-rose-950/40 border-rose-500/50'
+                    : 'bg-slate-950 border-slate-800'
+                }`}
+              >
+                <div className="grid grid-cols-3 gap-2 text-center divide-x divide-slate-800/80">
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-slate-500">
+                      ক্যাশ আছে (Now)
+                    </div>
+                    <div className="text-sm sm:text-base font-bold font-mono text-sky-300 mt-0.5">
+                      ৳{availableCash.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-slate-500">
+                      {tradeType === 'buy' ? 'এই অর্ডারের খরচ' : 'নেট পাবেন'}
+                    </div>
+                    <div
+                      className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                        tradeType === 'buy' ? 'text-amber-300' : 'text-emerald-300'
+                      }`}
+                    >
+                      {tradeType === 'buy' ? '−' : '+'}৳
+                      {liveValues.netValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                    {tradeType === 'sell' && (
+                      <div className="text-[10px] font-mono text-slate-500 mt-0.5">
+                        বিক্রির পর শেয়ার: {sharesAfterTrade.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-slate-500">
+                      অর্ডারের পর থাকবে
+                    </div>
+                    <div
+                      className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                        cashAfterTrade < 0 ? 'text-rose-400' : 'text-white'
+                      }`}
+                    >
+                      ৳{cashAfterTrade.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                </div>
+
+                {hasInsufficientCash && (
+                  <p className="mt-2 pt-2 border-t border-rose-500/30 text-[11px] text-rose-300 leading-relaxed" role="alert">
+                    ⚠️ পর্যাপ্ত ক্যাশ নেই — আছে ৳{availableCash.toLocaleString()}, দরকার ৳
+                    {liveValues.netValue.toLocaleString()}। আগে এই BO-তে ক্যাশ ডিপোজিট করুন।
+                  </p>
+                )}
+                {hasInsufficientShares && (
+                  <p className="mt-2 pt-2 border-t border-rose-500/30 text-[11px] text-rose-300 leading-relaxed" role="alert">
+                    ⚠️ পর্যাপ্ত শেয়ার নেই — এই BO-তে আছে {availableSharesToSell.toLocaleString()}টি, বিক্রি করতে চাইছেন{' '}
+                    {numQty.toLocaleString()}টি। শর্ট-সেলিং অনুমোদিত নয়।
+                  </p>
+                )}
+              </div>
+
               {/* Security / Stock Selector */}
               {tradeType === 'sell' ? (
                 /* SELL ORDER: HOLDINGS SELECTOR */
@@ -1046,27 +1118,6 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   </div>
                 </div>
               </div>
-
-              {/* Validation Warning Safeguards */}
-              {tradeType === 'buy' && availableCash < liveValues.netValue && (
-                <ErrorBanner
-                  message={
-                    <>
-                      Insufficient cash balance. Available: ৳{availableCash.toLocaleString()}, Required: ৳{liveValues.netValue.toLocaleString()}. Please deposit cash before submitting.
-                    </>
-                  }
-                />
-              )}
-
-              {tradeType === 'sell' && availableSharesToSell < numQty && (
-                <ErrorBanner
-                  message={
-                    <>
-                      Insufficient shares held. Available in this BO: {availableSharesToSell.toLocaleString()} shares, Requested: {numQty.toLocaleString()} shares. Short selling is prohibited.
-                    </>
-                  }
-                />
-              )}
 
               {/* Trade Date & Reference */}
               <div className="grid grid-cols-2 gap-3">
