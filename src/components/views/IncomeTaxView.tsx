@@ -295,24 +295,24 @@ export const IncomeTaxView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Top Header Card */}
-      <div className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
+      <div className="rounded-2xl border border-edge bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-          <Landmark className="h-48 w-48 text-emerald-400" />
+          <Landmark className="h-48 w-48 text-accent-strong" />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1.5 font-mono">
+            <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1.5 font-mono">
               <ShieldCheck className="h-4 w-4" />
               <span>NBR Income Tax Act 2023 Compliant</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] border border-emerald-500/20">
+              <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent-strong text-[10px] border border-accent/20">
                 AY {profile.assessmentYear}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2.5">
               <span>বাংলাদেশ আয়কর ও এনবিআর রিটার্ন প্ল্যানার</span>
             </h1>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
+            <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
               স্বয়ংক্রিয় কর নির্ধারণ, ষষ্ঠ তফসিল অনুযায়ী বিনিয়োগ কর রেয়াত, আইটি-১০বি সম্পদ ও দায় বিবরণী এবং এনবিআর রিটার্ন সামারি।
             </p>
           </div>
@@ -344,62 +344,62 @@ export const IncomeTaxView: React.FC = () => {
         )}
 
         {/* High-level Tax KPIs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-slate-800/80">
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">করযোগ্য মোট আয় (Net Taxable)</div>
-            <div className="text-base sm:text-lg font-bold text-white mt-0.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-edge/80">
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">করযোগ্য মোট আয় (Net Taxable)</div>
+            <div className="text-base sm:text-lg font-bold text-ink mt-0.5">
               {formatBDT(taxResult.netTaxableIncome)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <div className="text-[10px] text-ink-muted mt-1 flex items-center gap-1">
               <span>করমুক্ত সীমা:</span>
-              <span className="font-semibold text-emerald-400">{formatBDT(taxResult.exemptionThreshold)}</span>
+              <span className="font-semibold text-accent-strong">{formatBDT(taxResult.exemptionThreshold)}</span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">বিনিয়োগ কর রেয়াত (Tax Rebate)</div>
-            <div className="text-base sm:text-lg font-bold text-emerald-400 mt-0.5">
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">বিনিয়োগ কর রেয়াত (Tax Rebate)</div>
+            <div className="text-base sm:text-lg font-bold text-accent-strong mt-0.5">
               {formatBDT(taxResult.rebate.rebateAmount)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
-              অনুমোদিত বিনিয়োগ: <span className="text-slate-300 font-semibold">{formatBDT(taxResult.rebate.allowableInvestment)}</span>
+            <div className="text-[10px] text-ink-muted mt-1">
+              অনুমোদিত বিনিয়োগ: <span className="text-ink-soft font-semibold">{formatBDT(taxResult.rebate.allowableInvestment)}</span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">মোট নিট সম্পদ (Net Wealth IT-10B)</div>
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">মোট নিট সম্পদ (Net Wealth IT-10B)</div>
             <div className="text-base sm:text-lg font-bold text-sky-400 mt-0.5">
               {formatBDT(it10bResult.netWealth)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
-              সারচার্জ হার: <span className="font-semibold text-amber-400">{taxResult.surcharge.ratePct}%</span>
+            <div className="text-[10px] text-ink-muted mt-1">
+              সারচার্জ হার: <span className="font-semibold text-warning">{taxResult.surcharge.ratePct}%</span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-emerald-500/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
-            <div className="text-[11px] font-mono text-emerald-300">রিটার্নের সাথে প্রদেয় কর (Net Payable)</div>
-            <div className={`text-base sm:text-lg font-bold mt-0.5 ${taxResult.netTaxableIncome <= taxResult.exemptionThreshold ? 'text-emerald-400' : 'text-amber-400'}`}>
+          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
+            <div className="text-[11px] font-mono text-accent-strong">রিটার্নের সাথে প্রদেয় কর (Net Payable)</div>
+            <div className={`text-base sm:text-lg font-bold mt-0.5 ${taxResult.netTaxableIncome <= taxResult.exemptionThreshold ? 'text-accent-strong' : 'text-warning'}`}>
               {taxResult.netTaxPayableOrRefund > 0
                 ? formatBDT(taxResult.netTaxPayableOrRefund)
                 : taxResult.netTaxPayableOrRefund < 0
                 ? `${formatBDT(Math.abs(taxResult.netTaxPayableOrRefund))} (রিফান্ড)`
                 : '৳ 0 (করমুক্ত)'}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
-              উৎস কর ক্রেডিট: <span className="text-slate-300 font-semibold">{formatBDT(taxResult.advanceTaxCredits.totalCredits)}</span>
+            <div className="text-[10px] text-ink-muted mt-1">
+              উৎস কর ক্রেডিট: <span className="text-ink-soft font-semibold">{formatBDT(taxResult.advanceTaxCredits.totalCredits)}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-900/90 border border-slate-800 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-surface/90 border border-edge overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveTab('calculator')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
             activeTab === 'calculator'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <Calculator className="h-3.5 w-3.5" />
@@ -410,8 +410,8 @@ export const IncomeTaxView: React.FC = () => {
           onClick={() => setActiveTab('rebate')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
             activeTab === 'rebate'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <TrendingUp className="h-3.5 w-3.5" />
@@ -422,8 +422,8 @@ export const IncomeTaxView: React.FC = () => {
           onClick={() => setActiveTab('it10b')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
             activeTab === 'it10b'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <Layers className="h-3.5 w-3.5" />
@@ -434,8 +434,8 @@ export const IncomeTaxView: React.FC = () => {
           onClick={() => setActiveTab('summary')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
             activeTab === 'summary'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <FileText className="h-3.5 w-3.5" />
@@ -451,13 +451,13 @@ export const IncomeTaxView: React.FC = () => {
           {/* Left Column: Taxpayer Profile & Income Inputs */}
           <div className="lg:col-span-7 space-y-6">
             {/* Taxpayer Config Card */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold font-mono">
+            <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
+                <div className="flex items-center gap-2 text-accent-strong text-xs font-bold font-mono">
                   <Sliders className="h-4 w-4" />
                   <span>করদাতার ধরন ও কর অঞ্চল সেটিংস</span>
                 </div>
-                <span className="text-[11px] text-slate-400">অর্থবছর: {profile.incomeYear}</span>
+                <span className="text-[11px] text-ink-muted">অর্থবছর: {profile.incomeYear}</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -518,10 +518,10 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               {/* Disabled child allowance */}
-              <div className="flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800/80">
+              <div className="flex items-center justify-between p-3 rounded-xl bg-canvas border border-edge/80">
                 <div className="space-y-0.5">
-                  <div className="text-xs font-semibold text-slate-200">প্রতিবন্ধী সন্তানের পিতা/মাতা/অভিভাবক</div>
-                  <div className="text-[10px] text-slate-400">প্রতি সন্তানের জন্য অতিরিক্ত ৳ ৫০,০০০ করমুক্ত সুবিধা</div>
+                  <div className="text-xs font-semibold text-ink-soft">প্রতিবন্ধী সন্তানের পিতা/মাতা/অভিভাবক</div>
+                  <div className="text-[10px] text-ink-muted">প্রতি সন্তানের জন্য অতিরিক্ত ৳ ৫০,০০০ করমুক্ত সুবিধা</div>
                 </div>
                 <div className="flex items-center gap-2">
                   <input
@@ -548,7 +548,7 @@ export const IncomeTaxView: React.FC = () => {
                           disabledDependentsCount: parseInt(e.target.value) || 1,
                         })
                       }
-                      className="w-14 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-xs text-center"
+                      className="w-14 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-xs text-center"
                     />
                   )}
                 </div>
@@ -556,23 +556,23 @@ export const IncomeTaxView: React.FC = () => {
             </div>
 
             {/* Income Heads Input Form */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
                 <div className="flex items-center gap-2 text-sky-400 text-xs font-bold font-mono">
                   <DollarSign className="h-4 w-4" />
                   <span>আয়ের খাতসমূহ (Heads of Income — ধারা ৩২-৬৬)</span>
                 </div>
-                <span className="text-[11px] text-slate-400">NBR Income Tax Act 2023</span>
+                <span className="text-[11px] text-ink-muted">NBR Income Tax Act 2023</span>
               </div>
 
               {/* 1. Employment / Salary */}
-              <div className="space-y-2 p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-xl bg-canvas border border-edge/80">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-mono">1</span>
+                  <span className="text-xs font-bold text-ink flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-accent/20 text-accent-strong flex items-center justify-center text-[10px] font-mono">1</span>
                     বেতন খাতে আয় (Employment / Salary)
                   </span>
-                  <span className="text-[10px] font-mono text-emerald-400">
+                  <span className="text-[10px] font-mono text-accent-strong">
                     করছাড়: ১/৩ বা সর্বোচ্চ ৪.৫ লাখ
                   </span>
                 </div>
@@ -586,7 +586,7 @@ export const IncomeTaxView: React.FC = () => {
                     />
                   </Field>
                   <Field label="অনুমোদিত করমুক্ত অংশ (স্বয়ংক্রিয়)">
-                    <div className="px-3 py-1.5 rounded-lg bg-slate-900/50 border border-slate-800 text-emerald-400 text-xs font-mono font-semibold">
+                    <div className="px-3 py-1.5 rounded-lg bg-surface/50 border border-edge text-accent-strong text-xs font-mono font-semibold">
                       - {formatBDT(taxResult.statutoryExemptions.salaryExemption)}
                     </div>
                   </Field>
@@ -594,9 +594,9 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               {/* 2. House Property Rent */}
-              <div className="space-y-2 p-3.5 rounded-xl bg-slate-950 border border-slate-800/80">
+              <div className="space-y-2 p-3.5 rounded-xl bg-canvas border border-edge/80">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white flex items-center gap-2">
+                  <span className="text-xs font-bold text-ink flex items-center gap-2">
                     <span className="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center text-[10px] font-mono">2</span>
                     ভাড়া খাতে আয় (House Property / Rent)
                   </span>
@@ -635,13 +635,13 @@ export const IncomeTaxView: React.FC = () => {
 
               {/* 3. Agriculture & Business */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge/80 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
-                      <span className="w-5 h-5 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center text-[10px] font-mono">3</span>
+                    <span className="text-xs font-bold text-ink flex items-center gap-1.5">
+                      <span className="w-5 h-5 rounded-full bg-warning/20 text-warning flex items-center justify-center text-[10px] font-mono">3</span>
                       কৃষি খাতে আয়
                     </span>
-                    <span className="text-[10px] text-amber-400">৬০% উৎপাদন খরচ ছাড়</span>
+                    <span className="text-[10px] text-warning">৬০% উৎপাদন খরচ ছাড়</span>
                   </div>
                   <Field label="বাৎসরিক মোট কৃষি আয়">
                     <Input
@@ -653,9 +653,9 @@ export const IncomeTaxView: React.FC = () => {
                   </Field>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-2">
+                <div className="p-3.5 rounded-xl bg-canvas border border-edge/80 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-ink flex items-center gap-1.5">
                       <span className="w-5 h-5 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-[10px] font-mono">4</span>
                       ব্যবসা ও পেশা
                     </span>
@@ -673,13 +673,13 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               {/* 4. Capital Gains & Financial Assets */}
-              <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800/80 space-y-3">
+              <div className="p-3.5 rounded-xl bg-canvas border border-edge/80 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-white flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-[10px] font-mono">5</span>
+                  <span className="text-xs font-bold text-ink flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-accent/20 text-accent-strong flex items-center justify-center text-[10px] font-mono">5</span>
                     মূলধনী মুনাফা ও আর্থিক পরিসম্পদ (DSE Stocks, Bank & Savings)
                   </span>
-                  <span className="text-[10px] font-mono text-emerald-400">
+                  <span className="text-[10px] font-mono text-accent-strong">
                     উৎস কর ক্রেডিট সহ
                   </span>
                 </div>
@@ -688,7 +688,7 @@ export const IncomeTaxView: React.FC = () => {
                     label={
                       <span className="flex items-center justify-between">
                         <span>ডিএসই স্টক ক্যাপিটাল গেইন</span>
-                        <span className="text-[9px] text-emerald-400 font-mono">৫০ লাখ পর্যন্ত করমুক্ত</span>
+                        <span className="text-[9px] text-accent-strong font-mono">৫০ লাখ পর্যন্ত করমুক্ত</span>
                       </span>
                     }
                   >
@@ -750,13 +750,13 @@ export const IncomeTaxView: React.FC = () => {
           {/* Right Column: Reactive Slab Breakdown & Live Tax Ledger */}
           <div className="lg:col-span-5 space-y-6">
             {/* Slab Calculation Card */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold font-mono">
+            <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
+                <div className="flex items-center gap-2 text-accent-strong text-xs font-bold font-mono">
                   <PieChart className="h-4 w-4" />
                   <span>স্ল্যাবভিত্তিক আয়কর গণনা (Tax Slabs)</span>
                 </div>
-                <span className="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="text-[10px] font-mono bg-accent/10 text-accent-strong px-2 py-0.5 rounded border border-accent/20">
                   {profile.category === 'general_male' ? 'পুরুষ: ৩.৫ লাখ' : 'বিশেষ: ৪.০+ লাখ'}
                 </span>
               </div>
@@ -768,8 +768,8 @@ export const IncomeTaxView: React.FC = () => {
                     key={idx}
                     className={`p-3 rounded-xl border text-xs transition-all ${
                       slab.taxableInSlab > 0
-                        ? 'bg-slate-950 border-slate-700 shadow-sm'
-                        : 'bg-slate-950/40 border-slate-900 opacity-60'
+                        ? 'bg-canvas border-slate-700 shadow-sm'
+                        : 'bg-canvas/40 border-edge-soft opacity-60'
                     }`}
                   >
                     <div className="flex items-center justify-between font-mono">
@@ -777,21 +777,21 @@ export const IncomeTaxView: React.FC = () => {
                         <span
                           className={`w-6 text-center py-0.5 rounded text-[10px] font-bold ${
                             slab.ratePct === 0
-                              ? 'bg-slate-800 text-slate-300'
-                              : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                              ? 'bg-raised text-ink-soft'
+                              : 'bg-accent/20 text-accent-strong border border-accent/30'
                           }`}
                         >
                           {slab.ratePct}%
                         </span>
-                        <span className="text-slate-200">{slab.slabLabel}</span>
+                        <span className="text-ink-soft">{slab.slabLabel}</span>
                       </div>
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-ink">
                         {slab.taxAmount > 0 ? formatBDT(slab.taxAmount) : '৳ ০'}
                       </span>
                     </div>
 
                     {slab.taxableInSlab > 0 && (
-                      <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 border-t border-slate-800/80 pt-1.5 font-mono">
+                      <div className="mt-2 flex items-center justify-between text-[11px] text-ink-muted border-t border-edge/80 pt-1.5 font-mono">
                         <span>করযোগ্য আয়: {formatBDT(slab.taxableInSlab)}</span>
                         <span>ক্রমপুঞ্জিত কর: {formatBDT(slab.cumulativeTax)}</span>
                       </div>
@@ -801,24 +801,24 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               {/* Tax Summary Subtotal */}
-              <div className="space-y-2 pt-2 border-t border-slate-800 text-xs font-mono">
-                <div className="flex items-center justify-between text-slate-300">
+              <div className="space-y-2 pt-2 border-t border-edge text-xs font-mono">
+                <div className="flex items-center justify-between text-ink-soft">
                   <span>গ্রস কর দায় (Gross Tax Liability):</span>
-                  <span className="font-bold text-white">{formatBDT(taxResult.grossTaxLiability)}</span>
+                  <span className="font-bold text-ink">{formatBDT(taxResult.grossTaxLiability)}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-emerald-400">
+                <div className="flex items-center justify-between text-accent-strong">
                   <span>(-) বিনিয়োগ কর রেয়াত (Rebate):</span>
                   <span className="font-bold">- {formatBDT(taxResult.rebate.rebateAmount)}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-slate-300">
+                <div className="flex items-center justify-between text-ink-soft">
                   <span>রেয়াত পরবর্তী কর:</span>
-                  <span className="font-bold text-white">{formatBDT(taxResult.taxAfterRebate)}</span>
+                  <span className="font-bold text-ink">{formatBDT(taxResult.taxAfterRebate)}</span>
                 </div>
 
                 {taxResult.minimumTaxApplicable > taxResult.taxAfterRebate && taxResult.netTaxableIncome > taxResult.exemptionThreshold && (
-                  <div className="flex items-center justify-between text-amber-400 text-[11px] bg-amber-500/10 p-2 rounded-lg border border-amber-500/20">
+                  <div className="flex items-center justify-between text-warning text-[11px] bg-warning/10 p-2 rounded-lg border border-warning/20">
                     <span>ন্যূনতম কর প্রযোজ্য (Minimum Tax):</span>
                     <span className="font-bold">{formatBDT(taxResult.minimumTaxApplicable)}</span>
                   </div>
@@ -831,29 +831,29 @@ export const IncomeTaxView: React.FC = () => {
                   </div>
                 )}
 
-                <div className="flex items-center justify-between text-slate-300">
+                <div className="flex items-center justify-between text-ink-soft">
                   <span>(-) পরিশোধিত অগ্রিম ও উৎসে কর (AIT):</span>
-                  <span className="font-bold text-emerald-400">- {formatBDT(taxResult.advanceTaxCredits.totalCredits)}</span>
+                  <span className="font-bold text-accent-strong">- {formatBDT(taxResult.advanceTaxCredits.totalCredits)}</span>
                 </div>
 
                 {/* Final Net Payable Box */}
-                <div className="mt-3 p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-slate-950 border-2 border-emerald-500/50 flex items-center justify-between">
+                <div className="mt-3 p-4 rounded-xl bg-gradient-to-r from-emerald-950/60 to-slate-950 border-2 border-accent/50 flex items-center justify-between">
                   <div>
-                    <div className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider">
+                    <div className="text-[10px] uppercase font-bold text-accent-strong tracking-wider">
                       রিটার্নের সাথে প্রদেয় কর (Net Payable)
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">
+                    <div className="text-[11px] text-ink-muted mt-0.5">
                       চালান বা ই-পেমেন্টের মাধ্যমে প্রদেয়
                     </div>
                   </div>
                   <div className="text-right">
-                    <div className="text-xl font-extrabold text-white">
+                    <div className="text-xl font-extrabold text-ink">
                       {taxResult.netTaxPayableOrRefund > 0
                         ? formatBDT(taxResult.netTaxPayableOrRefund)
                         : '৳ ০'}
                     </div>
                     {taxResult.netTaxPayableOrRefund < 0 && (
-                      <div className="text-[11px] text-emerald-400 font-bold">
+                      <div className="text-[11px] text-accent-strong font-bold">
                         ফেরত দাবি (Refund): {formatBDT(Math.abs(taxResult.netTaxPayableOrRefund))}
                       </div>
                     )}
@@ -863,7 +863,7 @@ export const IncomeTaxView: React.FC = () => {
             </div>
 
             {/* Quick Surcharge Checkbox */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-2">
+            <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-2">
               <label className="flex items-start gap-2.5 cursor-pointer">
                 <input
                   type="checkbox"
@@ -872,10 +872,10 @@ export const IncomeTaxView: React.FC = () => {
                   className="mt-0.5 h-4 w-4 rounded accent-emerald-500 cursor-pointer"
                 />
                 <div className="text-xs">
-                  <span className="font-semibold text-slate-200">
+                  <span className="font-semibold text-ink-soft">
                     একাধিক মোটরগাড়ি বা সিটি কর্পোরেশনে ৮,০০০+ বর্গফুট আবাসিক ভবন আছে
                   </span>
-                  <p className="text-[10px] text-slate-400 mt-0.5">
+                  <p className="text-[10px] text-ink-muted mt-0.5">
                     আইন অনুযায়ী মোট নিট সম্পদ ৪ কোটি টাকার নিচে হলেও ন্যূনতম ১০% সারচার্জ আরোপিত হবে।
                   </p>
                 </div>
@@ -891,26 +891,26 @@ export const IncomeTaxView: React.FC = () => {
       {activeTab === 'rebate' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-7 space-y-6">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold font-mono">
+            <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
+                <div className="flex items-center gap-2 text-accent-strong text-xs font-bold font-mono">
                   <TrendingUp className="h-4 w-4" />
                   <span>অনুমোদিত বিনিয়োগের খাতসমূহ (ধারা ৭৮ ও ষষ্ঠ তফসিল অংশ ৩)</span>
                 </div>
-                <span className="text-[10px] font-mono bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="text-[10px] font-mono bg-accent/10 text-accent-strong px-2 py-0.5 rounded border border-accent/20">
                   ১৫% কর রেয়াত
                 </span>
               </div>
 
               <div className="space-y-3 font-mono text-xs">
                 {/* DPS */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-3 rounded-xl bg-canvas border border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white flex items-center gap-1.5">
+                    <div className="font-bold text-ink flex items-center gap-1.5">
                       <span>ডিপোজিট পেনশন স্কিম (DPS)</span>
-                      <span className="text-[10px] text-emerald-400 font-normal">(সর্বোচ্চ ১.২ লাখ অনুমোদন)</span>
+                      <span className="text-[10px] text-accent-strong font-normal">(সর্বোচ্চ ১.২ লাখ অনুমোদন)</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-sans">
+                    <div className="text-[11px] text-ink-muted mt-0.5 font-sans">
                       বাৎসরিক জমা করা মাসিক ডিপিএস কিস্তি
                     </div>
                   </div>
@@ -928,13 +928,13 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 {/* Sanchayapatra */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-3 rounded-xl bg-canvas border border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white flex items-center gap-1.5">
+                    <div className="font-bold text-ink flex items-center gap-1.5">
                       <span>জাতীয় সঞ্চয়পত্র ক্রয় (Sanchayapatra)</span>
                       <span className="text-[10px] text-sky-400 font-normal">(সর্বোচ্চ ৫ লাখ বিবেচনা)</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-sans">
+                    <div className="text-[11px] text-ink-muted mt-0.5 font-sans">
                       পরিবার, পেনশনার বা ৩ মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র
                     </div>
                   </div>
@@ -952,12 +952,12 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 {/* DSE Shares */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-3 rounded-xl bg-canvas border border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white flex items-center gap-1.5">
+                    <div className="font-bold text-ink flex items-center gap-1.5">
                       <span>ডিএসই শেয়ারবাজার ও মিউচুয়াল ফান্ড (DSE Stocks)</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-sans">
+                    <div className="text-[11px] text-ink-muted mt-0.5 font-sans">
                       শেয়ারবাজারে তালিকাভুক্ত শেয়ার বা অনুমোদিত ইউনিট ফান্ড ক্রয়
                     </div>
                   </div>
@@ -975,12 +975,12 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 {/* Life Insurance */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-3 rounded-xl bg-canvas border border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white flex items-center gap-1.5">
+                    <div className="font-bold text-ink flex items-center gap-1.5">
                       <span>জীবন বীমা প্রিমিয়াম (Life Insurance)</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-sans">
+                    <div className="text-[11px] text-ink-muted mt-0.5 font-sans">
                       পলিসি মূল্যের সর্বোচ্চ ১০% পর্যন্ত অনুমোদনযোগ্য
                     </div>
                   </div>
@@ -998,12 +998,12 @@ export const IncomeTaxView: React.FC = () => {
                 </div>
 
                 {/* Provident Fund */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="p-3 rounded-xl bg-canvas border border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
-                    <div className="font-bold text-white flex items-center gap-1.5">
+                    <div className="font-bold text-ink flex items-center gap-1.5">
                       <span>অনুমোদিত ভবিষ্যৎ তহবিল (Provident Fund)</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5 font-sans">
+                    <div className="text-[11px] text-ink-muted mt-0.5 font-sans">
                       জিপিএফ / আরপিএফ ও কল্যাণ তহবিল চাঁদা
                     </div>
                   </div>
@@ -1025,36 +1025,36 @@ export const IncomeTaxView: React.FC = () => {
 
           {/* Rebate Optimization Advice Box */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-950 p-6 space-y-4">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+            <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-slate-900 to-slate-950 p-6 space-y-4">
+              <div className="flex items-center gap-2 text-accent-strong font-bold text-sm">
                 <Sparkles className="h-5 w-5" />
                 <span>ট্যাক্স রিবেট সামারি ও সেভিংস অ্যাডভাইজার</span>
               </div>
 
               <div className="space-y-3 font-mono text-xs pt-2">
-                <div className="flex items-center justify-between text-slate-300">
+                <div className="flex items-center justify-between text-ink-soft">
                   <span>প্রকৃত মোট বিনিয়োগ:</span>
-                  <span className="font-bold text-white">{formatBDT(taxResult.rebate.totalEligibleInvestment)}</span>
+                  <span className="font-bold text-ink">{formatBDT(taxResult.rebate.totalEligibleInvestment)}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-slate-300">
+                <div className="flex items-center justify-between text-ink-soft">
                   <span>অনুমোদিত বিনিয়োগ সিলিং (ধারা ৭৮):</span>
-                  <span className="font-bold text-white">{formatBDT(taxResult.rebate.allowableInvestmentCeiling)}</span>
+                  <span className="font-bold text-ink">{formatBDT(taxResult.rebate.allowableInvestmentCeiling)}</span>
                 </div>
 
-                <div className="flex items-center justify-between text-emerald-400 border-t border-slate-800 pt-2">
+                <div className="flex items-center justify-between text-accent-strong border-t border-edge pt-2">
                   <span>বিবেচিত বিনিয়োগ (Allowable):</span>
                   <span className="font-bold text-lg">{formatBDT(taxResult.rebate.allowableInvestment)}</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-between">
                   <div>
-                    <div className="text-[11px] font-bold text-emerald-300 font-sans">
+                    <div className="text-[11px] font-bold text-accent-strong font-sans">
                       মোট অর্জিত কর রেয়াত (Tax Rebate)
                     </div>
-                    <div className="text-[10px] text-slate-400 font-sans">১৫% হারে সরাসরি কর থেকে বাদ</div>
+                    <div className="text-[10px] text-ink-muted font-sans">১৫% হারে সরাসরি কর থেকে বাদ</div>
                   </div>
-                  <div className="text-xl font-extrabold text-emerald-400 font-mono">
+                  <div className="text-xl font-extrabold text-accent-strong font-mono">
                     {formatBDT(taxResult.rebate.rebateAmount)}
                   </div>
                 </div>
@@ -1062,16 +1062,16 @@ export const IncomeTaxView: React.FC = () => {
 
               {/* Recommendation for more savings */}
               {taxResult.rebate.recommendedAdditionalInvestment > 0 && (
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2 font-sans">
-                  <div className="flex items-center gap-2 text-xs font-bold text-amber-400">
+                <div className="p-4 rounded-xl bg-surface border border-edge space-y-2 font-sans">
+                  <div className="flex items-center gap-2 text-xs font-bold text-warning">
                     <Info className="h-4 w-4" />
                     <span>আরও কর বাঁচানোর সুযোগ!</span>
                   </div>
-                  <p className="text-xs text-slate-300 leading-relaxed">
+                  <p className="text-xs text-ink-soft leading-relaxed">
                     আপনার ধারা ৭৮ অনুযায়ী সর্বোচ্চ কর রেয়াত অর্জন করতে আপনি আরও{' '}
-                    <strong className="text-white font-mono">{formatBDT(taxResult.rebate.recommendedAdditionalInvestment)}</strong>{' '}
+                    <strong className="text-ink font-mono">{formatBDT(taxResult.rebate.recommendedAdditionalInvestment)}</strong>{' '}
                     টাকা ডিপিএস বা শেয়ারবাজারে বিনিয়োগ করতে পারেন। এতে আপনার আরও{' '}
-                    <strong className="text-emerald-400 font-mono">
+                    <strong className="text-accent-strong font-mono">
                       {formatBDT(taxResult.rebate.recommendedAdditionalInvestment * 0.15)}
                     </strong>{' '}
                     টাকা সরাসরি ট্যাক্স সেভ হবে!
@@ -1088,14 +1088,14 @@ export const IncomeTaxView: React.FC = () => {
       {/* --------------------------------------------------------------------- */}
       {activeTab === 'it10b' && (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div className="rounded-2xl border border-edge bg-surface/60 p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-edge pb-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <Layers className="h-4 w-4 text-emerald-400" />
+                <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                  <Layers className="h-4 w-4 text-accent-strong" />
                   <span>আইটি-১০বি সম্পদ, দায় ও ব্যয় বিবরণী (IT-10B Statement)</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-ink-muted mt-0.5">
                   জাতীয় রাজস্ব বোর্ড (NBR) নির্ধারিত ফরম্যাট — ধারা ৭৮ ও আয়কর আইন ২০২৩
                 </p>
               </div>
@@ -1115,21 +1115,21 @@ export const IncomeTaxView: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Part A: Assets */}
               <div className="space-y-4">
-                <div className="text-xs font-bold text-emerald-400 font-mono flex items-center justify-between border-b border-slate-800/80 pb-2">
+                <div className="text-xs font-bold text-accent-strong font-mono flex items-center justify-between border-b border-edge/80 pb-2">
                   <span>ক. পরিসম্পদ (Gross Assets)</span>
                   <span>{formatBDT(it10bResult.grossAssets)}</span>
                 </div>
 
                 <div className="space-y-3 font-mono text-xs">
                   {/* Non-Agri Property */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-200">১. অকৃষি সম্পত্তি (ফ্ল্যাট, জমি, বাড়ি)</span>
+                      <span className="text-ink-soft">১. অকৃষি সম্পত্তি (ফ্ল্যাট, জমি, বাড়ি)</span>
                       <input
                         type="number"
                         value={it10b.nonAgriPropertyCost || ''}
                         onChange={(e) => setIt10b({ ...it10b, nonAgriPropertyCost: parseFloat(e.target.value) || 0 })}
-                        className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                        className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                       />
                     </div>
                     <input
@@ -1137,101 +1137,101 @@ export const IncomeTaxView: React.FC = () => {
                       value={it10b.nonAgriPropertyDescription}
                       onChange={(e) => setIt10b({ ...it10b, nonAgriPropertyDescription: e.target.value })}
                       placeholder="বিবরণ (ঠিকানা ও আয়তন)"
-                      className="w-full px-2 py-1 rounded bg-slate-900/50 border border-slate-800 text-[11px] text-slate-400"
+                      className="w-full px-2 py-1 rounded bg-surface/50 border border-edge text-[11px] text-ink-muted"
                     />
                   </div>
 
                   {/* Agricultural Land */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-200">২. কৃষি সম্পত্তি (জমি)</span>
+                      <span className="text-ink-soft">২. কৃষি সম্পত্তি (জমি)</span>
                       <input
                         type="number"
                         value={it10b.agriPropertyCost || ''}
                         onChange={(e) => setIt10b({ ...it10b, agriPropertyCost: parseFloat(e.target.value) || 0 })}
-                        className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                        className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                       />
                     </div>
                   </div>
 
                   {/* Financial Assets */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-                    <span className="text-slate-200 font-bold block">৩. আর্থিক পরিসম্পদ (Financial Assets)</span>
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-2">
+                    <span className="text-ink-soft font-bold block">৩. আর্থিক পরিসম্পদ (Financial Assets)</span>
                     <div className="grid grid-cols-2 gap-2 text-[11px]">
                       <div>
-                        <span className="text-slate-400">ক্যাশ ও ব্যাংক ব্যালেন্স:</span>
+                        <span className="text-ink-muted">ক্যাশ ও ব্যাংক ব্যালেন্স:</span>
                         <input
                           type="number"
                           value={it10b.bankAndCashBalances || ''}
                           onChange={(e) => setIt10b({ ...it10b, bankAndCashBalances: parseFloat(e.target.value) || 0 })}
-                          className="w-full mt-0.5 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                          className="w-full mt-0.5 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                         />
                       </div>
                       <div>
-                        <span className="text-slate-400">এফডিআর ও ডিপিএস ব্যালেন্স:</span>
+                        <span className="text-ink-muted">এফডিআর ও ডিপিএস ব্যালেন্স:</span>
                         <input
                           type="number"
                           value={(it10b.fixedDepositsFdr + it10b.dpsBalance) || ''}
                           onChange={(e) => setIt10b({ ...it10b, fixedDepositsFdr: parseFloat(e.target.value) || 0 })}
-                          className="w-full mt-0.5 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                          className="w-full mt-0.5 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                         />
                       </div>
                       <div>
-                        <span className="text-slate-400">শেয়ারবাজার বিনিয়োগ (ক্রয়মূল্য):</span>
+                        <span className="text-ink-muted">শেয়ারবাজার বিনিয়োগ (ক্রয়মূল্য):</span>
                         <input
                           type="number"
                           value={it10b.sharesListedCost || ''}
                           onChange={(e) => setIt10b({ ...it10b, sharesListedCost: parseFloat(e.target.value) || 0 })}
-                          className="w-full mt-0.5 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                          className="w-full mt-0.5 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                         />
                       </div>
                       <div>
-                        <span className="text-slate-400">সঞ্চয়পত্র ক্রয়মূল্য:</span>
+                        <span className="text-ink-muted">সঞ্চয়পত্র ক্রয়মূল্য:</span>
                         <input
                           type="number"
                           value={it10b.sanchayapatraCost || ''}
                           onChange={(e) => setIt10b({ ...it10b, sanchayapatraCost: parseFloat(e.target.value) || 0 })}
-                          className="w-full mt-0.5 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                          className="w-full mt-0.5 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Motor Vehicle */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-200">৪. মোটরযান (Motor Vehicle)</span>
+                      <span className="text-ink-soft">৪. মোটরযান (Motor Vehicle)</span>
                       <input
                         type="number"
                         value={it10b.motorVehicleCost || ''}
                         onChange={(e) => setIt10b({ ...it10b, motorVehicleCost: parseFloat(e.target.value) || 0 })}
-                        className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                        className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                       />
                     </div>
                   </div>
 
                   {/* Gold & Jewellery */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-200">৫. স্বর্ণালঙ্কার ও মূল্যবান ধাতু</span>
+                      <span className="text-ink-soft">৫. স্বর্ণালঙ্কার ও মূল্যবান ধাতু</span>
                       <input
                         type="number"
                         value={it10b.goldCostOrValue || ''}
                         onChange={(e) => setIt10b({ ...it10b, goldCostOrValue: parseFloat(e.target.value) || 0 })}
-                        className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                        className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                       />
                     </div>
                   </div>
 
                   {/* Furniture & Electronics */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-slate-200">৬. আসবাবপত্র ও ইলেকট্রনিক্স</span>
+                      <span className="text-ink-soft">৬. আসবাবপত্র ও ইলেকট্রনিক্স</span>
                       <input
                         type="number"
                         value={it10b.furnitureAndElectronicsCost || ''}
                         onChange={(e) => setIt10b({ ...it10b, furnitureAndElectronicsCost: parseFloat(e.target.value) || 0 })}
-                        className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                        className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                       />
                     </div>
                   </div>
@@ -1240,29 +1240,29 @@ export const IncomeTaxView: React.FC = () => {
 
               {/* Part B: Liabilities & Reconciliation */}
               <div className="space-y-4">
-                <div className="text-xs font-bold text-rose-400 font-mono flex items-center justify-between border-b border-slate-800/80 pb-2">
+                <div className="text-xs font-bold text-negative font-mono flex items-center justify-between border-b border-edge/80 pb-2">
                   <span>খ. দায়সমূহ (Liabilities / Borrowings)</span>
                   <span>{formatBDT(it10bResult.totalLiabilities)}</span>
                 </div>
 
                 <div className="space-y-3 font-mono text-xs">
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                    <span className="text-slate-200">১. ব্যাংক ঋণ ও গৃহনির্মাণ ঋণ</span>
+                  <div className="p-3 rounded-xl bg-canvas border border-edge flex items-center justify-between">
+                    <span className="text-ink-soft">১. ব্যাংক ঋণ ও গৃহনির্মাণ ঋণ</span>
                     <input
                       type="number"
                       value={it10b.bankMortgagesAndLoans || ''}
                       onChange={(e) => setIt10b({ ...it10b, bankMortgagesAndLoans: parseFloat(e.target.value) || 0 })}
-                      className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                      className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                     />
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
-                    <span className="text-slate-200">২. ব্যক্তিগত ধারদেনা (Unsecured Loans)</span>
+                  <div className="p-3 rounded-xl bg-canvas border border-edge flex items-center justify-between">
+                    <span className="text-ink-soft">২. ব্যক্তিগত ধারদেনা (Unsecured Loans)</span>
                     <input
                       type="number"
                       value={it10b.personalDebtsAndPayables || ''}
                       onChange={(e) => setIt10b({ ...it10b, personalDebtsAndPayables: parseFloat(e.target.value) || 0 })}
-                      className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                      className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                     />
                   </div>
                 </div>
@@ -1273,58 +1273,58 @@ export const IncomeTaxView: React.FC = () => {
                     <div className="text-xs font-bold text-sky-400 font-mono">
                       গ. বছর শেষে নিট সম্পদ (Net Wealth)
                     </div>
-                    <div className="text-[11px] text-slate-400">মোট পরিসম্পদ বাদ মোট দায় (ক - খ)</div>
+                    <div className="text-[11px] text-ink-muted">মোট পরিসম্পদ বাদ মোট দায় (ক - খ)</div>
                   </div>
-                  <div className="text-xl font-bold text-white font-mono">
+                  <div className="text-xl font-bold text-ink font-mono">
                     {formatBDT(it10bResult.netWealth)}
                   </div>
                 </div>
 
                 {/* Part C: Accretion & Family Living Expenses */}
-                <div className="text-xs font-bold text-amber-400 font-mono flex items-center justify-between border-b border-slate-800/80 pt-2 pb-2">
+                <div className="text-xs font-bold text-warning font-mono flex items-center justify-between border-b border-edge/80 pt-2 pb-2">
                   <span>ঘ. সম্পদ বৃদ্ধি ও পারিবারিক জীবনযাপন ব্যয় (Reconciliation)</span>
                 </div>
 
                 <div className="space-y-3 font-mono text-xs">
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge flex items-center justify-between">
                     <div>
-                      <span className="text-slate-200">পূর্ববর্তী বছরের নিট সম্পদ</span>
-                      <div className="text-[10px] text-slate-400">গত বছরের শেষ দিনে থাকা সম্পদ</div>
+                      <span className="text-ink-soft">পূর্ববর্তী বছরের নিট সম্পদ</span>
+                      <div className="text-[10px] text-ink-muted">গত বছরের শেষ দিনে থাকা সম্পদ</div>
                     </div>
                     <input
                       type="number"
                       value={it10b.previousYearNetWealth || ''}
                       onChange={(e) => setIt10b({ ...it10b, previousYearNetWealth: parseFloat(e.target.value) || 0 })}
-                      className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                      className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                     />
                   </div>
 
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge flex items-center justify-between">
                     <div>
-                      <span className="text-slate-200">পারিবারিক জীবনযাপন ব্যয় (IT-10BB)</span>
-                      <div className="text-[10px] text-slate-400">বাৎসরিক খাবার, বাড়িভাড়া, শিক্ষা ও চিকিৎসা খরচ</div>
+                      <span className="text-ink-soft">পারিবারিক জীবনযাপন ব্যয় (IT-10BB)</span>
+                      <div className="text-[10px] text-ink-muted">বাৎসরিক খাবার, বাড়িভাড়া, শিক্ষা ও চিকিৎসা খরচ</div>
                     </div>
                     <input
                       type="number"
                       value={it10b.annualFamilyLivingExpenses || ''}
                       onChange={(e) => setIt10b({ ...it10b, annualFamilyLivingExpenses: parseFloat(e.target.value) || 0 })}
-                      className="w-36 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-white text-right"
+                      className="w-36 px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-right"
                     />
                   </div>
 
                   {/* Accretion summary */}
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] space-y-1.5 font-mono">
-                    <div className="flex items-center justify-between text-slate-300">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge text-[11px] space-y-1.5 font-mono">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>চলতি বছরে সম্পদ বৃদ্ধি (Accretion):</span>
-                      <span className="font-bold text-white">{formatBDT(it10bResult.netAccretionInWealth)}</span>
+                      <span className="font-bold text-ink">{formatBDT(it10bResult.netAccretionInWealth)}</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>মোট ব্যয় ও বিনিয়োগ তহবিল (Outflow):</span>
-                      <span className="font-bold text-white">{formatBDT(it10bResult.totalOutflow)}</span>
+                      <span className="font-bold text-ink">{formatBDT(it10bResult.totalOutflow)}</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>প্রদর্শিত আয়ের উৎস (Inflow):</span>
-                      <span className="font-bold text-emerald-400">{formatBDT(it10bResult.totalInflowReconciled)}</span>
+                      <span className="font-bold text-accent-strong">{formatBDT(it10bResult.totalInflowReconciled)}</span>
                     </div>
                   </div>
 
@@ -1332,18 +1332,18 @@ export const IncomeTaxView: React.FC = () => {
                   <div
                     className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
                       it10bResult.isReconciled
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                        : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+                        ? 'bg-accent/10 border-accent/30 text-accent-strong'
+                        : 'bg-warning/10 border-warning/30 text-warning'
                     }`}
                   >
                     {it10bResult.isReconciled ? (
                       <>
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
                         <span>আইটি-১০বি আয়ের উৎস ও সম্পদ বৃদ্ধির সম্পূর্ণ সামঞ্জস্য রয়েছে (Reconciled)!</span>
                       </>
                     ) : (
                       <>
-                        <AlertCircle className="h-4 w-4 text-amber-400 shrink-0" />
+                        <AlertCircle className="h-4 w-4 text-warning shrink-0" />
                         <span>
                           আয় ও সম্পদ বৃদ্ধির ব্যবধান: {formatBDT(Math.abs(it10bResult.reconciliationDifference))} (
                           {it10bResult.reconciliationDifference > 0 ? 'অতিরিক্ত প্রদর্শিত আয়' : 'অপ্রদর্শিত আয়ের ঝুঁকি'}
@@ -1364,14 +1364,14 @@ export const IncomeTaxView: React.FC = () => {
       {/* --------------------------------------------------------------------- */}
       {activeTab === 'summary' && (
         <div className="space-y-6">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div className="rounded-2xl border border-edge bg-surface/60 p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-edge pb-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-emerald-400" />
+                <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-accent-strong" />
                   <span>জাতীয় রাজস্ব বোর্ড (NBR) আয়কর রিটার্ন সারাংশ</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-ink-muted mt-0.5">
                   কর বছর {profile.assessmentYear} | ই-রিটার্ন (etaxnbr.gov.bd) দাখিলের জন্য প্রস্তুত ফরম্যাট
                 </p>
               </div>
@@ -1390,7 +1390,7 @@ export const IncomeTaxView: React.FC = () => {
                   href="https://etaxnbr.gov.bd"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-sky-400 text-xs font-semibold border border-slate-700 transition-colors"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-sky-400 text-xs font-semibold border border-slate-700 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
                   <span>NBR e-Return Portal</span>
@@ -1399,35 +1399,35 @@ export const IncomeTaxView: React.FC = () => {
             </div>
 
             {/* Print-friendly Return Document Preview */}
-            <div className="rounded-xl border border-slate-800 bg-slate-950 p-6 space-y-6 text-slate-200">
+            <div className="rounded-xl border border-edge bg-canvas p-6 space-y-6 text-ink-soft">
               {/* Header Slip */}
-              <div className="text-center space-y-1 border-b border-slate-800 pb-4">
-                <div className="text-xs font-mono uppercase tracking-widest text-emerald-400">
+              <div className="text-center space-y-1 border-b border-edge pb-4">
+                <div className="text-xs font-mono uppercase tracking-widest text-accent-strong">
                   Government of the People's Republic of Bangladesh
                 </div>
-                <div className="text-sm font-bold text-white">National Board of Revenue (NBR)</div>
-                <div className="text-xs text-slate-400">
+                <div className="text-sm font-bold text-ink">National Board of Revenue (NBR)</div>
+                <div className="text-xs text-ink-muted">
                   Acknowledgement & Income Tax Return Summary (কর নির্ধারণ ও প্রাপ্তিস্বীকার)
                 </div>
               </div>
 
               {/* Taxpayer Meta */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono border-b border-slate-800 pb-4">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono border-b border-edge pb-4">
                 <div>
-                  <span className="text-slate-400 block text-[10px]">করদাতার নাম:</span>
-                  <span className="font-bold text-white">{profile.name}</span>
+                  <span className="text-ink-muted block text-[10px]">করদাতার নাম:</span>
+                  <span className="font-bold text-ink">{profile.name}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">ই-টিআইএন (e-TIN):</span>
-                  <span className="font-bold text-white">{profile.tin}</span>
+                  <span className="text-ink-muted block text-[10px]">ই-টিআইএন (e-TIN):</span>
+                  <span className="font-bold text-ink">{profile.tin}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">কর নির্ধারণী বছর:</span>
-                  <span className="font-bold text-emerald-400">{profile.assessmentYear}</span>
+                  <span className="text-ink-muted block text-[10px]">কর নির্ধারণী বছর:</span>
+                  <span className="font-bold text-accent-strong">{profile.assessmentYear}</span>
                 </div>
                 <div>
-                  <span className="text-slate-400 block text-[10px]">আয় বর্ষ:</span>
-                  <span className="font-bold text-white">{profile.incomeYear}</span>
+                  <span className="text-ink-muted block text-[10px]">আয় বর্ষ:</span>
+                  <span className="font-bold text-ink">{profile.incomeYear}</span>
                 </div>
               </div>
 
@@ -1435,38 +1435,38 @@ export const IncomeTaxView: React.FC = () => {
               <div className="space-y-3 font-mono text-xs">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-400 text-[11px]">
+                    <tr className="border-b border-edge text-ink-muted text-[11px]">
                       <th className="py-2">ক্রমিক</th>
                       <th className="py-2">আয় ও করের বিবরণী</th>
                       <th className="py-2 text-right">টাকার পরিমাণ (BDT)</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                  <tbody className="divide-y divide-edge/60 text-ink-soft">
                     <tr>
-                      <td className="py-2 text-slate-500">১</td>
+                      <td className="py-2 text-ink-faint">১</td>
                       <td className="py-2">বেতন খাতে করযোগ্য আয় (ধারা ৩৩)</td>
-                      <td className="py-2 text-right font-bold text-white">
+                      <td className="py-2 text-right font-bold text-ink">
                         {formatBDT(Math.max(0, income.salaryGross - taxResult.statutoryExemptions.salaryExemption))}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">২</td>
+                      <td className="py-2 text-ink-faint">২</td>
                       <td className="py-2">ভাড়া খাতে করযোগ্য আয় (ধারা ৩৫)</td>
-                      <td className="py-2 text-right font-bold text-white">
+                      <td className="py-2 text-right font-bold text-ink">
                         {formatBDT(Math.max(0, income.rentalIncomeGross - taxResult.statutoryExemptions.rentalRepairAllowance - income.rentalMunicipalTax))}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৩</td>
+                      <td className="py-2 text-ink-faint">৩</td>
                       <td className="py-2">কৃষি খাতে করযোগ্য আয়</td>
-                      <td className="py-2 text-right font-bold text-white">
+                      <td className="py-2 text-right font-bold text-ink">
                         {formatBDT(Math.max(0, income.agricultureGross - taxResult.statutoryExemptions.agriProductionCost))}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৪</td>
+                      <td className="py-2 text-ink-faint">৪</td>
                       <td className="py-2">ব্যবসা, শেয়ারবাজার মূলধনী লাভ ও ব্যাংক মুনাফা</td>
-                      <td className="py-2 text-right font-bold text-white">
+                      <td className="py-2 text-right font-bold text-ink">
                         {formatBDT(
                           income.businessNetProfit +
                             income.capitalGainsListedShares +
@@ -1476,43 +1476,43 @@ export const IncomeTaxView: React.FC = () => {
                         )}
                       </td>
                     </tr>
-                    <tr className="bg-slate-900/50 font-bold text-white">
-                      <td className="py-2.5 text-emerald-400">৫</td>
+                    <tr className="bg-surface/50 font-bold text-ink">
+                      <td className="py-2.5 text-accent-strong">৫</td>
                       <td className="py-2.5">মোট করযোগ্য আয় (Total Taxable Income)</td>
-                      <td className="py-2.5 text-right text-emerald-400">
+                      <td className="py-2.5 text-right text-accent-strong">
                         {formatBDT(taxResult.netTaxableIncome)}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৬</td>
+                      <td className="py-2 text-ink-faint">৬</td>
                       <td className="py-2">গ্রস কর দায় (স্ল্যাব অনুযায়ী)</td>
-                      <td className="py-2 text-right text-white">
+                      <td className="py-2 text-right text-ink">
                         {formatBDT(taxResult.grossTaxLiability)}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৭</td>
-                      <td className="py-2 text-emerald-400">(-) বিনিয়োগ কর রেয়াত (Tax Rebate)</td>
-                      <td className="py-2 text-right text-emerald-400">
+                      <td className="py-2 text-ink-faint">৭</td>
+                      <td className="py-2 text-accent-strong">(-) বিনিয়োগ কর রেয়াত (Tax Rebate)</td>
+                      <td className="py-2 text-right text-accent-strong">
                         - {formatBDT(taxResult.rebate.rebateAmount)}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৮</td>
+                      <td className="py-2 text-ink-faint">৮</td>
                       <td className="py-2">নিট সম্পদ সারচার্জ (যদি থাকে)</td>
-                      <td className="py-2 text-right text-white">
+                      <td className="py-2 text-right text-ink">
                         {formatBDT(taxResult.surcharge.amount)}
                       </td>
                     </tr>
                     <tr>
-                      <td className="py-2 text-slate-500">৯</td>
+                      <td className="py-2 text-ink-faint">৯</td>
                       <td className="py-2 text-sky-400">(-) উৎসে কর ও অগ্রিম কর ক্রেডিট (AIT/TDS)</td>
                       <td className="py-2 text-right text-sky-400">
                         - {formatBDT(taxResult.advanceTaxCredits.totalCredits)}
                       </td>
                     </tr>
-                    <tr className="bg-emerald-950/40 text-emerald-300 font-extrabold text-sm">
-                      <td className="py-3 text-emerald-400">১০</td>
+                    <tr className="bg-emerald-950/40 text-accent-strong font-extrabold text-sm">
+                      <td className="py-3 text-accent-strong">১০</td>
                       <td className="py-3">রিটার্নের সাথে প্রদেয় কর (Net Tax Payable)</td>
                       <td className="py-3 text-right">
                         {taxResult.netTaxPayableOrRefund > 0
@@ -1520,8 +1520,8 @@ export const IncomeTaxView: React.FC = () => {
                           : '৳ ০ (করমুক্ত)'}
                       </td>
                     </tr>
-                    <tr className="border-t-2 border-slate-800">
-                      <td className="py-2 text-slate-500">১১</td>
+                    <tr className="border-t-2 border-edge">
+                      <td className="py-2 text-ink-faint">১১</td>
                       <td className="py-2">বছর শেষে মোট নিট সম্পদ (IT-10B Net Wealth)</td>
                       <td className="py-2 text-right font-bold text-sky-400">
                         {formatBDT(it10bResult.netWealth)}
@@ -1532,7 +1532,7 @@ export const IncomeTaxView: React.FC = () => {
               </div>
 
               {/* Verification & Signoff */}
-              <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-slate-400 font-mono">
+              <div className="pt-6 border-t border-edge flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-ink-muted font-mono">
                 <div>
                   Generated securely by Money Canvas Wealth OS
                   <br />

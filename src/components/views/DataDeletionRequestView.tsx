@@ -55,20 +55,20 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 py-12 px-4 sm:px-6 lg:px-8 selection:bg-rose-500/20 selection:text-rose-300">
+    <div className="min-h-screen bg-canvas text-ink py-12 px-4 sm:px-6 lg:px-8 selection:bg-negative/20 selection:text-negative">
       <div className="max-w-3xl mx-auto space-y-8">
         {/* Navigation Bar */}
         <div className="flex items-center justify-between">
           <button
             type="button"
             onClick={onBack || (() => window.history.back())}
-            className="flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors bg-slate-900/80 hover:bg-slate-800 border border-slate-800 px-3.5 py-2 rounded-xl cursor-pointer"
+            className="flex items-center gap-2 text-xs font-semibold text-ink-muted hover:text-ink transition-colors bg-surface/80 hover:bg-raised border border-edge px-3.5 py-2 rounded-xl cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>Back to Money Canvas</span>
           </button>
 
-          <span className="text-[11px] font-mono uppercase tracking-wider text-rose-400 bg-rose-950/40 border border-rose-800/40 px-3 py-1 rounded-full flex items-center gap-1.5">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-negative bg-rose-950/40 border border-rose-800/40 px-3 py-1 rounded-full flex items-center gap-1.5">
             <ShieldAlert className="h-3.5 w-3.5" />
             <span>Play Store Compliance</span>
           </span>
@@ -77,20 +77,20 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
         {/* Header Banner */}
         <div className="rounded-2xl border border-rose-900/40 bg-gradient-to-br from-rose-950/30 via-slate-900/90 to-slate-950 p-6 sm:p-8 space-y-4 shadow-xl shadow-rose-950/10">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400">
+            <div className="p-3 rounded-xl bg-negative/10 border border-negative/20 text-negative">
               <Trash2 className="h-7 w-7" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+              <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
                 Account & Data Deletion
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 font-medium">
+              <p className="text-xs sm:text-sm text-ink-muted font-medium">
                 অ্যাকাউন্ট ও ব্যক্তিগত ডেটা স্থায়ী অপসারণ নীতি এবং ওয়েব রিকোয়েস্ট পোর্টাল
               </p>
             </div>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed pt-2">
+          <p className="text-xs sm:text-sm text-ink-soft leading-relaxed pt-2">
             In compliance with <strong>Google Play Store User Data and Account Deletion Policy</strong>, 
             Money Canvas provides complete transparency and controls to delete your user account, 
             cloud-synced financial ledgers, and all associated personal records permanently.
@@ -99,12 +99,12 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
 
         {/* What gets deleted breakdown */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 space-y-2.5">
-            <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider">
+          <div className="rounded-xl border border-edge bg-surface/50 p-5 space-y-2.5">
+            <div className="flex items-center gap-2 text-negative text-xs font-bold uppercase tracking-wider">
               <Database className="h-4 w-4" />
               <span>What Gets Deleted / যা যা মুছে যায়</span>
             </div>
-            <ul className="text-xs text-slate-300 space-y-1.5 list-disc pl-4 leading-relaxed">
+            <ul className="text-xs text-ink-soft space-y-1.5 list-disc pl-4 leading-relaxed">
               <li>Firebase authentication profile & email linkage</li>
               <li>Cloud-synced double-entry financial ledger</li>
               <li>Zero-knowledge encrypted cloud vaults (AES-256)</li>
@@ -113,12 +113,12 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
             </ul>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-5 space-y-2.5">
-            <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
+          <div className="rounded-xl border border-edge bg-surface/50 p-5 space-y-2.5">
+            <div className="flex items-center gap-2 text-accent-strong text-xs font-bold uppercase tracking-wider">
               <Clock className="h-4 w-4" />
               <span>Data Retention Policy / ডেটা সংরক্ষণ নীতি</span>
             </div>
-            <ul className="text-xs text-slate-300 space-y-1.5 list-disc pl-4 leading-relaxed">
+            <ul className="text-xs text-ink-soft space-y-1.5 list-disc pl-4 leading-relaxed">
               <li><strong>Zero Data Retained:</strong> No financial data is kept after deletion.</li>
               <li><strong>Instant in-app:</strong> In-app deletion purges data immediately.</li>
               <li><strong>Web Requests:</strong> Processed within 24 to 48 hours of verification.</li>
@@ -128,15 +128,15 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
         </div>
 
         {/* Step-by-step instructions for in-app deletion */}
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-3">
+        <div className="rounded-xl border border-edge bg-surface/40 p-5 space-y-3">
           <div className="flex items-center gap-2 text-sky-400 text-xs font-bold uppercase tracking-wider">
             <Smartphone className="h-4 w-4" />
             <span>How to Delete from Within the App / অ্যাপের ভেতর থেকে তাৎক্ষণিক ডিলিট পদ্ধতি</span>
           </div>
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-xs text-ink-soft leading-relaxed">
             If you have the Money Canvas app installed, you can delete your account instantly without waiting:
           </p>
-          <ol className="text-xs text-slate-300 space-y-1 list-decimal pl-5 leading-relaxed">
+          <ol className="text-xs text-ink-soft space-y-1 list-decimal pl-5 leading-relaxed">
             <li>Open the <strong>Money Canvas</strong> app on your device.</li>
             <li>Go to <strong>Settings (সেটিংস)</strong> from the sidebar menu.</li>
             <li>Scroll down to the <strong>Danger Zone (বিপজ্জনক এলাকা)</strong>.</li>
@@ -146,28 +146,28 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
         </div>
 
         {/* Web Deletion Request Form (for uninstalled app or lost device) */}
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/80 p-6 sm:p-8 space-y-6">
+        <div className="rounded-2xl border border-edge bg-surface/80 p-6 sm:p-8 space-y-6">
           <div className="space-y-1">
-            <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-              <Mail className="h-5 w-5 text-rose-400" />
+            <h2 className="text-base sm:text-lg font-bold text-ink flex items-center gap-2">
+              <Mail className="h-5 w-5 text-negative" />
               <span>Web Deletion Request Form (অ্যাপ আনইনস্টল করে থাকলে)</span>
             </h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-ink-muted leading-relaxed">
               If you have already uninstalled the application or cannot access your account from the device, 
               submit your request below to have our systems delete all your records.
             </p>
           </div>
 
           {submitted ? (
-            <div className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 p-6 text-center space-y-3">
-              <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+            <div className="rounded-xl border border-accent/40 bg-emerald-950/30 p-6 text-center space-y-3">
+              <div className="mx-auto w-12 h-12 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent-strong">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <h3 className="text-base font-bold text-white">
+              <h3 className="text-base font-bold text-ink">
                 Deletion Request Received / অনুরোধ গৃহীত হয়েছে
               </h3>
-              <p className="text-xs text-slate-300 max-w-md mx-auto leading-relaxed">
-                Your account deletion request for <strong className="text-white font-mono">{email}</strong> has been logged. 
+              <p className="text-xs text-ink-soft max-w-md mx-auto leading-relaxed">
+                Your account deletion request for <strong className="text-ink font-mono">{email}</strong> has been logged. 
                 Associated cloud records will be permanently expunged within 24–48 hours.
               </p>
               <div className="pt-2">
@@ -179,7 +179,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                     setReason('');
                     setAgreeChecked(false);
                   }}
-                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200"
+                  className="px-4 py-2 rounded-xl bg-raised hover:bg-slate-700 text-xs font-semibold text-ink-soft"
                 >
                   Submit Another Request
                 </button>
@@ -188,15 +188,15 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {errorMessage && (
-                <div className="p-3.5 rounded-xl border border-rose-500/40 bg-rose-950/40 text-rose-300 text-xs flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400" />
+                <div className="p-3.5 rounded-xl border border-negative/40 bg-rose-950/40 text-negative text-xs flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-negative" />
                   <span>{errorMessage}</span>
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">
-                  Registered Email Address <span className="text-rose-400">*</span>
+                <label className="text-xs font-semibold text-ink-soft">
+                  Registered Email Address <span className="text-negative">*</span>
                 </label>
                 <input
                   type="email"
@@ -204,15 +204,15 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="e.g. yourname@example.com"
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-600 focus:outline-none focus:border-rose-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-slate-600 focus:outline-none focus:border-negative"
                 />
-                <p className="text-[11px] text-slate-500">
+                <p className="text-[11px] text-ink-faint">
                   The email associated with your Google Sign-in or Money Canvas profile.
                 </p>
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-300">
+                <label className="text-xs font-semibold text-ink-soft">
                   Reason for Deletion (Optional / ঐচ্ছিক)
                 </label>
                 <textarea
@@ -220,7 +220,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   onChange={(e) => setReason(e.target.value)}
                   rows={2}
                   placeholder="Optional feedback or reason for closing your account..."
-                  className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs placeholder:text-slate-600 focus:outline-none focus:border-rose-500 resize-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-slate-600 focus:outline-none focus:border-negative resize-none"
                 />
               </div>
 
@@ -230,9 +230,9 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   id="agree-delete"
                   checked={agreeChecked}
                   onChange={(e) => setAgreeChecked(e.target.checked)}
-                  className="mt-0.5 rounded bg-slate-950 border-slate-700 text-rose-500 focus:ring-rose-500 cursor-pointer"
+                  className="mt-0.5 rounded bg-canvas border-slate-700 text-negative focus:ring-rose-500 cursor-pointer"
                 />
-                <label htmlFor="agree-delete" className="text-xs text-slate-300 leading-snug cursor-pointer">
+                <label htmlFor="agree-delete" className="text-xs text-ink-soft leading-snug cursor-pointer">
                   I understand that this action is irreversible and permanently erases all my transactions, 
                   cloud backups, and accounts. (আমি নিশ্চিত করছি যে এই অপসারণ স্থায়ী এবং অপরিবর্তনীয়।)
                 </label>
@@ -242,7 +242,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                 <button
                   type="submit"
                   disabled={isSubmitting || !email || !agreeChecked}
-                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 disabled:bg-rose-950 disabled:text-slate-500 disabled:cursor-not-allowed text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-ink-faint disabled:cursor-not-allowed text-ink font-bold text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
                 >
                   {isSubmitting ? (
                     <span>Submitting Request...</span>
@@ -259,11 +259,11 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
         </div>
 
         {/* Developer Contact Footer */}
-        <div className="rounded-xl border border-slate-800/80 bg-slate-900/30 p-5 text-center space-y-2">
-          <p className="text-xs text-slate-400">
+        <div className="rounded-xl border border-edge/80 bg-surface/30 p-5 text-center space-y-2">
+          <p className="text-xs text-ink-muted">
             For further privacy inquiries or manual assistance, reach the developer directly:
           </p>
-          <div className="flex items-center justify-center gap-4 text-xs font-medium text-slate-300">
+          <div className="flex items-center justify-center gap-4 text-xs font-medium text-ink-soft">
             <a
               href="mailto:raju.official.asf@gmail.com?subject=Money%20Canvas%20Data%20Deletion%20Request"
               className="text-sky-400 hover:underline flex items-center gap-1"
@@ -272,7 +272,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
               <span>raju.official.asf@gmail.com</span>
             </a>
           </div>
-          <p className="text-[11px] text-slate-500 pt-1">
+          <p className="text-[11px] text-ink-faint pt-1">
             Money Canvas — Personal Finance & Wealth OS © 2026. All Rights Reserved.
           </p>
         </div>

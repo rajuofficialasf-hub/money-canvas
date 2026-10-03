@@ -28,42 +28,42 @@
 }
 
 :root[data-theme='ocean-dark'] {
-  --mc-canvas: #030b17;
-  --mc-surface: #0a1a2f;
-  --mc-raised: #142b47;
-  --mc-edge: #1c3a5e;
-  --mc-edge-soft: #0f2238;
-  --mc-ink: #f3f8ff;
-  --mc-ink-soft: #c4d7ee;
-  --mc-ink-muted: #8aa8c8;
-  --mc-ink-faint: #6b89ab;
-  --mc-accent-deep: #0891b2;
-  --mc-accent: #22d3ee; /* cyan-400 */
-  --mc-accent-strong: #67e8f9;
-  --mc-accent-ink: #042430;
-  --mc-positive: #34d399;
+  --mc-canvas: #06101f;
+  --mc-surface: #0c1f3a;
+  --mc-raised: #17345c;
+  --mc-edge: #23497c;
+  --mc-edge-soft: #122b4c;
+  --mc-ink: #f2f8ff;
+  --mc-ink-soft: #bfd6f2;
+  --mc-ink-muted: #7fa3cc;
+  --mc-ink-faint: #5a7ea8;
+  --mc-accent-deep: #0284c7;
+  --mc-accent: #38bdf8;
+  --mc-accent-strong: #7dd3fc;
+  --mc-accent-ink: #04233a;
+  --mc-positive: #2dd4bf;
   --mc-negative: #fb7185;
   --mc-warning: #fbbf24;
   color-scheme: dark;
 }
 
 :root[data-theme='royal-dark'] {
-  --mc-canvas: #0c0613;
-  --mc-surface: #171026;
-  --mc-raised: #261a3e;
-  --mc-edge: #342450;
-  --mc-edge-soft: #1d1430;
-  --mc-ink: #faf7ff;
-  --mc-ink-soft: #d8ccee;
-  --mc-ink-muted: #a292c4;
-  --mc-ink-faint: #7f6fa3;
+  --mc-canvas: #140a26;
+  --mc-surface: #221340;
+  --mc-raised: #342059;
+  --mc-edge: #452e75;
+  --mc-edge-soft: #2a1a4a;
+  --mc-ink: #fbf7ff;
+  --mc-ink-soft: #ddcdf5;
+  --mc-ink-muted: #a98fd6;
+  --mc-ink-faint: #8169ad;
   --mc-accent-deep: #9333ea;
-  --mc-accent: #c084fc; /* purple-400 */
-  --mc-accent-strong: #d8b4fe;
-  --mc-accent-ink: #1e1035;
+  --mc-accent: #c084fc;
+  --mc-accent-strong: #ddb3ff;
+  --mc-accent-ink: #22083d;
   --mc-positive: #4ade80;
   --mc-negative: #fb7185;
-  --mc-warning: #facc15;
+  --mc-warning: #fcd34d;
   color-scheme: dark;
 }
 
@@ -142,7 +142,7 @@ html, body {
     padding: 0 !important;
     margin: 0 !important;
   }
-  .bg-slate-900, .bg-slate-900\/60, .bg-slate-950, .bg-slate-900\/40 {
+  .bg-surface, .bg-surface\/60, .bg-surface\/40, .bg-canvas, .bg-raised, .bg-slate-900, .bg-slate-950 {
     background: white !important;
     color: black !important;
     border-color: #cbd5e1 !important;

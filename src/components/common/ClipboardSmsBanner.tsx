@@ -177,14 +177,14 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
 
   return (
     <div className="fixed bottom-20 lg:bottom-6 right-4 left-4 sm:left-auto sm:right-6 sm:w-96 z-50 animate-in fade-in slide-in-from-bottom-5 duration-300">
-      <div className="rounded-2xl border border-sky-500/40 bg-slate-900/95 backdrop-blur-xl shadow-2xl p-4 space-y-3 text-slate-100 ring-1 ring-sky-500/20">
+      <div className="rounded-2xl border border-sky-500/40 bg-surface/95 backdrop-blur-xl shadow-2xl p-4 space-y-3 text-ink ring-1 ring-sky-500/20">
         {/* Banner Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-sky-500/20 text-sky-400">
               <Sparkles className="h-4 w-4" />
             </div>
-            <span className="text-xs font-bold text-white">
+            <span className="text-xs font-bold text-ink">
               {isBn ? 'ক্লিপবোর্ডে এসএমএস লেনদেন সনাক্ত!' : 'Transaction SMS Detected!'}
             </span>
           </div>
@@ -192,14 +192,14 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
           <button
             type="button"
             onClick={handleDismiss}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-ink-muted hover:text-ink p-1 rounded-lg hover:bg-raised transition-colors"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
         {/* Transaction Summary Card */}
-        <div className="rounded-xl bg-slate-950/80 border border-slate-800 p-3 space-y-2">
+        <div className="rounded-xl bg-canvas/80 border border-edge p-3 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-sky-400 font-mono">
               {parsed.sourceProvider}
@@ -207,8 +207,8 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
             <span
               className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
                 parsed.type === 'income'
-                  ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                  : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                  ? 'bg-accent/20 text-accent-strong border border-accent/30'
+                  : 'bg-negative/20 text-negative border border-negative/30'
               }`}
             >
               {parsed.type.toUpperCase()}
@@ -216,37 +216,37 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
           </div>
 
           <div className="flex items-baseline justify-between">
-            <div className="text-xl font-black text-white font-mono">
+            <div className="text-xl font-black text-ink font-mono">
               ৳{parsed.amount.toLocaleString()}
             </div>
-            <div className="text-[11px] text-slate-400 flex items-center gap-1 font-mono">
+            <div className="text-[11px] text-ink-muted flex items-center gap-1 font-mono">
               <Calendar className="h-3 w-3" />
               <span>{parsed.date}</span>
             </div>
           </div>
 
           {parsed.counterparty && (
-            <p className="text-[11px] text-slate-300 truncate">
+            <p className="text-[11px] text-ink-soft truncate">
               বিবরণ: <strong>{parsed.counterparty}</strong>
             </p>
           )}
 
           {parsed.trxId && (
-            <div className="text-[10px] font-mono text-slate-400 truncate">
+            <div className="text-[10px] font-mono text-ink-muted truncate">
               TrxID: {parsed.trxId}
             </div>
           )}
 
           {alreadyInLedger && (
-            <div className="p-1.5 rounded-lg bg-amber-950/50 border border-amber-500/30 text-amber-300 text-[11px] flex items-center gap-1.5">
-              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-amber-400" />
+            <div className="p-1.5 rounded-lg bg-amber-950/50 border border-warning/30 text-warning text-[11px] flex items-center gap-1.5">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0 text-warning" />
               <span>এই লেনদেনটি ইতিমধ্যে লেজারে যুক্ত থাকতে পারে।</span>
             </div>
           )}
 
           {postSuccess && (
-            <div className="p-2 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 text-xs flex items-center gap-1.5">
-              <Check className="h-4 w-4 text-emerald-400 shrink-0" />
+            <div className="p-2 rounded-lg bg-emerald-950/60 border border-accent/40 text-accent-strong text-xs flex items-center gap-1.5">
+              <Check className="h-4 w-4 text-accent-strong shrink-0" />
               <span>লেনদেন সফলভাবে লেজারে যুক্ত হয়েছে!</span>
             </div>
           )}
@@ -259,7 +259,7 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
               type="button"
               disabled={isPosting}
               onClick={handleQuickPost}
-              className="flex-1 py-2 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/50"
+              className="flex-1 py-2 px-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-accent-ink font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/50"
             >
               <CheckCircle2 className="h-3.5 w-3.5" />
               <span>{isPosting ? 'যোগ হচ্ছে...' : isBn ? 'লেজারে যোগ করুন' : 'Add to Ledger'}</span>
@@ -268,7 +268,7 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
             <button
               type="button"
               onClick={handleOpenInParser}
-              className="py-2 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer border border-slate-700"
+              className="py-2 px-3 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft font-semibold text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer border border-slate-700"
               title="এডিট বা বিস্তারিত দেখুন"
             >
               <span>{isBn ? 'রিভিউ' : 'Review'}</span>
@@ -278,7 +278,7 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
             <button
               type="button"
               onClick={handleDismiss}
-              className="py-2 px-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-400 hover:text-rose-400 text-xs font-semibold transition-colors border border-slate-800"
+              className="py-2 px-2.5 rounded-xl bg-canvas hover:bg-raised text-ink-muted hover:text-negative text-xs font-semibold transition-colors border border-edge"
               title="উপেক্ষা করুন"
             >
               <X className="h-3.5 w-3.5" />

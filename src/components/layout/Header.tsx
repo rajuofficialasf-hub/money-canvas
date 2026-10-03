@@ -447,7 +447,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                     }}
                     className="w-full py-2 px-3 bg-white hover:bg-slate-100 text-slate-900 font-semibold rounded-lg text-xs flex items-center justify-center gap-2 shadow-md transition-all cursor-pointer"
                   >
-                    <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <ShieldCheck className="h-4 w-4 text-accent-deep shrink-0" />
                     <span>Sign In with Google</span>
                   </button>
                   <p className="text-[10px] text-ink-muted text-center">

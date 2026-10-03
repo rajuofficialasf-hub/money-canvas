@@ -110,16 +110,16 @@ export const AccountsView: React.FC = () => {
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-2">
       {/* Top Header */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="border-b border-edge pb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1.5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1.5">
             <Building2 className="h-4 w-4" />
             <span>Accounts & Financial Wallets</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             Bank Accounts & Wallets
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
+          <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
             Manage your cash, savings, checking, credit card, and mobile wallet balances with double-entry integrity.
           </p>
         </div>
@@ -168,7 +168,7 @@ export const AccountsView: React.FC = () => {
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Segmented Filter Control (zero pill rule: functional tab buttons) */}
-        <div className="flex items-center gap-1 p-1 bg-slate-900 rounded-lg border border-slate-800 overflow-x-auto w-full md:w-auto">
+        <div className="flex items-center gap-1 p-1 bg-surface rounded-lg border border-edge overflow-x-auto w-full md:w-auto">
           {[
             { id: 'all', label: 'All Active' },
             { id: 'liquid', label: 'Cash & Bank' },
@@ -182,8 +182,8 @@ export const AccountsView: React.FC = () => {
               onClick={() => setTypeFilter(tab.id)}
               className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap transition-colors ${
                 typeFilter === tab.id
-                  ? 'bg-slate-800 text-white shadow-sm font-semibold'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-raised text-ink shadow-sm font-semibold'
+                  : 'text-ink-muted hover:text-ink-soft'
               }`}
             >
               {tab.label}
@@ -214,22 +214,22 @@ export const AccountsView: React.FC = () => {
               key={acc.id}
               className={`rounded-xl border p-5 flex flex-col justify-between transition-all ${
                 acc.isArchived
-                  ? 'border-slate-800/60 bg-slate-950/40 opacity-60'
-                  : 'border-slate-800 bg-slate-900/50 hover:border-slate-700'
+                  ? 'border-edge/60 bg-canvas/40 opacity-60'
+                  : 'border-edge bg-surface/50 hover:border-slate-700'
               }`}
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between">
                   <div className="space-y-0.5">
-                    <span className="text-[10px] font-mono uppercase text-slate-500">
+                    <span className="text-[10px] font-mono uppercase text-ink-faint">
                       {getAccountTypeLabel(acc.accountType)}
                     </span>
-                    <h3 className="text-sm font-bold text-white tracking-tight">{acc.name}</h3>
+                    <h3 className="text-sm font-bold text-ink tracking-tight">{acc.name}</h3>
                   </div>
 
                   <div className="text-right">
                     {acc.isZakatable && (
-                      <span className="text-[9px] font-mono text-emerald-400 border border-emerald-500/30 bg-emerald-950/20 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-mono text-accent-strong border border-accent/30 bg-emerald-950/20 px-1.5 py-0.5 rounded">
                         Zakatable
                       </span>
                     )}
@@ -237,17 +237,17 @@ export const AccountsView: React.FC = () => {
                 </div>
 
                 {acc.institutionName && (
-                  <div className="text-xs text-slate-400 flex items-center gap-1.5">
-                    <Building2 className="h-3.5 w-3.5 text-slate-500" />
+                  <div className="text-xs text-ink-muted flex items-center gap-1.5">
+                    <Building2 className="h-3.5 w-3.5 text-ink-faint" />
                     <span>{acc.institutionName}</span>
                     {acc.accountNumberMask && (
-                      <span className="text-slate-500 font-mono text-[11px]">({acc.accountNumberMask})</span>
+                      <span className="text-ink-faint font-mono text-[11px]">({acc.accountNumberMask})</span>
                     )}
                   </div>
                 )}
 
                 {acc.accountType === 'credit_card' && acc.creditLimit && (
-                  <div className="text-[11px] text-slate-500 font-mono">
+                  <div className="text-[11px] text-ink-faint font-mono">
                     Limit: ৳{acc.creditLimit.toLocaleString()} · Available: ৳
                     {(acc.creditLimit + balance).toLocaleString()}
                   </div>
@@ -255,12 +255,12 @@ export const AccountsView: React.FC = () => {
               </div>
 
               {/* Balance Bottom Bar */}
-              <div className="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+              <div className="pt-4 mt-4 border-t border-edge/80 flex items-center justify-between">
                 <div>
-                  <div className="text-[10px] font-mono text-slate-500 uppercase">Authoritative Balance</div>
+                  <div className="text-[10px] font-mono text-ink-faint uppercase">Authoritative Balance</div>
                   <div
                     className={`text-lg font-bold font-mono tracking-tight ${
-                      isNegative ? 'text-rose-400' : 'text-emerald-400'
+                      isNegative ? 'text-negative' : 'text-accent-strong'
                     }`}
                   >
                     ৳{balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -271,14 +271,14 @@ export const AccountsView: React.FC = () => {
                   {acc.isArchived ? (
                     <button
                       onClick={() => unarchiveAccount(acc.id)}
-                      className="text-[11px] font-mono text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 transition-colors"
+                      className="text-[11px] font-mono text-ink-muted hover:text-ink px-2 py-1 rounded bg-raised hover:bg-slate-700 transition-colors"
                     >
                       Unarchive
                     </button>
                   ) : (
                     <button
                       onClick={() => archiveAccount(acc.id)}
-                      className="text-[11px] font-mono text-slate-500 hover:text-rose-400 transition-colors"
+                      className="text-[11px] font-mono text-ink-faint hover:text-negative transition-colors"
                       title="Archive account"
                     >
                       <Archive className="h-4 w-4" />
@@ -292,7 +292,7 @@ export const AccountsView: React.FC = () => {
       </div>
 
       {filteredAccounts.length === 0 && (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-12 text-center text-slate-500 text-xs font-mono">
+        <div className="rounded-xl border border-edge bg-surface/30 p-12 text-center text-ink-faint text-xs font-mono">
           No accounts found matching current filter.
         </div>
       )}
@@ -381,14 +381,14 @@ export const AccountsView: React.FC = () => {
               id="zakatable-chk"
               checked={isZakatable}
               onChange={(e) => setIsZakatable(e.target.checked)}
-              className="rounded border-slate-800 bg-slate-950 text-emerald-500 focus:ring-0 cursor-pointer"
+              className="rounded border-edge bg-canvas text-accent focus:ring-0 cursor-pointer"
             />
-            <label htmlFor="zakatable-chk" className="text-slate-300 text-xs cursor-pointer select-none">
+            <label htmlFor="zakatable-chk" className="text-ink-soft text-xs cursor-pointer select-none">
               Include in Zakat wealth calculation (applicable to liquid assets & cash)
             </label>
           </div>
 
-          <div className="border-t border-slate-800 pt-4 flex items-center justify-end gap-3 font-sans">
+          <div className="border-t border-edge pt-4 flex items-center justify-end gap-3 font-sans">
             <Button
               type="button"
               variant="outline"

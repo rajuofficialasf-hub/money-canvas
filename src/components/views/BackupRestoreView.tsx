@@ -697,47 +697,47 @@ export const BackupRestoreView: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Header Banner */}
-      <div className="border-b border-slate-800 pb-5">
-        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+      <div className="border-b border-edge pb-5">
+        <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
           <Database className="h-4 w-4" />
           <span>Data Lifecycle & Backup Portal</span>
         </div>
-        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+        <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
           Data Backup, Export & Restore
         </h1>
-        <p className="text-xs sm:text-sm text-slate-400 mt-1">
+        <p className="text-xs sm:text-sm text-ink-muted mt-1">
           Export full encrypted JSON snapshots, download granular CSV spreadsheets for tax and audit compliance, or restore past state.
         </p>
       </div>
 
       {/* Card 1: Real-Time Google Account Cloud Sync (Instant Mobile <-> Web) */}
-      <div className="bg-slate-900 border border-emerald-500/30 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
-        <div className="absolute -right-10 -top-10 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="bg-surface border border-accent/30 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
+        <div className="absolute -right-10 -top-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4 relative z-10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-4 relative z-10">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-xl border border-emerald-500/30">
+            <div className="p-3 bg-accent/20 text-accent-strong rounded-xl border border-accent/30">
               <Cloud className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <h2 className="text-base sm:text-lg font-bold text-ink flex items-center gap-2">
                   <span>রিয়েল-টাইম ক্লাউড সিঙ্ক (Google Account Cloud Sync)</span>
-                  <Sparkles className="h-4 w-4 text-emerald-400" />
+                  <Sparkles className="h-4 w-4 text-accent-strong" />
                 </h2>
                 {isGoogleAuthenticated ? (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-accent/20 text-accent-strong border border-accent/30 flex items-center gap-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent-strong animate-pulse" />
                     <span>সিঙ্ক সক্রিয় (Active)</span>
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-800 text-slate-400 border border-slate-700">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-raised text-ink-muted border border-slate-700">
                     লোকাল মোড
                   </span>
                 )}
               </div>
-              <p className="text-slate-400 text-xs mt-0.5 max-w-2xl leading-relaxed">
-                <strong className="text-emerald-300">মোবাইল অ্যাপ ও কম্পিউটার ব্রাউজার সিঙ্ক:</strong> আপনি যে ডিভাইসেই একই গুগল অ্যাকাউন্ট দিয়ে লগইন করবেন, স্বয়ংক্রিয়ভাবে আপনার সমস্ত অ্যাকাউন্ট ব্যালেন্স, খরচ এবং পোর্টফোলিও সাথে সাথে পেয়ে যাবেন।
+              <p className="text-ink-muted text-xs mt-0.5 max-w-2xl leading-relaxed">
+                <strong className="text-accent-strong">মোবাইল অ্যাপ ও কম্পিউটার ব্রাউজার সিঙ্ক:</strong> আপনি যে ডিভাইসেই একই গুগল অ্যাকাউন্ট দিয়ে লগইন করবেন, স্বয়ংক্রিয়ভাবে আপনার সমস্ত অ্যাকাউন্ট ব্যালেন্স, খরচ এবং পোর্টফোলিও সাথে সাথে পেয়ে যাবেন।
               </p>
             </div>
           </div>
@@ -745,7 +745,7 @@ export const BackupRestoreView: React.FC = () => {
           {!isGoogleAuthenticated ? (
             <button
               onClick={signInWithGoogle}
-              className="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
+              className="px-5 py-2.5 bg-accent hover:bg-accent-strong text-accent-ink font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
             >
               <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
               <span>Google দিয়ে সাইন-ইন করুন</span>
@@ -755,7 +755,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleCloudSync}
                 disabled={isCloudSyncingManual || cloudSyncStatus === 'syncing'}
-                className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <RefreshCw className={`h-4 w-4 ${isCloudSyncingManual || cloudSyncStatus === 'syncing' ? 'animate-spin' : ''}`} />
                 <span>{isCloudSyncingManual ? 'সিঙ্ক হচ্ছে...' : 'এখনই সিঙ্ক করুন'}</span>
@@ -764,9 +764,9 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleCloudRestore}
                 disabled={isCloudRestoringManual}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
               >
-                <CloudDownload className={`h-4 w-4 ${isCloudRestoringManual ? 'animate-spin text-emerald-400' : ''}`} />
+                <CloudDownload className={`h-4 w-4 ${isCloudRestoringManual ? 'animate-spin text-accent-strong' : ''}`} />
                 <span>{isCloudRestoringManual ? 'লোড হচ্ছে...' : 'ক্লাউড থেকে লোড করুন'}</span>
               </button>
 
@@ -776,7 +776,7 @@ export const BackupRestoreView: React.FC = () => {
                   setVaultError(null);
                   setShowCloudVaultModal(true);
                 }}
-                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all cursor-pointer"
+                className="px-3.5 py-2 bg-indigo-600 hover:bg-indigo-500 text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all cursor-pointer"
               >
                 <ShieldCheck className="h-4 w-4" />
                 <span>এনক্রিপ্টেড ক্লাউড ভল্ট</span>
@@ -789,51 +789,51 @@ export const BackupRestoreView: React.FC = () => {
           <div
             className={`p-3 rounded-xl border text-xs font-medium flex items-center gap-2 ${
               cloudMsg.type === 'success'
-                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
-                : 'bg-rose-950/40 border-rose-500/30 text-rose-300'
+                ? 'bg-emerald-950/40 border-accent/30 text-accent-strong'
+                : 'bg-rose-950/40 border-negative/30 text-negative'
             }`}
           >
             {cloudMsg.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <AlertCircle className="h-4 w-4 text-negative shrink-0" />
             )}
             <span>{cloudMsg.text}</span>
           </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
-            <div className="p-2 bg-slate-900 rounded-lg text-slate-400">
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80 flex items-center gap-3">
+            <div className="p-2 bg-surface rounded-lg text-ink-muted">
               <Users className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] text-slate-500 uppercase font-mono">কানেক্টেড ইউজার</p>
-              <p className="text-slate-200 font-semibold mt-0.5 truncate">{user.fullName}</p>
-              <p className="text-[10px] text-slate-400 truncate">{user.email}</p>
+              <p className="text-[10px] text-ink-faint uppercase font-mono">কানেক্টেড ইউজার</p>
+              <p className="text-ink-soft font-semibold mt-0.5 truncate">{user.fullName}</p>
+              <p className="text-[10px] text-ink-muted truncate">{user.email}</p>
             </div>
           </div>
 
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80 flex items-center gap-3">
+            <div className="p-2 bg-accent/10 rounded-lg text-accent-strong">
               <Smartphone className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] text-slate-500 uppercase font-mono">মাল্টি-ডিভাইস সিঙ্ক</p>
-              <p className="text-emerald-400 font-semibold mt-0.5 flex items-center gap-1">
+              <p className="text-[10px] text-ink-faint uppercase font-mono">মাল্টি-ডিভাইস সিঙ্ক</p>
+              <p className="text-accent-strong font-semibold mt-0.5 flex items-center gap-1">
                 <span>মোবাইল ও ব্রাউজার কানেক্টেড</span>
               </p>
-              <p className="text-[10px] text-slate-400">স্বয়ংক্রিয় ব্যাকগ্রাউন্ড সিঙ্ক</p>
+              <p className="text-[10px] text-ink-muted">স্বয়ংক্রিয় ব্যাকগ্রাউন্ড সিঙ্ক</p>
             </div>
           </div>
 
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80 flex items-center gap-3">
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80 flex items-center gap-3">
             <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400">
               <Laptop className="h-4 w-4" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] text-slate-500 uppercase font-mono">সর্বশেষ ক্লাউড সিঙ্ক</p>
-              <p className="text-slate-200 font-semibold mt-0.5">
+              <p className="text-[10px] text-ink-faint uppercase font-mono">সর্বশেষ ক্লাউড সিঙ্ক</p>
+              <p className="text-ink-soft font-semibold mt-0.5">
                 {lastCloudSyncAt
                   ? new Date(lastCloudSyncAt).toLocaleString('en-US', {
                       month: 'short',
@@ -843,7 +843,7 @@ export const BackupRestoreView: React.FC = () => {
                     })
                   : 'এখনও সিঙ্ক করা হয়নি'}
               </p>
-              <p className="text-[10px] text-emerald-400">Firebase Firestore Cloud</p>
+              <p className="text-[10px] text-accent-strong">Firebase Firestore Cloud</p>
             </div>
           </div>
         </div>
@@ -858,7 +858,7 @@ export const BackupRestoreView: React.FC = () => {
           </div>
         )}
         {cloudSyncStatus !== 'error' && cloudSyncWarning && (
-          <div className="relative z-10 flex items-start gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs rounded-xl p-3" role="alert">
+          <div className="relative z-10 flex items-start gap-2 bg-warning/10 border border-warning/30 text-warning text-xs rounded-xl p-3" role="alert">
             <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
             <p className="leading-relaxed">{cloudSyncWarning}</p>
           </div>
@@ -866,23 +866,23 @@ export const BackupRestoreView: React.FC = () => {
       </div>
 
       {/* Card 2: Google Drive File Backup & Restore */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+      <div className="bg-surface border border-edge rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-4">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl border border-blue-500/20">
               <HardDrive className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-base sm:text-lg font-bold text-white">Google Drive ফাইল ব্যাকআপ ও রিস্টোর (File Archive)</h2>
+                <h2 className="text-base sm:text-lg font-bold text-ink">Google Drive ফাইল ব্যাকআপ ও রিস্টোর (File Archive)</h2>
                 {isGoogleAuthenticated && (
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/20 text-blue-300 border border-blue-500/30">
                     Google Drive Active
                   </span>
                 )}
               </div>
-              <p className="text-slate-400 text-xs mt-0.5">
-                আপনার ব্যক্তিগত গুগল ড্রাইভে ব্যাকআপ ফাইল (<code className="text-slate-300 font-mono">money_canvas_ledger_backup.json</code>) হিসেবে সেভ ও রিস্টোর করুন। মোবাইল এবং ব্রাউজার উভয়েই এই ফাইল অ্যাক্সেস করতে পারবে।
+              <p className="text-ink-muted text-xs mt-0.5">
+                আপনার ব্যক্তিগত গুগল ড্রাইভে ব্যাকআপ ফাইল (<code className="text-ink-soft font-mono">money_canvas_ledger_backup.json</code>) হিসেবে সেভ ও রিস্টোর করুন। মোবাইল এবং ব্রাউজার উভয়েই এই ফাইল অ্যাক্সেস করতে পারবে।
               </p>
             </div>
           </div>
@@ -890,7 +890,7 @@ export const BackupRestoreView: React.FC = () => {
           {!isGoogleAuthenticated ? (
             <button
               onClick={signInWithGoogle}
-              className="px-5 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl border border-slate-700 flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
+              className="px-5 py-2.5 bg-surface hover:bg-raised text-ink text-xs font-bold rounded-xl border border-slate-700 flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
             >
               <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
               <span>Sign In with Google</span>
@@ -900,7 +900,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleBackupToDrive}
                 disabled={isDriveBackingUp}
-                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudUpload className={`h-4 w-4 ${isDriveBackingUp ? 'animate-bounce' : ''}`} />
                 <span>{isDriveBackingUp ? 'ড্রাইভে সেভ হচ্ছে...' : 'Backup to Drive'}</span>
@@ -912,7 +912,7 @@ export const BackupRestoreView: React.FC = () => {
                   setDriveExportError(null);
                 }}
                 disabled={isDriveBackingUp}
-                className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-accent-deep hover:bg-accent text-ink text-xs font-bold rounded-xl flex items-center gap-2 shadow-md transition-all disabled:opacity-50 cursor-pointer"
               >
                 <Lock className="h-4 w-4" />
                 <span>ড্রাইভ এনক্রিপ্ট ব্যাকআপ</span>
@@ -921,7 +921,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleRestoreFromDrive}
                 disabled={isDriveRestoring}
-                className="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudDownload className={`h-4 w-4 ${isDriveRestoring ? 'animate-spin' : ''}`} />
                 <span>{isDriveRestoring ? 'লোড হচ্ছে...' : 'Restore from Drive'}</span>
@@ -934,33 +934,33 @@ export const BackupRestoreView: React.FC = () => {
           <div
             className={`p-3 rounded-xl border text-xs font-medium flex items-center gap-2 ${
               driveMsg.type === 'success'
-                ? 'bg-emerald-950/40 border-emerald-500/30 text-emerald-300'
-                : 'bg-rose-950/40 border-rose-500/30 text-rose-300'
+                ? 'bg-emerald-950/40 border-accent/30 text-accent-strong'
+                : 'bg-rose-950/40 border-negative/30 text-negative'
             }`}
           >
             {driveMsg.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             ) : (
-              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <AlertCircle className="h-4 w-4 text-negative shrink-0" />
             )}
             <span>{driveMsg.text}</span>
           </div>
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 text-xs">
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-            <p className="text-[10px] text-slate-500 uppercase font-mono">ড্রাইভ ফাইল নেম</p>
-            <p className="text-slate-200 font-semibold font-mono mt-0.5 text-[11px] truncate">money_canvas_ledger_backup.json</p>
-            <p className="text-[10px] text-slate-400 truncate">Cross-Device Compatible</p>
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80">
+            <p className="text-[10px] text-ink-faint uppercase font-mono">ড্রাইভ ফাইল নেম</p>
+            <p className="text-ink-soft font-semibold font-mono mt-0.5 text-[11px] truncate">money_canvas_ledger_backup.json</p>
+            <p className="text-[10px] text-ink-muted truncate">Cross-Device Compatible</p>
           </div>
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-            <p className="text-[10px] text-slate-500 uppercase font-mono">Cloud Security</p>
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80">
+            <p className="text-[10px] text-ink-faint uppercase font-mono">Cloud Security</p>
             <p className="text-blue-400 font-semibold mt-0.5">100% Encrypted & Private</p>
-            <p className="text-[10px] text-slate-400">Stored directly in your Google Drive</p>
+            <p className="text-[10px] text-ink-muted">Stored directly in your Google Drive</p>
           </div>
-          <div className="bg-slate-950 p-3 rounded-xl border border-slate-800/80">
-            <p className="text-[10px] text-slate-500 uppercase font-mono">Last Drive Backup</p>
-            <p className="text-slate-200 font-semibold mt-0.5">
+          <div className="bg-canvas p-3 rounded-xl border border-edge/80">
+            <p className="text-[10px] text-ink-faint uppercase font-mono">Last Drive Backup</p>
+            <p className="text-ink-soft font-semibold mt-0.5">
               {user.lastDriveBackupAt
                 ? new Date(user.lastDriveBackupAt).toLocaleString('en-US', {
                     month: 'short',
@@ -970,17 +970,17 @@ export const BackupRestoreView: React.FC = () => {
                   })
                 : 'No backup taken yet'}
             </p>
-            <p className="text-[10px] text-slate-400">Google Drive API</p>
+            <p className="text-[10px] text-ink-muted">Google Drive API</p>
           </div>
         </div>
       </div>
 
       {restoreSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-emerald-400 shrink-0" />
+        <div className="p-4 rounded-xl bg-emerald-950/40 border border-accent/40 text-accent-strong text-xs font-mono flex items-center gap-3">
+          <CheckCircle2 className="h-5 w-5 text-accent-strong shrink-0" />
           <div>
-            <div className="font-bold text-white text-sm">Ledger State Restored Successfully!</div>
-            <p className="text-slate-300 mt-0.5">
+            <div className="font-bold text-ink text-sm">Ledger State Restored Successfully!</div>
+            <p className="text-ink-soft mt-0.5">
               All accounts, journal lines, investment holdings, loans, and audit records have been loaded.
             </p>
           </div>
@@ -991,38 +991,38 @@ export const BackupRestoreView: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Complete JSON Backup Export */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
-                <FileJson className="h-5 w-5 text-emerald-400" />
+          <div className="rounded-xl border border-edge bg-surface/40 p-6 space-y-5">
+            <div className="flex items-center justify-between border-b border-edge pb-4">
+              <div className="flex items-center gap-2 text-sm font-bold text-ink">
+                <FileJson className="h-5 w-5 text-accent-strong" />
                 <span>Full JSON System Backup</span>
               </div>
-              <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[11px] font-mono text-accent-strong bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
                 Schema v5.0 Encapsulated
               </span>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-ink-soft leading-relaxed">
               Downloads a unified, portable JSON snapshot containing your entire financial graph — 
               accounts, double-entry transactions, loans, fixed deposits, stock portfolios, and cryptographic audit hashes.
             </p>
 
-            <div className="rounded-lg bg-slate-950 p-4 border border-slate-800 text-xs font-mono space-y-2 text-slate-400">
+            <div className="rounded-lg bg-canvas p-4 border border-edge text-xs font-mono space-y-2 text-ink-muted">
               <div className="flex justify-between">
                 <span>Active Tenant:</span>
-                <span className="text-white font-medium">{user.fullName}</span>
+                <span className="text-ink font-medium">{user.fullName}</span>
               </div>
               <div className="flex justify-between">
                 <span>Total Accounts:</span>
-                <span className="text-emerald-400">{accounts.length}</span>
+                <span className="text-accent-strong">{accounts.length}</span>
               </div>
               <div className="flex justify-between">
                 <span>Journal Transactions:</span>
-                <span className="text-emerald-400">{transactions.length}</span>
+                <span className="text-accent-strong">{transactions.length}</span>
               </div>
               <div className="flex justify-between">
                 <span>DSE Stock Trades:</span>
-                <span className="text-emerald-400">{stockTransactions.length}</span>
+                <span className="text-accent-strong">{stockTransactions.length}</span>
               </div>
             </div>
 
@@ -1030,7 +1030,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleExportFullJson}
                 disabled={isExporting}
-                className="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors border border-slate-700 disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors border border-slate-700 disabled:opacity-50 cursor-pointer"
               >
                 <Download className={`h-4 w-4 ${isExporting ? 'animate-bounce' : ''}`} />
                 <span>{isExporting ? 'Packaging...' : 'Plain JSON Backup'}</span>
@@ -1041,7 +1041,7 @@ export const BackupRestoreView: React.FC = () => {
                   setShowEncryptedExportModal(true);
                   setExportCryptoError(null);
                 }}
-                className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
+                className="w-full py-2.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer"
               >
                 <Lock className="h-4 w-4" />
                 <span>Encrypted Backup (AES-256)</span>
@@ -1052,17 +1052,17 @@ export const BackupRestoreView: React.FC = () => {
 
         {/* Right: Granular CSV Exports */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div className="flex items-center gap-2 text-sm font-bold text-white">
+          <div className="rounded-xl border border-edge bg-surface/40 p-6 space-y-5">
+            <div className="flex items-center justify-between border-b border-edge pb-4">
+              <div className="flex items-center gap-2 text-sm font-bold text-ink">
                 <FileSpreadsheet className="h-5 w-5 text-sky-400" />
                 <span>Spreadsheet / CSV Exports</span>
               </div>
-              <span className="text-[11px] font-mono text-slate-400">RFC-4180 Format</span>
+              <span className="text-[11px] font-mono text-ink-muted">RFC-4180 Format</span>
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Export specific ledgers to CSV format for Excel, Google Sheets, or accountant tax submission.
               </p>
               <a
@@ -1075,56 +1075,56 @@ export const BackupRestoreView: React.FC = () => {
             </div>
 
             <div className="space-y-2.5">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-canvas border border-edge">
                 <div>
-                  <div className="text-xs font-semibold text-white">Accounts & Balances</div>
-                  <div className="text-[11px] text-slate-400">{accounts.length} accounts with live balances</div>
+                  <div className="text-xs font-semibold text-ink">Accounts & Balances</div>
+                  <div className="text-[11px] text-ink-muted">{accounts.length} accounts with live balances</div>
                 </div>
                 <button
                   onClick={() => handleExportCsv('accounts')}
-                  className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-canvas border border-edge">
                 <div>
-                  <div className="text-xs font-semibold text-white">General Journal Ledger</div>
-                  <div className="text-[11px] text-slate-400">{transactionLines.length} double-entry line items</div>
+                  <div className="text-xs font-semibold text-ink">General Journal Ledger</div>
+                  <div className="text-[11px] text-ink-muted">{transactionLines.length} double-entry line items</div>
                 </div>
                 <button
                   onClick={() => handleExportCsv('ledger')}
-                  className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-canvas border border-edge">
                 <div>
-                  <div className="text-xs font-semibold text-white">Stock Trades & Execution Log</div>
-                  <div className="text-[11px] text-slate-400">{stockTransactions.length} buy/sell trade records</div>
+                  <div className="text-xs font-semibold text-ink">Stock Trades & Execution Log</div>
+                  <div className="text-[11px] text-ink-muted">{stockTransactions.length} buy/sell trade records</div>
                 </div>
                 <button
                   onClick={() => handleExportCsv('trades')}
-                  className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-canvas border border-edge">
                 <div>
-                  <div className="text-xs font-semibold text-white">Dividends & Corporate Actions</div>
-                  <div className="text-[11px] text-slate-400">{dividends.length} dividend payouts & tax credits</div>
+                  <div className="text-xs font-semibold text-ink">Dividends & Corporate Actions</div>
+                  <div className="text-[11px] text-ink-muted">{dividends.length} dividend payouts & tax credits</div>
                 </div>
                 <button
                   onClick={() => handleExportCsv('dividends')}
-                  className="px-3 py-1.5 rounded-md bg-slate-800 hover:bg-slate-700 text-xs font-mono text-slate-200 flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
@@ -1136,86 +1136,86 @@ export const BackupRestoreView: React.FC = () => {
       </div>
 
       {/* Official Financial PDF Statements & Reports */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6 space-y-5">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <FileText className="h-5 w-5 text-rose-400" />
+      <div className="rounded-xl border border-edge bg-surface/40 p-6 space-y-5">
+        <div className="flex items-center justify-between border-b border-edge pb-4">
+          <div className="flex items-center gap-2 text-sm font-bold text-ink">
+            <FileText className="h-5 w-5 text-negative" />
             <span>Official Financial PDF Statement Generation</span>
           </div>
-          <span className="text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+          <span className="text-[11px] font-mono text-accent-strong bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
             Vector Typography & Auto-Calculated Stamps
           </span>
         </div>
 
-        <p className="text-xs text-slate-300 leading-relaxed">
+        <p className="text-xs text-ink-soft leading-relaxed">
           Generate publication-grade PDF documents with official double-entry verification seals, tax assessment schedules, and cryptographic authenticity headers.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3.5 pt-1">
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 rounded-xl bg-canvas border border-edge flex flex-col justify-between space-y-3">
             <div>
-              <div className="text-xs font-bold text-white">NBR Tax Schedule</div>
-              <div className="text-[11px] text-slate-400 mt-1">Section 32/57 Capital Gains Return</div>
+              <div className="text-xs font-bold text-ink">NBR Tax Schedule</div>
+              <div className="text-[11px] text-ink-muted mt-1">Section 32/57 Capital Gains Return</div>
             </div>
             <button
               onClick={() => handleExportPdfStatement('nbr_tax')}
-              className="w-full py-2 rounded-lg bg-rose-600/90 hover:bg-rose-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-rose-600/90 hover:bg-negative text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Tax PDF</span>
             </button>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 rounded-xl bg-canvas border border-edge flex flex-col justify-between space-y-3">
             <div>
-              <div className="text-xs font-bold text-white">Balance Sheet</div>
-              <div className="text-[11px] text-slate-400 mt-1">Statement of Financial Position</div>
+              <div className="text-xs font-bold text-ink">Balance Sheet</div>
+              <div className="text-[11px] text-ink-muted mt-1">Statement of Financial Position</div>
             </div>
             <button
               onClick={() => handleExportPdfStatement('balance_sheet')}
-              className="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Balance Sheet PDF</span>
             </button>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 rounded-xl bg-canvas border border-edge flex flex-col justify-between space-y-3">
             <div>
-              <div className="text-xs font-bold text-white">Income Statement</div>
-              <div className="text-[11px] text-slate-400 mt-1">P&L Operating Surplus & Margins</div>
+              <div className="text-xs font-bold text-ink">Income Statement</div>
+              <div className="text-[11px] text-ink-muted mt-1">P&L Operating Surplus & Margins</div>
             </div>
             <button
               onClick={() => handleExportPdfStatement('pnl')}
-              className="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-accent-deep hover:bg-accent text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>P&L PDF</span>
             </button>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 rounded-xl bg-canvas border border-edge flex flex-col justify-between space-y-3">
             <div>
-              <div className="text-xs font-bold text-white">DSE Valuation</div>
-              <div className="text-[11px] text-slate-400 mt-1">Holdings, WAC & Return Analysis</div>
+              <div className="text-xs font-bold text-ink">DSE Valuation</div>
+              <div className="text-[11px] text-ink-muted mt-1">Holdings, WAC & Return Analysis</div>
             </div>
             <button
               onClick={() => handleExportPdfStatement('valuation')}
-              className="w-full py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-sky-600 hover:bg-sky-500 text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Valuation PDF</span>
             </button>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col justify-between space-y-3">
+          <div className="p-3.5 rounded-xl bg-canvas border border-edge flex flex-col justify-between space-y-3">
             <div>
-              <div className="text-xs font-bold text-white">Audit Certificate</div>
-              <div className="text-[11px] text-slate-400 mt-1">Cryptographic Hash Seal Log</div>
+              <div className="text-xs font-bold text-ink">Audit Certificate</div>
+              <div className="text-[11px] text-ink-muted mt-1">Cryptographic Hash Seal Log</div>
             </div>
             <button
               onClick={() => handleExportPdfStatement('audit')}
-              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
+              className="w-full py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-ink font-mono text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors shadow-xs"
             >
               <FileText className="h-3.5 w-3.5" />
               <span>Audit PDF</span>
@@ -1225,13 +1225,13 @@ export const BackupRestoreView: React.FC = () => {
       </div>
 
       {/* Restore Section */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-6 space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div className="flex items-center gap-2 text-sm font-bold text-white">
-            <Upload className="h-5 w-5 text-amber-400" />
+      <div className="rounded-xl border border-edge bg-surface/40 p-6 space-y-6">
+        <div className="flex items-center justify-between border-b border-edge pb-4">
+          <div className="flex items-center gap-2 text-sm font-bold text-ink">
+            <Upload className="h-5 w-5 text-warning" />
             <span>Restore Ledger from JSON Backup</span>
           </div>
-          <span className="text-[11px] font-mono text-slate-400">Pre-flight Validation Enabled</span>
+          <span className="text-[11px] font-mono text-ink-muted">Pre-flight Validation Enabled</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -1245,20 +1245,20 @@ export const BackupRestoreView: React.FC = () => {
             />
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-700 hover:border-emerald-500 rounded-xl p-8 text-center cursor-pointer transition-colors bg-slate-950/50"
+              className="border-2 border-dashed border-slate-700 hover:border-accent rounded-xl p-8 text-center cursor-pointer transition-colors bg-canvas/50"
             >
-              <Upload className="h-8 w-8 text-slate-500 mx-auto mb-3" />
-              <div className="text-xs font-semibold text-white">
+              <Upload className="h-8 w-8 text-ink-faint mx-auto mb-3" />
+              <div className="text-xs font-semibold text-ink">
                 {restoreFile ? restoreFile.name : 'Click to select JSON backup file'}
               </div>
-              <p className="text-[11px] text-slate-500 mt-1">
+              <p className="text-[11px] text-ink-faint mt-1">
                 Accepts .json backup files generated by FinOS Master v5
               </p>
             </div>
 
             {parseError && (
-              <div className="p-3.5 rounded-lg bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs font-mono flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="p-3.5 rounded-lg bg-rose-950/30 border border-negative/30 text-negative text-xs font-mono flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
                 <span>{parseError}</span>
               </div>
             )}
@@ -1266,26 +1266,26 @@ export const BackupRestoreView: React.FC = () => {
 
           <div className="lg:col-span-6 space-y-4">
             {parsedBundle ? (
-              <div className="rounded-lg bg-slate-950 border border-slate-800 p-4 space-y-3 font-mono text-xs">
-                <div className="flex items-center justify-between text-emerald-400 font-semibold border-b border-slate-800 pb-2">
+              <div className="rounded-lg bg-canvas border border-edge p-4 space-y-3 font-mono text-xs">
+                <div className="flex items-center justify-between text-accent-strong font-semibold border-b border-edge pb-2">
                   <span className="flex items-center gap-1.5">
                     <CheckCircle2 className="h-4 w-4" />
                     <span>Valid Backup Verified</span>
                   </span>
-                  <span className="text-[10px] text-slate-500">Schema {parsedBundle.metadata.schemaVersion}</span>
+                  <span className="text-[10px] text-ink-faint">Schema {parsedBundle.metadata.schemaVersion}</span>
                 </div>
 
-                <div className="space-y-1.5 text-slate-300 text-[11px]">
-                  <div>Original Owner: <span className="text-white">{parsedBundle.metadata.userFullName}</span></div>
-                  <div>Export Timestamp: <span className="text-slate-400">{parsedBundle.metadata.exportedAt}</span></div>
-                  <div>Accounts Included: <span className="text-emerald-400">{parsedBundle.metadata.recordCounts.accounts || 0}</span></div>
-                  <div>Transactions Included: <span className="text-emerald-400">{parsedBundle.metadata.recordCounts.transactions || 0}</span></div>
+                <div className="space-y-1.5 text-ink-soft text-[11px]">
+                  <div>Original Owner: <span className="text-ink">{parsedBundle.metadata.userFullName}</span></div>
+                  <div>Export Timestamp: <span className="text-ink-muted">{parsedBundle.metadata.exportedAt}</span></div>
+                  <div>Accounts Included: <span className="text-accent-strong">{parsedBundle.metadata.recordCounts.accounts || 0}</span></div>
+                  <div>Transactions Included: <span className="text-accent-strong">{parsedBundle.metadata.recordCounts.transactions || 0}</span></div>
                 </div>
 
                 <div className="pt-2">
                   <button
                     onClick={handleExecuteRestore}
-                    className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-2.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold font-mono text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <RefreshCw className="h-4 w-4" />
                     <span>Apply & Overwrite Current Tenant State</span>
@@ -1293,25 +1293,25 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
               </div>
             ) : fileEncryptedBundle ? (
-              <div className="rounded-lg bg-slate-950 border border-amber-500/40 p-4 space-y-3.5 font-mono text-xs">
-                <div className="flex items-center justify-between text-amber-400 font-semibold border-b border-slate-800 pb-2">
+              <div className="rounded-lg bg-canvas border border-warning/40 p-4 space-y-3.5 font-mono text-xs">
+                <div className="flex items-center justify-between text-warning font-semibold border-b border-edge pb-2">
                   <span className="flex items-center gap-1.5">
                     <Lock className="h-4 w-4" />
                     <span>এনক্রিপ্টেড ব্যাকআপ ডিটেক্টেড (AES-GCM)</span>
                   </span>
-                  <span className="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/20">
+                  <span className="text-[10px] bg-warning/10 text-warning px-2 py-0.5 rounded border border-warning/20">
                     256-bit PBKDF2
                   </span>
                 </div>
 
-                <div className="space-y-1 text-slate-300 text-[11px]">
+                <div className="space-y-1 text-ink-soft text-[11px]">
                   {fileEncryptedBundle.userFullName && (
-                    <div>ব্যবহারকারী: <span className="text-white font-medium">{fileEncryptedBundle.userFullName}</span></div>
+                    <div>ব্যবহারকারী: <span className="text-ink font-medium">{fileEncryptedBundle.userFullName}</span></div>
                   )}
-                  <div>এক্সপোর্ট তারিখ: <span className="text-slate-400">{new Date(fileEncryptedBundle.exportedAt).toLocaleString('bn-BD')}</span></div>
+                  <div>এক্সপোর্ট তারিখ: <span className="text-ink-muted">{new Date(fileEncryptedBundle.exportedAt).toLocaleString('bn-BD')}</span></div>
                   {fileEncryptedBundle.hint && (
-                    <div className="p-2 rounded bg-amber-950/20 border border-amber-500/20 text-amber-200 text-[11px] flex items-center gap-1.5 mt-2">
-                      <Sparkles className="h-3.5 w-3.5 shrink-0 text-amber-400" />
+                    <div className="p-2 rounded bg-amber-950/20 border border-warning/20 text-amber-200 text-[11px] flex items-center gap-1.5 mt-2">
+                      <Sparkles className="h-3.5 w-3.5 shrink-0 text-warning" />
                       <span>পাসফ্রেজ হিন্ট: <strong>{fileEncryptedBundle.hint}</strong></span>
                     </div>
                   )}
@@ -1332,7 +1332,7 @@ export const BackupRestoreView: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setShowFileDecryptPassword(!showFileDecryptPassword)}
-                          className="text-slate-400 hover:text-white cursor-pointer"
+                          className="text-ink-muted hover:text-ink cursor-pointer"
                         >
                           {showFileDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                         </button>
@@ -1341,7 +1341,7 @@ export const BackupRestoreView: React.FC = () => {
                   </Field>
 
                   {fileDecryptError && (
-                    <div className="p-2 rounded bg-rose-950/30 border border-rose-500/30 text-rose-300 text-[11px] flex items-center gap-1.5">
+                    <div className="p-2 rounded bg-rose-950/30 border border-negative/30 text-negative text-[11px] flex items-center gap-1.5">
                       <AlertCircle className="h-3.5 w-3.5 shrink-0" />
                       <span>{fileDecryptError}</span>
                     </div>
@@ -1350,7 +1350,7 @@ export const BackupRestoreView: React.FC = () => {
                   <button
                     onClick={handleDecryptLocalFile}
                     disabled={isDecryptingFile || !fileDecryptPassphrase}
-                    className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                    className="w-full py-2.5 rounded-lg bg-warning hover:bg-warning text-accent-ink font-bold text-xs transition-colors flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
                   >
                     <Unlock className={`h-4 w-4 ${isDecryptingFile ? 'animate-spin' : ''}`} />
                     <span>{isDecryptingFile ? 'ডিক্রিপ্ট হচ্ছে...' : 'ডিক্রিপ্ট ও আনলক করুন'}</span>
@@ -1358,7 +1358,7 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="rounded-lg bg-slate-950/40 border border-slate-800/60 p-6 text-center text-xs text-slate-500 font-mono flex flex-col items-center justify-center h-full">
+              <div className="rounded-lg bg-canvas/40 border border-edge/60 p-6 text-center text-xs text-ink-faint font-mono flex flex-col items-center justify-center h-full">
                 <Shield className="h-6 w-6 text-slate-600 mb-2" />
                 <span>Select a plain or AES-GCM encrypted backup file to inspect record contents before applying.</span>
               </div>
@@ -1369,11 +1369,11 @@ export const BackupRestoreView: React.FC = () => {
 
       {/* Danger Zone: Factory Reset */}
       <div className="rounded-xl border border-rose-900/40 bg-rose-950/10 p-6 space-y-4">
-        <div className="flex items-center gap-2 text-sm font-bold text-rose-400">
-          <AlertTriangle className="h-5 w-5 text-rose-400" />
+        <div className="flex items-center gap-2 text-sm font-bold text-negative">
+          <AlertTriangle className="h-5 w-5 text-negative" />
           <span>Danger Zone: Hard Tenant Factory Reset</span>
         </div>
-        <p className="text-xs text-slate-400 leading-relaxed max-w-3xl">
+        <p className="text-xs text-ink-muted leading-relaxed max-w-3xl">
           Permanently wipes all local accounts, transactions, investments, and audit records for the active tenant profile. 
           The application will return to a clean initial state. This action cannot be undone.
         </p>
@@ -1388,8 +1388,8 @@ export const BackupRestoreView: React.FC = () => {
             Reset Tenant Data
           </Button>
         ) : (
-          <div className="p-4 rounded-lg bg-slate-950 border border-rose-500/50 space-y-3 max-w-md font-mono text-xs">
-            <div className="text-rose-400 font-semibold">
+          <div className="p-4 rounded-lg bg-canvas border border-negative/50 space-y-3 max-w-md font-mono text-xs">
+            <div className="text-negative font-semibold">
               Type "CONFIRM RESET" to purge active tenant:
             </div>
             <Input
@@ -1403,7 +1403,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleExecuteReset}
                 disabled={confirmResetText.trim() !== 'CONFIRM RESET'}
-                className="px-4 py-1.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold transition-colors disabled:opacity-30"
+                className="px-4 py-1.5 rounded bg-rose-600 hover:bg-negative text-ink font-semibold transition-colors disabled:opacity-30"
               >
                 Permanently Purge
               </button>
@@ -1412,7 +1412,7 @@ export const BackupRestoreView: React.FC = () => {
                   setShowResetModal(false);
                   setConfirmResetText('');
                 }}
-                className="px-3 py-1.5 rounded text-slate-400 hover:text-white"
+                className="px-3 py-1.5 rounded text-ink-muted hover:text-ink"
               >
                 Cancel
               </button>
@@ -1430,8 +1430,8 @@ export const BackupRestoreView: React.FC = () => {
             setExportCryptoError(null);
           }}
           title={
-            <div className="flex items-center gap-2 text-white">
-              <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="flex items-center gap-2 text-ink">
+              <div className="p-1.5 rounded-lg bg-accent/10 text-accent-strong border border-accent/20">
                 <ShieldCheck className="h-5 w-5" />
               </div>
               <span>এনক্রিপ্টেড ব্যাকআপ এক্সপোর্ট (AES-GCM-256)</span>
@@ -1440,9 +1440,9 @@ export const BackupRestoreView: React.FC = () => {
           description="আপনার সমস্ত আর্থিক রেকর্ড 256-বিট এইএস এনক্রিপশন ও পাসফ্রেজ দিয়ে সুরক্ষিত করে ডাউনলোড করুন।"
         >
           <div className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-500/30 text-amber-200 text-xs leading-relaxed space-y-1">
-              <div className="flex items-center gap-2 font-bold text-amber-300">
-                <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+            <div className="p-3.5 rounded-xl bg-amber-950/30 border border-warning/30 text-amber-200 text-xs leading-relaxed space-y-1">
+              <div className="flex items-center gap-2 font-bold text-warning">
+                <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
                 <span>জিরো-নলেজ সিকিউরিটি নোটিশ (Zero-Knowledge Privacy)</span>
               </div>
               <p>
@@ -1458,10 +1458,10 @@ export const BackupRestoreView: React.FC = () => {
                     <span
                       className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded ${
                         validatePassphrase(exportPassphrase).strength === 'strong'
-                          ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                          ? 'bg-accent/20 text-accent-strong border border-accent/30'
                           : validatePassphrase(exportPassphrase).strength === 'medium'
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                          : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                          ? 'bg-warning/20 text-warning border border-warning/30'
+                          : 'bg-negative/20 text-negative border border-negative/30'
                       }`}
                     >
                       {validatePassphrase(exportPassphrase).strength === 'strong'
@@ -1484,7 +1484,7 @@ export const BackupRestoreView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowExportPassword(!showExportPassword)}
-                    className="text-slate-400 hover:text-white cursor-pointer"
+                    className="text-ink-muted hover:text-ink cursor-pointer"
                   >
                     {showExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -1506,7 +1506,7 @@ export const BackupRestoreView: React.FC = () => {
               label={
                 <span className="flex items-center justify-between">
                   <span>পাসফ্রেজ হিন্ট (ঐচ্ছিক):</span>
-                  <span className="text-[10px] text-slate-500">ফাইলে দেখা যাবে</span>
+                  <span className="text-[10px] text-ink-faint">ফাইলে দেখা যাবে</span>
                 </span>
               }
             >
@@ -1519,13 +1519,13 @@ export const BackupRestoreView: React.FC = () => {
             </Field>
 
             {exportCryptoError && (
-              <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="p-3 rounded-xl bg-rose-950/30 border border-negative/30 text-negative text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
                 <span>{exportCryptoError}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
               <Button
                 type="button"
                 variant="secondary"
@@ -1556,7 +1556,7 @@ export const BackupRestoreView: React.FC = () => {
             setDriveExportError(null);
           }}
           title={
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-2 text-ink">
               <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 border border-blue-500/20">
                 <CloudUpload className="h-5 w-5" />
               </div>
@@ -1566,9 +1566,9 @@ export const BackupRestoreView: React.FC = () => {
           description="আপনার লেজার ব্যাকআপটিকে ড্রাইভের ক্লাউডে আপলোডের পূর্বে ব্রাউজারে পাসফ্রেজ দিয়ে এনক্রিপ্ট করুন।"
         >
           <div className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-amber-950/30 border border-amber-500/30 text-amber-200 text-xs leading-relaxed space-y-1">
-              <div className="flex items-center gap-2 font-bold text-amber-300">
-                <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+            <div className="p-3.5 rounded-xl bg-amber-950/30 border border-warning/30 text-amber-200 text-xs leading-relaxed space-y-1">
+              <div className="flex items-center gap-2 font-bold text-warning">
+                <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
                 <span>নিরাপত্তা সতর্কতা</span>
               </div>
               <p>
@@ -1587,7 +1587,7 @@ export const BackupRestoreView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowDriveExportPassword(!showDriveExportPassword)}
-                    className="text-slate-400 hover:text-white cursor-pointer"
+                    className="text-ink-muted hover:text-ink cursor-pointer"
                   >
                     {showDriveExportPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -1615,13 +1615,13 @@ export const BackupRestoreView: React.FC = () => {
             </Field>
 
             {driveExportError && (
-              <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="p-3 rounded-xl bg-rose-950/30 border border-negative/30 text-negative text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
                 <span>{driveExportError}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
               <Button
                 type="button"
                 variant="secondary"
@@ -1633,7 +1633,7 @@ export const BackupRestoreView: React.FC = () => {
                 type="button"
                 onClick={handleExecuteDriveEncryptedBackup}
                 disabled={isDriveEncrypting || !driveExportPassphrase || !driveExportPassphraseConfirm}
-                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
               >
                 <CloudUpload className={`h-4 w-4 ${isDriveEncrypting ? 'animate-bounce' : ''}`} />
                 <span>{isDriveEncrypting ? 'এনক্রিপ্ট ও আপলোড হচ্ছে...' : 'এনক্রিপ্ট করে ড্রাইভে সেভ'}</span>
@@ -1652,8 +1652,8 @@ export const BackupRestoreView: React.FC = () => {
             setDriveDecryptError(null);
           }}
           title={
-            <div className="flex items-center gap-2 text-white">
-              <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
+            <div className="flex items-center gap-2 text-ink">
+              <div className="p-1.5 rounded-lg bg-warning/10 text-warning border border-warning/20">
                 <Lock className="h-5 w-5" />
               </div>
               <span>Google Drive এনক্রিপ্টেড ব্যাকআপ আনলক</span>
@@ -1663,8 +1663,8 @@ export const BackupRestoreView: React.FC = () => {
         >
           <div className="space-y-4">
             {driveEncryptedBundle?.hint && (
-              <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30 text-amber-200 text-xs flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+              <div className="p-3 rounded-xl bg-amber-950/20 border border-warning/30 text-amber-200 text-xs flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-warning shrink-0" />
                 <span>
                   পাসফ্রেজ হিন্ট: <strong>{driveEncryptedBundle.hint}</strong>
                 </span>
@@ -1685,7 +1685,7 @@ export const BackupRestoreView: React.FC = () => {
                   <button
                     type="button"
                     onClick={() => setShowDriveDecryptPassword(!showDriveDecryptPassword)}
-                    className="text-slate-400 hover:text-white cursor-pointer"
+                    className="text-ink-muted hover:text-ink cursor-pointer"
                   >
                     {showDriveDecryptPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -1694,13 +1694,13 @@ export const BackupRestoreView: React.FC = () => {
             </Field>
 
             {driveDecryptError && (
-              <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="p-3 rounded-xl bg-rose-950/30 border border-negative/30 text-negative text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
                 <span>{driveDecryptError}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
               <Button
                 type="button"
                 variant="secondary"
@@ -1712,7 +1712,7 @@ export const BackupRestoreView: React.FC = () => {
                 type="button"
                 onClick={handleExecuteDriveDecryptRestore}
                 disabled={isDriveDecrypting || !driveDecryptPassphrase}
-                className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                className="px-5 py-2 rounded-xl bg-warning hover:bg-warning text-accent-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
               >
                 <Unlock className={`h-4 w-4 ${isDriveDecrypting ? 'animate-spin' : ''}`} />
                 <span>{isDriveDecrypting ? 'ডিক্রিপ্ট হচ্ছে...' : 'ডিক্রিপ্ট ও রিস্টোর করুন'}</span>
@@ -1731,7 +1731,7 @@ export const BackupRestoreView: React.FC = () => {
             setVaultError(null);
           }}
           title={
-            <div className="flex items-center gap-2 text-white">
+            <div className="flex items-center gap-2 text-ink">
               <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                 <ShieldCheck className="h-5 w-5" />
               </div>
@@ -1742,7 +1742,7 @@ export const BackupRestoreView: React.FC = () => {
         >
           <div className="space-y-4">
             {/* Mode Switcher */}
-            <div className="flex rounded-xl bg-slate-950 p-1 border border-slate-800">
+            <div className="flex rounded-xl bg-canvas p-1 border border-edge">
               <button
                 type="button"
                 onClick={() => {
@@ -1751,8 +1751,8 @@ export const BackupRestoreView: React.FC = () => {
                 }}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   vaultMode === 'export'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-indigo-600 text-ink shadow-sm'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 ভল্টে ব্যাকআপ রাখুন
@@ -1765,8 +1765,8 @@ export const BackupRestoreView: React.FC = () => {
                 }}
                 className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   vaultMode === 'restore'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-indigo-600 text-ink shadow-sm'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 ভল্ট থেকে রিস্টোর করুন
@@ -1775,7 +1775,7 @@ export const BackupRestoreView: React.FC = () => {
 
             {vaultMode === 'export' ? (
               <div className="space-y-3.5">
-                <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/30 text-amber-200 text-xs">
+                <div className="p-3 rounded-xl bg-amber-950/20 border border-warning/30 text-amber-200 text-xs">
                   ভল্টে সংরক্ষিত ডেটা আপনার ব্রাউজারেই AES-GCM দিয়ে এনক্রিপ্ট হয়ে ক্লাউডে পৌঁছায়। পাসফ্রেজ হারিয়ে গেলে এই ডেটা আর কোনোভাবেই উদ্ধার করা সম্ভব নয়।
                 </div>
 
@@ -1790,7 +1790,7 @@ export const BackupRestoreView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setShowVaultPassword(!showVaultPassword)}
-                        className="text-slate-400 hover:text-white cursor-pointer"
+                        className="text-ink-muted hover:text-ink cursor-pointer"
                       >
                         {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
@@ -1819,7 +1819,7 @@ export const BackupRestoreView: React.FC = () => {
               </div>
             ) : (
               <div className="space-y-3.5">
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-ink-soft">
                   ক্লাউড ভল্ট থেকে ডেটা নামিয়ে ডিক্রিপ্ট করতে ভল্ট তৈরির সময় ব্যবহৃত পাসফ্রেজটি লিখুন:
                 </p>
                 <Field label="ভল্ট পাসফ্রেজ:">
@@ -1836,7 +1836,7 @@ export const BackupRestoreView: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => setShowVaultPassword(!showVaultPassword)}
-                        className="text-slate-400 hover:text-white cursor-pointer"
+                        className="text-ink-muted hover:text-ink cursor-pointer"
                       >
                         {showVaultPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
@@ -1847,13 +1847,13 @@ export const BackupRestoreView: React.FC = () => {
             )}
 
             {vaultError && (
-              <div className="p-3 rounded-xl bg-rose-950/30 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
-                <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <div className="p-3 rounded-xl bg-rose-950/30 border border-negative/30 text-negative text-xs flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
                 <span>{vaultError}</span>
               </div>
             )}
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
               <Button
                 type="button"
                 variant="secondary"
@@ -1866,7 +1866,7 @@ export const BackupRestoreView: React.FC = () => {
                   type="button"
                   onClick={handleSaveToCloudVault}
                   disabled={isVaultOperating || !vaultPassphrase || !vaultPassphraseConfirm}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
                 >
                   <Lock className={`h-4 w-4 ${isVaultOperating ? 'animate-spin' : ''}`} />
                   <span>{isVaultOperating ? 'ভল্টে সেভ হচ্ছে...' : 'ভল্টে এনক্রিপ্ট করে সেভ'}</span>
@@ -1876,7 +1876,7 @@ export const BackupRestoreView: React.FC = () => {
                   type="button"
                   onClick={handleRestoreFromCloudVault}
                   disabled={isVaultOperating || !vaultPassphrase}
-                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
+                  className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-ink font-bold text-xs flex items-center gap-2 shadow-lg disabled:opacity-50 cursor-pointer"
                 >
                   <Unlock className={`h-4 w-4 ${isVaultOperating ? 'animate-spin' : ''}`} />
                   <span>{isVaultOperating ? 'ডিক্রিপ্ট হচ্ছে...' : 'ডিক্রিপ্ট ও রিস্টোর করুন'}</span>

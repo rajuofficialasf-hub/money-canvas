@@ -80,17 +80,17 @@ export const ArchitectureViewer: React.FC = () => {
   return (
     <div className="space-y-10 max-w-6xl mx-auto py-4">
       {/* Hero Header */}
-      <div className="border-b border-slate-800 pb-8">
-        <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-2">
+      <div className="border-b border-edge pb-8">
+        <div className="flex items-center gap-2 text-xs font-mono text-accent-strong mb-2">
           <ShieldCheck className="h-4 w-4" />
           <span>PHASE 0 ARCHITECTURE LOCK</span>
           <span>·</span>
           <span>MASTER SPECIFICATION V5</span>
         </div>
-        <h1 className="text-3xl font-bold tracking-tight text-white mb-3">
+        <h1 className="text-3xl font-bold tracking-tight text-ink mb-3">
           Authoritative Accounting & Financial Ledger Architecture
         </h1>
-        <p className="text-slate-400 text-sm max-w-3xl leading-relaxed">
+        <p className="text-ink-muted text-sm max-w-3xl leading-relaxed">
           The user interface is never a source of truth for financial balances, P/L, cost basis, XIRR, or Net Worth.
           All balances and performance returns are deterministically derived from immutable, signed double-entry ledger lines.
         </p>
@@ -100,10 +100,10 @@ export const ArchitectureViewer: React.FC = () => {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-white">The 7 Master Architectural Locks</h2>
-            <p className="text-xs text-slate-400">Non-negotiable accounting rules locked in Build Plan v5</p>
+            <h2 className="text-lg font-semibold text-ink">The 7 Master Architectural Locks</h2>
+            <p className="text-xs text-ink-muted">Non-negotiable accounting rules locked in Build Plan v5</p>
           </div>
-          <span className="text-xs font-mono text-slate-500">{activeLockIndex + 1} of 7</span>
+          <span className="text-xs font-mono text-ink-faint">{activeLockIndex + 1} of 7</span>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
@@ -115,53 +115,53 @@ export const ArchitectureViewer: React.FC = () => {
                 onClick={() => setActiveLockIndex(idx)}
                 className={`w-full text-left p-3.5 rounded-lg border transition-all text-xs ${
                   activeLockIndex === idx
-                    ? 'border-emerald-500/50 bg-emerald-950/20 text-white'
-                    : 'border-slate-800/80 bg-slate-900/40 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                    ? 'border-accent/50 bg-emerald-950/20 text-ink'
+                    : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-mono text-[10px] text-emerald-400">{item.tag}</span>
-                  {activeLockIndex === idx && <Check className="h-3.5 w-3.5 text-emerald-400" />}
+                  <span className="font-mono text-[10px] text-accent-strong">{item.tag}</span>
+                  {activeLockIndex === idx && <Check className="h-3.5 w-3.5 text-accent-strong" />}
                 </div>
-                <div className="font-medium text-sm text-slate-200 truncate">{item.title}</div>
-                <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{item.summary}</div>
+                <div className="font-medium text-sm text-ink-soft truncate">{item.title}</div>
+                <div className="text-[11px] text-ink-faint line-clamp-1 mt-0.5">{item.summary}</div>
               </button>
             ))}
           </div>
 
           {/* Detailed Lock Showcase */}
-          <div className="lg:col-span-8 rounded-xl border border-slate-800 bg-slate-900/60 p-6 flex flex-col justify-between">
+          <div className="lg:col-span-8 rounded-xl border border-edge bg-surface/60 p-6 flex flex-col justify-between">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                <span className="text-xs font-mono px-2 py-0.5 rounded bg-accent/10 text-accent-strong border border-accent/30">
                   {locks[activeLockIndex].tag}
                 </span>
-                <span className="text-xs text-slate-400 font-mono">Status: Locked & Invariant Enforced</span>
+                <span className="text-xs text-ink-muted font-mono">Status: Locked & Invariant Enforced</span>
               </div>
 
-              <h3 className="text-xl font-bold text-white tracking-tight">
+              <h3 className="text-xl font-bold text-ink tracking-tight">
                 {locks[activeLockIndex].title}
               </h3>
 
-              <div className="rounded-lg bg-slate-950 p-4 border border-slate-800 font-mono text-xs text-emerald-300">
-                <div className="text-slate-500 text-[10px] uppercase mb-1">Authoritative Formula / Rule</div>
+              <div className="rounded-lg bg-canvas p-4 border border-edge font-mono text-xs text-accent-strong">
+                <div className="text-ink-faint text-[10px] uppercase mb-1">Authoritative Formula / Rule</div>
                 <div>{locks[activeLockIndex].rule}</div>
               </div>
 
-              <div className="text-sm text-slate-300 leading-relaxed">
+              <div className="text-sm text-ink-soft leading-relaxed">
                 {locks[activeLockIndex].detail}
               </div>
 
-              <div className="rounded-lg bg-slate-950/80 p-3.5 border border-slate-800/80 text-xs">
-                <div className="text-slate-400 font-medium mb-1 flex items-center gap-1.5">
-                  <Scale className="h-3.5 w-3.5 text-slate-400" />
+              <div className="rounded-lg bg-canvas/80 p-3.5 border border-edge/80 text-xs">
+                <div className="text-ink-muted font-medium mb-1 flex items-center gap-1.5">
+                  <Scale className="h-3.5 w-3.5 text-ink-muted" />
                   <span>Concrete Example:</span>
                 </div>
-                <div className="font-mono text-slate-300">{locks[activeLockIndex].example}</div>
+                <div className="font-mono text-ink-soft">{locks[activeLockIndex].example}</div>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+            <div className="pt-6 border-t border-edge/80 flex items-center justify-between text-xs text-ink-faint">
               <span>PostgreSQL Constraint & Trigger Verified</span>
               <span>Decimal-Safe Numeric(14,2)</span>
             </div>
@@ -171,40 +171,40 @@ export const ArchitectureViewer: React.FC = () => {
 
       {/* Ledger Model & Invariants Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+        <div className="rounded-xl border border-edge bg-surface/30 p-5 space-y-3">
+          <div className="flex items-center gap-2 text-accent-strong text-sm font-semibold">
             <Layers className="h-4 w-4" />
             <span>Double-Entry Model</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Practical middle-path: <code className="text-slate-300 font-mono">transactions</code> event header and{' '}
-            <code className="text-slate-300 font-mono">transaction_lines</code>. Lines strictly hold either an{' '}
-            <code className="text-slate-300 font-mono">account_id</code> OR a{' '}
-            <code className="text-slate-300 font-mono">category_id</code>, never both.
+          <p className="text-xs text-ink-muted leading-relaxed">
+            Practical middle-path: <code className="text-ink-soft font-mono">transactions</code> event header and{' '}
+            <code className="text-ink-soft font-mono">transaction_lines</code>. Lines strictly hold either an{' '}
+            <code className="text-ink-soft font-mono">account_id</code> OR a{' '}
+            <code className="text-ink-soft font-mono">category_id</code>, never both.
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+        <div className="rounded-xl border border-edge bg-surface/30 p-5 space-y-3">
+          <div className="flex items-center gap-2 text-accent-strong text-sm font-semibold">
             <ArrowRightLeft className="h-4 w-4" />
             <span>Sign Conventions</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Asset increase: <span className="font-mono text-emerald-400">+</span> | Asset decrease:{' '}
-            <span className="font-mono text-rose-400">-</span>. Liability increase:{' '}
-            <span className="font-mono text-rose-400">-</span> | Liability decrease:{' '}
-            <span className="font-mono text-emerald-400">+</span>. Category lines: Expense/Income are positive, refunds are signed negative.
+          <p className="text-xs text-ink-muted leading-relaxed">
+            Asset increase: <span className="font-mono text-accent-strong">+</span> | Asset decrease:{' '}
+            <span className="font-mono text-negative">-</span>. Liability increase:{' '}
+            <span className="font-mono text-negative">-</span> | Liability decrease:{' '}
+            <span className="font-mono text-accent-strong">+</span>. Category lines: Expense/Income are positive, refunds are signed negative.
           </p>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-5 space-y-3">
-          <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+        <div className="rounded-xl border border-edge bg-surface/30 p-5 space-y-3">
+          <div className="flex items-center gap-2 text-accent-strong text-sm font-semibold">
             <BookOpen className="h-4 w-4" />
             <span>Immutability & Reversals</span>
           </div>
-          <p className="text-xs text-slate-400 leading-relaxed">
+          <p className="text-xs text-ink-muted leading-relaxed">
             Posted transactions are permanently immutable. Corrections require posting an equal and opposite reversal transaction with{' '}
-            <code className="text-slate-300 font-mono">linked_transaction_id</code>. Audit log is strictly INSERT-only.
+            <code className="text-ink-soft font-mono">linked_transaction_id</code>. Audit log is strictly INSERT-only.
           </p>
         </div>
       </div>

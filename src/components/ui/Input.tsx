@@ -21,7 +21,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? 'true' : undefined}
           className={`w-full rounded-xl border ${
             error
-              ? 'border-negative/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/30'
+              ? 'border-negative/80 focus:border-negative focus:ring-1 focus:ring-rose-500/30'
               : 'border-edge focus:border-accent focus:ring-1 focus:ring-accent/20'
           } bg-canvas ${Icon ? 'pl-9' : 'px-3'} ${
             rightElement ? 'pr-10' : 'pr-3'

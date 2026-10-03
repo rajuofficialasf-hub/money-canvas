@@ -39,7 +39,7 @@ export const SyncConflictModal: React.FC = () => {
       onClose={() => {}}
       title={
         <span className="flex items-center gap-2">
-          <GitBranch className="h-5 w-5 text-amber-400" />
+          <GitBranch className="h-5 w-5 text-warning" />
           <span>সিঙ্ক দ্বন্দ্ব — কোন ডেটা রাখবেন?</span>
         </span>
       }
@@ -50,16 +50,16 @@ export const SyncConflictModal: React.FC = () => {
       showCloseButton={false}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
+        <div className="bg-canvas border border-edge rounded-xl p-4 space-y-2">
           <div className="flex items-center gap-2 text-blue-400 text-xs font-bold">
             <Laptop className="h-4 w-4" />
             <span>এই ডিভাইস (This Device)</span>
           </div>
-          <p className="text-xs text-slate-400">
-            সর্বশেষ সিঙ্ক: <span className="text-slate-200">{fmt(syncConflict.localLastSavedAt)}</span>
+          <p className="text-xs text-ink-muted">
+            সর্বশেষ সিঙ্ক: <span className="text-ink-soft">{fmt(syncConflict.localLastSavedAt)}</span>
           </p>
-          <p className="text-xs text-slate-400">
-            রেকর্ড সংখ্যা: <span className="text-slate-200">{syncConflict.localRecordCount.toLocaleString()}</span>
+          <p className="text-xs text-ink-muted">
+            রেকর্ড সংখ্যা: <span className="text-ink-soft">{syncConflict.localRecordCount.toLocaleString()}</span>
           </p>
           <Button
             variant="primary"
@@ -71,16 +71,16 @@ export const SyncConflictModal: React.FC = () => {
           </Button>
         </div>
 
-        <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-2">
-          <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold">
+        <div className="bg-canvas border border-edge rounded-xl p-4 space-y-2">
+          <div className="flex items-center gap-2 text-accent-strong text-xs font-bold">
             <Cloud className="h-4 w-4" />
             <span>ক্লাউড (Cloud)</span>
           </div>
-          <p className="text-xs text-slate-400">
-            সর্বশেষ সেভ: <span className="text-slate-200">{fmt(syncConflict.cloudExportedAt)}</span>
+          <p className="text-xs text-ink-muted">
+            সর্বশেষ সেভ: <span className="text-ink-soft">{fmt(syncConflict.cloudExportedAt)}</span>
           </p>
-          <p className="text-xs text-slate-400">
-            রেকর্ড সংখ্যা: <span className="text-slate-200">{syncConflict.cloudRecordCount.toLocaleString()}</span>
+          <p className="text-xs text-ink-muted">
+            রেকর্ড সংখ্যা: <span className="text-ink-soft">{syncConflict.cloudRecordCount.toLocaleString()}</span>
           </p>
           <Button
             variant="secondary"

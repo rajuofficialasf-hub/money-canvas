@@ -151,14 +151,14 @@ export const GoalsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Target className="h-4 w-4" />
             <span>Financial Targets & Goals</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Savings Targets & Goals</h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">Savings Targets & Goals</h1>
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Set milestone targets, track funded progress, and assign dedicated savings accounts.
           </p>
         </div>
@@ -168,7 +168,7 @@ export const GoalsView: React.FC = () => {
             setCreateError('');
             setIsCreateModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold font-mono transition-colors shadow-sm self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink text-xs font-semibold font-mono transition-colors shadow-sm self-start sm:self-auto"
         >
           <Plus className="h-4 w-4" />
           <span>New Goal</span>
@@ -176,11 +176,11 @@ export const GoalsView: React.FC = () => {
       </div>
 
       {/* Lock 3 Educational Architecture Banner */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-4 font-mono text-xs flex items-start gap-3 text-slate-300">
-        <Lock className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+      <div className="rounded-xl border border-edge bg-surface/30 p-4 font-mono text-xs flex items-start gap-3 text-ink-soft">
+        <Lock className="h-4 w-4 text-accent-strong shrink-0 mt-0.5" />
         <div className="space-y-1">
-          <div className="text-white font-semibold">Architectural Lock 3 Compliance:</div>
-          <div className="text-slate-400 leading-relaxed text-[11px]">
+          <div className="text-ink font-semibold">Architectural Lock 3 Compliance:</div>
+          <div className="text-ink-muted leading-relaxed text-[11px]">
             <strong>Mode A (Tracking Goal):</strong> Tracks visual milestones against general liquidity. Contributions do NOT generate an expense or alter double-entry balance sheets.<br />
             <strong>Mode B (Linked Account Goal):</strong> Backed by a dedicated canonical bank account. Contributions are recorded as balanced double-entry Transfers (-Bank / +Goal Account).
           </div>
@@ -197,20 +197,20 @@ export const GoalsView: React.FC = () => {
           return (
             <div
               key={g.id}
-              className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-4 hover:border-slate-700 transition-colors flex flex-col justify-between"
+              className="rounded-xl border border-edge bg-surface/40 p-5 space-y-4 hover:border-slate-700 transition-colors flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h3 className="text-white font-semibold text-base">{g.name}</h3>
-                    <div className="text-[11px] font-mono text-slate-400 flex items-center gap-2 mt-1">
-                      <span className="text-emerald-400">
+                    <h3 className="text-ink font-semibold text-base">{g.name}</h3>
+                    <div className="text-[11px] font-mono text-ink-muted flex items-center gap-2 mt-1">
+                      <span className="text-accent-strong">
                         {g.goalMode === 'tracking_goal' ? 'Virtual Tracking Goal' : 'Dedicated Linked Account'}
                       </span>
                       {linkedAcc && (
                         <>
                           <span>·</span>
-                          <span className="text-slate-500">{linkedAcc.name}</span>
+                          <span className="text-ink-faint">{linkedAcc.name}</span>
                         </>
                       )}
                     </div>
@@ -220,8 +220,8 @@ export const GoalsView: React.FC = () => {
                     <span
                       className={`text-[10px] uppercase px-2 py-0.5 rounded border ${
                         isComplete
-                          ? 'border-emerald-500/40 text-emerald-400 bg-emerald-950/20'
-                          : 'border-slate-800 text-slate-400 bg-slate-900'
+                          ? 'border-accent/40 text-accent-strong bg-emerald-950/20'
+                          : 'border-edge text-ink-muted bg-surface'
                       }`}
                     >
                       {isComplete ? 'Achieved' : 'In Progress'}
@@ -232,32 +232,32 @@ export const GoalsView: React.FC = () => {
                 {/* Progress bar */}
                 <div className="space-y-1.5 font-mono">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">Saved: ৳{currentSaved.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
-                    <span className="text-white font-semibold">Target: ৳{g.targetAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                    <span className="text-ink-muted">Saved: ৳{currentSaved.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
+                    <span className="text-ink font-semibold">Target: ৳{g.targetAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
                   </div>
 
-                  <div className="h-2.5 w-full bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-2.5 w-full bg-raised rounded-full overflow-hidden">
                     <div
-                      className={`h-full transition-all duration-300 ${isComplete ? 'bg-emerald-400' : 'bg-sky-400'}`}
+                      className={`h-full transition-all duration-300 ${isComplete ? 'bg-accent-strong' : 'bg-sky-400'}`}
                       style={{ width: `${Math.min(100, pct)}%` }}
                     />
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] pt-0.5 text-slate-500">
+                  <div className="flex items-center justify-between text-[11px] pt-0.5 text-ink-faint">
                     <span>{pct.toFixed(1)}% funded</span>
                     <span>৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })} to go</span>
                   </div>
                 </div>
 
                 {/* Time & Monthly Projection */}
-                <div className="p-3 rounded-lg border border-slate-800/80 bg-slate-950/40 font-mono text-xs flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-slate-400">
+                <div className="p-3 rounded-lg border border-edge/80 bg-canvas/40 font-mono text-xs flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-ink-muted">
                     <Calendar className="h-3.5 w-3.5" />
-                    <span>Target Date: <strong className="text-white">{g.targetDate}</strong></span>
+                    <span>Target Date: <strong className="text-ink">{g.targetDate}</strong></span>
                   </div>
                   <div className="text-right">
-                    <div className="text-[10px] text-slate-500">Required / Month</div>
-                    <div className="text-emerald-400 font-semibold">
+                    <div className="text-[10px] text-ink-faint">Required / Month</div>
+                    <div className="text-accent-strong font-semibold">
                       ৳{monthlyRequired.toLocaleString(undefined, { maximumFractionDigits: 0 })}
                     </div>
                   </div>
@@ -265,9 +265,9 @@ export const GoalsView: React.FC = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800/70 font-mono text-xs">
+              <div className="flex items-center justify-between pt-2 border-t border-edge/70 font-mono text-xs">
                 {isComplete ? (
-                  <div className="text-emerald-400 flex items-center gap-1.5 font-medium py-1.5">
+                  <div className="text-accent-strong flex items-center gap-1.5 font-medium py-1.5">
                     <CheckCircle2 className="h-4 w-4" />
                     <span>Target Achieved!</span>
                   </div>
@@ -277,7 +277,7 @@ export const GoalsView: React.FC = () => {
                       setContribError('');
                       setSelectedGoalForContrib(g.id);
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/20 transition-colors font-medium"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/30 text-accent-strong hover:bg-accent/20 transition-colors font-medium"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     <span>Contribute Funds</span>
@@ -287,7 +287,7 @@ export const GoalsView: React.FC = () => {
                 {!isComplete && (
                   <button
                     onClick={() => updateGoalStatus(g.id, 'achieved')}
-                    className="text-slate-500 hover:text-slate-300 py-1.5 transition-colors"
+                    className="text-ink-faint hover:text-ink-soft py-1.5 transition-colors"
                   >
                     Mark Done
                   </button>
@@ -300,8 +300,8 @@ export const GoalsView: React.FC = () => {
 
       {/* Contribute Modal */}
       {selectedGoalForContrib && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+        <div className="fixed inset-0 z-50 bg-canvas/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-edge rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl">
             {(() => {
               const goal = financialGoals.find((g) => g.id === selectedGoalForContrib);
               if (!goal) return null;
@@ -309,57 +309,57 @@ export const GoalsView: React.FC = () => {
 
               return (
                 <>
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div className="flex items-center justify-between border-b border-edge pb-3">
                     <div>
-                      <h3 className="text-lg font-bold text-white">Contribute to Goal</h3>
-                      <div className="text-xs text-slate-400 font-mono">{goal.name}</div>
+                      <h3 className="text-lg font-bold text-ink">Contribute to Goal</h3>
+                      <div className="text-xs text-ink-muted font-mono">{goal.name}</div>
                     </div>
                     <button
                       onClick={() => setSelectedGoalForContrib(null)}
-                      className="text-slate-400 hover:text-white p-1 rounded"
+                      className="text-ink-muted hover:text-ink p-1 rounded"
                     >
                       <X className="h-5 w-5" />
                     </button>
                   </div>
 
                   {contribError && (
-                    <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
+                    <div className="p-3 rounded-lg bg-rose-950/40 border border-negative/30 text-negative text-xs font-mono">
                       {contribError}
                     </div>
                   )}
 
-                  <div className="p-3 rounded-lg border border-slate-800 bg-slate-950 text-slate-300 text-xs font-sans leading-relaxed">
+                  <div className="p-3 rounded-lg border border-edge bg-canvas text-ink-soft text-xs font-sans leading-relaxed">
                     {isLinked ? (
                       <p>
                         <strong className="text-sky-400 font-mono">লিংকড অ্যাকাউন্ট গোল:</strong> নির্বাচিত ব্যাংক অ্যাকাউন্ট থেকে এই লক্ষ্যের ডেডিকেটেড অ্যাকাউন্টে ফান্ড ট্রান্সফার (-ব্যাংক / +গোল) হবে।
                       </p>
                     ) : (
                       <p>
-                        <strong className="text-emerald-400 font-mono">ট্র্যাকিং গোল:</strong> এটি শুধুমাত্র আপনার জমানো টাকার প্রগ্রেস ট্র্যাক করবে। অ্যাকাউন্টের ব্যালেন্সে কোনো পরিবর্তন বা কৃত্রিম খরচ হবে না।
+                        <strong className="text-accent-strong font-mono">ট্র্যাকিং গোল:</strong> এটি শুধুমাত্র আপনার জমানো টাকার প্রগ্রেস ট্র্যাক করবে। অ্যাকাউন্টের ব্যালেন্সে কোনো পরিবর্তন বা কৃত্রিম খরচ হবে না।
                       </p>
                     )}
                   </div>
 
                   <form onSubmit={handleMakeContribution} className="space-y-4 text-xs font-mono">
                     <div>
-                      <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Contribution Amount (BDT)</label>
+                      <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Contribution Amount (BDT)</label>
                       <input
                         type="number"
                         step="any"
                         placeholder="e.g. 10000"
                         value={contribAmount}
                         onChange={(e) => setContribAmount(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                       />
                     </div>
 
                     {isLinked && (
                       <div>
-                        <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Source Bank Account</label>
+                        <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Source Bank Account</label>
                         <select
                           value={contribSourceId}
                           onChange={(e) => setContribSourceId(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                          className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                         >
                           <option value="">-- Choose Account --</option>
                           {accounts.filter((a) => !a.isArchived && a.id !== goal.linkedAccountId).map((a) => (
@@ -372,27 +372,27 @@ export const GoalsView: React.FC = () => {
                     )}
 
                     <div>
-                      <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Note (Optional)</label>
+                      <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Note (Optional)</label>
                       <input
                         type="text"
                         placeholder="e.g. Monthly salary savings portion"
                         value={contribNote}
                         onChange={(e) => setContribNote(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                        className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                       />
                     </div>
 
-                    <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+                    <div className="flex justify-end gap-3 pt-3 border-t border-edge">
                       <button
                         type="button"
                         onClick={() => setSelectedGoalForContrib(null)}
-                        className="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                        className="px-4 py-2 rounded-lg border border-edge text-ink-muted hover:text-ink transition-colors"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
+                        className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold transition-colors"
                       >
                         Confirm Contribution
                       </button>
@@ -407,65 +407,65 @@ export const GoalsView: React.FC = () => {
 
       {/* Create Goal Modal */}
       {isCreateModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-canvas/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-edge rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-lg font-bold text-white">Create Financial Goal</h3>
-                <div className="text-xs text-slate-400 font-mono">Target planning & savings modes</div>
+                <h3 className="text-lg font-bold text-ink">Create Financial Goal</h3>
+                <div className="text-xs text-ink-muted font-mono">Target planning & savings modes</div>
               </div>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
+                className="text-ink-muted hover:text-ink p-1 rounded"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {createError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-negative/30 text-negative text-xs font-mono">
                 {createError}
               </div>
             )}
 
             <form onSubmit={handleCreateGoal} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Goal Name</label>
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Goal Name</label>
                 <input
                   type="text"
                   placeholder="e.g. New Home Down Payment"
                   value={goalName}
                   onChange={(e) => setGoalName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Target Amount (BDT)</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Target Amount (BDT)</label>
                   <input
                     type="number"
                     step="any"
                     placeholder="e.g. 500000"
                     value={targetAmount}
                     onChange={(e) => setTargetAmount(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Target Date</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Target Date</label>
                   <input
                     type="date"
                     value={targetDate}
                     onChange={(e) => setTargetDate(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">
                   Goal Mode (লক্ষ্যের ধরন নির্ধারণ)
                 </label>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -474,15 +474,15 @@ export const GoalsView: React.FC = () => {
                     onClick={() => setGoalMode('tracking_goal')}
                     className={`p-3 rounded-lg border text-left transition-colors ${
                       goalMode === 'tracking_goal'
-                        ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-sm'
-                        : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                        ? 'border-accent bg-emerald-950/30 text-ink shadow-sm'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
                     }`}
                   >
-                    <div className="font-semibold text-xs text-emerald-400 flex items-center justify-between">
+                    <div className="font-semibold text-xs text-accent-strong flex items-center justify-between">
                       <span>মোড ১: ট্র্যাকিং গোল</span>
-                      <span className="text-[10px] font-mono text-slate-400">(Tracking Goal)</span>
+                      <span className="text-[10px] font-mono text-ink-muted">(Tracking Goal)</span>
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-1 leading-snug font-sans">
+                    <div className="text-[11px] text-ink-soft mt-1 leading-snug font-sans">
                       সাধারণ আর্থিক লক্ষ্যের অগ্রগতি ট্র্যাক করার জন্য। এতে ব্যালেন্স শিট বা অ্যাকাউন্টে কোনো পরিবর্তন হবে না এবং কোনো বাড়তি খরচ (Expense) হিসেবে গণ্য হবে না।
                     </div>
                   </button>
@@ -492,15 +492,15 @@ export const GoalsView: React.FC = () => {
                     onClick={() => setGoalMode('linked_savings_account_goal')}
                     className={`p-3 rounded-lg border text-left transition-colors ${
                       goalMode === 'linked_savings_account_goal'
-                        ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-sm'
-                        : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                        ? 'border-accent bg-emerald-950/30 text-ink shadow-sm'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
                     }`}
                   >
                     <div className="font-semibold text-xs text-sky-400 flex items-center justify-between">
                       <span>মোড ২: লিংকড অ্যাকাউন্ট গোল</span>
-                      <span className="text-[10px] font-mono text-slate-400">(Linked Account)</span>
+                      <span className="text-[10px] font-mono text-ink-muted">(Linked Account)</span>
                     </div>
-                    <div className="text-[11px] text-slate-300 mt-1 leading-snug font-sans">
+                    <div className="text-[11px] text-ink-soft mt-1 leading-snug font-sans">
                       নির্দিষ্ট ব্যাংক অ্যাকাউন্টের সাথে যুক্ত লক্ষ্য। এতে টাকা জমা করলে তা অ্যাকাউন্ট ট্রান্সফার (-ব্যাংক / +গোল অ্যাকাউন্ট) হিসেবে স্বয়ংক্রিয়ভাবে হিসাব বইয়ে যুক্ত হবে।
                     </div>
                   </button>
@@ -508,28 +508,28 @@ export const GoalsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Initial Allocation (Optional)</label>
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Initial Allocation (Optional)</label>
                 <input
                   type="number"
                   step="any"
                   placeholder="e.g. 50000"
                   value={initialDeposit}
                   onChange={(e) => setInitialDeposit(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-edge">
                 <button
                   type="button"
                   onClick={() => setIsCreateModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge text-ink-muted hover:text-ink transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold transition-colors"
                 >
                   Create Goal
                 </button>

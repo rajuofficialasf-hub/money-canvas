@@ -83,13 +83,13 @@ export const AssetsView: React.FC = () => {
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'vehicle':
-        return <Car className="h-4 w-4 text-emerald-400" />;
+        return <Car className="h-4 w-4 text-accent-strong" />;
       case 'real_estate':
         return <Home className="h-4 w-4 text-sky-400" />;
       case 'gold_jewelry':
-        return <Coins className="h-4 w-4 text-amber-400" />;
+        return <Coins className="h-4 w-4 text-warning" />;
       case 'land':
-        return <Building className="h-4 w-4 text-emerald-300" />;
+        return <Building className="h-4 w-4 text-accent-strong" />;
       case 'electronics':
         return <Tag className="h-4 w-4 text-cyan-400" />;
       default:
@@ -195,16 +195,16 @@ export const AssetsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Home className="h-4 w-4" />
             <span>Physical Assets & Fixed Property</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
             Physical Assets & Valuables
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Real estate, land, vehicles, gold bullion, and static assets with multi-source financing.
           </p>
         </div>
@@ -217,7 +217,7 @@ export const AssetsView: React.FC = () => {
               if (loanAccounts.length > 0) setLoanAccountId(loanAccounts[0].id);
               setIsNewAssetModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
           >
             <Plus className="h-4 w-4" />
             <span>Add Physical Asset</span>
@@ -227,61 +227,61 @@ export const AssetsView: React.FC = () => {
 
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Physical Assets Value</span>
-            <div className="h-6 w-6 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+            <div className="h-6 w-6 rounded bg-accent/10 flex items-center justify-center text-accent-strong">
               <TrendingUp className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-emerald-400 font-mono">
+          <div className="text-xl font-bold text-accent-strong font-mono">
             ৳{totalAssetValuation.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             {physicalAssets.length} Registered Assets
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Static Liabilities</span>
-            <div className="h-6 w-6 rounded bg-rose-500/10 flex items-center justify-center text-rose-400">
+            <div className="h-6 w-6 rounded bg-negative/10 flex items-center justify-center text-negative">
               <Shield className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-rose-400 font-mono">
+          <div className="text-xl font-bold text-negative font-mono">
             ৳{totalStaticLiabilities.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             {staticLiabilities.length} Static Obligations
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Net Asset Equity</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent-strong">
               Equity Verified
             </span>
           </div>
-          <div className="text-xl font-bold text-white font-mono">
+          <div className="text-xl font-bold text-ink font-mono">
             ৳{(totalAssetValuation - totalStaticLiabilities).toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             Assets minus static liabilities
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-edge pb-3">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab('assets')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'assets'
-                ? 'bg-slate-800 text-white font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-raised text-ink font-semibold'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Physical Assets ({physicalAssets.length})
@@ -290,8 +290,8 @@ export const AssetsView: React.FC = () => {
             onClick={() => setActiveTab('liabilities')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'liabilities'
-                ? 'bg-slate-800 text-white font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-raised text-ink font-semibold'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Static Obligations ({staticLiabilities.length})
@@ -304,7 +304,7 @@ export const AssetsView: React.FC = () => {
               setLiabFormError('');
               setIsNewLiabModalOpen(true);
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-medium transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-negative/10 hover:bg-negative/20 text-negative border border-negative/30 text-xs font-medium transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             <span>Add Static Obligation</span>
@@ -314,11 +314,11 @@ export const AssetsView: React.FC = () => {
 
       {/* Content View */}
       {activeTab === 'assets' ? (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 divide-y divide-slate-800/80 overflow-hidden">
+        <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/80 overflow-hidden">
           {physicalAssets.length === 0 ? (
-            <div className="p-12 text-center text-slate-500 space-y-2">
+            <div className="p-12 text-center text-ink-faint space-y-2">
               <Home className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
-              <div className="text-sm font-medium text-slate-400">No physical assets registered</div>
+              <div className="text-sm font-medium text-ink-muted">No physical assets registered</div>
               <div className="text-xs">Add your vehicle, real estate, gold bullion, or land to track their balance sheet equity.</div>
             </div>
           ) : (
@@ -327,39 +327,39 @@ export const AssetsView: React.FC = () => {
               return (
                 <div
                   key={asset.id}
-                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-slate-900/80 transition-colors"
+                  className="p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-surface/80 transition-colors"
                 >
                   <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
-                      <span className="p-1.5 rounded-lg bg-slate-800 flex items-center justify-center">
+                      <span className="p-1.5 rounded-lg bg-raised flex items-center justify-center">
                         {getCategoryIcon(asset.assetCategory)}
                       </span>
-                      <span className="text-xs font-mono uppercase text-slate-400">
+                      <span className="text-xs font-mono uppercase text-ink-muted">
                         {asset.assetCategory.replace('_', ' ')}
                       </span>
                       {asset.assetCategory === 'gold_jewelry' && (
-                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-warning/10 text-warning border border-warning/20">
                           Zakatable Asset
                         </span>
                       )}
                     </div>
 
-                    <div className="text-base font-semibold text-white">
+                    <div className="text-base font-semibold text-ink">
                       {asset.assetName}
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400 font-mono">
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-ink-muted font-mono">
                       <span>Acquired: {asset.purchaseDate}</span>
-                      {asset.description && <span className="text-slate-500 truncate max-w-md">"{asset.description}"</span>}
+                      {asset.description && <span className="text-ink-faint truncate max-w-md">"{asset.description}"</span>}
                     </div>
                   </div>
 
                   <div className="text-left sm:text-right font-mono">
-                    <div className="text-[10px] text-slate-500 uppercase">Valuation (Cost Basis)</div>
-                    <div className="text-lg font-bold text-emerald-400">
+                    <div className="text-[10px] text-ink-faint uppercase">Valuation (Cost Basis)</div>
+                    <div className="text-lg font-bold text-accent-strong">
                       ৳{valuation.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </div>
-                    <div className="text-[10px] text-slate-500">
+                    <div className="text-[10px] text-ink-faint">
                       Canonical Account Linked
                     </div>
                   </div>
@@ -369,28 +369,28 @@ export const AssetsView: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 divide-y divide-slate-800/80 overflow-hidden">
+        <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/80 overflow-hidden">
           {staticLiabilities.length === 0 ? (
-            <div className="p-12 text-center text-slate-500 space-y-2">
+            <div className="p-12 text-center text-ink-faint space-y-2">
               <Shield className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
-              <div className="text-sm font-medium text-slate-400">No static liabilities registered</div>
+              <div className="text-sm font-medium text-ink-muted">No static liabilities registered</div>
               <div className="text-xs">Record promissory obligations or custom balance sheet liabilities.</div>
             </div>
           ) : (
             staticLiabilities.map((liab) => (
               <div
                 key={liab.id}
-                className="p-4 sm:p-5 flex items-center justify-between hover:bg-slate-900/80 transition-colors"
+                className="p-4 sm:p-5 flex items-center justify-between hover:bg-surface/80 transition-colors"
               >
                 <div>
-                  <div className="text-base font-semibold text-white">{liab.liabilityName}</div>
-                  <div className="text-xs text-slate-400 font-mono">{liab.liabilityType}</div>
+                  <div className="text-base font-semibold text-ink">{liab.liabilityName}</div>
+                  <div className="text-xs text-ink-muted font-mono">{liab.liabilityType}</div>
                 </div>
                 <div className="text-right font-mono">
-                  <div className="text-lg font-bold text-rose-400">
+                  <div className="text-lg font-bold text-negative">
                     ৳{liab.initialAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
-                  <div className="text-[10px] text-slate-500">Liability Account</div>
+                  <div className="text-[10px] text-ink-faint">Liability Account</div>
                 </div>
               </div>
             ))
@@ -400,23 +400,23 @@ export const AssetsView: React.FC = () => {
 
       {/* MODAL: Register New Asset */}
       {isNewAssetModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <Home className="h-5 w-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-lg rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <Home className="h-5 w-5 text-accent-strong" />
                 <span>Register Physical Asset</span>
               </div>
               <button
                 onClick={() => setIsNewAssetModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {assetFormError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-negative text-xs flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{assetFormError}</span>
               </div>
@@ -425,7 +425,7 @@ export const AssetsView: React.FC = () => {
             <form onSubmit={handleAssetSubmit} className="space-y-4 text-xs font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Asset Title / Name *
                   </label>
                   <input
@@ -434,20 +434,20 @@ export const AssetsView: React.FC = () => {
                     placeholder="e.g. Toyota Premio G-Superior"
                     value={assetName}
                     onChange={(e) => setAssetName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-slate-300 font-medium">
+                    <label className="text-ink-soft font-medium">
                       Asset Category
                     </label>
                     {!isCreatingCustomAssetCat && (
                       <button
                         type="button"
                         onClick={() => setIsCreatingCustomAssetCat(true)}
-                        className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-sans"
+                        className="text-[11px] text-accent-strong hover:text-accent-strong flex items-center gap-1 font-sans"
                       >
                         <Plus className="h-3 w-3" />
                         <span>Add Custom Category</span>
@@ -456,9 +456,9 @@ export const AssetsView: React.FC = () => {
                   </div>
 
                   {isCreatingCustomAssetCat ? (
-                    <div className="p-3 bg-slate-950 border border-emerald-500/40 rounded-lg space-y-2">
+                    <div className="p-3 bg-canvas border border-accent/40 rounded-lg space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-[11px] text-emerald-400 font-semibold uppercase">New Asset Category</span>
+                        <span className="text-[11px] text-accent-strong font-semibold uppercase">New Asset Category</span>
                         <button
                           type="button"
                           onClick={() => {
@@ -466,14 +466,14 @@ export const AssetsView: React.FC = () => {
                             setCustomAssetCatName('');
                             setCustomAssetCatError('');
                           }}
-                          className="text-slate-400 hover:text-white"
+                          className="text-ink-muted hover:text-ink"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
                       </div>
 
                       {customAssetCatError && (
-                        <div className="text-[11px] text-rose-400">{customAssetCatError}</div>
+                        <div className="text-[11px] text-negative">{customAssetCatError}</div>
                       )}
 
                       <div className="flex gap-2">
@@ -482,12 +482,12 @@ export const AssetsView: React.FC = () => {
                           placeholder="e.g. Machinery, Art & Antiques, Farm"
                           value={customAssetCatName}
                           onChange={(e) => setCustomAssetCatName(e.target.value)}
-                          className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500"
+                          className="flex-1 bg-surface border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
                         />
                         <button
                           type="button"
                           onClick={handleAddCustomAssetCategory}
-                          className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
+                          className="px-3 py-1.5 bg-accent-deep hover:bg-accent text-ink rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
                         >
                           Add
                         </button>
@@ -503,7 +503,7 @@ export const AssetsView: React.FC = () => {
                           setAssetCategory(e.target.value as any);
                         }
                       }}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none capitalize"
+                      className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
                     >
                       <option value="vehicle">Vehicle / Car / Motorcycle</option>
                       <option value="real_estate">Real Estate / Apartment</option>
@@ -524,7 +524,7 @@ export const AssetsView: React.FC = () => {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Purchase Price / Valuation (৳) *
                   </label>
                   <input
@@ -534,12 +534,12 @@ export const AssetsView: React.FC = () => {
                     required
                     value={purchasePrice}
                     onChange={(e) => setPurchasePrice(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Acquisition Date *
                   </label>
                   <input
@@ -547,20 +547,20 @@ export const AssetsView: React.FC = () => {
                     required
                     value={purchaseDate}
                     onChange={(e) => setPurchaseDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
 
               {/* Funding Method */}
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Funding Method *
                 </label>
                 <select
                   value={fundingMethod}
                   onChange={(e) => setFundingMethod(e.target.value as FundingMethod)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="full_cash">100% Cash / Bank Funding</option>
                   <option value="cash_plus_loan">Downpayment + Loan Financing (Test Case 13)</option>
@@ -570,13 +570,13 @@ export const AssetsView: React.FC = () => {
 
               {fundingMethod === 'full_cash' && (
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Source Bank Account *
                   </label>
                   <select
                     value={fundingAccountId}
                     onChange={(e) => setFundingAccountId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {liquidAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
@@ -588,9 +588,9 @@ export const AssetsView: React.FC = () => {
               )}
 
               {fundingMethod === 'cash_plus_loan' && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded-lg bg-canvas border border-edge">
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">
+                    <label className="block text-ink-soft font-medium mb-1">
                       Cash Downpayment (৳)
                     </label>
                     <input
@@ -598,11 +598,11 @@ export const AssetsView: React.FC = () => {
                       step="any"
                       value={cashDownpayment}
                       onChange={(e) => setCashDownpayment(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white font-mono"
+                      className="w-full rounded-lg border border-slate-700 bg-surface px-3 py-2 text-ink font-mono"
                     />
                   </div>
                   <div>
-                    <label className="block text-slate-300 font-medium mb-1">
+                    <label className="block text-ink-soft font-medium mb-1">
                       Financed Amount (৳)
                     </label>
                     <input
@@ -610,14 +610,14 @@ export const AssetsView: React.FC = () => {
                       step="any"
                       value={loanFinancedAmount}
                       onChange={(e) => setLoanFinancedAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-white font-mono"
+                      className="w-full rounded-lg border border-slate-700 bg-surface px-3 py-2 text-ink font-mono"
                     />
                   </div>
                 </div>
               )}
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Asset Description / Identifier (Deed #, VIN, Hallmarked weight)
                 </label>
                 <input
@@ -625,7 +625,7 @@ export const AssetsView: React.FC = () => {
                   placeholder="e.g. Dhaka Metro GA-35 • 40g 22K certified hallmarked"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -633,13 +633,13 @@ export const AssetsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewAssetModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
                 >
                   Record Asset
                 </button>
@@ -651,23 +651,23 @@ export const AssetsView: React.FC = () => {
 
       {/* MODAL: Register Static Liability */}
       {isNewLiabModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <Shield className="h-5 w-5 text-rose-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <Shield className="h-5 w-5 text-negative" />
                 <span>Add Static Obligation</span>
               </div>
               <button
                 onClick={() => setIsNewLiabModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {liabFormError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-negative text-xs flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{liabFormError}</span>
               </div>
@@ -675,7 +675,7 @@ export const AssetsView: React.FC = () => {
 
             <form onSubmit={handleLiabSubmit} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Obligation Title *
                 </label>
                 <input
@@ -684,12 +684,12 @@ export const AssetsView: React.FC = () => {
                   placeholder="e.g. Promissory Note to Business Partner"
                   value={liabName}
                   onChange={(e) => setLiabName(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white placeholder-slate-500 focus:border-rose-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-negative focus:outline-none"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Obligation Amount (৳ BDT) *
                 </label>
                 <input
@@ -699,7 +699,7 @@ export const AssetsView: React.FC = () => {
                   required
                   value={liabAmount}
                   onChange={(e) => setLiabAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-rose-500 focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-negative focus:outline-none font-mono"
                 />
               </div>
 
@@ -707,13 +707,13 @@ export const AssetsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewLiabModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-rose-500 hover:bg-rose-400 text-white font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-negative hover:bg-negative text-ink font-semibold text-xs transition-colors"
                 >
                   Save Obligation
                 </button>

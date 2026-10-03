@@ -135,14 +135,14 @@ export const RecurringView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Repeat className="h-4 w-4" />
             <span>Recurring Transactions & Automation</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Recurring Schedules & Standing Orders</h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">Recurring Schedules & Standing Orders</h1>
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Configure automated rules for rent, utility bills, salary income, and periodic fund transfers.
           </p>
         </div>
@@ -152,7 +152,7 @@ export const RecurringView: React.FC = () => {
             setFormError('');
             setIsAddModalOpen(true);
           }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold font-mono transition-colors shadow-sm self-start sm:self-auto"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink text-xs font-semibold font-mono transition-colors shadow-sm self-start sm:self-auto"
         >
           <Plus className="h-4 w-4" />
           <span>New Recurring Rule</span>
@@ -160,7 +160,7 @@ export const RecurringView: React.FC = () => {
       </div>
 
       {actionMessage && (
-        <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-emerald-500/30 text-emerald-300 text-xs font-mono flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-emerald-950/40 border border-accent/30 text-accent-strong text-xs font-mono flex items-center gap-2">
           <CheckCircle2 className="h-4 w-4 shrink-0" />
           <span>{actionMessage}</span>
         </div>
@@ -168,40 +168,40 @@ export const RecurringView: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-          <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Active Recurring Rules</div>
-          <div className="text-2xl font-bold text-white">{activeSchedules.length} Schedules</div>
-          <div className="text-[11px] text-slate-500 mt-1">{recurringTransactions.length} total defined</div>
+        <div className="rounded-xl border border-edge bg-surface/40 p-4">
+          <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">Active Recurring Rules</div>
+          <div className="text-2xl font-bold text-ink">{activeSchedules.length} Schedules</div>
+          <div className="text-[11px] text-ink-faint mt-1">{recurringTransactions.length} total defined</div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-          <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Monthly Committed Outflow</div>
-          <div className="text-2xl font-bold text-rose-400">৳{monthlyCommitment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-          <div className="text-[11px] text-slate-500 mt-1">Automatic fixed monthly obligations</div>
+        <div className="rounded-xl border border-edge bg-surface/40 p-4">
+          <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">Monthly Committed Outflow</div>
+          <div className="text-2xl font-bold text-negative">৳{monthlyCommitment.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+          <div className="text-[11px] text-ink-faint mt-1">Automatic fixed monthly obligations</div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-          <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">Next Upcoming Run</div>
-          <div className="text-2xl font-bold text-emerald-400">
+        <div className="rounded-xl border border-edge bg-surface/40 p-4">
+          <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">Next Upcoming Run</div>
+          <div className="text-2xl font-bold text-accent-strong">
             {activeSchedules.length > 0
               ? activeSchedules.sort((a, b) => a.nextRun.localeCompare(b.nextRun))[0].nextRun
               : 'None'}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Auto-advances upon posting</div>
+          <div className="text-[11px] text-ink-faint mt-1">Auto-advances upon posting</div>
         </div>
       </div>
 
       {/* Schedules List */}
       <div className="space-y-3">
-        <h3 className="text-sm font-semibold font-mono uppercase tracking-wider text-slate-300">
+        <h3 className="text-sm font-semibold font-mono uppercase tracking-wider text-ink-soft">
           Recurring Rules Portfolio
         </h3>
 
         {recurringTransactions.length === 0 ? (
-          <div className="p-8 text-center border border-slate-800/80 rounded-xl bg-slate-900/20">
+          <div className="p-8 text-center border border-edge/80 rounded-xl bg-surface/20">
             <Repeat className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-            <div className="text-sm font-medium text-slate-300">No recurring schedules active</div>
-            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+            <div className="text-sm font-medium text-ink-soft">No recurring schedules active</div>
+            <p className="text-xs text-ink-faint mt-1 max-w-sm mx-auto">
               Automate rent payments, utility bills, or subscription renewals.
             </p>
           </div>
@@ -216,27 +216,27 @@ export const RecurringView: React.FC = () => {
                   key={r.id}
                   className={`rounded-xl border p-4 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${
                     r.isPaused
-                      ? 'border-slate-800/60 bg-slate-950/40 opacity-70'
-                      : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                      ? 'border-edge/60 bg-canvas/40 opacity-70'
+                      : 'border-edge bg-surface/40 hover:border-slate-700'
                   }`}
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-white font-medium text-sm">{r.name}</span>
-                      <span className="text-[10px] font-mono uppercase text-slate-400 border border-slate-800 px-2 py-0.5 rounded">
+                      <span className="text-ink font-medium text-sm">{r.name}</span>
+                      <span className="text-[10px] font-mono uppercase text-ink-muted border border-edge px-2 py-0.5 rounded">
                         {r.frequency}
                       </span>
                       {r.isPaused && (
-                        <span className="text-[10px] font-mono uppercase text-amber-400 border border-amber-500/30 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-mono uppercase text-warning border border-warning/30 px-2 py-0.5 rounded">
                           Paused
                         </span>
                       )}
                     </div>
 
-                    <div className="text-xs text-slate-400 font-mono flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <div className="text-xs text-ink-muted font-mono flex flex-wrap items-center gap-x-3 gap-y-1">
                       <span>Source: {sourceAccount?.name || 'Canonical Account'}</span>
                       <span>·</span>
-                      <span>Next Run: <strong className="text-emerald-400">{r.nextRun}</strong></span>
+                      <span>Next Run: <strong className="text-accent-strong">{r.nextRun}</strong></span>
                       {r.lastRun && (
                         <>
                           <span>·</span>
@@ -248,14 +248,14 @@ export const RecurringView: React.FC = () => {
 
                   <div className="flex items-center justify-between md:justify-end gap-4">
                     <div className="text-right font-mono">
-                      <div className="text-white font-bold text-sm">৳{mainAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
-                      <div className="text-[10px] text-slate-500 uppercase">{r.templateTransaction.type}</div>
+                      <div className="text-ink font-bold text-sm">৳{mainAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</div>
+                      <div className="text-[10px] text-ink-faint uppercase">{r.templateTransaction.type}</div>
                     </div>
 
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleRunNow(r.id, r.name)}
-                        className="px-3 py-1.5 rounded-lg border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 text-xs font-mono font-medium flex items-center gap-1.5 transition-colors"
+                        className="px-3 py-1.5 rounded-lg border border-accent/40 bg-accent/10 text-accent-strong hover:bg-accent/20 text-xs font-mono font-medium flex items-center gap-1.5 transition-colors"
                         title="Execute now and generate transaction lines"
                       >
                         <Play className="h-3.5 w-3.5" />
@@ -264,7 +264,7 @@ export const RecurringView: React.FC = () => {
 
                       <button
                         onClick={() => toggleRecurringPause(r.id)}
-                        className="p-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-400 hover:text-white transition-colors"
+                        className="p-1.5 rounded-lg border border-edge bg-surface text-ink-muted hover:text-ink transition-colors"
                         title={r.isPaused ? 'Resume schedule' : 'Pause schedule'}
                       >
                         {r.isPaused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
@@ -272,7 +272,7 @@ export const RecurringView: React.FC = () => {
 
                       <button
                         onClick={() => deleteRecurring(r.id)}
-                        className="p-1.5 rounded-lg border border-slate-800 bg-slate-900 text-slate-500 hover:text-rose-400 transition-colors"
+                        className="p-1.5 rounded-lg border border-edge bg-surface text-ink-faint hover:text-negative transition-colors"
                         title="Delete rule"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -288,46 +288,46 @@ export const RecurringView: React.FC = () => {
 
       {/* Add Recurring Rule Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-canvas/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-edge rounded-xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-lg font-bold text-white">Create Recurring Schedule</h3>
-                <div className="text-xs text-slate-400 font-mono">Automated periodic ledger transactions</div>
+                <h3 className="text-lg font-bold text-ink">Create Recurring Schedule</h3>
+                <div className="text-xs text-ink-muted font-mono">Automated periodic ledger transactions</div>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
+                className="text-ink-muted hover:text-ink p-1 rounded"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-negative/30 text-negative text-xs font-mono">
                 {formError}
               </div>
             )}
 
             <form onSubmit={handleCreateRecurring} className="space-y-4 text-xs font-mono">
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Schedule Name</label>
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Schedule Name</label>
                 <input
                   type="text"
                   placeholder="e.g. Monthly Broadband Fiber"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Frequency</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Frequency</label>
                   <select
                     value={formFrequency}
                     onChange={(e) => setFormFrequency(e.target.value as RecurringFrequency)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="daily">Daily</option>
                     <option value="weekly">Weekly</option>
@@ -338,23 +338,23 @@ export const RecurringView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Start Date</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Start Date</label>
                   <input
                     type="date"
                     value={formStartDate}
                     onChange={(e) => setFormStartDate(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Transaction Type</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Transaction Type</label>
                   <select
                     value={formType}
                     onChange={(e) => setFormType(e.target.value as any)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="expense">Expense</option>
                     <option value="income">Income</option>
@@ -363,26 +363,26 @@ export const RecurringView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Amount (BDT)</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Amount (BDT)</label>
                   <input
                     type="number"
                     step="any"
                     placeholder="e.g. 2500"
                     value={formAmount}
                     onChange={(e) => setFormAmount(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">
                   {formType === 'income' ? 'Deposit Into Account' : 'Debit Source Account'}
                 </label>
                 <select
                   value={formAccountId}
                   onChange={(e) => setFormAccountId(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 >
                   <option value="">-- Select Account --</option>
                   {accounts.filter((a) => !a.isArchived).map((a) => (
@@ -395,11 +395,11 @@ export const RecurringView: React.FC = () => {
 
               {formType !== 'transfer' ? (
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Category</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Category</label>
                   <select
                     value={formCategoryId}
                     onChange={(e) => setFormCategoryId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="">-- Select Category --</option>
                     {categories.filter((c) => c.type === formType).map((c) => (
@@ -411,11 +411,11 @@ export const RecurringView: React.FC = () => {
                 </div>
               ) : (
                 <div>
-                  <label className="block text-slate-300 uppercase tracking-wider mb-1.5">Destination Account</label>
+                  <label className="block text-ink-soft uppercase tracking-wider mb-1.5">Destination Account</label>
                   <select
                     value={formDestinationAccountId}
                     onChange={(e) => setFormDestinationAccountId(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="">-- Select Destination Account --</option>
                     {accounts.filter((a) => !a.isArchived && a.id !== formAccountId).map((a) => (
@@ -427,17 +427,17 @@ export const RecurringView: React.FC = () => {
                 </div>
               )}
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-edge">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge text-ink-muted hover:text-ink transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold transition-colors"
                 >
                   Create Schedule
                 </button>

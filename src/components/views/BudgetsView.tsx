@@ -174,31 +174,31 @@ export const BudgetsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <PieChart className="h-4 w-4" />
             <span>Monthly Budgets & Category Limits</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
             Monthly Budgets & Spending Insights
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Dynamic category ceilings with opt-in unspent surplus rollover and 6-month predictive trends.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
           {/* Month selector */}
-          <div className="flex items-center gap-2 border border-slate-800 bg-slate-900/60 rounded-lg px-3 py-1.5 text-xs font-mono text-slate-300">
-            <Calendar className="h-3.5 w-3.5 text-slate-400" />
+          <div className="flex items-center gap-2 border border-edge bg-surface/60 rounded-lg px-3 py-1.5 text-xs font-mono text-ink-soft">
+            <Calendar className="h-3.5 w-3.5 text-ink-muted" />
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="bg-transparent text-white focus:outline-none cursor-pointer"
+              className="bg-transparent text-ink focus:outline-none cursor-pointer"
             >
               {availableMonths.map((m) => (
-                <option key={m} value={m} className="bg-slate-900">
+                <option key={m} value={m} className="bg-surface">
                   {formatMonthLabel(m, false)}
                 </option>
               ))}
@@ -208,7 +208,7 @@ export const BudgetsView: React.FC = () => {
           {currentBudgets.length > 0 && activeTab === 'budgets' && (
             <button
               onClick={handleDuplicateToNextMonth}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 text-xs text-slate-300 hover:text-white transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-raised/80 text-xs text-ink-soft hover:text-ink transition-colors"
               title="Copy all current allocations to the following month"
             >
               <Copy className="h-3.5 w-3.5" />
@@ -222,7 +222,7 @@ export const BudgetsView: React.FC = () => {
                 setFormError('');
                 setIsAddModalOpen(true);
               }}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-semibold font-mono transition-colors shadow-sm"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink text-xs font-semibold font-mono transition-colors shadow-sm"
             >
               <Plus className="h-4 w-4" />
               <span>Set Budget</span>
@@ -232,18 +232,18 @@ export const BudgetsView: React.FC = () => {
       </div>
 
       {/* Main Tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+      <div className="flex items-center gap-2 border-b border-edge pb-3">
         <button
           onClick={() => setActiveTab('budgets')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all ${
             activeTab === 'budgets'
-              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40 font-semibold'
-              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+              ? 'bg-accent text-accent-ink shadow-lg shadow-emerald-950/40 font-semibold'
+              : 'bg-surface/80 text-ink-muted hover:text-ink border border-edge'
           }`}
         >
           <Layers className="h-3.5 w-3.5" />
           <span>মাসিক বাজেট ও রোলওভার (Monthly Budgets & Rollover)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-slate-800 text-slate-300">
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-raised text-ink-soft">
             {currentBudgets.length}
           </span>
         </button>
@@ -252,13 +252,13 @@ export const BudgetsView: React.FC = () => {
           onClick={() => setActiveTab('insights')}
           className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-medium transition-all ${
             activeTab === 'insights'
-              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40 font-semibold'
-              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+              ? 'bg-accent text-accent-ink shadow-lg shadow-emerald-950/40 font-semibold'
+              : 'bg-surface/80 text-ink-muted hover:text-ink border border-edge'
           }`}
         >
-          <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+          <Sparkles className="h-3.5 w-3.5 text-warning" />
           <span>খরচের ইনসাইটস ও ৬-মাসের ট্রেন্ড (Spending Insights & Trends)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-bold">
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-warning/20 text-warning font-bold">
             NEW
           </span>
         </button>
@@ -279,58 +279,58 @@ export const BudgetsView: React.FC = () => {
           {/* Overview Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 font-mono">
             {/* Base Allocation */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">
+            <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-1">
+              <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">
                 Base Allocation
               </div>
-              <div className="text-xl font-bold text-white">
+              <div className="text-xl font-bold text-ink">
                 ৳{totalBaseAllocated.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-[11px] text-ink-faint">
                 {currentBudgets.length} Category ceilings
               </div>
             </div>
 
             {/* Carried Rollover */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-              <div className="flex items-center justify-between text-xs text-slate-400 uppercase tracking-wider mb-1">
+            <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-1">
+              <div className="flex items-center justify-between text-xs text-ink-muted uppercase tracking-wider mb-1">
                 <span>Rollover Surplus</span>
-                <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+                <Sparkles className="h-3.5 w-3.5 text-accent-strong" />
               </div>
-              <div className="text-xl font-bold text-emerald-400">
+              <div className="text-xl font-bold text-accent-strong">
                 +৳{totalRolloverCarried.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-[11px] text-ink-faint">
                 Carried from {formatMonthLabel(prevMonthStr, true)}
               </div>
             </div>
 
             {/* Realized Spend */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">
+            <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-1">
+              <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">
                 Total Realized Spend
               </div>
               <div className="text-xl font-bold text-sky-400">
                 ৳{totalSpent.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-[11px] text-ink-faint">
                 {overallPct.toFixed(1)}% of effective ceiling
               </div>
             </div>
 
             {/* Remaining Margin against Effective Limit */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-              <div className="text-xs text-slate-400 uppercase tracking-wider mb-1">
+            <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-1">
+              <div className="text-xs text-ink-muted uppercase tracking-wider mb-1">
                 Effective Safe Margin
               </div>
               <div
                 className={`text-xl font-bold ${
-                  totalSpent > totalEffectiveLimit ? 'text-rose-400' : 'text-emerald-400'
+                  totalSpent > totalEffectiveLimit ? 'text-negative' : 'text-accent-strong'
                 }`}
               >
                 ৳{totalRemaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
-              <div className="text-[11px] text-slate-500">
+              <div className="text-[11px] text-ink-faint">
                 {totalSpent > totalEffectiveLimit
                   ? `Over-budget by ৳${(totalSpent - totalEffectiveLimit).toLocaleString()}`
                   : `Total limit: ৳${totalEffectiveLimit.toLocaleString()}`}
@@ -339,14 +339,14 @@ export const BudgetsView: React.FC = () => {
           </div>
 
           {/* Overall Progress Bar */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/30 p-4 space-y-2">
+          <div className="rounded-xl border border-edge bg-surface/30 p-4 space-y-2">
             <div className="flex items-center justify-between text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="text-slate-400">
+                <span className="text-ink-muted">
                   Effective Ceiling Utilization ({formatMonthLabel(selectedMonth, false)})
                 </span>
                 {totalRolloverCarried > 0 && (
-                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-accent/10 text-accent-strong border border-accent/20">
                     Includes +৳{totalRolloverCarried.toLocaleString()} Rollover
                   </span>
                 )}
@@ -354,23 +354,23 @@ export const BudgetsView: React.FC = () => {
               <span
                 className={
                   overallPct >= 100
-                    ? 'text-rose-400 font-bold'
+                    ? 'text-negative font-bold'
                     : overallPct >= 90
-                    ? 'text-amber-400'
-                    : 'text-emerald-400'
+                    ? 'text-warning'
+                    : 'text-accent-strong'
                 }
               >
                 {overallPct.toFixed(1)}%
               </span>
             </div>
-            <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-2 w-full bg-raised rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all duration-300 ${
                   overallPct >= 100
-                    ? 'bg-rose-500'
+                    ? 'bg-negative'
                     : overallPct >= 90
-                    ? 'bg-amber-400'
-                    : 'bg-emerald-500'
+                    ? 'bg-warning'
+                    : 'bg-accent'
                 }`}
                 style={{ width: `${Math.min(100, overallPct)}%` }}
               />
@@ -380,26 +380,26 @@ export const BudgetsView: React.FC = () => {
           {/* Category Budgets Grid */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-semibold font-mono uppercase tracking-wider text-slate-300">
+              <h3 className="text-sm font-semibold font-mono uppercase tracking-wider text-ink-soft">
                 Category Ceilings & Rollover Balances
               </h3>
-              <div className="text-xs text-slate-500 font-mono">
+              <div className="text-xs text-ink-faint font-mono">
                 Click "Rollover" badge to toggle carry-forward per category
               </div>
             </div>
 
             {budgetSummaries.length === 0 ? (
-              <div className="p-8 text-center border border-slate-800/80 rounded-xl bg-slate-900/20">
+              <div className="p-8 text-center border border-edge/80 rounded-xl bg-surface/20">
                 <PieChart className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-                <div className="text-sm font-medium text-slate-300">
+                <div className="text-sm font-medium text-ink-soft">
                   No budgets configured for {formatMonthLabel(selectedMonth, false)}
                 </div>
-                <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+                <p className="text-xs text-ink-faint mt-1 max-w-sm mx-auto">
                   Set monthly spending caps for your expense categories to prevent overruns and enable surplus rollover.
                 </p>
                 <button
                   onClick={() => setIsAddModalOpen(true)}
-                  className="mt-4 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono text-xs font-semibold"
+                  className="mt-4 px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-mono text-xs font-semibold"
                 >
                   Add First Budget
                 </button>
@@ -414,11 +414,11 @@ export const BudgetsView: React.FC = () => {
                   return (
                     <div
                       key={summary.budgetId}
-                      className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-3 hover:border-slate-700 transition-colors"
+                      className="rounded-xl border border-edge bg-surface/40 p-4 space-y-3 hover:border-slate-700 transition-colors"
                     >
                       <div className="flex items-start justify-between">
                         <div>
-                          <div className="text-white font-medium text-sm flex items-center gap-2">
+                          <div className="text-ink font-medium text-sm flex items-center gap-2">
                             <span
                               className="w-2.5 h-2.5 rounded-full"
                               style={{ backgroundColor: summary.categoryColor }}
@@ -426,10 +426,10 @@ export const BudgetsView: React.FC = () => {
                             <span>{summary.categoryName}</span>
                           </div>
 
-                          <div className="flex items-center gap-2 text-[11px] text-slate-500 font-mono mt-1">
+                          <div className="flex items-center gap-2 text-[11px] text-ink-faint font-mono mt-1">
                             <span>Base: ৳{summary.baseAllocation.toLocaleString()}</span>
                             {summary.rolloverEnabled && summary.rolloverAmount > 0 && (
-                              <span className="text-emerald-400 font-semibold">
+                              <span className="text-accent-strong font-semibold">
                                 +৳{summary.rolloverAmount.toLocaleString()} Rollover
                               </span>
                             )}
@@ -442,8 +442,8 @@ export const BudgetsView: React.FC = () => {
                             onClick={() => rawBudget && handleToggleRollover(rawBudget)}
                             className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border transition-colors ${
                               summary.rolloverEnabled
-                                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20'
-                                : 'bg-slate-800/80 text-slate-500 border-slate-700 hover:text-slate-300'
+                                ? 'bg-accent/10 text-accent-strong border-accent/30 hover:bg-accent/20'
+                                : 'bg-raised/80 text-ink-faint border-slate-700 hover:text-ink-soft'
                             }`}
                             title={
                               summary.rolloverEnabled
@@ -458,7 +458,7 @@ export const BudgetsView: React.FC = () => {
                           {/* Delete Button */}
                           <button
                             onClick={() => deleteBudget(summary.budgetId)}
-                            className="text-slate-500 hover:text-rose-400 p-1 rounded transition-colors"
+                            className="text-ink-faint hover:text-negative p-1 rounded transition-colors"
                             title="Delete Budget"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -469,13 +469,13 @@ export const BudgetsView: React.FC = () => {
                       {/* Progress Line */}
                       <div className="space-y-1.5 font-mono">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-slate-400">
+                          <span className="text-ink-muted">
                             Spent: ৳
                             {summary.realizedSpend.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
                             })}
                           </span>
-                          <span className="text-white font-semibold">
+                          <span className="text-ink font-semibold">
                             Effective Limit: ৳
                             {summary.effectiveLimit.toLocaleString(undefined, {
                               minimumFractionDigits: 2,
@@ -483,30 +483,30 @@ export const BudgetsView: React.FC = () => {
                           </span>
                         </div>
 
-                        <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-2 w-full bg-raised rounded-full overflow-hidden">
                           <div
                             className={`h-full transition-all duration-300 ${
                               isOver
-                                ? 'bg-rose-500'
+                                ? 'bg-negative'
                                 : isWarning
-                                ? 'bg-amber-400'
-                                : 'bg-emerald-500'
+                                ? 'bg-warning'
+                                : 'bg-accent'
                             }`}
                             style={{ width: `${Math.min(100, summary.utilizationPct)}%` }}
                           />
                         </div>
 
                         <div className="flex items-center justify-between text-[11px] pt-0.5">
-                          <span className="text-slate-500">
+                          <span className="text-ink-faint">
                             {summary.utilizationPct.toFixed(1)}% used
                           </span>
                           <span
                             className={
                               isOver
-                                ? 'text-rose-400 font-medium'
+                                ? 'text-negative font-medium'
                                 : isWarning
-                                ? 'text-amber-400'
-                                : 'text-emerald-400'
+                                ? 'text-warning'
+                                : 'text-accent-strong'
                             }
                           >
                             {isOver
@@ -526,25 +526,25 @@ export const BudgetsView: React.FC = () => {
 
       {/* Add / Edit Budget Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 bg-canvas/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface border border-edge rounded-xl max-w-md w-full p-6 space-y-5 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-lg font-bold text-white">Set Category Budget</h3>
-                <div className="text-xs text-slate-400 font-mono">
+                <h3 className="text-lg font-bold text-ink">Set Category Budget</h3>
+                <div className="text-xs text-ink-muted font-mono">
                   Month: {formatMonthLabel(selectedMonth, false)}
                 </div>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded"
+                className="text-ink-muted hover:text-ink p-1 rounded"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-mono">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-negative/30 text-negative text-xs font-mono">
                 {formError}
               </div>
             )}
@@ -552,14 +552,14 @@ export const BudgetsView: React.FC = () => {
             <form onSubmit={handleSaveBudget} className="space-y-4 text-xs font-mono">
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-slate-300 uppercase tracking-wider">
+                  <label className="text-ink-soft uppercase tracking-wider">
                     Expense Category
                   </label>
                   {!isCreatingCustomCat && (
                     <button
                       type="button"
                       onClick={() => setIsCreatingCustomCat(true)}
-                      className="text-[11px] text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-sans"
+                      className="text-[11px] text-accent-strong hover:text-accent-strong flex items-center gap-1 font-sans"
                     >
                       <Plus className="h-3 w-3" />
                       <span>Add Custom Category</span>
@@ -568,9 +568,9 @@ export const BudgetsView: React.FC = () => {
                 </div>
 
                 {isCreatingCustomCat ? (
-                  <div className="p-3 bg-slate-950 border border-emerald-500/40 rounded-lg space-y-2.5">
+                  <div className="p-3 bg-canvas border border-accent/40 rounded-lg space-y-2.5">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] text-emerald-400 font-semibold uppercase">
+                      <span className="text-[11px] text-accent-strong font-semibold uppercase">
                         New Custom Category
                       </span>
                       <button
@@ -580,14 +580,14 @@ export const BudgetsView: React.FC = () => {
                           setCustomCatName('');
                           setCustomCatError('');
                         }}
-                        className="text-slate-400 hover:text-white"
+                        className="text-ink-muted hover:text-ink"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
                     </div>
 
                     {customCatError && (
-                      <div className="text-[11px] text-rose-400">{customCatError}</div>
+                      <div className="text-[11px] text-negative">{customCatError}</div>
                     )}
 
                     <div className="flex gap-2">
@@ -596,12 +596,12 @@ export const BudgetsView: React.FC = () => {
                         placeholder="e.g. Gaming, Baby Care, Pet Supplies"
                         value={customCatName}
                         onChange={(e) => setCustomCatName(e.target.value)}
-                        className="flex-1 bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-white text-xs focus:outline-none focus:border-emerald-500"
+                        className="flex-1 bg-surface border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
                       />
                       <button
                         type="button"
                         onClick={handleCreateCustomCategory}
-                        className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
+                        className="px-3 py-1.5 bg-accent-deep hover:bg-accent text-ink rounded-lg text-xs font-semibold whitespace-nowrap transition-colors"
                       >
                         Add
                       </button>
@@ -617,7 +617,7 @@ export const BudgetsView: React.FC = () => {
                         setFormCategory(e.target.value);
                       }
                     }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                    className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                   >
                     <option value="">-- Choose Category --</option>
                     {expenseCategories.map((c) => (
@@ -631,7 +631,7 @@ export const BudgetsView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">
                   Monthly Allocated Ceiling (BDT)
                 </label>
                 <input
@@ -640,12 +640,12 @@ export const BudgetsView: React.FC = () => {
                   placeholder="e.g. 25000"
                   value={formAmount}
                   onChange={(e) => setFormAmount(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 uppercase tracking-wider mb-1.5">
+                <label className="block text-ink-soft uppercase tracking-wider mb-1.5">
                   Warning Alert Threshold (%)
                 </label>
                 <input
@@ -654,44 +654,44 @@ export const BudgetsView: React.FC = () => {
                   max="100"
                   value={formThreshold}
                   onChange={(e) => setFormThreshold(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-canvas border border-edge rounded-lg px-3 py-2 text-ink focus:outline-none focus:border-accent"
                 />
-                <p className="text-[10px] text-slate-500 mt-1">
+                <p className="text-[10px] text-ink-faint mt-1">
                   Triggers amber warning when category spend reaches this %.
                 </p>
               </div>
 
               {/* Rollover Toggle Checkbox */}
-              <div className="p-3 rounded-lg border border-slate-800 bg-slate-950 flex items-start gap-2.5">
+              <div className="p-3 rounded-lg border border-edge bg-canvas flex items-start gap-2.5">
                 <input
                   type="checkbox"
                   id="rolloverToggle"
                   checked={formRollover}
                   onChange={(e) => setFormRollover(e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 bg-slate-900 cursor-pointer"
+                  className="mt-0.5 rounded border-slate-700 text-accent focus:ring-accent bg-surface cursor-pointer"
                 />
-                <label htmlFor="rolloverToggle" className="cursor-pointer text-slate-300">
-                  <div className="font-semibold text-white flex items-center gap-1.5">
-                    <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                <label htmlFor="rolloverToggle" className="cursor-pointer text-ink-soft">
+                  <div className="font-semibold text-ink flex items-center gap-1.5">
+                    <Sparkles className="h-3.5 w-3.5 text-warning" />
                     <span>অব্যবহৃত বাজেট রোলওভার (Budget Rollover)</span>
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-0.5 leading-normal">
+                  <div className="text-[11px] text-ink-muted mt-0.5 leading-normal">
                     মাস শেষে এই ক্যাটাগরির অবশিষ্ট উদ্বৃত্ত টাকা পরবর্তী মাসের বাজেটের সাথে স্বয়ংক্রিয়ভাবে যোগ হবে।
                   </div>
                 </label>
               </div>
 
-              <div className="flex justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-3 border-t border-edge">
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-800 text-slate-400 hover:text-white transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge text-ink-muted hover:text-ink transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold transition-colors"
                 >
                   Save Budget
                 </button>

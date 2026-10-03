@@ -194,21 +194,21 @@ export const LedgerSandbox: React.FC = () => {
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-4">
       {/* Top Banner & Net Worth Reconciler */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="border-b border-edge pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1.5">
+          <div className="flex items-center gap-2 text-xs font-mono text-accent-strong mb-1.5">
             <Sparkles className="h-4 w-4" />
             <span>LIVE LEDGER SIMULATION ENGINE</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Interactive Double-Entry Sandbox</h1>
-          <p className="text-slate-400 text-xs mt-1">
+          <h1 className="text-2xl font-bold text-ink tracking-tight">Interactive Double-Entry Sandbox</h1>
+          <p className="text-ink-muted text-xs mt-1">
             Test real-time transactions, observe posting invariant validations, and watch live Net Worth calculate.
           </p>
         </div>
 
         <button
           onClick={handleResetSandbox}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-slate-900 text-slate-300 hover:text-white hover:border-slate-600 transition-colors w-fit"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-surface text-ink-soft hover:text-ink hover:border-slate-600 transition-colors w-fit"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           <span>Reset Sandbox</span>
@@ -216,12 +216,12 @@ export const LedgerSandbox: React.FC = () => {
       </div>
 
       {/* Authoritative Live Net Worth Dashboard Card */}
-      <div className="rounded-xl border border-slate-800 bg-gradient-to-r from-slate-900/80 to-slate-950/80 p-6">
+      <div className="rounded-xl border border-edge bg-gradient-to-r from-slate-900/80 to-slate-950/80 p-6">
         <div className="flex items-center justify-between mb-4">
-          <span className="text-xs font-mono uppercase tracking-wider text-slate-400">
+          <span className="text-xs font-mono uppercase tracking-wider text-ink-muted">
             Authoritative Live Net Worth (v_net_worth view)
           </span>
-          <span className="text-xs font-mono text-emerald-400 flex items-center gap-1">
+          <span className="text-xs font-mono text-accent-strong flex items-center gap-1">
             <ShieldCheck className="h-3.5 w-3.5" />
             <span>Strict Sign Rule Active</span>
           </span>
@@ -229,35 +229,35 @@ export const LedgerSandbox: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
           <div>
-            <div className="text-xs text-slate-400 font-mono">Net Worth Total</div>
-            <div className="text-2xl font-bold font-mono text-white mt-1">
+            <div className="text-xs text-ink-muted font-mono">Net Worth Total</div>
+            <div className="text-2xl font-bold font-mono text-ink mt-1">
               ৳{netWorthView.netWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
-            <div className="text-[11px] text-slate-500 mt-0.5 font-mono">Liabilities already negative</div>
+            <div className="text-[11px] text-ink-faint mt-0.5 font-mono">Liabilities already negative</div>
           </div>
 
-          <div className="border-l border-slate-800 pl-4">
-            <div className="text-xs text-slate-400 font-mono">Canonical Accounts</div>
-            <div className="text-base font-semibold font-mono text-slate-200 mt-1">
+          <div className="border-l border-edge pl-4">
+            <div className="text-xs text-ink-muted font-mono">Canonical Accounts</div>
+            <div className="text-base font-semibold font-mono text-ink-soft mt-1">
               ৳{netWorthView.accountsBalance.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
-            <div className="text-[11px] text-slate-500 mt-0.5">Sum of all bank, asset & debt accounts</div>
+            <div className="text-[11px] text-ink-faint mt-0.5">Sum of all bank, asset & debt accounts</div>
           </div>
 
-          <div className="border-l border-slate-800 pl-4">
-            <div className="text-xs text-slate-400 font-mono">Broker Cash Sub-Ledger</div>
-            <div className="text-base font-semibold font-mono text-slate-200 mt-1">
+          <div className="border-l border-edge pl-4">
+            <div className="text-xs text-ink-muted font-mono">Broker Cash Sub-Ledger</div>
+            <div className="text-base font-semibold font-mono text-ink-soft mt-1">
               ৳{netWorthView.brokerCash.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
-            <div className="text-[11px] text-slate-500 mt-0.5">v_broker_cash_balance</div>
+            <div className="text-[11px] text-ink-faint mt-0.5">v_broker_cash_balance</div>
           </div>
 
-          <div className="border-l border-slate-800 pl-4">
-            <div className="text-xs text-slate-400 font-mono">Stock Market Valuation</div>
-            <div className="text-base font-semibold font-mono text-slate-200 mt-1">
+          <div className="border-l border-edge pl-4">
+            <div className="text-xs text-ink-muted font-mono">Stock Market Valuation</div>
+            <div className="text-base font-semibold font-mono text-ink-soft mt-1">
               ৳{netWorthView.stockMarketValue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </div>
-            <div className="text-[11px] text-slate-500 mt-0.5">200 GP shares @ ৳285.00</div>
+            <div className="text-[11px] text-ink-faint mt-0.5">200 GP shares @ ৳285.00</div>
           </div>
         </div>
       </div>
@@ -267,33 +267,33 @@ export const LedgerSandbox: React.FC = () => {
         {/* Left: Live Account Balances Table */}
         <div className="lg:col-span-7 space-y-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider font-mono">
+            <h2 className="text-sm font-semibold text-ink uppercase tracking-wider font-mono">
               Canonical Accounts (v_account_balances)
             </h2>
-            <span className="text-xs text-slate-500 font-mono">{accountBalances.length} accounts</span>
+            <span className="text-xs text-ink-faint font-mono">{accountBalances.length} accounts</span>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden">
+          <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden">
             <table className="w-full text-left text-xs font-mono">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400">
+                <tr className="border-b border-edge bg-canvas/60 text-ink-muted">
                   <th className="py-2.5 px-3">Account</th>
                   <th className="py-2.5 px-3">Type</th>
                   <th className="py-2.5 px-3 text-right">Derived Balance</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-edge/60">
                 {accountBalances.map((acc) => (
-                  <tr key={acc.accountId} className="hover:bg-slate-800/30">
-                    <td className="py-2.5 px-3 text-slate-200 font-medium">{acc.accountName}</td>
-                    <td className="py-2.5 px-3 text-slate-400">{acc.accountType}</td>
+                  <tr key={acc.accountId} className="hover:bg-raised/30">
+                    <td className="py-2.5 px-3 text-ink-soft font-medium">{acc.accountName}</td>
+                    <td className="py-2.5 px-3 text-ink-muted">{acc.accountType}</td>
                     <td
                       className={`py-2.5 px-3 text-right font-semibold ${
                         acc.currentBalance < 0
-                          ? 'text-rose-400'
+                          ? 'text-negative'
                           : acc.currentBalance > 0
-                          ? 'text-emerald-400'
-                          : 'text-slate-400'
+                          ? 'text-accent-strong'
+                          : 'text-ink-muted'
                       }`}
                     >
                       {acc.currentBalance < 0
@@ -308,22 +308,22 @@ export const LedgerSandbox: React.FC = () => {
 
           {/* Recent Posted Transactions Header */}
           <div className="pt-2">
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider font-mono mb-2">
+            <h2 className="text-sm font-semibold text-ink uppercase tracking-wider font-mono mb-2">
               Recent Posted Transactions ({transactions.length})
             </h2>
             <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
               {transactions.slice(0, 6).map((tx) => (
                 <div
                   key={tx.id}
-                  className="p-2.5 rounded-lg border border-slate-800 bg-slate-900/30 flex items-center justify-between text-xs font-mono"
+                  className="p-2.5 rounded-lg border border-edge bg-surface/30 flex items-center justify-between text-xs font-mono"
                 >
                   <div className="flex items-center gap-2 truncate">
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-raised text-ink-soft">
                       {tx.type}
                     </span>
-                    <span className="text-slate-300 truncate">{tx.note}</span>
+                    <span className="text-ink-soft truncate">{tx.note}</span>
                   </div>
-                  <span className="text-slate-500 shrink-0">{tx.date}</span>
+                  <span className="text-ink-faint shrink-0">{tx.date}</span>
                 </div>
               ))}
             </div>
@@ -332,26 +332,26 @@ export const LedgerSandbox: React.FC = () => {
 
         {/* Right: Post New Transaction Form */}
         <div className="lg:col-span-5">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <div className="flex items-center gap-2 border-b border-slate-800/80 pb-3">
-              <PlusCircle className="h-4 w-4 text-emerald-400" />
-              <h3 className="text-sm font-semibold text-white">Post Live Transaction</h3>
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-4">
+            <div className="flex items-center gap-2 border-b border-edge/80 pb-3">
+              <PlusCircle className="h-4 w-4 text-accent-strong" />
+              <h3 className="text-sm font-semibold text-ink">Post Live Transaction</h3>
             </div>
 
             {postError && (
-              <div className="rounded-lg bg-rose-950/40 border border-rose-800/50 p-3 text-xs text-rose-300 flex items-start gap-2">
-                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+              <div className="rounded-lg bg-rose-950/40 border border-rose-800/50 p-3 text-xs text-negative flex items-start gap-2">
+                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-negative" />
                 <span>{postError}</span>
               </div>
             )}
 
             <form onSubmit={handlePostTransaction} className="space-y-3.5 text-xs font-mono">
               <div>
-                <label className="block text-slate-400 mb-1">Event Type</label>
+                <label className="block text-ink-muted mb-1">Event Type</label>
                 <select
                   value={txType}
                   onChange={(e) => setTxType(e.target.value as any)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="expense">Expense (Account -X, Category +X)</option>
                   <option value="income">Income (Account +X, Category +X)</option>
@@ -362,11 +362,11 @@ export const LedgerSandbox: React.FC = () => {
 
               {txType !== 'cc_purchase' && (
                 <div>
-                  <label className="block text-slate-400 mb-1">Source Account</label>
+                  <label className="block text-ink-muted mb-1">Source Account</label>
                   <select
                     value={txAccount}
                     onChange={(e) => setTxAccount(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {accounts.map((a) => (
                       <option key={a.id} value={a.id}>
@@ -379,11 +379,11 @@ export const LedgerSandbox: React.FC = () => {
 
               {txType === 'transfer' && (
                 <div>
-                  <label className="block text-slate-400 mb-1">Destination Account</label>
+                  <label className="block text-ink-muted mb-1">Destination Account</label>
                   <select
                     value={txTargetAccount}
                     onChange={(e) => setTxTargetAccount(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {accounts.map((a) => (
                       <option key={a.id} value={a.id}>
@@ -396,11 +396,11 @@ export const LedgerSandbox: React.FC = () => {
 
               {txType !== 'transfer' && (
                 <div>
-                  <label className="block text-slate-400 mb-1">Reporting Category</label>
+                  <label className="block text-ink-muted mb-1">Reporting Category</label>
                   <select
                     value={txCategory}
                     onChange={(e) => setTxCategory(e.target.value)}
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {categories.map((c) => (
                       <option key={c.id} value={c.id}>
@@ -412,31 +412,31 @@ export const LedgerSandbox: React.FC = () => {
               )}
 
               <div>
-                <label className="block text-slate-400 mb-1">Amount (BDT)</label>
+                <label className="block text-ink-muted mb-1">Amount (BDT)</label>
                 <input
                   type="number"
                   step="any"
                   value={txAmount}
                   onChange={(e) => setTxAmount(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   placeholder="e.g. 1500.00"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-400 mb-1">Note / Memo</label>
+                <label className="block text-ink-muted mb-1">Note / Memo</label>
                 <input
                   type="text"
                   value={txNote}
                   onChange={(e) => setTxNote(e.target.value)}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-sans"
+                  className="w-full rounded-lg border border-edge bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-sans"
                   placeholder="e.g. Monthly internet subscription"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold font-mono text-xs transition-colors flex items-center justify-center gap-2 mt-2 shadow-sm"
+                className="w-full py-2.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold font-mono text-xs transition-colors flex items-center justify-center gap-2 mt-2 shadow-sm"
               >
                 <span>Commit & Post to Ledger</span>
               </button>

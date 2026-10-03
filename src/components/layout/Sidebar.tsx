@@ -91,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
       >
         <div className="space-y-4 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-800 scrollbar-track-transparent">
           {/* Brand Wordmark & Mobile Close */}
-          <div className="flex items-center justify-between px-2 pt-1 pb-2 border-b border-slate-900">
+          <div className="flex items-center justify-between px-2 pt-1 pb-2 border-b border-edge-soft">
             <div className="flex items-center gap-2.5">
               <img
                 src={appIcon}
@@ -472,7 +472,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
         </div>
 
         {/* Clean Footer Info Card */}
-        <div className="border-t border-slate-900/80 pt-3 mt-2 space-y-2">
+        <div className="border-t border-edge-soft/80 pt-3 mt-2 space-y-2">
           {/* App Auto Update / Download Android App in Sidebar */}
           {Capacitor.isNativePlatform() ? (
             <button

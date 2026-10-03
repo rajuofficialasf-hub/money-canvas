@@ -252,7 +252,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
     switch (type) {
       case 'deposit':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-accent/10 text-accent-strong border border-accent/20">
             Deposit
           </span>
         );
@@ -270,19 +270,19 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         );
       case 'sell_gross':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-accent/10 text-accent-strong border border-accent/20">
             Trade Sell Gross
           </span>
         );
       case 'commission':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-warning/10 text-warning border border-warning/20">
             Commission
           </span>
         );
       case 'tax':
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-negative/10 text-negative border border-negative/20">
             AIT Tax (0.05%)
           </span>
         );
@@ -300,7 +300,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         );
       default:
         return (
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-400">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-raised text-ink-muted">
             {type}
           </span>
         );
@@ -310,14 +310,14 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
   return (
     <div className="space-y-6">
       {/* Top Banner & Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-white tracking-tight">
+            <h1 className="text-xl font-bold text-ink tracking-tight">
               Brokerage & Trading Accounts
             </h1>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-ink-muted mt-1">
             Manage your Beneficiary Owner (BO) accounts, cash deposits, withdrawals, and trade execution balances.
           </p>
         </div>
@@ -358,7 +358,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
           variant="sky"
           subtitle={
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3 w-3 text-emerald-400" />
+              <ShieldCheck className="h-3 w-3 text-accent-strong" />
               <span>Sum of all verified BO sub-ledgers</span>
             </span>
           }
@@ -378,7 +378,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
               <span>DSE TREC Licensees</span>
               <button
                 onClick={() => setIsAddBrokerModalOpen(true)}
-                className="text-xs text-emerald-400 hover:text-emerald-300 font-medium"
+                className="text-xs text-accent-strong hover:text-accent-strong font-medium"
               >
                 + Add Firm
               </button>
@@ -388,14 +388,14 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
       </div>
 
       {/* BO Accounts Card Grid */}
-      <div className="bg-slate-900/40 border border-slate-800 rounded-xl p-4">
+      <div className="bg-surface/40 border border-edge rounded-xl p-4">
         <div className="flex items-center justify-between mb-3">
-          <div className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+          <div className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
             BO Accounts (Beneficiary Owner Accounts)
           </div>
           <button
             onClick={() => setIsAddBoModalOpen(true)}
-            className="text-xs text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-1"
+            className="text-xs text-accent-strong hover:text-accent-strong font-medium flex items-center gap-1"
           >
             <Plus className="h-3 w-3" />
             <span>Add BO Account</span>
@@ -411,31 +411,31 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             return (
               <div
                 key={bo.id}
-                className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 hover:border-slate-700 transition-colors"
+                className="bg-canvas border border-edge rounded-xl p-3.5 hover:border-slate-700 transition-colors"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                    <div className="font-bold text-ink text-xs flex items-center gap-1.5">
                       <span>{bo.accountName}</span>
                       {bo.isDefault && (
-                        <span className="text-[9px] px-1.5 py-0.2 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded">
+                        <span className="text-[9px] px-1.5 py-0.2 bg-accent/10 text-accent-strong border border-accent/20 rounded">
                           Default
                         </span>
                       )}
                     </div>
-                    <div className="text-[11px] text-slate-400 mt-0.5">{broker?.name || 'Brokerage Firm'}</div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-0.5">
-                      BO ID: <span className="text-slate-300">{bo.boId}</span>
+                    <div className="text-[11px] text-ink-muted mt-0.5">{broker?.name || 'Brokerage Firm'}</div>
+                    <div className="text-[10px] font-mono text-ink-faint mt-0.5">
+                      BO ID: <span className="text-ink-soft">{bo.boId}</span>
                     </div>
                   </div>
-                  <div className="p-2 bg-slate-900 rounded-lg text-slate-400">
+                  <div className="p-2 bg-surface rounded-lg text-ink-muted">
                     <Building2 className="h-4 w-4" />
                   </div>
                 </div>
 
-                <div className="mt-3 pt-2.5 border-t border-slate-900 flex items-center justify-between">
+                <div className="mt-3 pt-2.5 border-t border-edge-soft flex items-center justify-between">
                   <div>
-                    <div className="text-[10px] uppercase font-mono text-slate-500">Available Cash</div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">Available Cash</div>
                     <div className="text-sm font-mono font-bold text-sky-400">
                       ৳{cash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
@@ -446,7 +446,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                         setDepositBoAccountId(bo.id);
                         setIsDepositModalOpen(true);
                       }}
-                      className="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded text-[10px] font-medium transition-colors"
+                      className="px-2 py-1 bg-surface hover:bg-raised text-ink-soft rounded text-[10px] font-medium transition-colors"
                     >
                       Deposit
                     </button>
@@ -455,7 +455,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                         setWithdrawBoAccountId(bo.id);
                         setIsWithdrawModalOpen(true);
                       }}
-                      className="px-2 py-1 bg-slate-900 hover:bg-slate-800 text-slate-300 rounded text-[10px] font-medium transition-colors"
+                      className="px-2 py-1 bg-surface hover:bg-raised text-ink-soft rounded text-[10px] font-medium transition-colors"
                     >
                       Withdraw
                     </button>
@@ -468,15 +468,15 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
       </div>
 
       {/* Cash Sub-Ledger Section (Authoritative Audit Log) */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
+      <div className="bg-surface/60 border border-edge rounded-xl overflow-hidden">
         {/* Header & Filter Controls */}
-        <div className="p-4 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-4 border-b border-edge flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+            <div className="text-xs font-bold text-ink uppercase tracking-wider font-mono flex items-center gap-2">
               <Receipt className="h-4 w-4 text-sky-400" />
               <span>Broker Cash Ledger (broker_cash_transactions)</span>
             </div>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-[11px] text-ink-muted mt-0.5">
               Authoritative transaction entries for cash deposits, withdrawals, trade gross values, commissions, and AIT tax.
             </p>
           </div>
@@ -485,7 +485,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             <select
               value={selectedBoId}
               onChange={(e) => setSelectedBoId(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-sky-500"
+              className="bg-canvas border border-edge rounded-lg px-2.5 py-1.5 text-xs text-ink-soft focus:outline-none focus:border-sky-500"
             >
               <option value="all">All BO Accounts</option>
               {brokerAccounts.map((bo) => (
@@ -498,7 +498,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             <select
               value={selectedTxType}
               onChange={(e) => setSelectedTxType(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-sky-500"
+              className="bg-canvas border border-edge rounded-lg px-2.5 py-1.5 text-xs text-ink-soft focus:outline-none focus:border-sky-500"
             >
               <option value="all">All Event Types</option>
               <option value="deposit">Deposits</option>
@@ -516,15 +516,15 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         {filteredTxs.length === 0 ? (
           <div className="p-8 text-center">
             <AlertCircle className="h-7 w-7 text-slate-600 mx-auto mb-2" />
-            <div className="text-xs font-semibold text-slate-300">No broker cash transactions recorded</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">
+            <div className="text-xs font-semibold text-ink-soft">No broker cash transactions recorded</div>
+            <p className="text-[11px] text-ink-faint mt-0.5">
               Deposit cash from a bank account to fund your brokerage operations.
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950/60 text-slate-400 border-b border-slate-800 text-[11px] font-mono uppercase">
+              <thead className="bg-canvas/60 text-ink-muted border-b border-edge text-[11px] font-mono uppercase">
                 <tr>
                   <th className="py-3 px-4">Date</th>
                   <th className="py-3 px-4">BO Account</th>
@@ -533,32 +533,32 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                   <th className="py-3 px-4 text-right">Amount (BDT)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              <tbody className="divide-y divide-edge/60 text-ink-soft">
                 {filteredTxs.map((tx) => {
                   const boAcc = brokerAccounts.find((b) => b.id === tx.brokerAccountId);
                   const isPositive = tx.amountSigned >= 0;
 
                   return (
-                    <tr key={tx.id} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={tx.id} className="hover:bg-raised/40 transition-colors">
                       {/* Date */}
-                      <td className="py-3 px-4 font-mono text-[11px] text-slate-400 whitespace-nowrap">
+                      <td className="py-3 px-4 font-mono text-[11px] text-ink-muted whitespace-nowrap">
                         {tx.transactionDate}
                       </td>
 
                       {/* BO Account */}
                       <td className="py-3 px-4 font-mono text-[11px]">
-                        <span className="text-slate-200 font-medium">{boAcc?.accountName || 'BO Account'}</span>
-                        <div className="text-[10px] text-slate-500">BO: {boAcc?.boId}</div>
+                        <span className="text-ink-soft font-medium">{boAcc?.accountName || 'BO Account'}</span>
+                        <div className="text-[10px] text-ink-faint">BO: {boAcc?.boId}</div>
                       </td>
 
                       {/* Type Badge */}
                       <td className="py-3 px-4 whitespace-nowrap">{getTypeBadge(tx.type)}</td>
 
                       {/* Note / Memo */}
-                      <td className="py-3 px-4 text-slate-300">
+                      <td className="py-3 px-4 text-ink-soft">
                         <div>{tx.note || 'Brokerage ledger entry'}</div>
                         {tx.linkedStockTransactionId && (
-                          <div className="text-[10px] font-mono text-slate-500">
+                          <div className="text-[10px] font-mono text-ink-faint">
                             Ref Trade: {tx.linkedStockTransactionId}
                           </div>
                         )}
@@ -566,7 +566,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
 
                       {/* Amount */}
                       <td className="py-3 px-4 text-right font-mono font-semibold whitespace-nowrap">
-                        <span className={isPositive ? 'text-emerald-400' : 'text-rose-400'}>
+                        <span className={isPositive ? 'text-accent-strong' : 'text-negative'}>
                           {isPositive ? '+' : ''}৳
                           {tx.amountSigned.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
@@ -589,7 +589,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         onClose={() => setIsDepositModalOpen(false)}
         title={
           <span className="flex items-center gap-1.5">
-            <ArrowDownLeft className="h-4 w-4 text-emerald-400" />
+            <ArrowDownLeft className="h-4 w-4 text-accent-strong" />
             <span>Deposit Cash to BO Account</span>
           </span>
         }
@@ -601,7 +601,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             <form onSubmit={handleDepositSubmit} className="space-y-3.5">
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="text-xs font-medium text-slate-300">
+                  <label className="text-xs font-medium text-ink-soft">
                     Destination BO Account *
                   </label>
                   {brokerAccounts.length === 0 && (
@@ -611,7 +611,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                         setIsDepositModalOpen(false);
                         setIsAddBoModalOpen(true);
                       }}
-                      className="text-[11px] text-emerald-400 hover:underline"
+                      className="text-[11px] text-accent-strong hover:underline"
                     >
                       + Create BO Account
                     </button>
@@ -636,11 +636,11 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
 
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-medium text-slate-300">
+                  <label className="block text-xs font-medium text-ink-soft">
                     Funding Source (Bank Account or Direct Cash) *
                   </label>
                   {depositBankAccountId !== 'direct_deposit' && (
-                    <span className="text-[11px] font-mono text-emerald-400">
+                    <span className="text-[11px] font-mono text-accent-strong">
                       Balance: ৳{getAccountBalance(depositBankAccountId).toLocaleString()}
                     </span>
                   )}
@@ -661,7 +661,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                     );
                   })}
                 </Select>
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-[11px] text-ink-faint mt-1">
                   Direct Cash directly increases your total wealth &amp; BO ledger. Bank transfer moves funds from your bank.
                 </p>
 
@@ -676,15 +676,15 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
                   if (!isBankInsufficient) return null;
 
                   return (
-                    <div className="mt-2.5 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300 space-y-1.5 animate-in fade-in">
+                    <div className="mt-2.5 p-3 bg-warning/10 border border-warning/30 rounded-xl text-xs text-warning space-y-1.5 animate-in fade-in">
                       <div className="flex items-center gap-1.5 font-semibold text-amber-200">
-                        <AlertCircle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <AlertCircle className="w-4 h-4 text-warning shrink-0" />
                         <span>অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই (Insufficient Funds)</span>
                       </div>
-                      <div className="text-[11px] text-slate-300 leading-relaxed">
-                        "{selectedBankAcc?.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold font-mono text-amber-400">৳{selectedBankBal.toLocaleString()}</span>, কিন্তু আপনি <span className="font-bold font-mono text-white">৳{parsedDepAmt.toLocaleString()}</span> ট্রান্সফার করতে চেয়েছেন।
+                      <div className="text-[11px] text-ink-soft leading-relaxed">
+                        "{selectedBankAcc?.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold font-mono text-warning">৳{selectedBankBal.toLocaleString()}</span>, কিন্তু আপনি <span className="font-bold font-mono text-ink">৳{parsedDepAmt.toLocaleString()}</span> ট্রান্সফার করতে চেয়েছেন।
                       </div>
-                      <div className="text-[11px] text-emerald-300 font-medium bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-lg">
+                      <div className="text-[11px] text-accent-strong font-medium bg-emerald-950/40 border border-emerald-800/40 p-2 rounded-lg">
                         💡 <span className="font-bold">করণীয়:</span> বিও অ্যাকাউন্টে টাকা পাঠানোর পূর্বে অনুগ্রহ করে প্রথমে আপনার ব্যাংক অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন। অথবা নগদ অর্থ জমা দেওয়ার জন্য উপরের ড্রপডাউনে <span className="underline font-bold text-emerald-200">'Direct Cash (Fresh Capital)'</span> নির্বাচন করুন।
                       </div>
                     </div>
@@ -801,11 +801,11 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             return (
               <div
                 className={`rounded-lg border p-2.5 flex items-center justify-between text-xs font-mono ${
-                  short ? 'bg-rose-950/40 border-rose-500/50 text-rose-300' : 'bg-slate-950 border-slate-800 text-slate-300'
+                  short ? 'bg-rose-950/40 border-negative/50 text-negative' : 'bg-canvas border-edge text-ink-soft'
                 }`}
               >
                 <span>ক্যাশ আছে: ৳{wdBal.toLocaleString()}</span>
-                <span className={short ? 'text-rose-300 font-bold' : after === wdBal ? 'text-slate-500' : 'text-white font-bold'}>
+                <span className={short ? 'text-negative font-bold' : after === wdBal ? 'text-ink-faint' : 'text-ink font-bold'}>
                   উত্তোলনের পর: ৳{after.toLocaleString()}
                 </span>
               </div>
@@ -831,7 +831,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             </Button>
             <button
               type="submit"
-              className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-colors"
+              className="px-4 py-1.5 bg-sky-600 hover:bg-sky-500 text-ink rounded-lg text-xs font-medium transition-colors"
             >
               Confirm Withdrawal
             </button>
@@ -918,7 +918,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
           <Field
             label={
               <>
-                BO Account ID (16 Digits) <span className="text-slate-500 font-normal">(Optional)</span>
+                BO Account ID (16 Digits) <span className="text-ink-faint font-normal">(Optional)</span>
               </>
             }
           >
@@ -946,9 +946,9 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
               id="boDefault"
               checked={newBoIsDefault}
               onChange={(e) => setNewBoIsDefault(e.target.checked)}
-              className="rounded border-slate-700 bg-slate-950 text-emerald-500 focus:ring-emerald-500"
+              className="rounded border-slate-700 bg-canvas text-accent focus:ring-accent"
             />
-            <label htmlFor="boDefault" className="text-xs text-slate-300">
+            <label htmlFor="boDefault" className="text-xs text-ink-soft">
               Set as primary/default BO account for trades
             </label>
           </div>

@@ -57,20 +57,20 @@ export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }>
   if (!isAdmin) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center p-6">
-        <div className="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-2xl p-8 text-center shadow-2xl backdrop-blur-xl space-y-5">
-          <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center mx-auto">
+        <div className="max-w-md w-full bg-surface/90 border border-edge rounded-2xl p-8 text-center shadow-2xl backdrop-blur-xl space-y-5">
+          <div className="w-14 h-14 rounded-2xl bg-warning/10 border border-warning/30 text-warning flex items-center justify-center mx-auto">
             <Lock className="h-7 w-7" />
           </div>
           <div className="space-y-2">
-            <h2 className="text-lg font-bold text-white tracking-tight">Owner Access Required</h2>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              Google Play Store Kit and publishing assets are private developer resources restricted exclusively to the app owner (<span className="text-emerald-400 font-mono">{APP_CONFIG.OWNER_EMAIL}</span>).
+            <h2 className="text-lg font-bold text-ink tracking-tight">Owner Access Required</h2>
+            <p className="text-xs text-ink-muted leading-relaxed">
+              Google Play Store Kit and publishing assets are private developer resources restricted exclusively to the app owner (<span className="text-accent-strong font-mono">{APP_CONFIG.OWNER_EMAIL}</span>).
             </p>
           </div>
           <div className="pt-2 flex flex-col gap-2.5">
             <button
               onClick={openAuthModal}
-              className="w-full py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-xl bg-accent hover:bg-accent-strong text-accent-ink font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
             >
               <ShieldCheck className="h-4 w-4" />
               <span>Sign In with Owner Account</span>
@@ -78,7 +78,7 @@ export const PlayStoreKitView: React.FC<{ onNavigate?: (view: string) => void }>
             {onNavigate && (
               <button
                 onClick={() => onNavigate('dashboard')}
-                className="w-full py-2 px-4 rounded-xl bg-slate-800/80 hover:bg-slate-800 text-slate-300 text-xs transition-colors"
+                className="w-full py-2 px-4 rounded-xl bg-raised/80 hover:bg-raised text-ink-soft text-xs transition-colors"
               >
                 Return to Dashboard
               </button>
@@ -248,19 +248,19 @@ Master your wealth and take control of your financial destiny with Money Canvas!
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-2">
       {/* Header */}
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="border-b border-edge pb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1.5">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1.5">
             <Sparkles className="h-4 w-4" />
             <span>Google Play Console Release & Publishing Studio</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2">
             <span>Play Store Assets & Listing Kit</span>
-            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-accent/20 text-accent-strong border border-accent/30">
               100% Ready
             </span>
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
+          <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
             {isBn
               ? 'গুগল প্লে কনসোলে অ্যাপ সাবমিট করার জন্য প্রয়োজনীয় সকল হাই-রেজ্যুলিউশন আইকন, ফিচার ব্যানার, ফোন স্ক্রিনশট এবং বাংলা-ইংরেজি স্টোর মেটাডেটা এক ক্লিকে ডাউনলোড ও কপি করুন।'
               : 'Official high-resolution icon (512x512), feature graphic (1024x500), HD device screenshots (1080x1920), and bilingual store metadata formatted to Google Play Console specifications.'}
@@ -270,7 +270,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
         <div className="flex items-center gap-2.5 shrink-0">
           <button
             onClick={handleDownloadAll}
-            className="px-4 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs transition-colors flex items-center gap-2 shadow-lg shadow-emerald-950/40 cursor-pointer"
+            className="px-4 py-2.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold font-mono text-xs transition-colors flex items-center gap-2 shadow-lg shadow-emerald-950/40 cursor-pointer"
           >
             <Download className="h-4 w-4" />
             <span>{isBn ? 'সবগুলো অ্যাসেট ডাউনলোড করুন' : 'Download All Assets (Batch)'}</span>
@@ -279,16 +279,16 @@ Master your wealth and take control of your financial destiny with Money Canvas!
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 gap-2 overflow-x-auto pb-1">
+      <div className="flex border-b border-edge gap-2 overflow-x-auto pb-1">
         <button
           onClick={() => setActiveTab('assets')}
           className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'assets'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+              ? 'bg-accent/20 text-accent-strong border border-accent/40'
+              : 'text-ink-muted hover:text-ink hover:bg-surface/60'
           }`}
         >
-          <Image className="h-4 w-4 text-emerald-400" />
+          <Image className="h-4 w-4 text-accent-strong" />
           <span>{isBn ? 'গ্রাফিক্স ও স্ক্রিনশটস (Visual Assets)' : 'Graphics & Screenshots (6 Assets)'}</span>
         </button>
 
@@ -296,8 +296,8 @@ Master your wealth and take control of your financial destiny with Money Canvas!
           onClick={() => setActiveTab('metadata')}
           className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'metadata'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+              ? 'bg-accent/20 text-accent-strong border border-accent/40'
+              : 'text-ink-muted hover:text-ink hover:bg-surface/60'
           }`}
         >
           <FileText className="h-4 w-4 text-sky-400" />
@@ -308,11 +308,11 @@ Master your wealth and take control of your financial destiny with Money Canvas!
           onClick={() => setActiveTab('datasafety')}
           className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'datasafety'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+              ? 'bg-accent/20 text-accent-strong border border-accent/40'
+              : 'text-ink-muted hover:text-ink hover:bg-surface/60'
           }`}
         >
-          <ShieldCheck className="h-4 w-4 text-amber-400" />
+          <ShieldCheck className="h-4 w-4 text-warning" />
           <span>{isBn ? 'ডাটা সেফটি ও পলিসি (Data Safety)' : 'Data Safety & Compliance'}</span>
         </button>
 
@@ -320,8 +320,8 @@ Master your wealth and take control of your financial destiny with Money Canvas!
           onClick={() => setActiveTab('checklist')}
           className={`px-4 py-2.5 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
             activeTab === 'checklist'
-              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-              : 'text-slate-400 hover:text-white hover:bg-slate-900/60'
+              ? 'bg-accent/20 text-accent-strong border border-accent/40'
+              : 'text-ink-muted hover:text-ink hover:bg-surface/60'
           }`}
         >
           <CheckSquare className="h-4 w-4 text-purple-400" />
@@ -333,16 +333,16 @@ Master your wealth and take control of your financial destiny with Money Canvas!
       {activeTab === 'assets' && (
         <div className="space-y-6">
           {/* Quick Summary Card */}
-          <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="rounded-xl border border-accent/30 bg-emerald-950/20 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <div className="h-10 w-10 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Award className="h-5 w-5 text-emerald-400" />
+              <div className="h-10 w-10 rounded-lg bg-accent/20 border border-accent/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Award className="h-5 w-5 text-accent-strong" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-white">
+                <h3 className="text-sm font-bold text-ink">
                   {isBn ? 'গুগল প্লে কনসোল স্ট্যান্ডার্ড অনুযায়ী প্রস্তুত' : 'Fully Compliant with Google Play Store Requirements'}
                 </h3>
-                <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                <p className="text-xs text-ink-soft mt-1 leading-relaxed">
                   {isBn
                     ? '১টি ৫১২x৫১২ আইকন, ১টি ১০২৪x৫০০ ফিচার ব্যানার এবং ৪টি ১০৮০x১৯২০ স্ক্রিনশট তৈরি করা হয়েছে। সবগুলো ফাইল PNG ও SVG উভয় ফরম্যাটে উপলব্ধ।'
                     : 'Generated 1x 512x512 Icon, 1x 1024x500 Feature Graphic, and 4x 1080x1920 HD Device Screenshots. Available in both PNG and SVG.'}
@@ -353,7 +353,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
               <button
                 onClick={handleDownloadAll}
-                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                className="w-full sm:w-auto px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <Download className="h-4 w-4" />
                 <span>{isBn ? 'সব ডাউনলোড করুন' : 'Download All PNGs'}</span>
@@ -366,27 +366,27 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             {assets.map((asset, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-slate-800 bg-slate-900/70 p-4 flex flex-col justify-between hover:border-slate-700 transition-all group"
+                className="rounded-xl border border-edge bg-surface/70 p-4 flex flex-col justify-between hover:border-slate-700 transition-all group"
               >
                 <div>
                   {/* Title & Badge */}
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <h4 className="text-xs font-bold text-white truncate">
+                    <h4 className="text-xs font-bold text-ink truncate">
                       {isBn ? asset.titleBn : asset.titleEn}
                     </h4>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-800 text-emerald-400 border border-slate-700 shrink-0">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-raised text-accent-strong border border-slate-700 shrink-0">
                       {asset.dimension}
                     </span>
                   </div>
 
-                  <p className="text-[11px] text-slate-400 mb-3 line-clamp-2 leading-relaxed">
+                  <p className="text-[11px] text-ink-muted mb-3 line-clamp-2 leading-relaxed">
                     {isBn ? asset.descriptionBn : asset.descriptionEn}
                   </p>
 
                   {/* Image Preview Container */}
                   <div
                     onClick={() => setSelectedPreview(asset.pngUrl)}
-                    className="relative rounded-lg overflow-hidden border border-slate-800 bg-slate-950 cursor-pointer group-hover:border-emerald-500/50 transition-colors flex items-center justify-center p-2 mb-4 bg-gradient-to-b from-slate-900 to-slate-950"
+                    className="relative rounded-lg overflow-hidden border border-edge bg-canvas cursor-pointer group-hover:border-accent/50 transition-colors flex items-center justify-center p-2 mb-4 bg-gradient-to-b from-slate-900 to-slate-950"
                   >
                     <img
                       src={asset.pngUrl}
@@ -394,8 +394,8 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                       className="max-h-56 w-auto object-contain rounded drop-shadow-md transition-transform group-hover:scale-[1.02]"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="px-2.5 py-1 rounded bg-slate-900/90 border border-slate-700 text-[10px] font-mono text-white">
+                    <div className="absolute inset-0 bg-canvas/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="px-2.5 py-1 rounded bg-surface/90 border border-slate-700 text-[10px] font-mono text-ink">
                         Click to Zoom
                       </span>
                     </div>
@@ -403,8 +403,8 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                 </div>
 
                 {/* Bottom Actions */}
-                <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-slate-500">
+                <div className="space-y-2 pt-2 border-t border-edge/80">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-ink-faint">
                     <span>{asset.format}</span>
                     <span>{asset.sizeDesc}</span>
                   </div>
@@ -413,7 +413,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     <a
                       href={asset.pngUrl}
                       download={asset.pngUrl.split('/').pop()}
-                      className="px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      className="px-3 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/30 text-accent-strong font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>PNG</span>
@@ -422,7 +422,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     <a
                       href={asset.svgUrl}
                       download={asset.svgUrl.split('/').pop()}
-                      className="px-3 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      className="px-3 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>SVG Vector</span>
@@ -436,27 +436,27 @@ Master your wealth and take control of your financial destiny with Money Canvas!
           {/* Large Preview Modal */}
           {selectedPreview && (
             <div
-              className="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4"
+              className="fixed inset-0 z-50 bg-canvas/90 backdrop-blur-md flex items-center justify-center p-4"
               onClick={() => setSelectedPreview(null)}
             >
               <div
-                className="relative max-w-4xl max-h-[90vh] bg-slate-900 rounded-xl border border-slate-700 p-4 flex flex-col items-center gap-3 overflow-hidden shadow-2xl"
+                className="relative max-w-4xl max-h-[90vh] bg-surface rounded-xl border border-slate-700 p-4 flex flex-col items-center gap-3 overflow-hidden shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="flex items-center justify-between w-full border-b border-slate-800 pb-2">
-                  <span className="text-xs font-mono text-slate-300 truncate">{selectedPreview}</span>
+                <div className="flex items-center justify-between w-full border-b border-edge pb-2">
+                  <span className="text-xs font-mono text-ink-soft truncate">{selectedPreview}</span>
                   <div className="flex items-center gap-2">
                     <a
                       href={selectedPreview}
                       download={selectedPreview.split('/').pop()}
-                      className="px-3 py-1 rounded bg-emerald-500 text-slate-950 font-bold font-mono text-xs flex items-center gap-1"
+                      className="px-3 py-1 rounded bg-accent text-accent-ink font-bold font-mono text-xs flex items-center gap-1"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>Download</span>
                     </a>
                     <button
                       onClick={() => setSelectedPreview(null)}
-                      className="text-slate-400 hover:text-white px-2 py-1 text-xs font-bold font-mono bg-slate-800 rounded"
+                      className="text-ink-muted hover:text-ink px-2 py-1 text-xs font-bold font-mono bg-raised rounded"
                     >
                       ✕ Close
                     </button>
@@ -478,15 +478,15 @@ Master your wealth and take control of your financial destiny with Money Canvas!
       {/* TAB 2: STORE LISTING METADATA */}
       {activeTab === 'metadata' && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-6">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white">Google Play Store Copywriting (Bengali & English)</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <h3 className="text-sm font-bold text-ink">Google Play Store Copywriting (Bengali & English)</h3>
+                <p className="text-xs text-ink-muted mt-0.5">
                   Pre-formatted text matching Google Play character limits (Title ≤ 30, Short Desc ≤ 80, Full Desc ≤ 4000).
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              <span className="text-[10px] font-mono text-accent-strong bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
                 Play Console Optimized
               </span>
             </div>
@@ -494,41 +494,41 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             {/* App Title */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-300 flex items-center gap-2">
+                <label className="text-xs font-bold text-ink-soft flex items-center gap-2">
                   <span>App Name / Title</span>
-                  <span className="text-[10px] font-mono text-slate-500">(Max 30 characters)</span>
+                  <span className="text-[10px] font-mono text-ink-faint">(Max 30 characters)</span>
                 </label>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Bengali */}
-                <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between gap-3">
+                <div className="p-3.5 rounded-lg bg-canvas border border-edge flex items-center justify-between gap-3">
                   <div>
-                    <div className="text-[10px] font-mono text-emerald-400 font-bold mb-0.5">বাংলা লিস্টিং (Bengali)</div>
-                    <div className="text-sm font-semibold text-white font-sans">{appTitleBn}</div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-1">{appTitleBn.length} / 30 chars</div>
+                    <div className="text-[10px] font-mono text-accent-strong font-bold mb-0.5">বাংলা লিস্টিং (Bengali)</div>
+                    <div className="text-sm font-semibold text-ink font-sans">{appTitleBn}</div>
+                    <div className="text-[10px] font-mono text-ink-faint mt-1">{appTitleBn.length} / 30 chars</div>
                   </div>
                   <button
                     onClick={() => copyToClipboard(appTitleBn, 'title_bn')}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
-                    {copiedKey === 'title_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiedKey === 'title_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'title_bn' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
 
                 {/* English */}
-                <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between gap-3">
+                <div className="p-3.5 rounded-lg bg-canvas border border-edge flex items-center justify-between gap-3">
                   <div>
                     <div className="text-[10px] font-mono text-sky-400 font-bold mb-0.5">ইংরেজি লিস্টিং (English)</div>
-                    <div className="text-sm font-semibold text-white font-sans">{appTitleEn}</div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-1">{appTitleEn.length} / 30 chars</div>
+                    <div className="text-sm font-semibold text-ink font-sans">{appTitleEn}</div>
+                    <div className="text-[10px] font-mono text-ink-faint mt-1">{appTitleEn.length} / 30 chars</div>
                   </div>
                   <button
                     onClick={() => copyToClipboard(appTitleEn, 'title_en')}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
-                    {copiedKey === 'title_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiedKey === 'title_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'title_en' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
@@ -537,40 +537,40 @@ Master your wealth and take control of your financial destiny with Money Canvas!
 
             {/* Short Description */}
             <div className="space-y-3">
-              <label className="text-xs font-bold text-slate-300 flex items-center gap-2">
+              <label className="text-xs font-bold text-ink-soft flex items-center gap-2">
                 <span>Short Description</span>
-                <span className="text-[10px] font-mono text-slate-500">(Max 80 characters)</span>
+                <span className="text-[10px] font-mono text-ink-faint">(Max 80 characters)</span>
               </label>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Bengali */}
-                <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 flex items-start justify-between gap-3">
+                <div className="p-3.5 rounded-lg bg-canvas border border-edge flex items-start justify-between gap-3">
                   <div>
-                    <div className="text-[10px] font-mono text-emerald-400 font-bold mb-0.5">বাংলা (Bengali)</div>
-                    <div className="text-xs text-slate-200 font-sans leading-relaxed">{shortDescBn}</div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-1">{shortDescBn.length} / 80 chars</div>
+                    <div className="text-[10px] font-mono text-accent-strong font-bold mb-0.5">বাংলা (Bengali)</div>
+                    <div className="text-xs text-ink-soft font-sans leading-relaxed">{shortDescBn}</div>
+                    <div className="text-[10px] font-mono text-ink-faint mt-1">{shortDescBn.length} / 80 chars</div>
                   </div>
                   <button
                     onClick={() => copyToClipboard(shortDescBn, 'short_bn')}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
-                    {copiedKey === 'short_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiedKey === 'short_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'short_bn' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
 
                 {/* English */}
-                <div className="p-3.5 rounded-lg bg-slate-950 border border-slate-800 flex items-start justify-between gap-3">
+                <div className="p-3.5 rounded-lg bg-canvas border border-edge flex items-start justify-between gap-3">
                   <div>
                     <div className="text-[10px] font-mono text-sky-400 font-bold mb-0.5">English</div>
-                    <div className="text-xs text-slate-200 font-sans leading-relaxed">{shortDescEn}</div>
-                    <div className="text-[10px] font-mono text-slate-500 mt-1">{shortDescEn.length} / 80 chars</div>
+                    <div className="text-xs text-ink-soft font-sans leading-relaxed">{shortDescEn}</div>
+                    <div className="text-[10px] font-mono text-ink-faint mt-1">{shortDescEn.length} / 80 chars</div>
                   </div>
                   <button
                     onClick={() => copyToClipboard(shortDescEn, 'short_en')}
-                    className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
-                    {copiedKey === 'short_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiedKey === 'short_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'short_en' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
@@ -579,33 +579,33 @@ Master your wealth and take control of your financial destiny with Money Canvas!
 
             {/* Full Description */}
             <div className="space-y-4">
-              <label className="text-xs font-bold text-slate-300 flex items-center gap-2">
+              <label className="text-xs font-bold text-ink-soft flex items-center gap-2">
                 <span>Full Description (সম্পূর্ণ বিবরণ)</span>
-                <span className="text-[10px] font-mono text-slate-500">(Max 4000 characters)</span>
+                <span className="text-[10px] font-mono text-ink-faint">(Max 4000 characters)</span>
               </label>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Bengali Full */}
-                <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between gap-3">
+                <div className="p-4 rounded-lg bg-canvas border border-edge flex flex-col justify-between gap-3">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold">বাংলা ফুল ডেসক্রিপশন</span>
+                      <span className="text-[10px] font-mono text-accent-strong font-bold">বাংলা ফুল ডেসক্রিপশন</span>
                       <button
                         onClick={() => copyToClipboard(fullDescBn, 'full_bn')}
-                        className="px-3 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500/30 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center gap-1.5 transition-colors"
+                        className="px-3 py-1 rounded bg-accent/20 hover:bg-accent/30 border border-accent/40 text-accent-strong text-xs font-mono flex items-center gap-1.5 transition-colors"
                       >
-                        {copiedKey === 'full_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                        {copiedKey === 'full_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                         <span>{copiedKey === 'full_bn' ? 'Copied' : 'Copy Text'}</span>
                       </button>
                     </div>
-                    <pre className="text-xs text-slate-300 font-sans whitespace-pre-wrap max-h-72 overflow-y-auto pr-2 leading-relaxed bg-slate-900/50 p-3 rounded border border-slate-800/80">
+                    <pre className="text-xs text-ink-soft font-sans whitespace-pre-wrap max-h-72 overflow-y-auto pr-2 leading-relaxed bg-surface/50 p-3 rounded border border-edge/80">
                       {fullDescBn}
                     </pre>
                   </div>
                 </div>
 
                 {/* English Full */}
-                <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 flex flex-col justify-between gap-3">
+                <div className="p-4 rounded-lg bg-canvas border border-edge flex flex-col justify-between gap-3">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-mono text-sky-400 font-bold">English Full Description</span>
@@ -617,7 +617,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                         <span>{copiedKey === 'full_en' ? 'Copied' : 'Copy Text'}</span>
                       </button>
                     </div>
-                    <pre className="text-xs text-slate-300 font-sans whitespace-pre-wrap max-h-72 overflow-y-auto pr-2 leading-relaxed bg-slate-900/50 p-3 rounded border border-slate-800/80">
+                    <pre className="text-xs text-ink-soft font-sans whitespace-pre-wrap max-h-72 overflow-y-auto pr-2 leading-relaxed bg-surface/50 p-3 rounded border border-edge/80">
                       {fullDescEn}
                     </pre>
                   </div>
@@ -626,18 +626,18 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             </div>
 
             {/* Categorization & Tags */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-slate-800">
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-mono text-slate-400">Application Category</div>
-                <div className="text-xs font-bold text-white mt-1">Finance / Accounting</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 border-t border-edge">
+              <div className="p-3 rounded-lg bg-canvas border border-edge">
+                <div className="text-[10px] font-mono text-ink-muted">Application Category</div>
+                <div className="text-xs font-bold text-ink mt-1">Finance / Accounting</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-mono text-slate-400">Content Rating</div>
-                <div className="text-xs font-bold text-emerald-400 mt-1">Everyone (PEGI 3 / 3+)</div>
+              <div className="p-3 rounded-lg bg-canvas border border-edge">
+                <div className="text-[10px] font-mono text-ink-muted">Content Rating</div>
+                <div className="text-xs font-bold text-accent-strong mt-1">Everyone (PEGI 3 / 3+)</div>
               </div>
-              <div className="p-3 rounded-lg bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-mono text-slate-400">Store Tags</div>
-                <div className="text-xs font-bold text-slate-200 mt-1">Finance, Personal Finance, DSE, Zakat</div>
+              <div className="p-3 rounded-lg bg-canvas border border-edge">
+                <div className="text-[10px] font-mono text-ink-muted">Store Tags</div>
+                <div className="text-xs font-bold text-ink-soft mt-1">Finance, Personal Finance, DSE, Zakat</div>
               </div>
             </div>
           </div>
@@ -647,63 +647,63 @@ Master your wealth and take control of your financial destiny with Money Canvas!
       {/* TAB 3: DATA SAFETY & PRIVACY */}
       {activeTab === 'datasafety' && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-6">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white">Google Play Data Safety Form Answers</h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <h3 className="text-sm font-bold text-ink">Google Play Data Safety Form Answers</h3>
+                <p className="text-xs text-ink-muted mt-0.5">
                   Exact answers to select in the Google Play Console Data Safety questionnaire.
                 </p>
               </div>
-              <ShieldCheck className="h-5 w-5 text-emerald-400" />
+              <ShieldCheck className="h-5 w-5 text-accent-strong" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              <div className="p-4 rounded-lg bg-canvas border border-edge space-y-2">
+                <div className="text-xs font-bold text-ink flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent-strong" />
                   <span>Data Collection & Sharing</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   <strong>Does your app collect or share any of the required user data types?</strong>
                   <br />
-                  <span className="text-emerald-400 font-mono">No</span> — Money Canvas does not share user data with any 3rd party. All financial data is processed locally on device (IndexedDB/Local Vault).
+                  <span className="text-accent-strong font-mono">No</span> — Money Canvas does not share user data with any 3rd party. All financial data is processed locally on device (IndexedDB/Local Vault).
                 </p>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              <div className="p-4 rounded-lg bg-canvas border border-edge space-y-2">
+                <div className="text-xs font-bold text-ink flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent-strong" />
                   <span>Data Transfer & Encryption</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   <strong>Is data encrypted in transit?</strong>
                   <br />
-                  <span className="text-emerald-400 font-mono">Yes</span> — All HTTPS connections (Google Drive API / Firebase Auth) use standard TLS 1.3 encryption.
+                  <span className="text-accent-strong font-mono">Yes</span> — All HTTPS connections (Google Drive API / Firebase Auth) use standard TLS 1.3 encryption.
                 </p>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              <div className="p-4 rounded-lg bg-canvas border border-edge space-y-2">
+                <div className="text-xs font-bold text-ink flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent-strong" />
                   <span>User Account Deletion & Data Wipe</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-ink-soft leading-relaxed">
                   <strong>Can users request data deletion?</strong>
                   <br />
-                  <span className="text-emerald-400 font-mono">Yes</span> — Users can wipe 100% of their data immediately via the built-in "Clean Slate / Reset Ledger" in Settings.
+                  <span className="text-accent-strong font-mono">Yes</span> — Users can wipe 100% of their data immediately via the built-in "Clean Slate / Reset Ledger" in Settings.
                 </p>
               </div>
 
-              <div className="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-2">
-                <div className="text-xs font-bold text-white flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+              <div className="p-4 rounded-lg bg-canvas border border-edge space-y-2">
+                <div className="text-xs font-bold text-ink flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-accent-strong" />
                   <span>Ads & Financial Policy</span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  <strong>Contains Ads:</strong> <span className="text-emerald-400 font-mono">No</span>
+                <p className="text-xs text-ink-soft leading-relaxed">
+                  <strong>Contains Ads:</strong> <span className="text-accent-strong font-mono">No</span>
                   <br />
-                  <strong>Target Audience:</strong> <span className="text-emerald-400 font-mono">18 and over</span>
+                  <strong>Target Audience:</strong> <span className="text-accent-strong font-mono">18 and over</span>
                   <br />
                   <strong>Financial App Declaration:</strong> Personal finance management & accounting (Non-banking, non-lending).
                 </p>
@@ -711,16 +711,16 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             </div>
 
             {/* Privacy Policy URL Card */}
-            <div className="p-4 rounded-lg bg-emerald-950/20 border border-emerald-500/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="p-4 rounded-lg bg-emerald-950/20 border border-accent/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
               <div>
-                <div className="text-xs font-bold text-white">Live Privacy Policy URL for Play Console</div>
-                <div className="text-xs font-mono text-emerald-400 mt-0.5 truncate max-w-xl">
+                <div className="text-xs font-bold text-ink">Live Privacy Policy URL for Play Console</div>
+                <div className="text-xs font-mono text-accent-strong mt-0.5 truncate max-w-xl">
                   {typeof window !== 'undefined' ? `${window.location.origin}/privacy` : 'https://moneycanvas.app/privacy'}
                 </div>
               </div>
               <button
                 onClick={() => copyToClipboard(typeof window !== 'undefined' ? `${window.location.origin}/privacy` : 'https://moneycanvas.app/privacy', 'priv_url')}
-                className="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold font-mono text-xs flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
+                className="px-3.5 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold font-mono text-xs flex items-center gap-1.5 shrink-0 transition-colors cursor-pointer"
               >
                 {copiedKey === 'priv_url' ? <CheckCircle2 className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copiedKey === 'priv_url' ? 'Copied URL' : 'Copy Privacy URL'}</span>
@@ -733,17 +733,17 @@ Master your wealth and take control of your financial destiny with Money Canvas!
       {/* TAB 4: PUBLISHING CHECKLIST */}
       {activeTab === 'checklist' && (
         <div className="space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-6">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
               <div>
-                <h3 className="text-sm font-bold text-white">
+                <h3 className="text-sm font-bold text-ink">
                   {isBn ? 'গুগল প্লে কনসোল পাবলিশিং চেকলিস্ট (২০২৬ আপডেট)' : 'Google Play Console 2026 Production Rollout Checklist'}
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-ink-muted mt-0.5">
                   {isBn ? 'প্রতিটি ধাপ সম্পন্ন করে টিক দিন এবং সহজে ট্র্যাকিং রাখুন।' : 'Track your readiness step-by-step for submission and review.'}
                 </p>
               </div>
-              <div className="text-xs font-mono text-emerald-400">
+              <div className="text-xs font-mono text-accent-strong">
                 {Object.values(checklist).filter(Boolean).length} / 8 Completed
               </div>
             </div>
@@ -814,22 +814,22 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     onClick={() => toggleChecklistItem(item.id)}
                     className={`p-4 rounded-lg border transition-all cursor-pointer flex items-start gap-3.5 ${
                       isChecked
-                        ? 'bg-emerald-950/20 border-emerald-500/40 text-emerald-300'
-                        : 'bg-slate-950/60 border-slate-800 hover:border-slate-700 text-slate-300'
+                        ? 'bg-emerald-950/20 border-accent/40 text-accent-strong'
+                        : 'bg-canvas/60 border-edge hover:border-slate-700 text-ink-soft'
                     }`}
                   >
                     <div className="pt-0.5 shrink-0">
                       {isChecked ? (
-                        <CheckSquare className="h-5 w-5 text-emerald-400" />
+                        <CheckSquare className="h-5 w-5 text-accent-strong" />
                       ) : (
                         <Square className="h-5 w-5 text-slate-600" />
                       )}
                     </div>
                     <div className="space-y-0.5 flex-1">
-                      <div className={`text-xs font-bold ${isChecked ? 'text-white line-through opacity-80' : 'text-white'}`}>
+                      <div className={`text-xs font-bold ${isChecked ? 'text-ink line-through opacity-80' : 'text-ink'}`}>
                         {isBn ? item.titleBn : item.titleEn}
                       </div>
-                      <div className="text-[11px] text-slate-400 leading-relaxed">
+                      <div className="text-[11px] text-ink-muted leading-relaxed">
                         {isBn ? item.descBn : item.descEn}
                       </div>
                     </div>

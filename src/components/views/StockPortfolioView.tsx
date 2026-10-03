@@ -398,7 +398,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
           {onNavigateToDividends && (
             <button
               onClick={onNavigateToDividends}
-              className="px-3 py-2 bg-amber-950/60 border border-amber-700/60 hover:border-amber-500 text-amber-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-2 bg-amber-950/60 border border-amber-700/60 hover:border-warning text-amber-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <Coins className="h-3.5 w-3.5 text-warning" />
               <span>Dividends</span>
@@ -438,7 +438,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                   </span>
                   <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
                     dseSyncStatus.isManualOnly
-                      ? 'bg-amber-950 text-amber-300 border border-amber-800'
+                      ? 'bg-amber-950 text-warning border border-amber-800'
                       : dseSyncStatus.status === 'syncing' || isSyncingLocal
                       ? 'bg-sky-950 text-sky-300 border border-sky-800 animate-pulse'
                       : dseSyncStatus.status === 'success'
@@ -523,7 +523,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             syncNotice.type === 'success'
               ? 'bg-emerald-950/40 border-emerald-800/60 text-accent-strong'
               : syncNotice.type === 'error'
-              ? 'bg-rose-950/40 border-rose-800/60 text-rose-300'
+              ? 'bg-rose-950/40 border-rose-800/60 text-negative'
               : 'bg-sky-950/40 border-sky-800/60 text-sky-300'
           }`}>
             {syncNotice.type === 'success' ? (
@@ -795,7 +795,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <button
                 onClick={handleClearUnused}
                 title="Remove all stocks that have no trade history"
-                className="text-xs text-negative hover:text-rose-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-canvas border border-edge rounded-lg transition-colors"
+                className="text-xs text-negative hover:text-negative font-medium flex items-center gap-1 px-2.5 py-1 bg-canvas border border-edge rounded-lg transition-colors"
               >
                 <Trash2 className="h-3 w-3" />
                 <span>Clear Unused</span>
@@ -824,7 +824,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
           <div
             className={`mb-3 p-2.5 rounded-xl border text-xs flex items-center gap-2 animate-in fade-in duration-150 ${
               catalogToast.isError
-                ? 'bg-rose-950/40 border-rose-800/60 text-rose-300'
+                ? 'bg-rose-950/40 border-rose-800/60 text-negative'
                 : 'bg-emerald-950/40 border-emerald-800/60 text-accent-strong'
             }`}
           >

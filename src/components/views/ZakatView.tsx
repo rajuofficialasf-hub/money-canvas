@@ -160,16 +160,16 @@ export const ZakatView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Scale className="h-4 w-4" />
             <span>Islamic Wealth & Zakat</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
             Net Worth & Zakat Engine
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Balance sheet consolidation and Shariah-compliant Zakat calculation with Gold and Silver Nisab thresholds.
           </p>
         </div>
@@ -177,9 +177,9 @@ export const ZakatView: React.FC = () => {
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setIsSettingsModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 font-medium text-xs transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 hover:bg-raised text-ink-soft font-medium text-xs transition-colors"
           >
-            <Sliders className="h-3.5 w-3.5 text-slate-400" />
+            <Sliders className="h-3.5 w-3.5 text-ink-muted" />
             <span>Nisab Rates</span>
           </button>
 
@@ -190,7 +190,7 @@ export const ZakatView: React.FC = () => {
               setDisburseError('');
               setIsDisburseModalOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
           >
             <DollarSign className="h-4 w-4" />
             <span>Disburse Zakat</span>
@@ -201,24 +201,24 @@ export const ZakatView: React.FC = () => {
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
         {/* Net Worth */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Authoritative Net Worth</span>
-            <div className="h-6 w-6 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+            <div className="h-6 w-6 rounded bg-accent/10 flex items-center justify-center text-accent-strong">
               <TrendingUp className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-white font-mono">
+          <div className="text-xl font-bold text-ink font-mono">
             ৳{netWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             Lock 1: Assets minus Liabilities
           </div>
         </div>
 
         {/* Zakatable Net Pool */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Net Zakatable Pool</span>
             <div className="h-6 w-6 rounded bg-sky-500/10 flex items-center justify-center text-sky-400">
               <Coins className="h-3.5 w-3.5" />
@@ -227,53 +227,53 @@ export const ZakatView: React.FC = () => {
           <div className="text-xl font-bold text-sky-400 font-mono">
             ৳{zakatCalc.netZakatablePool.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             Zakatable Assets - Deductions
           </div>
         </div>
 
         {/* Active Nisab Threshold */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Nisab ({zakatSettings.nisabBasis.toUpperCase()})</span>
-            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${zakatCalc.isNisabMet ? 'bg-emerald-500/10 text-emerald-400' : 'bg-slate-800 text-slate-400'}`}>
+            <span className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${zakatCalc.isNisabMet ? 'bg-accent/10 text-accent-strong' : 'bg-raised text-ink-muted'}`}>
               {zakatCalc.isNisabMet ? 'Met' : 'Below'}
             </span>
           </div>
-          <div className="text-xl font-bold text-amber-400 font-mono">
+          <div className="text-xl font-bold text-warning font-mono">
             ৳{zakatCalc.effectiveNisabThreshold.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             {zakatSettings.nisabBasis === 'silver' ? '52.5 tolas / 612.36g' : '7.5 tolas / 87.48g'}
           </div>
         </div>
 
         {/* Total Zakat Due (2.5%) */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Annual Zakat Due (2.5%)</span>
-            <div className="h-6 w-6 rounded bg-emerald-500/10 flex items-center justify-center text-emerald-400">
+            <div className="h-6 w-6 rounded bg-accent/10 flex items-center justify-center text-accent-strong">
               <ShieldCheck className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-emerald-400 font-mono">
+          <div className="text-xl font-bold text-accent-strong font-mono">
             ৳{zakatCalc.zakatDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             {zakatCalc.isNisabMet ? 'Obligatory Hawl fulfilled' : 'Wealth below Nisab'}
           </div>
         </div>
       </div>
 
       {/* View Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-edge pb-3">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setActiveTab('zakat')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'zakat'
-                ? 'bg-slate-800 text-white font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-raised text-ink font-semibold'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Islamic Zakat Assessment
@@ -282,8 +282,8 @@ export const ZakatView: React.FC = () => {
             onClick={() => setActiveTab('net_worth')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
               activeTab === 'net_worth'
-                ? 'bg-slate-800 text-white font-semibold'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'bg-raised text-ink font-semibold'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Balance Sheet Snapshots ({netWorthSnapshots.length})
@@ -295,80 +295,80 @@ export const ZakatView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Asset Breakdown */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="text-xs font-mono uppercase text-slate-400 tracking-wider">
+            <div className="text-xs font-mono uppercase text-ink-muted tracking-wider">
               Zakatable Balance Sheet Breakdown
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 divide-y divide-slate-800/80 overflow-hidden font-mono text-xs">
+            <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/80 overflow-hidden font-mono text-xs">
               <div className="p-4 flex items-center justify-between">
                 <div>
-                  <div className="text-white font-semibold">1. Liquid Cash & Bank Deposits</div>
-                  <div className="text-[10px] text-slate-500">Savings accounts, cash on hand, bKash</div>
+                  <div className="text-ink font-semibold">1. Liquid Cash & Bank Deposits</div>
+                  <div className="text-[10px] text-ink-faint">Savings accounts, cash on hand, bKash</div>
                 </div>
-                <div className="text-right text-emerald-400 font-bold">
+                <div className="text-right text-accent-strong font-bold">
                   +৳{cashAndBankZakatable.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
               <div className="p-4 flex items-center justify-between">
                 <div>
-                  <div className="text-white font-semibold">2. Investment Schemes (FD & DPS)</div>
-                  <div className="text-[10px] text-slate-500">Fixed deposits and accrued DPS capital</div>
+                  <div className="text-ink font-semibold">2. Investment Schemes (FD & DPS)</div>
+                  <div className="text-[10px] text-ink-faint">Fixed deposits and accrued DPS capital</div>
                 </div>
-                <div className="text-right text-emerald-400 font-bold">
+                <div className="text-right text-accent-strong font-bold">
                   +৳{investmentsZakatable.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
               <div className="p-4 flex items-center justify-between">
                 <div>
-                  <div className="text-white font-semibold">3. Gold Bullion & Liquid Jewelry</div>
-                  <div className="text-[10px] text-slate-500">22K hallmarked ornaments and gold bullion</div>
+                  <div className="text-ink font-semibold">3. Gold Bullion & Liquid Jewelry</div>
+                  <div className="text-[10px] text-ink-faint">22K hallmarked ornaments and gold bullion</div>
                 </div>
-                <div className="text-right text-emerald-400 font-bold">
+                <div className="text-right text-accent-strong font-bold">
                   +৳{goldBullionZakatable.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
               <div className="p-4 flex items-center justify-between">
                 <div>
-                  <div className="text-white font-semibold">4. Recoverable Peer Receivables</div>
-                  <div className="text-[10px] text-slate-500">Money lent to others expected to be recovered</div>
+                  <div className="text-ink font-semibold">4. Recoverable Peer Receivables</div>
+                  <div className="text-[10px] text-ink-faint">Money lent to others expected to be recovered</div>
                 </div>
-                <div className="text-right text-emerald-400 font-bold">
+                <div className="text-right text-accent-strong font-bold">
                   +৳{receivablesZakatable.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div className="p-4 flex items-center justify-between bg-slate-950/50">
-                <div className="text-white font-bold uppercase text-[11px]">
+              <div className="p-4 flex items-center justify-between bg-canvas/50">
+                <div className="text-ink font-bold uppercase text-[11px]">
                   Gross Zakatable Assets
                 </div>
-                <div className="text-right text-white font-bold text-sm">
+                <div className="text-right text-ink font-bold text-sm">
                   ৳{totalZakatableAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div className="p-4 flex items-center justify-between text-rose-400">
+              <div className="p-4 flex items-center justify-between text-negative">
                 <div>
                   <div className="font-semibold">Deductible Liabilities</div>
-                  <div className="text-[10px] text-slate-500">Short-term borrowings, bank loan principal, credit cards</div>
+                  <div className="text-[10px] text-ink-faint">Short-term borrowings, bank loan principal, credit cards</div>
                 </div>
                 <div className="text-right font-bold">
                   -৳{deductibleLiabilities.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
 
-              <div className="p-4 flex items-center justify-between bg-emerald-950/20 border-t border-emerald-500/30">
+              <div className="p-4 flex items-center justify-between bg-emerald-950/20 border-t border-accent/30">
                 <div>
-                  <div className="text-white font-bold uppercase text-[11px]">
+                  <div className="text-ink font-bold uppercase text-[11px]">
                     Net Zakatable Wealth
                   </div>
-                  <div className="text-[10px] text-slate-400 font-sans">
+                  <div className="text-[10px] text-ink-muted font-sans">
                     Nisab Threshold: ৳{zakatCalc.effectiveNisabThreshold.toLocaleString()} ({zakatSettings.nisabBasis})
                   </div>
                 </div>
-                <div className="text-right text-emerald-400 font-bold text-base">
+                <div className="text-right text-accent-strong font-bold text-base">
                   ৳{zakatCalc.netZakatablePool.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </div>
               </div>
@@ -377,42 +377,42 @@ export const ZakatView: React.FC = () => {
 
           {/* Right Column: Nisab Benchmarking & Hawl Rules */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="text-xs font-mono uppercase text-slate-400 tracking-wider">
+            <div className="text-xs font-mono uppercase text-ink-muted tracking-wider">
               Nisab Standards & Hawl Criteria
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-4 text-xs font-sans">
+            <div className="rounded-xl border border-edge bg-surface/40 p-5 space-y-4 text-xs font-sans">
               <div className="space-y-2">
                 <div className="flex items-center justify-between font-mono text-[11px]">
-                  <span className="text-slate-400">Silver Nisab Standard:</span>
-                  <span className="text-white font-semibold">
+                  <span className="text-ink-muted">Silver Nisab Standard:</span>
+                  <span className="text-ink font-semibold">
                     ৳{(612.36 * zakatSettings.silverPricePerGram).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="flex items-center justify-between font-mono text-[11px]">
-                  <span className="text-slate-400">Gold Nisab Standard:</span>
-                  <span className="text-white font-semibold">
+                  <span className="text-ink-muted">Gold Nisab Standard:</span>
+                  <span className="text-ink font-semibold">
                     ৳{(87.48 * zakatSettings.goldPricePerGram).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
-              <div className="border-t border-slate-800 pt-3 space-y-2">
-                <div className="text-slate-300 font-semibold flex items-center gap-1.5">
+              <div className="border-t border-edge pt-3 space-y-2">
+                <div className="text-ink-soft font-semibold flex items-center gap-1.5">
                   <Info className="h-4 w-4 text-sky-400 shrink-0" />
                   <span>Nisab Basis Guidance</span>
                 </div>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
-                  Classical scholars (Hanafi, Maliki, Hanbali) advise using the <strong className="text-white">Silver Nisab</strong> for currency, bank balances, and mixed portfolios because it establishes an equitable threshold that benefits more recipients in society.
+                <p className="text-ink-muted text-[11px] leading-relaxed">
+                  Classical scholars (Hanafi, Maliki, Hanbali) advise using the <strong className="text-ink">Silver Nisab</strong> for currency, bank balances, and mixed portfolios because it establishes an equitable threshold that benefits more recipients in society.
                 </p>
               </div>
 
-              <div className="border-t border-slate-800 pt-3 space-y-2">
-                <div className="text-slate-300 font-semibold flex items-center gap-1.5">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <div className="border-t border-edge pt-3 space-y-2">
+                <div className="text-ink-soft font-semibold flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
                   <span>Exempt Personal Assets</span>
                 </div>
-                <p className="text-slate-400 text-[11px] leading-relaxed">
+                <p className="text-ink-muted text-[11px] leading-relaxed">
                   Your primary residence, daily use vehicles (e.g. Toyota Premio), and essential home furnishings are completely exempt from Zakat.
                 </p>
               </div>
@@ -424,7 +424,7 @@ export const ZakatView: React.FC = () => {
                     if (liquidAccounts.length > 0) setDisburseAccountId(liquidAccounts[0].id);
                     setIsDisburseModalOpen(true);
                   }}
-                  className="w-full py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs font-mono transition-colors"
+                  className="w-full py-2.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold text-xs font-mono transition-colors"
                 >
                   Pay Zakat Obligation (৳{zakatCalc.zakatDue.toLocaleString(undefined, { minimumFractionDigits: 2 })})
                 </button>
@@ -435,8 +435,8 @@ export const ZakatView: React.FC = () => {
       ) : (
         /* Net Worth Snapshots History */
         <div className="space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border border-slate-800 bg-slate-900/40">
-            <div className="text-xs text-slate-300">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-xl border border-edge bg-surface/40">
+            <div className="text-xs text-ink-soft">
               Capture an immutable balance sheet snapshot to track your wealth trajectory over time.
             </div>
             <div className="flex items-center gap-2">
@@ -445,11 +445,11 @@ export const ZakatView: React.FC = () => {
                 placeholder="Optional snapshot note..."
                 value={snapshotNote}
                 onChange={(e) => setSnapshotNote(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                className="rounded-lg border border-slate-700 bg-canvas px-3 py-1.5 text-xs text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
               />
               <button
                 onClick={handleCaptureSnapshot}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors shrink-0"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors shrink-0"
               >
                 <Camera className="h-3.5 w-3.5" />
                 <span>Capture Snapshot</span>
@@ -457,9 +457,9 @@ export const ZakatView: React.FC = () => {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden">
+          <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+              <thead className="bg-canvas text-ink-muted uppercase text-[10px] border-b border-edge">
                 <tr>
                   <th className="py-2.5 px-4">Date</th>
                   <th className="py-2.5 px-4">Total Assets</th>
@@ -468,22 +468,22 @@ export const ZakatView: React.FC = () => {
                   <th className="py-2.5 px-4">Notes</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 bg-slate-900/30">
+              <tbody className="divide-y divide-edge/60 bg-surface/30">
                 {netWorthSnapshots.map((snap) => (
-                  <tr key={snap.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="py-3 px-4 font-semibold text-white">
+                  <tr key={snap.id} className="hover:bg-raised/30 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-ink">
                       {snap.snapshotDate}
                     </td>
-                    <td className="py-3 px-4 text-emerald-400 font-semibold">
+                    <td className="py-3 px-4 text-accent-strong font-semibold">
                       ৳{snap.totalAssets.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="py-3 px-4 text-rose-400 font-semibold">
+                    <td className="py-3 px-4 text-negative font-semibold">
                       ৳{snap.totalLiabilities.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="py-3 px-4 text-white font-bold text-sm">
+                    <td className="py-3 px-4 text-ink font-bold text-sm">
                       ৳{snap.netWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </td>
-                    <td className="py-3 px-4 text-slate-400 font-sans italic text-[11px]">
+                    <td className="py-3 px-4 text-ink-muted font-sans italic text-[11px]">
                       {snap.notes || '—'}
                     </td>
                   </tr>
@@ -496,23 +496,23 @@ export const ZakatView: React.FC = () => {
 
       {/* MODAL 1: Disburse Zakat */}
       {isDisburseModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <DollarSign className="h-5 w-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <DollarSign className="h-5 w-5 text-accent-strong" />
                 <span>Disburse Zakat Payment</span>
               </div>
               <button
                 onClick={() => setIsDisburseModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {disburseError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-negative text-xs flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{disburseError}</span>
               </div>
@@ -520,7 +520,7 @@ export const ZakatView: React.FC = () => {
 
             <form onSubmit={handleDisburseSubmit} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Disbursement Amount (৳ BDT) *
                 </label>
                 <input
@@ -530,18 +530,18 @@ export const ZakatView: React.FC = () => {
                   required
                   value={disburseAmount}
                   onChange={(e) => setDisburseAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                 />
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Funding Account (Bank / Cash) *
                 </label>
                 <select
                   value={disburseAccountId}
                   onChange={(e) => setDisburseAccountId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -552,18 +552,18 @@ export const ZakatView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Memo / Note
                 </label>
                 <input
                   type="text"
                   value={disburseNote}
                   onChange={(e) => setDisburseNote(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                 />
               </div>
 
-              <div className="rounded-lg bg-emerald-950/20 border border-emerald-500/20 p-2.5 text-[11px] text-emerald-300 flex items-start gap-2">
+              <div className="rounded-lg bg-emerald-950/20 border border-accent/20 p-2.5 text-[11px] text-accent-strong flex items-start gap-2">
                 <Info className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>
                   Posting will debit Bank/Cash and credit the canonical 'Zakat & Charitable Donations' category. Full audit log recorded.
@@ -574,13 +574,13 @@ export const ZakatView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsDisburseModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
                 >
                   Confirm & Disburse
                 </button>
@@ -592,16 +592,16 @@ export const ZakatView: React.FC = () => {
 
       {/* MODAL 2: Nisab Settings */}
       {isSettingsModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <Sliders className="h-5 w-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <Sliders className="h-5 w-5 text-accent-strong" />
                 <span>Nisab Market Valuation Settings</span>
               </div>
               <button
                 onClick={() => setIsSettingsModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -609,13 +609,13 @@ export const ZakatView: React.FC = () => {
 
             <form onSubmit={handleSettingsSubmit} className="space-y-4 text-xs font-sans">
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Nisab Benchmark Standard
                 </label>
                 <select
                   value={nisabBasis}
                   onChange={(e) => setNisabBasis(e.target.value as 'gold' | 'silver')}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="silver">Silver Standard (612.36g) — Recommended for Currency</option>
                   <option value="gold">Gold Standard (87.48g)</option>
@@ -623,7 +623,7 @@ export const ZakatView: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Silver Price per Gram (৳ BDT)
                 </label>
                 <input
@@ -632,15 +632,15 @@ export const ZakatView: React.FC = () => {
                   required
                   value={silverRate}
                   onChange={(e) => setSilverRate(parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white font-mono"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink font-mono"
                 />
-                <div className="text-[10px] text-slate-500 mt-1">
+                <div className="text-[10px] text-ink-faint mt-1">
                   Computed Nisab: ৳{(612.36 * silverRate).toLocaleString()}
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Gold Price per Gram (৳ BDT)
                 </label>
                 <input
@@ -649,9 +649,9 @@ export const ZakatView: React.FC = () => {
                   required
                   value={goldRate}
                   onChange={(e) => setGoldRate(parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white font-mono"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink font-mono"
                 />
-                <div className="text-[10px] text-slate-500 mt-1">
+                <div className="text-[10px] text-ink-faint mt-1">
                   Computed Nisab: ৳{(87.48 * goldRate).toLocaleString()}
                 </div>
               </div>
@@ -660,13 +660,13 @@ export const ZakatView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsSettingsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
                 >
                   Save Settings
                 </button>

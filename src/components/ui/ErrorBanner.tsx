@@ -23,11 +23,11 @@ const variantStyles: Record<
     container: 'border-negative/30 bg-negative/10',
     icon: AlertCircle,
     iconColor: 'text-negative',
-    titleColor: 'text-rose-300',
+    titleColor: 'text-negative',
     textColor: 'text-rose-200/90',
   },
   warning: {
-    container: 'border-amber-500/30 bg-amber-500/10',
+    container: 'border-warning/30 bg-warning/10',
     icon: AlertTriangle,
     iconColor: 'text-warning',
     titleColor: 'text-warning',

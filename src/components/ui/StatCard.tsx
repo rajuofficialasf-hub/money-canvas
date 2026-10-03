@@ -31,7 +31,7 @@ const iconBgClasses: Record<StatCardVariant, string> = {
   emerald: 'bg-accent/10 text-accent-strong border-accent/20',
   sky: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
   rose: 'bg-negative/10 text-negative border-negative/20',
-  amber: 'bg-amber-500/10 text-warning border-amber-500/20',
+  amber: 'bg-warning/10 text-warning border-warning/20',
 };
 
 export const StatCard: React.FC<StatCardProps> = ({

@@ -344,7 +344,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             <span className="text-xs text-gray-500">DSE / CSE Regulatory Sub-Ledger</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1 flex items-center gap-2.5">
-            <Coins className="w-6 h-6 sm:w-7 h-7 text-emerald-600 shrink-0" />
+            <Coins className="w-6 h-6 sm:w-7 h-7 text-accent-deep shrink-0" />
             Dividends & Corporate Actions
           </h1>
           <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
@@ -396,7 +396,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">
               Gross Dividends
             </span>
-            <div className="p-2 rounded-lg bg-emerald-50 text-emerald-600">
+            <div className="p-2 rounded-lg bg-emerald-50 text-accent-deep">
               <Coins className="w-5 h-5" />
             </div>
           </div>
@@ -407,7 +407,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             <div className="flex items-center gap-1.5 mt-1 text-xs text-gray-500">
               <span>{dividends.length} declared payouts</span>
               <span>•</span>
-              <span className="text-emerald-600 font-medium">{stats.dividendYieldPct}% yield</span>
+              <span className="text-accent-deep font-medium">{stats.dividendYieldPct}% yield</span>
             </div>
           </div>
         </div>
@@ -482,7 +482,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('dividends')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'dividends'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-accent-deep text-ink shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -492,7 +492,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('corporate_actions')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'corporate_actions'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-accent-deep text-ink shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -502,7 +502,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             onClick={() => setActiveTab('ipo')}
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all whitespace-nowrap ${
               activeTab === 'ipo'
-                ? 'bg-emerald-600 text-white shadow-sm'
+                ? 'bg-accent-deep text-ink shadow-sm'
                 : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
             }`}
           >
@@ -516,7 +516,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
           <select
             value={selectedStockFilter}
             onChange={(e) => setSelectedStockFilter(e.target.value)}
-            className="w-full sm:w-auto px-2.5 py-1.5 rounded-lg border border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 text-xs sm:text-sm"
+            className="w-full sm:w-auto px-2.5 py-1.5 rounded-lg border border-gray-300 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-accent text-xs sm:text-sm"
           >
             <option value="all">All Securities</option>
             {stocks.map((s) => (
@@ -535,11 +535,11 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
           <div className="px-4 sm:px-5 py-4 border-b border-gray-200 bg-gray-50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Coins className="w-5 h-5 text-emerald-600" />
+              <Coins className="w-5 h-5 text-accent-deep" />
               <h2 className="font-semibold text-gray-900 text-sm sm:text-base">Cash Dividends Ledger</h2>
             </div>
             <div className="text-xs text-gray-500 font-medium flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <ShieldCheck className="w-4 h-4 text-accent-deep" />
               <span>Gross Dividend & Withholding Tax Sub-Ledger</span>
             </div>
           </div>
@@ -598,7 +598,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                         <td className="py-3 px-3 sm:px-4 text-right font-mono text-rose-600">
                           -৳{div.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </td>
-                        <td className="py-3 px-3 sm:px-4 text-right font-mono font-bold text-emerald-600">
+                        <td className="py-3 px-3 sm:px-4 text-right font-mono font-bold text-accent-deep">
                           +৳{div.netDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                         </td>
                         <td className="py-3 px-3 sm:px-4 whitespace-nowrap">
@@ -895,7 +895,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
                                 {ipo.allottedShares ? `${ipo.allottedShares} shares` : '0 shares'}
                               </div>
                               {ipo.refundAmount ? (
-                                <div className="text-emerald-600 font-mono">
+                                <div className="text-accent-deep font-mono">
                                   ৳{ipo.refundAmount.toLocaleString()} refunded
                                 </div>
                               ) : null}
@@ -932,7 +932,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
         onClose={() => setShowDividendModal(false)}
         title={
           <span className="flex items-center gap-2">
-            <Coins className="w-5 h-5 text-emerald-400" />
+            <Coins className="w-5 h-5 text-accent-strong" />
             Record Cash Dividend
           </span>
         }
@@ -1031,27 +1031,27 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
           </div>
 
           {/* Live Preview Box */}
-          <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
-            <div className="font-semibold text-emerald-400 flex items-center justify-between">
+          <div className="bg-canvas/70 border border-edge rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
+            <div className="font-semibold text-accent-strong flex items-center justify-between">
               <span>Sub-Ledger Impact Preview:</span>
-              <span className="font-mono text-slate-400">Real-time Calculation</span>
+              <span className="font-mono text-ink-muted">Real-time Calculation</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
               <div>
-                <span className="text-slate-400 block text-[11px]">Gross Dividend (+)</span>
-                <span className="font-mono font-bold text-white text-sm">
+                <span className="text-ink-muted block text-[11px]">Gross Dividend (+)</span>
+                <span className="font-mono font-bold text-ink text-sm">
                   ৳{liveDivPreview.grossDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">AIT Tax Withheld (-)</span>
-                <span className="font-mono font-bold text-rose-400 text-sm">
+                <span className="text-ink-muted block text-[11px]">AIT Tax Withheld (-)</span>
+                <span className="font-mono font-bold text-negative text-sm">
                   -৳{liveDivPreview.tax.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Net BO Cash Impact</span>
-                <span className="font-mono font-bold text-emerald-400 text-sm">
+                <span className="text-ink-muted block text-[11px]">Net BO Cash Impact</span>
+                <span className="font-mono font-bold text-accent-strong text-sm">
                   +৳{liveDivPreview.netDividend.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
@@ -1073,14 +1073,14 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               id="externalPayoutCheckbox"
               checked={divIsExternal}
               onChange={(e) => setDivIsExternal(e.target.checked)}
-              className="rounded text-emerald-600 focus:ring-emerald-500 border-slate-800 bg-slate-950"
+              className="rounded text-accent-deep focus:ring-accent border-edge bg-canvas"
             />
-            <label htmlFor="externalPayoutCheckbox" className="text-xs text-slate-400">
+            <label htmlFor="externalPayoutCheckbox" className="text-xs text-ink-muted">
               External Direct Bank Payout (bypass BO cash sub-ledger)
             </label>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
             <Button type="button" variant="secondary" onClick={() => setShowDividendModal(false)}>
               Cancel
             </Button>
@@ -1169,7 +1169,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
               </Field>
             ) : (
               <Field label="Eligible Quantity Held">
-                <div className="px-3 py-2 text-sm bg-slate-950 border border-slate-800 rounded-lg text-slate-200 font-medium">
+                <div className="px-3 py-2 text-sm bg-canvas border border-edge rounded-lg text-ink-soft font-medium">
                   {eligibleCaShares} shares (Current WAC: ৳{currentCaWac.toFixed(2)})
                 </div>
               </Field>
@@ -1199,27 +1199,27 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
           </div>
 
           {/* Live Preview Box for Dilution */}
-          <div className="bg-slate-950/70 border border-slate-800 rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
+          <div className="bg-canvas/70 border border-edge rounded-xl p-3 sm:p-3.5 space-y-2 text-xs">
             <div className="font-semibold text-indigo-400 flex items-center justify-between">
               <span>Mathematical Holding Adjustment & Dilution:</span>
-              <span className="font-mono text-slate-400">WAC Invariant</span>
+              <span className="font-mono text-ink-muted">WAC Invariant</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1">
               <div>
-                <span className="text-slate-400 block text-[11px]">New Quantity</span>
-                <span className="font-mono font-bold text-white text-sm">
+                <span className="text-ink-muted block text-[11px]">New Quantity</span>
+                <span className="font-mono font-bold text-ink text-sm">
                   {liveCaPreview.newQuantity} shares
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Diluted WAC</span>
+                <span className="text-ink-muted block text-[11px]">Diluted WAC</span>
                 <span className="font-mono font-bold text-indigo-400 text-sm">
                   ৳{liveCaPreview.newWac.toFixed(2)}/sh
                 </span>
               </div>
               <div>
-                <span className="text-slate-400 block text-[11px]">Total Cost Basis</span>
-                <span className="font-mono font-bold text-white text-sm">
+                <span className="text-ink-muted block text-[11px]">Total Cost Basis</span>
+                <span className="font-mono font-bold text-ink text-sm">
                   ৳{liveCaPreview.newCostBasis.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </span>
               </div>
@@ -1235,13 +1235,13 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             />
           </Field>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
             <Button type="button" variant="secondary" onClick={() => setShowCorporateActionModal(false)}>
               Cancel
             </Button>
             <button
               type="submit"
-              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
+              className="px-4 py-2 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors"
             >
               Apply Corporate Action
             </button>
@@ -1318,25 +1318,25 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
 
           {/* Quick Lot Presets */}
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[10px] text-slate-400 font-mono">Quick Preset:</span>
+            <span className="text-[10px] text-ink-muted font-mono">Quick Preset:</span>
             <button
               type="button"
               onClick={() => { setIpoLotSize(500); setIpoOfferPrice(10); }}
-              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+              className="px-2 py-0.5 bg-canvas hover:bg-raised border border-edge rounded text-[11px] text-indigo-300 font-mono"
             >
               500 sh @ ৳10 (৳5,000)
             </button>
             <button
               type="button"
               onClick={() => { setIpoLotSize(1000); setIpoOfferPrice(10); }}
-              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+              className="px-2 py-0.5 bg-canvas hover:bg-raised border border-edge rounded text-[11px] text-indigo-300 font-mono"
             >
               1,000 sh @ ৳10 (৳10,000)
             </button>
             <button
               type="button"
               onClick={() => { setIpoLotSize(2000); setIpoOfferPrice(10); }}
-              className="px-2 py-0.5 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded text-[11px] text-indigo-300 font-mono"
+              className="px-2 py-0.5 bg-canvas hover:bg-raised border border-edge rounded text-[11px] text-indigo-300 font-mono"
             >
               2,000 sh @ ৳10 (৳20,000)
             </button>
@@ -1380,7 +1380,7 @@ export const DividendsAndCorporateActionsView: React.FC = () => {
             </Field>
 
             <Field label="Total Required Subscription">
-              <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-slate-950 border border-slate-800 rounded-lg text-indigo-400">
+              <div className="px-3 py-2 text-base sm:text-sm font-mono font-bold bg-canvas border border-edge rounded-lg text-indigo-400">
                 ৳{ipoTotalAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </div>
             </Field>
@@ -1406,7 +1406,7 @@ BENGALI_LINE                </>
             />
           </Field>
 
-          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-edge">
             <Button
               type="button"
               variant="secondary"
@@ -1418,7 +1418,7 @@ BENGALI_LINE                </>
             <button
               type="submit"
               disabled={availableBrokerCash < ipoTotalAmount}
-              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
+              className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-center"
             >
               Apply &amp; Block Funds (৳{ipoTotalAmount.toLocaleString()})
             </button>
@@ -1447,8 +1447,8 @@ BENGALI_LINE                </>
                   onClick={() => handleSettleStatusChange('allotted')}
                   className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
                     settleStatus === 'allotted'
-                      ? 'border-emerald-500 bg-emerald-500/20 text-emerald-300 font-bold'
-                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'border-accent bg-accent/20 text-accent-strong font-bold'
+                      : 'border-edge text-ink-soft hover:bg-raised'
                   }`}
                 >
                   100% Allotted
@@ -1459,7 +1459,7 @@ BENGALI_LINE                </>
                   className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
                     settleStatus === 'partially_allotted'
                       ? 'border-sky-500 bg-sky-500/20 text-sky-300 font-bold'
-                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                      : 'border-edge text-ink-soft hover:bg-raised'
                   }`}
                 >
                   Partial Allotment
@@ -1469,8 +1469,8 @@ BENGALI_LINE                </>
                   onClick={() => handleSettleStatusChange('refunded')}
                   className={`py-2 px-3 text-xs font-medium rounded-lg border transition-all ${
                     settleStatus === 'refunded'
-                      ? 'border-rose-500 bg-rose-500/20 text-rose-300 font-bold'
-                      : 'border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'border-negative bg-negative/20 text-negative font-bold'
+                      : 'border-edge text-ink-soft hover:bg-raised'
                   }`}
                 >
                   Not Allotted
@@ -1514,7 +1514,7 @@ BENGALI_LINE                </>
               />
             </Field>
 
-            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-slate-800">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2.5 pt-3 border-t border-edge">
               <Button
                 type="button"
                 variant="secondary"
@@ -1525,7 +1525,7 @@ BENGALI_LINE                </>
               </Button>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
+                className="w-full sm:w-auto px-5 py-2.5 text-sm font-medium text-ink bg-indigo-600 hover:bg-indigo-500 rounded-lg shadow-sm transition-colors text-center"
               >
                 Confirm Settlement
               </button>

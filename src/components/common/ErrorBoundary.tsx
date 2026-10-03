@@ -112,30 +112,30 @@ ${errorInfo?.componentStack || 'No component stack'}
       return (
         <div
           className={`w-full flex items-center justify-center p-4 sm:p-6 ${
-            isRoot ? 'min-h-screen bg-slate-950 text-slate-100' : 'min-h-[420px] my-6'
+            isRoot ? 'min-h-screen bg-canvas text-ink' : 'min-h-[420px] my-6'
           }`}
         >
-          <div className="w-full max-w-2xl rounded-2xl border border-rose-500/30 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
+          <div className="w-full max-w-2xl rounded-2xl border border-negative/30 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950/95 p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
             {/* Header Icon & Title */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="h-14 w-14 rounded-2xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center shrink-0 shadow-inner">
-                <AlertTriangle className="h-7 w-7 text-rose-400 animate-pulse" />
+              <div className="h-14 w-14 rounded-2xl bg-negative/10 border border-negative/30 flex items-center justify-center shrink-0 shadow-inner">
+                <AlertTriangle className="h-7 w-7 text-negative animate-pulse" />
               </div>
               <div className="space-y-1">
-                <h2 className="text-lg sm:text-xl font-bold text-white tracking-tight">
+                <h2 className="text-lg sm:text-xl font-bold text-ink tracking-tight">
                   {titleBn}
                 </h2>
-                <p className="text-xs text-slate-400 font-medium">
+                <p className="text-xs text-ink-muted font-medium">
                   {titleEn}
                 </p>
               </div>
             </div>
 
             {/* Reassurance Message - Local-First Guarantee */}
-            <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 flex items-start gap-3">
-              <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="rounded-xl border border-accent/30 bg-accent/10 p-4 flex items-start gap-3">
+              <ShieldCheck className="h-5 w-5 text-accent-strong shrink-0 mt-0.5" />
               <div className="space-y-1 text-xs text-emerald-200/90 leading-relaxed">
-                <div className="font-semibold text-emerald-300">
+                <div className="font-semibold text-accent-strong">
                   আপনার ডেটা নিরাপদে সংরক্ষিত আছে (Your data is safe)
                 </div>
                 <div>
@@ -146,8 +146,8 @@ ${errorInfo?.componentStack || 'No component stack'}
 
             {/* Error Message Summary */}
             {error && (
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-3.5 text-xs font-mono text-rose-300 overflow-x-auto">
-                <span className="text-slate-500 select-none mr-2">$</span>
+              <div className="rounded-xl border border-edge bg-canvas/80 p-3.5 text-xs font-mono text-negative overflow-x-auto">
+                <span className="text-ink-faint select-none mr-2">$</span>
                 {error.name}: {error.message}
               </div>
             )}
@@ -157,7 +157,7 @@ ${errorInfo?.componentStack || 'No component stack'}
               <button
                 type="button"
                 onClick={this.handleGoHome}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-strong active:scale-95 text-accent-ink font-bold text-xs shadow-lg shadow-emerald-500/20 transition-all cursor-pointer"
               >
                 <Home className="h-4 w-4" />
                 <span>ড্যাশবোর্ডে ফিরুন (Back to Dashboard)</span>
@@ -166,7 +166,7 @@ ${errorInfo?.componentStack || 'No component stack'}
               <button
                 type="button"
                 onClick={this.handleReload}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold text-xs border border-slate-700 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-raised hover:bg-slate-700 active:scale-95 text-ink-soft font-semibold text-xs border border-slate-700 transition-all cursor-pointer"
               >
                 <RefreshCw className="h-4 w-4 text-sky-400" />
                 <span>{isRoot ? 'পৃষ্ঠা রিলোড করুন (Reload Page)' : 'পুনরায় চেষ্টা করুন (Retry)'}</span>
@@ -175,7 +175,7 @@ ${errorInfo?.componentStack || 'No component stack'}
               <button
                 type="button"
                 onClick={() => this.setState({ showDetails: !showDetails })}
-                className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-xl text-slate-400 hover:text-slate-200 text-xs font-medium hover:bg-slate-800/50 transition-colors"
+                className="ml-auto flex items-center gap-1.5 px-3 py-2 rounded-xl text-ink-muted hover:text-ink-soft text-xs font-medium hover:bg-raised/50 transition-colors"
               >
                 <span>{showDetails ? 'বিস্তারিত লুকান' : 'কারিগরি বিবরণ (Details)'}</span>
                 {showDetails ? (
@@ -188,31 +188,31 @@ ${errorInfo?.componentStack || 'No component stack'}
 
             {/* Collapsible Technical Details */}
             {showDetails && (
-              <div className="rounded-xl border border-slate-800/80 bg-slate-950 p-4 space-y-3 animate-in fade-in duration-200">
+              <div className="rounded-xl border border-edge/80 bg-canvas p-4 space-y-3 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono font-semibold text-slate-400 uppercase tracking-wider">
+                  <span className="text-[11px] font-mono font-semibold text-ink-muted uppercase tracking-wider">
                     Error Diagnostics Stack
                   </span>
                   <button
                     type="button"
                     onClick={this.handleCopyDiagnostics}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-mono border border-slate-700 transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-[11px] font-mono border border-slate-700 transition-colors cursor-pointer"
                   >
                     {copied ? (
                       <>
-                        <Check className="h-3 w-3 text-emerald-400" />
-                        <span className="text-emerald-400">কপি হয়েছে!</span>
+                        <Check className="h-3 w-3 text-accent-strong" />
+                        <span className="text-accent-strong">কপি হয়েছে!</span>
                       </>
                     ) : (
                       <>
-                        <Copy className="h-3 w-3 text-slate-400" />
+                        <Copy className="h-3 w-3 text-ink-muted" />
                         <span>কপি করুন</span>
                       </>
                     )}
                   </button>
                 </div>
 
-                <pre className="text-[10px] sm:text-[11px] font-mono text-slate-400 overflow-x-auto max-h-56 p-2 rounded bg-slate-900/80 border border-slate-800/60 leading-relaxed whitespace-pre-wrap break-all">
+                <pre className="text-[10px] sm:text-[11px] font-mono text-ink-muted overflow-x-auto max-h-56 p-2 rounded bg-surface/80 border border-edge/60 leading-relaxed whitespace-pre-wrap break-all">
                   {error?.stack || error?.message || 'No stack trace available'}
                   {errorInfo?.componentStack && (
                     <>

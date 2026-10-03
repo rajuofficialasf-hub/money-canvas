@@ -162,16 +162,16 @@ export const LoansView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <FileSpreadsheet className="h-4 w-4" />
             <span>Bank Loans & EMI Amortization</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
             Loans & Mortgages
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             Formal bank loans with reducing balance and flat EMI amortization schedules and double-entry interest splits.
           </p>
         </div>
@@ -184,7 +184,7 @@ export const LoansView: React.FC = () => {
                 if (liquidAccounts.length > 0) setDisbursementAccountId(liquidAccounts[0].id);
                 setIsNewLoanModalOpen(true);
               }}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors cursor-pointer"
             >
               <Plus className="h-4 w-4" />
               <span>New Bank Loan</span>
@@ -194,14 +194,14 @@ export const LoansView: React.FC = () => {
       </div>
 
       {/* View Mode Tabs */}
-      <div className="flex items-center gap-2 border-b border-slate-800 pb-3">
+      <div className="flex items-center gap-2 border-b border-edge pb-3">
         <button
           type="button"
           onClick={() => setActiveTab('loans')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === 'loans'
-              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40'
-              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+              ? 'bg-accent text-accent-ink shadow-lg shadow-emerald-950/40'
+              : 'bg-surface/80 text-ink-muted hover:text-ink border border-edge'
           }`}
         >
           <Building2 className="h-3.5 w-3.5" />
@@ -213,13 +213,13 @@ export const LoansView: React.FC = () => {
           onClick={() => setActiveTab('simulator')}
           className={`px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
             activeTab === 'simulator'
-              ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-950/40'
-              : 'bg-slate-900/80 text-slate-400 hover:text-white border border-slate-800'
+              ? 'bg-accent text-accent-ink shadow-lg shadow-emerald-950/40'
+              : 'bg-surface/80 text-ink-muted hover:text-ink border border-edge'
           }`}
         >
-          <Zap className="h-3.5 w-3.5 text-amber-400" />
+          <Zap className="h-3.5 w-3.5 text-warning" />
           <span>প্রি-পেমেন্ট সিমুলেটর (Prepayment Simulator)</span>
-          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-300 font-bold">
+          <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-warning/20 text-warning font-bold">
             NEW
           </span>
         </button>
@@ -233,49 +233,49 @@ export const LoansView: React.FC = () => {
       {/* Summary Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Total Outstanding Principal */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Total Outstanding Debt</span>
-            <div className="h-6 w-6 rounded bg-rose-500/10 flex items-center justify-center text-rose-400">
+            <div className="h-6 w-6 rounded bg-negative/10 flex items-center justify-center text-negative">
               <TrendingDown className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-rose-400 font-mono">
+          <div className="text-xl font-bold text-negative font-mono">
             ৳{totalOutstandingPrincipal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             Canonical Liability Balance
           </div>
         </div>
 
         {/* Monthly EMI Commitment */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Monthly Commitment</span>
-            <div className="h-6 w-6 rounded bg-amber-500/10 flex items-center justify-center text-amber-400">
+            <div className="h-6 w-6 rounded bg-warning/10 flex items-center justify-center text-warning">
               <Calendar className="h-3.5 w-3.5" />
             </div>
           </div>
-          <div className="text-xl font-bold text-white font-mono">
+          <div className="text-xl font-bold text-ink font-mono">
             ৳{totalMonthlyCommitment.toLocaleString(undefined, { minimumFractionDigits: 2 })}
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             Combined active monthly EMIs
           </div>
         </div>
 
         {/* Active Facilities */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60 space-y-1">
-          <div className="flex items-center justify-between text-xs text-slate-400">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60 space-y-1">
+          <div className="flex items-center justify-between text-xs text-ink-muted">
             <span>Active Facilities</span>
-            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-accent/10 text-accent-strong">
               {activeLoans.length} Active
             </span>
           </div>
-          <div className="text-xl font-bold text-emerald-400 font-mono">
+          <div className="text-xl font-bold text-accent-strong font-mono">
             {loans.length} Facilities
           </div>
-          <div className="text-[11px] text-slate-500 font-mono">
+          <div className="text-[11px] text-ink-faint font-mono">
             {loans.filter((l) => l.status === 'paid_off').length} paid off completely
           </div>
         </div>
@@ -283,9 +283,9 @@ export const LoansView: React.FC = () => {
 
       {/* Main Workspace: Loans Selector & Schedule Table */}
       {loans.length === 0 ? (
-        <div className="p-12 text-center text-slate-500 rounded-xl border border-slate-800 bg-slate-900/40 space-y-2">
+        <div className="p-12 text-center text-ink-faint rounded-xl border border-edge bg-surface/40 space-y-2">
           <Building2 className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
-          <div className="text-sm font-medium text-slate-400">No bank loans found</div>
+          <div className="text-sm font-medium text-ink-muted">No bank loans found</div>
           <div className="text-xs">
             Record a formal home, auto, or personal loan facility to generate its amortization schedule.
           </div>
@@ -294,7 +294,7 @@ export const LoansView: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Column: Loan Cards List */}
           <div className="lg:col-span-4 space-y-3">
-            <div className="text-xs font-mono uppercase text-slate-400 tracking-wider">
+            <div className="text-xs font-mono uppercase text-ink-muted tracking-wider">
               Credit Facilities ({loans.length})
             </div>
 
@@ -310,19 +310,19 @@ export const LoansView: React.FC = () => {
                     onClick={() => setSelectedLoanId(loan.id)}
                     className={`p-4 rounded-xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'border-emerald-500/50 bg-emerald-950/20 shadow-lg'
-                        : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                        ? 'border-accent/50 bg-emerald-950/20 shadow-lg'
+                        : 'border-edge bg-surface/40 hover:border-slate-700'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-xs font-semibold text-white">
+                      <span className="text-xs font-semibold text-ink">
                         {loan.institutionName}
                       </span>
                       <span
                         className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-semibold ${
                           isPaidOff
-                            ? 'bg-slate-800 text-slate-400'
-                            : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                            ? 'bg-raised text-ink-muted'
+                            : 'bg-negative/10 text-negative border border-negative/20'
                         }`}
                       >
                         {isPaidOff ? 'Paid Off' : loan.loanType}
@@ -330,13 +330,13 @@ export const LoansView: React.FC = () => {
                     </div>
 
                     <div className="flex items-baseline justify-between text-xs font-mono">
-                      <span className="text-slate-500">Remaining</span>
-                      <span className="text-sm font-bold text-rose-400">
+                      <span className="text-ink-faint">Remaining</span>
+                      <span className="text-sm font-bold text-negative">
                         ৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </span>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono mt-2 pt-2 border-t border-slate-800/60">
+                    <div className="flex items-center justify-between text-[11px] text-ink-muted font-mono mt-2 pt-2 border-t border-edge/60">
                       <span>EMI: ৳{loan.emiAmount.toLocaleString()}</span>
                       <span>{loan.interestMethod.toUpperCase()} · {loan.annualInterestRate}%</span>
                     </div>
@@ -349,24 +349,24 @@ export const LoansView: React.FC = () => {
           {/* Right Column: Detailed Schedule for Selected Loan */}
           <div className="lg:col-span-8 space-y-4">
             {selectedLoan && (
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden space-y-4 p-5">
+              <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden space-y-4 p-5">
                 {/* Loan Overview Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-edge pb-4">
                   <div>
-                    <div className="text-lg font-bold text-white flex items-center gap-2">
+                    <div className="text-lg font-bold text-ink flex items-center gap-2">
                       <span>{selectedLoan.institutionName}</span>
-                      <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
+                      <span className="text-xs font-mono text-accent-strong bg-accent/10 px-2 py-0.5 rounded">
                         {selectedLoan.tenureMonths} Months
                       </span>
                     </div>
-                    <div className="text-xs text-slate-400 font-mono mt-0.5">
+                    <div className="text-xs text-ink-muted font-mono mt-0.5">
                       Disbursed on {selectedLoan.disbursementDate} · Method: {selectedLoan.interestMethod} balance
                     </div>
                   </div>
 
                   <div className="text-right font-mono">
-                    <div className="text-xs text-slate-500">Monthly EMI</div>
-                    <div className="text-lg font-bold text-emerald-400">
+                    <div className="text-xs text-ink-faint">Monthly EMI</div>
+                    <div className="text-lg font-bold text-accent-strong">
                       ৳{selectedLoan.emiAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                     </div>
                   </div>
@@ -374,13 +374,13 @@ export const LoansView: React.FC = () => {
 
                 {/* Amortization Schedule Table */}
                 <div>
-                  <div className="text-xs font-semibold text-white uppercase font-mono tracking-wider mb-2">
+                  <div className="text-xs font-semibold text-ink uppercase font-mono tracking-wider mb-2">
                     Amortization Schedule (Deterministic Lock)
                   </div>
 
-                  <div className="overflow-x-auto rounded-lg border border-slate-800">
+                  <div className="overflow-x-auto rounded-lg border border-edge">
                     <table className="w-full text-left text-xs font-mono">
-                      <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] border-b border-slate-800">
+                      <thead className="bg-canvas text-ink-muted uppercase text-[10px] border-b border-edge">
                         <tr>
                           <th className="py-2.5 px-3">#</th>
                           <th className="py-2.5 px-3">Due Date</th>
@@ -392,42 +392,42 @@ export const LoansView: React.FC = () => {
                           <th className="py-2.5 px-3 text-right">Action</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/60 bg-slate-900/30">
+                      <tbody className="divide-y divide-edge/60 bg-surface/30">
                         {currentLoanSchedule.map((item) => {
                           const isPaid = item.status === 'paid';
                           return (
                             <tr
                               key={item.id}
-                              className={`hover:bg-slate-800/30 transition-colors ${
+                              className={`hover:bg-raised/30 transition-colors ${
                                 isPaid ? 'opacity-80' : ''
                               }`}
                             >
-                              <td className="py-2.5 px-3 font-semibold text-slate-300">
+                              <td className="py-2.5 px-3 font-semibold text-ink-soft">
                                 {item.installmentNumber}
                               </td>
-                              <td className="py-2.5 px-3 text-slate-400">
+                              <td className="py-2.5 px-3 text-ink-muted">
                                 {item.dueDate}
                               </td>
-                              <td className="py-2.5 px-3 font-semibold text-white">
+                              <td className="py-2.5 px-3 font-semibold text-ink">
                                 ৳{item.scheduledEmiAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                               </td>
-                              <td className="py-2.5 px-3 text-emerald-400">
+                              <td className="py-2.5 px-3 text-accent-strong">
                                 ৳{item.scheduledPrincipal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                               </td>
-                              <td className="py-2.5 px-3 text-rose-400">
+                              <td className="py-2.5 px-3 text-negative">
                                 ৳{item.scheduledInterest.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                               </td>
-                              <td className="py-2.5 px-3 text-slate-400">
+                              <td className="py-2.5 px-3 text-ink-muted">
                                 ৳{item.remainingPrincipalAfter.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                               </td>
                               <td className="py-2.5 px-3">
                                 {isPaid ? (
-                                  <span className="flex items-center gap-1 text-[11px] text-emerald-400">
+                                  <span className="flex items-center gap-1 text-[11px] text-accent-strong">
                                     <CheckCircle2 className="h-3 w-3" />
                                     <span>Paid</span>
                                   </span>
                                 ) : (
-                                  <span className="flex items-center gap-1 text-[11px] text-amber-400">
+                                  <span className="flex items-center gap-1 text-[11px] text-warning">
                                     <Clock className="h-3 w-3" />
                                     <span>Pending</span>
                                   </span>
@@ -441,7 +441,7 @@ export const LoansView: React.FC = () => {
                                       if (liquidAccounts.length > 0) setPaymentAccountId(liquidAccounts[0].id);
                                       setPaymentError('');
                                     }}
-                                    className="px-2.5 py-1 rounded bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-semibold transition-colors"
+                                    className="px-2.5 py-1 rounded bg-accent/10 hover:bg-accent/20 text-accent-strong border border-accent/30 text-[11px] font-semibold transition-colors"
                                   >
                                     Pay EMI
                                   </button>
@@ -464,23 +464,23 @@ export const LoansView: React.FC = () => {
 
       {/* MODAL 1: Create New Loan */}
       {isNewLoanModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <FileSpreadsheet className="h-5 w-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-lg rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <FileSpreadsheet className="h-5 w-5 text-accent-strong" />
                 <span>New Credit Facility / Loan</span>
               </div>
               <button
                 onClick={() => setIsNewLoanModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {formError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-negative text-xs flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{formError}</span>
               </div>
@@ -489,7 +489,7 @@ export const LoansView: React.FC = () => {
             <form onSubmit={handleCreateSubmit} className="space-y-4 text-xs font-sans">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Lending Bank / Institution *
                   </label>
                   <input
@@ -498,18 +498,18 @@ export const LoansView: React.FC = () => {
                     placeholder="e.g. BRAC Bank Limited"
                     value={institutionName}
                     onChange={(e) => setInstitutionName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Facility Type
                   </label>
                   <select
                     value={loanType}
                     onChange={(e) => setLoanType(e.target.value as LoanType)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none capitalize"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
                   >
                     <option value="home">Home Mortgage</option>
                     <option value="auto">Auto / Vehicle Loan</option>
@@ -523,13 +523,13 @@ export const LoansView: React.FC = () => {
               {/* Interest Method & Principal */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Amortization Method
                   </label>
                   <select
                     value={interestMethod}
                     onChange={(e) => setInterestMethod(e.target.value as LoanInterestMethod)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     <option value="reducing">Reducing Balance (Compounded)</option>
                     <option value="flat">Flat Rate</option>
@@ -537,7 +537,7 @@ export const LoansView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Principal Amount (৳ BDT) *
                   </label>
                   <input
@@ -547,7 +547,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={principal}
                     onChange={(e) => setPrincipal(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -555,7 +555,7 @@ export const LoansView: React.FC = () => {
               {/* Rate & Tenure */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Annual Interest Rate (%) *
                   </label>
                   <input
@@ -565,12 +565,12 @@ export const LoansView: React.FC = () => {
                     required
                     value={annualInterestRate}
                     onChange={(e) => setAnnualInterestRate(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Tenure (Months) *
                   </label>
                   <input
@@ -580,7 +580,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={tenureMonths}
                     onChange={(e) => setTenureMonths(e.target.value ? parseInt(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -588,13 +588,13 @@ export const LoansView: React.FC = () => {
               {/* Disbursement Destination & Date */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Disbursement Account (Cash Receipt) *
                   </label>
                   <select
                     value={disbursementAccountId}
                     onChange={(e) => setDisbursementAccountId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {liquidAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
@@ -605,7 +605,7 @@ export const LoansView: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-slate-300 font-medium mb-1">
+                  <label className="block text-ink-soft font-medium mb-1">
                     Disbursement Date *
                   </label>
                   <input
@@ -613,28 +613,28 @@ export const LoansView: React.FC = () => {
                     required
                     value={disbursementDate}
                     onChange={(e) => setDisbursementDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
 
               {/* Live Preview Calculation Box */}
-              <div className="rounded-xl border border-slate-800 bg-slate-950 p-3.5 space-y-2 font-mono text-[11px]">
-                <div className="flex items-center justify-between text-slate-400">
+              <div className="rounded-xl border border-edge bg-canvas p-3.5 space-y-2 font-mono text-[11px]">
+                <div className="flex items-center justify-between text-ink-muted">
                   <span>Computed Monthly EMI</span>
-                  <span className="text-emerald-400 font-bold text-sm">
+                  <span className="text-accent-strong font-bold text-sm">
                     ৳{liveCalculation.emi.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-slate-500">
+                <div className="flex items-center justify-between text-ink-faint">
                   <span>Total Interest Payable</span>
-                  <span className="text-rose-400">
+                  <span className="text-negative">
                     ৳{liveCalculation.totalInterest.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="flex items-center justify-between text-slate-500">
+                <div className="flex items-center justify-between text-ink-faint">
                   <span>Total Repayment Amount</span>
-                  <span className="text-white">
+                  <span className="text-ink">
                     ৳{liveCalculation.totalPayment.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
@@ -645,13 +645,13 @@ export const LoansView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewLoanModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
                 >
                   Confirm & Disburse Loan
                 </button>
@@ -663,64 +663,64 @@ export const LoansView: React.FC = () => {
 
       {/* MODAL 2: Pay Loan EMI */}
       {payingInstallment && selectedLoan && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-semibold text-base">
-                <DollarSign className="h-5 w-5 text-emerald-400" />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md rounded-2xl border border-edge bg-surface shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-semibold text-base">
+                <DollarSign className="h-5 w-5 text-accent-strong" />
                 <span>Pay EMI #{payingInstallment.installmentNumber}</span>
               </div>
               <button
                 onClick={() => setPayingInstallment(null)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                className="text-ink-muted hover:text-ink p-1 rounded-lg"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             {paymentError && (
-              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
+              <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-negative text-xs flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{paymentError}</span>
               </div>
             )}
 
             <form onSubmit={handlePayEmiSubmit} className="space-y-4 text-xs font-sans">
-              <div className="rounded-lg bg-slate-950 p-3.5 border border-slate-800 space-y-1.5 font-mono text-[11px]">
-                <div className="text-slate-400">
-                  Facility: <span className="text-white font-semibold">{selectedLoan.institutionName}</span>
+              <div className="rounded-lg bg-canvas p-3.5 border border-edge space-y-1.5 font-mono text-[11px]">
+                <div className="text-ink-muted">
+                  Facility: <span className="text-ink font-semibold">{selectedLoan.institutionName}</span>
                 </div>
-                <div className="text-slate-400">
-                  Installment Due Date: <span className="text-slate-200">{payingInstallment.dueDate}</span>
+                <div className="text-ink-muted">
+                  Installment Due Date: <span className="text-ink-soft">{payingInstallment.dueDate}</span>
                 </div>
-                <div className="border-t border-slate-800 pt-1.5 flex justify-between">
-                  <span className="text-slate-400">Principal Component:</span>
-                  <span className="text-emerald-400 font-semibold">
+                <div className="border-t border-edge pt-1.5 flex justify-between">
+                  <span className="text-ink-muted">Principal Component:</span>
+                  <span className="text-accent-strong font-semibold">
                     ৳{payingInstallment.scheduledPrincipal.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Interest Expense:</span>
-                  <span className="text-rose-400 font-semibold">
+                  <span className="text-ink-muted">Interest Expense:</span>
+                  <span className="text-negative font-semibold">
                     ৳{payingInstallment.scheduledInterest.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
-                <div className="border-t border-slate-800 pt-1.5 flex justify-between font-bold">
-                  <span className="text-white">Total Scheduled EMI:</span>
-                  <span className="text-white text-xs">
+                <div className="border-t border-edge pt-1.5 flex justify-between font-bold">
+                  <span className="text-ink">Total Scheduled EMI:</span>
+                  <span className="text-ink text-xs">
                     ৳{payingInstallment.scheduledEmiAmount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </span>
                 </div>
               </div>
 
               <div>
-                <label className="block text-slate-300 font-medium mb-1">
+                <label className="block text-ink-soft font-medium mb-1">
                   Payment Account (Debit) *
                 </label>
                 <select
                   value={paymentAccountId}
                   onChange={(e) => setPaymentAccountId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-white focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -730,7 +730,7 @@ export const LoansView: React.FC = () => {
                 </select>
               </div>
 
-              <div className="rounded-lg bg-emerald-950/20 border border-emerald-500/20 p-2.5 text-[11px] text-emerald-300 flex items-start gap-2">
+              <div className="rounded-lg bg-emerald-950/20 border border-accent/20 p-2.5 text-[11px] text-accent-strong flex items-start gap-2">
                 <Info className="h-4 w-4 shrink-0 mt-0.5" />
                 <span>
                   Posting will debit Bank for full EMI, credit Loan Account for Principal reduction, and credit Loan Interest Expense. Zero imbalance guaranteed.
@@ -741,13 +741,13 @@ export const LoansView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setPayingInstallment(null)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs transition-colors"
                 >
                   Confirm & Post Payment
                 </button>

@@ -32,13 +32,13 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
         <button
           onClick={handleInstallClick}
           disabled={isInstalling}
-          className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 font-mono text-xs transition-colors"
+          className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 border border-accent/30 text-accent-strong font-mono text-xs transition-colors"
         >
           <div className="flex items-center gap-2">
-            <Download className="h-3.5 w-3.5 text-emerald-400" />
+            <Download className="h-3.5 w-3.5 text-accent-strong" />
             <span className="font-semibold">Install FinOS App</span>
           </div>
-          <span className="text-[10px] bg-emerald-500 text-slate-950 font-bold px-1.5 py-0.5 rounded">
+          <span className="text-[10px] bg-accent text-accent-ink font-bold px-1.5 py-0.5 rounded">
             PWA
           </span>
         </button>
@@ -49,7 +49,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
       <button
         onClick={handleInstallClick}
         disabled={isInstalling}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-mono font-bold text-xs transition-all shadow-sm hover:shadow-emerald-500/20 disabled:opacity-50"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-mono font-bold text-xs transition-all shadow-sm hover:shadow-emerald-500/20 disabled:opacity-50"
         title="Install Progressive Web App for offline access"
       >
         <Download className="h-3.5 w-3.5 shrink-0" />
@@ -86,56 +86,56 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
 
         {showIOSGuide && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-            <div className="w-full max-w-sm rounded-2xl bg-slate-900 border border-slate-700 p-6 shadow-2xl space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 font-bold text-white text-sm">
+            <div className="w-full max-w-sm rounded-2xl bg-surface border border-slate-700 p-6 shadow-2xl space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
+                <div className="flex items-center gap-2 font-bold text-ink text-sm">
                   <Smartphone className="h-4 w-4 text-sky-400" />
                   <span>Install FinOS on iOS</span>
                 </div>
                 <button
                   onClick={() => setShowIOSGuide(false)}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+                  className="p-1 rounded-lg text-ink-muted hover:text-ink hover:bg-raised"
                 >
                   <X className="h-4 w-4" />
                 </button>
               </div>
 
-              <p className="text-xs text-slate-300 leading-relaxed">
+              <p className="text-xs text-ink-soft leading-relaxed">
                 Add FinOS Master to your iOS Home Screen for instant launch and offline double-entry capability:
               </p>
 
               <div className="space-y-3 font-mono text-xs">
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-canvas border border-edge">
                   <div className="w-6 h-6 rounded-full bg-sky-500/20 border border-sky-500/30 text-sky-400 flex items-center justify-center text-xs font-bold shrink-0">
                     1
                   </div>
-                  <div className="text-slate-300">
-                    Tap the <strong className="text-white">Share</strong> button in Safari's bottom toolbar (<Share2 className="inline h-3.5 w-3.5 text-sky-400" />).
+                  <div className="text-ink-soft">
+                    Tap the <strong className="text-ink">Share</strong> button in Safari's bottom toolbar (<Share2 className="inline h-3.5 w-3.5 text-sky-400" />).
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="w-6 h-6 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-canvas border border-edge">
+                  <div className="w-6 h-6 rounded-full bg-accent/20 border border-accent/30 text-accent-strong flex items-center justify-center text-xs font-bold shrink-0">
                     2
                   </div>
-                  <div className="text-slate-300">
-                    Scroll down and select <strong className="text-white">"Add to Home Screen"</strong>.
+                  <div className="text-ink-soft">
+                    Scroll down and select <strong className="text-ink">"Add to Home Screen"</strong>.
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 p-3 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="w-6 h-6 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">
+                <div className="flex items-start gap-3 p-3 rounded-lg bg-canvas border border-edge">
+                  <div className="w-6 h-6 rounded-full bg-warning/20 border border-warning/30 text-warning flex items-center justify-center text-xs font-bold shrink-0">
                     3
                   </div>
-                  <div className="text-slate-300">
-                    Tap <strong className="text-white">Add</strong> in top-right corner to finish.
+                  <div className="text-ink-soft">
+                    Tap <strong className="text-ink">Add</strong> in top-right corner to finish.
                   </div>
                 </div>
               </div>
 
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="w-full py-2.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 font-mono text-xs font-semibold transition-colors"
+                className="w-full py-2.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft font-mono text-xs font-semibold transition-colors"
               >
                 Got It
               </button>

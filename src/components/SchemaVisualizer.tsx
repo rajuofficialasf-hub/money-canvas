@@ -183,13 +183,13 @@ export const SchemaVisualizer: React.FC = () => {
 
   return (
     <div className="space-y-8 max-w-6xl mx-auto py-4">
-      <div className="border-b border-slate-800 pb-6">
-        <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1.5">
+      <div className="border-b border-edge pb-6">
+        <div className="flex items-center gap-2 text-xs font-mono text-accent-strong mb-1.5">
           <Database className="h-4 w-4" />
           <span>RELATIONAL SCHEMA SPECIFICATION</span>
         </div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Database Tables, Foreign Keys & Authoritative Views</h1>
-        <p className="text-slate-400 text-xs max-w-2xl mt-1 leading-relaxed">
+        <h1 className="text-2xl font-bold text-ink tracking-tight">Database Tables, Foreign Keys & Authoritative Views</h1>
+        <p className="text-ink-muted text-xs max-w-2xl mt-1 leading-relaxed">
           Exhaustive schema designed for zero balance drift, strict sub-ledger foreign keys, and atomic financial invariants.
         </p>
       </div>
@@ -197,7 +197,7 @@ export const SchemaVisualizer: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Table Selector */}
         <div className="lg:col-span-4 space-y-2">
-          <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+          <div className="text-xs font-semibold text-ink-muted uppercase tracking-wider mb-2">
             Schema Entities ({TABLES.length})
           </div>
           {TABLES.map((t) => (
@@ -206,40 +206,40 @@ export const SchemaVisualizer: React.FC = () => {
               onClick={() => setSelectedTable(t)}
               className={`w-full text-left p-3 rounded-lg border transition-all text-xs flex items-center justify-between ${
                 selectedTable.name === t.name
-                  ? 'border-emerald-500/50 bg-emerald-950/20 text-white font-medium'
-                  : 'border-slate-800/80 bg-slate-900/40 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                  ? 'border-accent/50 bg-emerald-950/20 text-ink font-medium'
+                  : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
               }`}
             >
               <div className="flex items-center gap-2.5 truncate">
-                <TableIcon className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                <TableIcon className="h-3.5 w-3.5 text-ink-muted shrink-0" />
                 <span className="font-mono text-xs">{t.name}</span>
               </div>
-              <span className="text-[10px] text-slate-500 font-mono shrink-0">{t.module}</span>
+              <span className="text-[10px] text-ink-faint font-mono shrink-0">{t.module}</span>
             </button>
           ))}
         </div>
 
         {/* Table Details & DDL */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+          <div className="rounded-xl border border-edge bg-surface/60 p-6 space-y-5">
+            <div className="flex items-center justify-between border-b border-edge/80 pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-lg font-bold text-white font-mono">{selectedTable.name}</h3>
-                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                  <h3 className="text-lg font-bold text-ink font-mono">{selectedTable.name}</h3>
+                  <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-raised text-ink-soft">
                     {selectedTable.module}
                   </span>
                 </div>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-ink-muted mt-1">
                   {selectedTable.columns.length} columns defined with strict types & check constraints
                 </p>
               </div>
 
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:border-slate-600 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-raised text-ink-soft hover:text-ink hover:border-slate-600 transition-colors"
               >
-                {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
+                {copied ? <Check className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy DDL'}</span>
               </button>
             </div>
@@ -248,22 +248,22 @@ export const SchemaVisualizer: React.FC = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 font-mono">
+                  <tr className="border-b border-edge text-ink-muted font-mono">
                     <th className="py-2 pr-4">Column</th>
                     <th className="py-2 pr-4">Data Type</th>
                     <th className="py-2 pr-4">Keys / Constraints</th>
                     <th className="py-2">Description</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-mono">
+                <tbody className="divide-y divide-edge/60 font-mono">
                   {selectedTable.columns.map((c) => (
-                    <tr key={c.name} className="hover:bg-slate-800/30">
-                      <td className="py-2.5 pr-4 text-emerald-300 font-semibold">{c.name}</td>
-                      <td className="py-2.5 pr-4 text-slate-300">{c.type}</td>
+                    <tr key={c.name} className="hover:bg-raised/30">
+                      <td className="py-2.5 pr-4 text-accent-strong font-semibold">{c.name}</td>
+                      <td className="py-2.5 pr-4 text-ink-soft">{c.type}</td>
                       <td className="py-2.5 pr-4">
                         <div className="flex items-center gap-2">
                           {c.pk && (
-                            <span className="inline-flex items-center gap-1 text-[10px] text-amber-400">
+                            <span className="inline-flex items-center gap-1 text-[10px] text-warning">
                               <Key className="h-3 w-3" /> PK
                             </span>
                           )}
@@ -273,11 +273,11 @@ export const SchemaVisualizer: React.FC = () => {
                             </span>
                           )}
                           {c.notNull && !c.pk && (
-                            <span className="text-[10px] text-slate-400">NOT NULL</span>
+                            <span className="text-[10px] text-ink-muted">NOT NULL</span>
                           )}
                         </div>
                       </td>
-                      <td className="py-2.5 text-slate-400 font-sans">{c.desc}</td>
+                      <td className="py-2.5 text-ink-muted font-sans">{c.desc}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -285,9 +285,9 @@ export const SchemaVisualizer: React.FC = () => {
             </div>
 
             {/* DDL Code Block */}
-            <div className="rounded-lg bg-slate-950 p-4 border border-slate-800">
-              <div className="text-[10px] font-mono text-slate-500 uppercase mb-2">Authoritative DDL Definition</div>
-              <pre className="font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed">
+            <div className="rounded-lg bg-canvas p-4 border border-edge">
+              <div className="text-[10px] font-mono text-ink-faint uppercase mb-2">Authoritative DDL Definition</div>
+              <pre className="font-mono text-xs text-ink-soft overflow-x-auto leading-relaxed">
                 {selectedTable.ddl}
               </pre>
             </div>

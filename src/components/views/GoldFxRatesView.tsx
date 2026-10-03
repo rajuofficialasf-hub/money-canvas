@@ -243,19 +243,19 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* View Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-warning mb-1">
             <Coins className="h-4 w-4" />
             <span>{isBn ? 'স্বর্ণ ও বৈদেশিক মুদ্রা বাজার' : 'Gold & Foreign Exchange Markets'}</span>
-            <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
+            <span className="px-2 py-0.5 rounded-full bg-warning/20 text-warning font-mono text-[10px] font-bold border border-warning/30">
               BAJUS & BB
             </span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             {isBn ? 'বাজুস স্বর্ণের দর ও কারেন্সি এক্সচেঞ্জ' : 'BAJUS Gold & FX Exchange Rates'}
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
+          <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-3xl leading-relaxed">
             {isBn
               ? 'বাংলাদেশ জুয়েলার্স অ্যাসোসিয়েশন (BAJUS) নির্ধারিত হলমার্কযুক্ত ২২, ২১, ১৮ ক্যারেট সোনা-রূপার দর, গহনা মেকিং চার্জ এবং বাংলাদেশ ব্যাংক ও খোলা বাজার বৈদেশিক মুদ্রা বিনিময়।'
               : 'Official BAJUS hallmarked gold & silver benchmark rates, jewelry making charges, and Bangladesh Bank / Kerb market foreign currency exchange.'}
@@ -266,7 +266,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
         <div className="flex flex-wrap items-center gap-2.5">
           <button
             onClick={handleSyncToZakat}
-            className="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer"
+            className="px-3.5 py-2 rounded-xl bg-warning hover:bg-warning text-accent-ink text-xs font-semibold flex items-center gap-2 transition-all shadow-sm active:scale-95 cursor-pointer"
             title="Update Zakat Nisab threshold using live 22K gold rate"
           >
             <Scale className="h-3.5 w-3.5" />
@@ -278,7 +278,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             onClick={handleRefreshFx}
             disabled={isRefreshingFx}
           >
-            <RefreshCw className={`h-3.5 w-3.5 text-emerald-400 ${isRefreshingFx ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-3.5 w-3.5 text-accent-strong ${isRefreshingFx ? 'animate-spin' : ''}`} />
             <span>{isRefreshingFx ? (isBn ? 'রিফ্রেশ হচ্ছে...' : 'Refreshing...') : (isBn ? 'লাইভ রিফ্রেশ' : 'Refresh Rates')}</span>
           </Button>
 
@@ -286,7 +286,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             variant="outline"
             onClick={() => setIsEditingGoldRates(!isEditingGoldRates)}
           >
-            <Sliders className="h-3.5 w-3.5 text-slate-400" />
+            <Sliders className="h-3.5 w-3.5 text-ink-muted" />
             <span>{isBn ? 'দর কাস্টমাইজ' : 'Edit Rates'}</span>
           </Button>
         </div>
@@ -294,9 +294,9 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
 
       {/* Toast Feedbacks */}
       {zakatSyncSuccess && (
-        <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs flex items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-3 rounded-xl bg-emerald-950/60 border border-accent/40 text-emerald-200 text-xs flex items-center justify-between gap-3 animate-in fade-in">
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             <span>
               {isBn
                 ? `যাকাত নিসাব সফলভাবে ২২ ক্যারেট স্বর্ণের লাইভ দর (৳${bajusRates.goldRates['22k'].pricePerGram.toLocaleString()}/গ্রাম) দিয়ে আপডেট করা হয়েছে!`
@@ -306,7 +306,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           {onNavigate && (
             <button
               onClick={() => onNavigate('zakat')}
-              className="text-[11px] text-emerald-300 hover:underline font-bold font-mono"
+              className="text-[11px] text-accent-strong hover:underline font-bold font-mono"
             >
               {isBn ? 'যাকাত দেখুন →' : 'View Zakat →'}
             </button>
@@ -315,15 +315,15 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       )}
 
       {assetCreateSuccess && (
-        <div className="p-3 rounded-xl bg-amber-950/60 border border-amber-500/40 text-amber-200 text-xs flex items-center justify-between gap-3 animate-in fade-in">
+        <div className="p-3 rounded-xl bg-amber-950/60 border border-warning/40 text-amber-200 text-xs flex items-center justify-between gap-3 animate-in fade-in">
           <div className="flex items-center gap-2.5">
-            <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+            <Sparkles className="h-4 w-4 text-warning shrink-0" />
             <span>{assetCreateSuccess}</span>
           </div>
           {onNavigate && (
             <button
               onClick={() => onNavigate('assets')}
-              className="text-[11px] text-amber-300 hover:underline font-bold font-mono"
+              className="text-[11px] text-warning hover:underline font-bold font-mono"
             >
               {isBn ? 'সম্পদ দেখুন →' : 'View Assets →'}
             </button>
@@ -335,14 +335,14 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
         <div
           className={`p-3 rounded-xl text-xs flex items-center gap-2.5 animate-in fade-in ${
             fxToast.type === 'success'
-              ? 'bg-emerald-950/50 border border-emerald-500/40 text-emerald-300'
-              : 'bg-rose-950/50 border border-rose-500/40 text-rose-300'
+              ? 'bg-emerald-950/50 border border-accent/40 text-accent-strong'
+              : 'bg-rose-950/50 border border-negative/40 text-negative'
           }`}
         >
           {fxToast.type === 'success' ? (
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+            <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
           ) : (
-            <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+            <AlertCircle className="h-4 w-4 text-negative shrink-0" />
           )}
           <span>{fxToast.message}</span>
         </div>
@@ -351,76 +351,76 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {/* Top Benchmark KPI Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3.5">
         {/* 22K Gold */}
-        <div className="p-4 rounded-xl border border-amber-500/40 bg-gradient-to-b from-amber-950/30 to-slate-900/60 shadow-lg shadow-amber-950/20">
-          <div className="flex items-center justify-between text-xs text-amber-400 font-semibold mb-1">
+        <div className="p-4 rounded-xl border border-warning/40 bg-gradient-to-b from-amber-950/30 to-slate-900/60 shadow-lg shadow-amber-950/20">
+          <div className="flex items-center justify-between text-xs text-warning font-semibold mb-1">
             <span>{isBn ? '২২ ক্যারেট সোনা' : '22K Gold (916)'}</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 font-mono text-amber-300">
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-warning/20 font-mono text-warning">
               হলমার্ক
             </span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-amber-300">
+          <div className="text-xl sm:text-2xl font-bold font-mono text-warning">
             ৳{bajusRates.goldRates['22k'].pricePerBhori.toLocaleString()}
           </div>
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono mt-1">
+          <div className="flex items-center justify-between text-[11px] text-ink-muted font-mono mt-1">
             <span>প্রতি গ্রাম: ৳{bajusRates.goldRates['22k'].pricePerGram.toLocaleString()}</span>
-            <span className="text-emerald-400">+{bajusRates.goldRates['22k'].changeFromPrevious}</span>
+            <span className="text-accent-strong">+{bajusRates.goldRates['22k'].changeFromPrevious}</span>
           </div>
         </div>
 
         {/* 21K Gold */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60">
-          <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60">
+          <div className="flex items-center justify-between text-xs text-ink-soft font-semibold mb-1">
             <span>{isBn ? '২১ ক্যারেট সোনা' : '21K Gold (875)'}</span>
-            <span className="text-[10px] text-slate-400 font-mono">1 ভরি</span>
+            <span className="text-[10px] text-ink-muted font-mono">1 ভরি</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+          <div className="text-xl sm:text-2xl font-bold font-mono text-ink">
             ৳{bajusRates.goldRates['21k'].pricePerBhori.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-400 font-mono mt-1">
+          <div className="text-[11px] text-ink-muted font-mono mt-1">
             প্রতি গ্রাম: ৳{bajusRates.goldRates['21k'].pricePerGram.toLocaleString()}
           </div>
         </div>
 
         {/* 18K Gold */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60">
-          <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60">
+          <div className="flex items-center justify-between text-xs text-ink-soft font-semibold mb-1">
             <span>{isBn ? '১৮ ক্যারেট সোনা' : '18K Gold (750)'}</span>
-            <span className="text-[10px] text-slate-400 font-mono">1 ভরি</span>
+            <span className="text-[10px] text-ink-muted font-mono">1 ভরি</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+          <div className="text-xl sm:text-2xl font-bold font-mono text-ink">
             ৳{bajusRates.goldRates['18k'].pricePerBhori.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-400 font-mono mt-1">
+          <div className="text-[11px] text-ink-muted font-mono mt-1">
             প্রতি গ্রাম: ৳{bajusRates.goldRates['18k'].pricePerGram.toLocaleString()}
           </div>
         </div>
 
         {/* Silver 22K */}
-        <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/60">
-          <div className="flex items-center justify-between text-xs text-slate-300 font-semibold mb-1">
+        <div className="p-4 rounded-xl border border-edge bg-surface/60">
+          <div className="flex items-center justify-between text-xs text-ink-soft font-semibold mb-1">
             <span>{isBn ? '২২ ক্যারেট রূপা' : '22K Silver'}</span>
-            <span className="text-[10px] text-slate-400 font-mono">ক্যাডমিয়াম</span>
+            <span className="text-[10px] text-ink-muted font-mono">ক্যাডমিয়াম</span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-white">
+          <div className="text-xl sm:text-2xl font-bold font-mono text-ink">
             ৳{bajusRates.silverRates['22k'].pricePerBhori.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-400 font-mono mt-1">
+          <div className="text-[11px] text-ink-muted font-mono mt-1">
             প্রতি গ্রাম: ৳{bajusRates.silverRates['22k'].pricePerGram.toLocaleString()}
           </div>
         </div>
 
         {/* USD Remittance Rate */}
-        <div className="p-4 rounded-xl border border-emerald-500/30 bg-gradient-to-b from-emerald-950/20 to-slate-900/60 col-span-2 lg:col-span-1">
-          <div className="flex items-center justify-between text-xs text-emerald-400 font-semibold mb-1">
+        <div className="p-4 rounded-xl border border-accent/30 bg-gradient-to-b from-emerald-950/20 to-slate-900/60 col-span-2 lg:col-span-1">
+          <div className="flex items-center justify-between text-xs text-accent-strong font-semibold mb-1">
             <span>{isBn ? 'ইউএস ডলার (USD)' : 'US Dollar (USD)'}</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 font-mono text-emerald-300">
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-accent/20 font-mono text-accent-strong">
               +2.5% বোনাস
             </span>
           </div>
-          <div className="text-xl sm:text-2xl font-bold font-mono text-emerald-400">
+          <div className="text-xl sm:text-2xl font-bold font-mono text-accent-strong">
             ৳{fxRates.find((f) => f.code === 'USD')?.remittanceRate.toFixed(2)}
           </div>
-          <div className="text-[11px] text-slate-400 font-mono mt-1">
+          <div className="text-[11px] text-ink-muted font-mono mt-1">
             প্রণোদনা সহ: ৳{((fxRates.find((f) => f.code === 'USD')?.remittanceRate || 123.5) * 1.025).toFixed(2)}
           </div>
         </div>
@@ -428,16 +428,16 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
 
       {/* Edit Rates Modal / Collapsible */}
       {isEditingGoldRates && (
-        <form onSubmit={handleSaveCustomGoldRates} className="p-5 rounded-xl border border-amber-500/30 bg-slate-900/90 space-y-4 animate-in fade-in">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <div className="flex items-center gap-2 text-white font-bold text-sm">
-              <Sliders className="h-4 w-4 text-amber-400" />
+        <form onSubmit={handleSaveCustomGoldRates} className="p-5 rounded-xl border border-warning/30 bg-surface/90 space-y-4 animate-in fade-in">
+          <div className="flex items-center justify-between border-b border-edge pb-3">
+            <div className="flex items-center gap-2 text-ink font-bold text-sm">
+              <Sliders className="h-4 w-4 text-warning" />
               <span>{isBn ? 'স্বর্ণ ও রূপার দর কাস্টমাইজ করুন' : 'Customize Gold & Silver Rates (Per Bhori)'}</span>
             </div>
             <button
               type="button"
               onClick={handleResetToDefaultBajus}
-              className="text-xs text-slate-400 hover:text-amber-400 font-mono underline"
+              className="text-xs text-ink-muted hover:text-warning font-mono underline"
             >
               {isBn ? 'ডিফল্ট বাজুস রেটে রিসেট' : 'Reset to Official BAJUS'}
             </button>
@@ -492,7 +492,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             </Button>
             <button
               type="submit"
-              className="px-4 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-semibold"
+              className="px-4 py-1.5 rounded-lg bg-warning hover:bg-warning text-accent-ink text-xs font-semibold"
             >
               {isBn ? 'সংরক্ষণ করুন' : 'Save Rates'}
             </button>
@@ -501,13 +501,13 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       )}
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-800 space-x-1 sm:space-x-3 text-xs font-medium">
+      <div className="flex border-b border-edge space-x-1 sm:space-x-3 text-xs font-medium">
         <button
           onClick={() => setActiveTab('gold')}
           className={`pb-3 px-3 transition-colors flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === 'gold'
-              ? 'border-amber-400 text-amber-400 font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-warning text-warning font-bold'
+              : 'border-transparent text-ink-muted hover:text-ink-soft'
           }`}
         >
           <Coins className="h-4 w-4" />
@@ -518,8 +518,8 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           onClick={() => setActiveTab('fx')}
           className={`pb-3 px-3 transition-colors flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === 'fx'
-              ? 'border-emerald-400 text-emerald-400 font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-accent-strong text-accent-strong font-bold'
+              : 'border-transparent text-ink-muted hover:text-ink-soft'
           }`}
         >
           <ArrowLeftRight className="h-4 w-4" />
@@ -531,7 +531,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           className={`pb-3 px-3 transition-colors flex items-center gap-2 border-b-2 cursor-pointer ${
             activeTab === 'units'
               ? 'border-sky-400 text-sky-400 font-bold'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              : 'border-transparent text-ink-muted hover:text-ink-soft'
           }`}
         >
           <Scale className="h-4 w-4" />
@@ -545,25 +545,25 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {activeTab === 'gold' && (
         <div className="space-y-6">
           {/* Official Rates Breakdown Table */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 overflow-hidden shadow-xl">
-            <div className="p-4 border-b border-slate-800 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="rounded-xl border border-edge bg-surface/50 overflow-hidden shadow-xl">
+            <div className="p-4 border-b border-edge bg-canvas/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-white">
+                <span className="font-bold text-ink">
                   {isBn ? 'বাজুস নির্ধারিত বর্তমান খুচরা মূল্যতালিকা' : 'BAJUS Retail Pricing Schedule'}
                 </span>
-                <span className="text-slate-500 font-mono">
+                <span className="text-ink-faint font-mono">
                   (কার্যকর তারিখ: {bajusRates.effectiveDate})
                 </span>
               </div>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 font-mono">
-                <Calendar className="h-3.5 w-3.5 text-amber-400" />
+              <div className="flex items-center gap-2 text-[11px] text-ink-muted font-mono">
+                <Calendar className="h-3.5 w-3.5 text-warning" />
                 <span>বিজ্ঞপ্তি: {bajusRates.pressReleaseNo || 'BAJUS-2026'}</span>
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800">
+                <thead className="bg-canvas/80 text-ink-muted border-b border-edge">
                   <tr>
                     <th className="py-3 px-4 font-semibold">ক্যারেট / মান (Karat)</th>
                     <th className="py-3 px-4 font-semibold">বিশুদ্ধতা (Purity)</th>
@@ -573,26 +573,26 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                     <th className="py-3 px-4 font-semibold text-right">প্রতি রতি (1/96 ভরি)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/80">
+                <tbody className="divide-y divide-edge/80">
                   {(['22k', '21k', '18k', 'traditional'] as GoldKarat[]).map((k) => {
                     const item = bajusRates.goldRates[k];
                     return (
-                      <tr key={k} className="hover:bg-slate-900/60 transition-colors">
-                        <td className="py-3.5 px-4 font-medium text-white flex items-center gap-2">
-                          <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+                      <tr key={k} className="hover:bg-surface/60 transition-colors">
+                        <td className="py-3.5 px-4 font-medium text-ink flex items-center gap-2">
+                          <span className="h-2 w-2 rounded-full bg-warning shrink-0" />
                           <span className="font-sans font-bold">{isBn ? item.nameBn : item.nameEn}</span>
                         </td>
-                        <td className="py-3.5 px-4 text-slate-400">{item.purity}</td>
-                        <td className="py-3.5 px-4 text-right font-bold text-amber-300">
+                        <td className="py-3.5 px-4 text-ink-muted">{item.purity}</td>
+                        <td className="py-3.5 px-4 text-right font-bold text-warning">
                           ৳{item.pricePerBhori.toLocaleString()}
                         </td>
-                        <td className="py-3.5 px-4 text-right text-slate-200">
+                        <td className="py-3.5 px-4 text-right text-ink-soft">
                           ৳{item.pricePerGram.toLocaleString()}
                         </td>
-                        <td className="py-3.5 px-4 text-right text-slate-300">
+                        <td className="py-3.5 px-4 text-right text-ink-soft">
                           ৳{item.pricePerAnna.toLocaleString()}
                         </td>
-                        <td className="py-3.5 px-4 text-right text-slate-400">
+                        <td className="py-3.5 px-4 text-right text-ink-muted">
                           ৳{item.pricePerRatti.toLocaleString()}
                         </td>
                       </tr>
@@ -600,24 +600,24 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   })}
 
                   {/* Silver 22K Cadmium */}
-                  <tr className="bg-slate-950/40 hover:bg-slate-900/60 transition-colors">
-                    <td className="py-3.5 px-4 font-medium text-slate-200 flex items-center gap-2">
+                  <tr className="bg-canvas/40 hover:bg-surface/60 transition-colors">
+                    <td className="py-3.5 px-4 font-medium text-ink-soft flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-slate-400 shrink-0" />
                       <span className="font-sans font-bold">
                         {isBn ? bajusRates.silverRates['22k'].nameBn : bajusRates.silverRates['22k'].nameEn}
                       </span>
                     </td>
-                    <td className="py-3.5 px-4 text-slate-400">রূপা (Silver Cadmium)</td>
-                    <td className="py-3.5 px-4 text-right font-bold text-slate-200">
+                    <td className="py-3.5 px-4 text-ink-muted">রূপা (Silver Cadmium)</td>
+                    <td className="py-3.5 px-4 text-right font-bold text-ink-soft">
                       ৳{bajusRates.silverRates['22k'].pricePerBhori.toLocaleString()}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-300">
+                    <td className="py-3.5 px-4 text-right text-ink-soft">
                       ৳{bajusRates.silverRates['22k'].pricePerGram.toLocaleString()}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-400">
+                    <td className="py-3.5 px-4 text-right text-ink-muted">
                       ৳{Math.round(bajusRates.silverRates['22k'].pricePerBhori / 16).toLocaleString()}
                     </td>
-                    <td className="py-3.5 px-4 text-right text-slate-500">
+                    <td className="py-3.5 px-4 text-right text-ink-faint">
                       ৳{Math.round(bajusRates.silverRates['22k'].pricePerBhori / 96).toLocaleString()}
                     </td>
                   </tr>
@@ -625,29 +625,29 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
               </table>
             </div>
 
-            <div className="p-3 bg-slate-950/40 border-t border-slate-800 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4">
+            <div className="p-3 bg-canvas/40 border-t border-edge text-[11px] text-ink-muted flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4">
               <span>* বাজুস নিয়ম অনুযায়ী ক্যাডমিয়াম হলমার্কযুক্ত স্বর্ণে সর্বনিম্ন মজুরি প্রতি গ্রাম ৳৪৯০ নির্ধারিত।</span>
-              <span className="text-amber-400 font-mono">১ ভরি = ১৬ আনা = ৯৬ রতি = ১১.৬৬৪ গ্রাম</span>
+              <span className="text-warning font-mono">১ ভরি = ১৬ আনা = ৯৬ রতি = ১১.৬৬৪ গ্রাম</span>
             </div>
           </div>
 
           {/* Interactive Gold Value & Jewelry Making Charge Calculator */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left: Input Form */}
-            <div className="lg:col-span-6 rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2 text-white font-bold text-sm">
-                  <Scale className="h-4 w-4 text-amber-400" />
+            <div className="lg:col-span-6 rounded-xl border border-edge bg-surface/60 p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-edge pb-3">
+                <div className="flex items-center gap-2 text-ink font-bold text-sm">
+                  <Scale className="h-4 w-4 text-warning" />
                   <span>{isBn ? 'স্বর্ণের মূল্য ও গহনা মেকিং চার্জ ক্যালকুলেটর' : 'Gold Value & Jewelry Making Calculator'}</span>
                 </div>
-                <span className="text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+                <span className="text-[10px] font-mono text-warning bg-warning/10 px-2 py-0.5 rounded border border-warning/20">
                   BAJUS Retail
                 </span>
               </div>
 
               {/* Karat Selector */}
               <div>
-                <label className="block text-xs text-slate-400 mb-1.5 font-medium">
+                <label className="block text-xs text-ink-muted mb-1.5 font-medium">
                   {isBn ? 'স্বর্ণের ক্যারেট নির্বাচন করুন' : 'Select Karat'}
                 </label>
                 <div className="grid grid-cols-4 gap-2 text-xs font-mono">
@@ -658,8 +658,8 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       onClick={() => setCalcKarat(k)}
                       className={`p-2 rounded-lg border text-center font-bold transition-all cursor-pointer ${
                         calcKarat === k
-                          ? 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm'
-                          : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+                          ? 'bg-warning/20 border-warning text-warning shadow-sm'
+                          : 'bg-canvas border-edge text-ink-muted hover:text-ink hover:border-slate-700'
                       }`}
                     >
                       {k.toUpperCase()}
@@ -670,14 +670,14 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
 
               {/* Weight Input Mode Toggle */}
               <div>
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+                <div className="flex items-center justify-between text-xs text-ink-muted mb-1.5">
                   <span className="font-medium">{isBn ? 'ওজন পরিমাপের একক' : 'Weight Measurement Unit'}</span>
-                  <div className="flex gap-1 bg-slate-950 p-0.5 rounded-lg border border-slate-800 text-[11px] font-mono">
+                  <div className="flex gap-1 bg-canvas p-0.5 rounded-lg border border-edge text-[11px] font-mono">
                     <button
                       type="button"
                       onClick={() => setWeightMode('bhori')}
                       className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-                        weightMode === 'bhori' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                        weightMode === 'bhori' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-ink'
                       }`}
                     >
                       {isBn ? 'ভরি-আনা-রতি' : 'Bhori / Anna'}
@@ -686,7 +686,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       type="button"
                       onClick={() => setWeightMode('grams')}
                       className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
-                        weightMode === 'grams' ? 'bg-amber-500 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                        weightMode === 'grams' ? 'bg-warning text-accent-ink font-bold' : 'text-ink-muted hover:text-ink'
                       }`}
                     >
                       {isBn ? 'গ্রাম (Grams)' : 'Grams'}
@@ -762,8 +762,8 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                     onClick={() => setIncludeVat(!includeVat)}
                     className={`w-full py-2 px-3 rounded-lg border text-center transition-all cursor-pointer font-bold ${
                       includeVat
-                        ? 'bg-emerald-500/20 border-emerald-500 text-emerald-300'
-                        : 'bg-slate-950 border-slate-800 text-slate-500'
+                        ? 'bg-accent/20 border-accent text-accent-strong'
+                        : 'bg-canvas border-edge text-ink-faint'
                     }`}
                   >
                     {includeVat ? (isBn ? '৫% ভ্যাট অন্তর্ভুক্ত' : '5% VAT Included') : (isBn ? 'ভ্যাট ছাড়া' : 'No VAT')}
@@ -773,42 +773,42 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
             </div>
 
             {/* Right: Bill Breakdown & One-Click Actions */}
-            <div className="lg:col-span-6 rounded-xl border border-amber-500/30 bg-gradient-to-b from-amber-950/20 via-slate-900 to-slate-950 p-5 space-y-4 flex flex-col justify-between">
+            <div className="lg:col-span-6 rounded-xl border border-warning/30 bg-gradient-to-b from-amber-950/20 via-slate-900 to-slate-950 p-5 space-y-4 flex flex-col justify-between">
               <div>
-                <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-                  <div className="text-sm font-bold text-white flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-amber-400" />
+                <div className="flex items-center justify-between border-b border-edge/80 pb-3">
+                  <div className="text-sm font-bold text-ink flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-warning" />
                     <span>{isBn ? 'আনুমানিক গহনা মেমো / বিল সামারি' : 'Jewelry Memo / Pricing Summary'}</span>
                   </div>
-                  <span className="text-[11px] font-mono text-amber-400 font-bold">
+                  <span className="text-[11px] font-mono text-warning font-bold">
                     {jewelryCalc.weightBhori.toFixed(3)} ভরি ({jewelryCalc.weightGrams}g)
                   </span>
                 </div>
 
-                <div className="divide-y divide-slate-800/70 text-xs font-mono mt-3 space-y-2">
-                  <div className="flex justify-between text-slate-400 pt-2">
+                <div className="divide-y divide-edge/70 text-xs font-mono mt-3 space-y-2">
+                  <div className="flex justify-between text-ink-muted pt-2">
                     <span>{isBn ? 'স্বর্ণের বিশুদ্ধ মূল্য (Gold Net Cost):' : 'Pure Gold Value:'}</span>
-                    <span className="text-white font-bold">৳{jewelryCalc.goldBasePrice.toLocaleString()}</span>
+                    <span className="text-ink font-bold">৳{jewelryCalc.goldBasePrice.toLocaleString()}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-400 pt-2">
+                  <div className="flex justify-between text-ink-muted pt-2">
                     <span>{isBn ? `মজুরি (${makingChargePerGram}৳ × ${jewelryCalc.weightGrams}g):` : `Making Charge (৳${makingChargePerGram}/g):`}</span>
-                    <span className="text-amber-300 font-bold">+৳{jewelryCalc.makingChargeTotal.toLocaleString()}</span>
+                    <span className="text-warning font-bold">+৳{jewelryCalc.makingChargeTotal.toLocaleString()}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-400 pt-2">
+                  <div className="flex justify-between text-ink-muted pt-2">
                     <span>{isBn ? 'উপ-মোট (Subtotal):' : 'Subtotal:'}</span>
-                    <span className="text-slate-200">৳{jewelryCalc.subtotal.toLocaleString()}</span>
+                    <span className="text-ink-soft">৳{jewelryCalc.subtotal.toLocaleString()}</span>
                   </div>
 
-                  <div className="flex justify-between text-slate-400 pt-2">
+                  <div className="flex justify-between text-ink-muted pt-2">
                     <span>{isBn ? 'সরকারি ভ্যাট (Government VAT 5%):' : 'Govt VAT (5%):'}</span>
-                    <span className="text-emerald-400 font-bold">+৳{jewelryCalc.vatAmount.toLocaleString()}</span>
+                    <span className="text-accent-strong font-bold">+৳{jewelryCalc.vatAmount.toLocaleString()}</span>
                   </div>
 
-                  <div className="flex justify-between items-center text-sm font-bold pt-3 text-white border-t-2 border-amber-500/40">
-                    <span className="text-amber-400">{isBn ? 'সর্বমোট ক্রয়মূল্য (Total Retail):' : 'Total Retail Price:'}</span>
-                    <span className="text-xl text-amber-300 font-mono">
+                  <div className="flex justify-between items-center text-sm font-bold pt-3 text-ink border-t-2 border-warning/40">
+                    <span className="text-warning">{isBn ? 'সর্বমোট ক্রয়মূল্য (Total Retail):' : 'Total Retail Price:'}</span>
+                    <span className="text-xl text-warning font-mono">
                       ৳{jewelryCalc.totalPrice.toLocaleString()}
                     </span>
                   </div>
@@ -820,7 +820,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                 <button
                   type="button"
                   onClick={handleAddToPhysicalAssets}
-                  className="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
+                  className="flex-1 py-2.5 px-3 rounded-xl bg-warning hover:bg-warning text-accent-ink text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 cursor-pointer"
                 >
                   <PlusCircle className="h-4 w-4" />
                   <span>{isBn ? 'স্থাবর সম্পদে যোগ করুন' : 'Add to Physical Assets'}</span>
@@ -831,7 +831,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   variant="secondary"
                   onClick={handleSyncToZakat}
                 >
-                  <Scale className="h-4 w-4 text-emerald-400" />
+                  <Scale className="h-4 w-4 text-accent-strong" />
                   <span>{isBn ? 'যাকাত নিসাব আপডেট' : 'Sync to Zakat'}</span>
                 </Button>
               </div>
@@ -846,18 +846,18 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {activeTab === 'fx' && (
         <div className="space-y-6">
           {/* Remittance Calculator Banner */}
-          <div className="rounded-xl border border-emerald-500/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 space-y-4">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="rounded-xl border border-accent/30 bg-gradient-to-r from-emerald-950/40 via-slate-900 to-slate-950 p-5 space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-edge pb-3">
               <div>
-                <div className="flex items-center gap-2 text-white font-bold text-sm">
-                  <DollarSign className="h-4 w-4 text-emerald-400" />
+                <div className="flex items-center gap-2 text-ink font-bold text-sm">
+                  <DollarSign className="h-4 w-4 text-accent-strong" />
                   <span>{isBn ? 'প্রবাসী রেমিট্যান্স ও সরকারি ২.৫% নগদ প্রণোদনা ক্যালকুলেটর' : 'Remittance & Govt 2.5% Cash Incentive Calculator'}</span>
                 </div>
-                <p className="text-[11px] text-slate-400 mt-0.5">
+                <p className="text-[11px] text-ink-muted mt-0.5">
                   বৈধ ব্যাংকিং চ্যানেলে রেমিট্যান্স পাঠালে বাংলাদেশ সরকারের সরাসরি ২.৫% ক্যাশ ইনসেন্টিভ সহ সর্বমোট প্রাপ্য টাকার হিসাব।
                 </p>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-xs font-bold border border-emerald-500/30 self-start md:self-center">
+              <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent-strong font-mono text-xs font-bold border border-accent/30 self-start md:self-center">
                 +2.5% নগদ প্রণোদনা
               </span>
             </div>
@@ -869,7 +869,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                   <select
                     value={remitCurrency}
                     onChange={(e) => setRemitCurrency(e.target.value)}
-                    className="rounded-lg border border-slate-800 bg-slate-950 px-3 py-2 text-white text-xs font-mono font-bold focus:border-emerald-500 focus:outline-none"
+                    className="rounded-lg border border-edge bg-canvas px-3 py-2 text-ink text-xs font-mono font-bold focus:border-accent focus:outline-none"
                   >
                     {fxRates.map((f) => (
                       <option key={f.code} value={f.code}>
@@ -902,22 +902,22 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
               </Field>
 
               {/* Live Converted Output */}
-              <div className="md:col-span-5 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 font-mono text-xs space-y-1.5">
-                <div className="flex justify-between text-slate-400">
+              <div className="md:col-span-5 bg-canvas/80 p-3.5 rounded-xl border border-edge font-mono text-xs space-y-1.5">
+                <div className="flex justify-between text-ink-muted">
                   <span>এক্সচেঞ্জ রেট:</span>
-                  <span className="text-white font-bold">1 {remitCurrency} = ৳{remittanceCalc.exchangeRate.toFixed(2)}</span>
+                  <span className="text-ink font-bold">1 {remitCurrency} = ৳{remittanceCalc.exchangeRate.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between text-ink-muted">
                   <span>মূল টাকা (Base):</span>
                   <span>৳{remittanceCalc.baseAmountBdt.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between text-emerald-400 font-bold">
+                <div className="flex justify-between text-accent-strong font-bold">
                   <span>+২.৫% সরকারি প্রণোদনা:</span>
                   <span>+৳{remittanceCalc.govtIncentiveAmountBdt.toLocaleString()}</span>
                 </div>
-                <div className="flex justify-between items-center text-sm font-bold text-white pt-1 border-t border-slate-800">
-                  <span className="text-emerald-300">সর্বমোট পাবেন:</span>
-                  <span className="text-base text-emerald-400 font-bold">
+                <div className="flex justify-between items-center text-sm font-bold text-ink pt-1 border-t border-edge">
+                  <span className="text-accent-strong">সর্বমোট পাবেন:</span>
+                  <span className="text-base text-accent-strong font-bold">
                     ৳{remittanceCalc.totalReceivableBdt.toLocaleString()}
                   </span>
                 </div>
@@ -926,24 +926,24 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           </div>
 
           {/* Currency Rates Table (13 Major Currencies) */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/50 overflow-hidden shadow-xl">
-            <div className="p-4 border-b border-slate-800 bg-slate-950/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+          <div className="rounded-xl border border-edge bg-surface/50 overflow-hidden shadow-xl">
+            <div className="p-4 border-b border-edge bg-canvas/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
               <div className="flex items-center gap-2">
-                <span className="font-bold text-white">
+                <span className="font-bold text-ink">
                   {isBn ? 'বৈদেশিক মুদ্রা লাইভ এক্সচেঞ্জ রেট (বাংলাদেশ টাকা / BDT)' : 'Foreign Currency Exchange Rates (vs BDT)'}
                 </span>
-                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                <span className="text-[10px] font-mono text-accent-strong bg-accent/10 px-2 py-0.5 rounded border border-accent/20">
                   13 Currencies
                 </span>
               </div>
-              <div className="text-[11px] text-slate-400 font-mono">
+              <div className="text-[11px] text-ink-muted font-mono">
                 {isBn ? 'সর্বশেষ আপডেট:' : 'Last Updated:'} {new Date().toLocaleTimeString()}
               </div>
             </div>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-slate-950/80 text-slate-400 border-b border-slate-800">
+                <thead className="bg-canvas/80 text-ink-muted border-b border-edge">
                   <tr>
                     <th className="py-3 px-4 font-semibold">{isBn ? 'মুদ্রা (Currency)' : 'Currency'}</th>
                     <th className="py-3 px-4 font-semibold text-right">{isBn ? 'আন্তঃব্যাংক দর (Interbank)' : 'Interbank Rate'}</th>
@@ -952,33 +952,33 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                     <th className="py-3 px-4 font-semibold text-right">{isBn ? 'খোলা বাজার / ক্যাশ (Kerb)' : 'Cash / Kerb'}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/80">
+                <tbody className="divide-y divide-edge/80">
                   {fxRates.map((f) => {
                     const withIncentive = f.remittanceRate * 1.025;
                     return (
-                      <tr key={f.code} className="hover:bg-slate-900/60 transition-colors">
-                        <td className="py-3.5 px-4 font-medium text-white flex items-center gap-2.5">
+                      <tr key={f.code} className="hover:bg-surface/60 transition-colors">
+                        <td className="py-3.5 px-4 font-medium text-ink flex items-center gap-2.5">
                           <span className="text-lg">{f.flag}</span>
                           <div>
-                            <div className="font-bold text-white flex items-center gap-1">
+                            <div className="font-bold text-ink flex items-center gap-1">
                               <span>{f.code}</span>
-                              <span className="text-slate-500 text-[10px]">({f.symbol})</span>
+                              <span className="text-ink-faint text-[10px]">({f.symbol})</span>
                             </div>
-                            <div className="text-[10px] text-slate-400 font-sans">
+                            <div className="text-[10px] text-ink-muted font-sans">
                               {isBn ? f.nameBn : f.nameEn}
                             </div>
                           </div>
                         </td>
-                        <td className="py-3.5 px-4 text-right text-slate-300">
+                        <td className="py-3.5 px-4 text-right text-ink-soft">
                           ৳{f.interbankRate.toFixed(2)}
                         </td>
-                        <td className="py-3.5 px-4 text-right font-bold text-emerald-400">
+                        <td className="py-3.5 px-4 text-right font-bold text-accent-strong">
                           ৳{f.remittanceRate.toFixed(2)}
                         </td>
                         <td className="py-3.5 px-4 text-right font-bold text-sky-300">
                           ৳{withIncentive.toFixed(2)}
                         </td>
-                        <td className="py-3.5 px-4 text-right font-medium text-amber-300">
+                        <td className="py-3.5 px-4 text-right font-medium text-warning">
                           ৳{f.cashKerbRate.toFixed(2)}
                         </td>
                       </tr>
@@ -988,16 +988,16 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
               </table>
             </div>
 
-            <div className="p-3 bg-slate-950/40 border-t border-slate-800 text-[11px] text-slate-400 flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4">
+            <div className="p-3 bg-canvas/40 border-t border-edge text-[11px] text-ink-muted flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4">
               <span>* ব্যাংক ভেদে এবং লেনদেনের পরিমাণের ওপর ভিত্তি করে রেট সামান্য পরিবর্তন হতে পারে।</span>
-              <span className="text-emerald-400 font-mono">উৎস: বাংলাদেশ ব্যাংক ও আন্তর্জাতিক বাজার সূচক</span>
+              <span className="text-accent-strong font-mono">উৎস: বাংলাদেশ ব্যাংক ও আন্তর্জাতিক বাজার সূচক</span>
             </div>
           </div>
 
           {/* Reverse Converter: BDT to Foreign Currency (Travel / Study / Medical Abroad) */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-bold text-sm">
                 <ArrowLeftRight className="h-4 w-4 text-sky-400" />
                 <span>{isBn ? 'টাকা থেকে বৈদেশিক মুদ্রা কনভার্টার (ভ্রমণ, চিকিৎসা ও উচ্চশিক্ষা কোটা)' : 'BDT to Foreign Currency Converter (Travel & Medical Quota)'}</span>
               </div>
@@ -1031,14 +1031,14 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                 </Select>
               </Field>
 
-              <div className="md:col-span-4 bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs font-mono space-y-1">
-                <div className="text-slate-400 text-[11px]">
+              <div className="md:col-span-4 bg-canvas p-3 rounded-xl border border-edge text-xs font-mono space-y-1">
+                <div className="text-ink-muted text-[11px]">
                   বিক্রয় দর: 1 {reverseCurrency} = ৳{reverseFxCalc.rate.toFixed(2)}
                 </div>
                 <div className="text-sm font-bold text-sky-400">
                   = {reverseFxCalc.currency.symbol} {reverseFxCalc.foreignResult.toLocaleString()} {reverseCurrency}
                 </div>
-                <div className="text-[10px] text-slate-500">
+                <div className="text-[10px] text-ink-faint">
                   ভ্রমণ কোটা: প্রাপ্তবয়স্ক ব্যক্তি প্রতি বছর সর্বোচ্চ ১২,০০০ ডলার এনডোর্স করতে পারেন।
                 </div>
               </div>
@@ -1053,18 +1053,18 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
       {activeTab === 'units' && (
         <div className="space-y-6">
           {/* Interactive Weight Converter */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div className="flex items-center gap-2 text-white font-bold text-sm">
+          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <div className="flex items-center gap-2 text-ink font-bold text-sm">
                 <Scale className="h-4 w-4 text-sky-400" />
                 <span>{isBn ? 'স্বর্ণের একক রূপান্তর কনভার্টার (ভরি, গ্রাম, আনা, রতি)' : 'Gold Weight Unit Converter'}</span>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">Bangladeshi Standards</span>
+              <span className="text-[10px] font-mono text-ink-muted">Bangladeshi Standards</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-mono">
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                <label className="block text-slate-400 text-[11px] font-bold">ভরি / তোলা (Bhori / Tola)</label>
+              <div className="bg-canvas p-3.5 rounded-xl border border-edge space-y-1">
+                <label className="block text-ink-muted text-[11px] font-bold">ভরি / তোলা (Bhori / Tola)</label>
                 <input
                   type="number"
                   step="any"
@@ -1078,13 +1078,13 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       setUnitRatti(Math.round(val * RATTI_PER_BHORI * 10) / 10);
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-white font-bold text-sm focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-lg border border-edge bg-surface px-3 py-2 text-ink font-bold text-sm focus:border-sky-400 focus:outline-none"
                 />
-                <span className="text-[10px] text-slate-500">= ১ ভরি = ১৬ আনা</span>
+                <span className="text-[10px] text-ink-faint">= ১ ভরি = ১৬ আনা</span>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                <label className="block text-slate-400 text-[11px] font-bold">গ্রাম (Grams)</label>
+              <div className="bg-canvas p-3.5 rounded-xl border border-edge space-y-1">
+                <label className="block text-ink-muted text-[11px] font-bold">গ্রাম (Grams)</label>
                 <input
                   type="number"
                   step="any"
@@ -1098,13 +1098,13 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       setUnitRatti(Math.round((val / (GRAMS_PER_BHORI / 96)) * 10) / 10);
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-emerald-400 font-bold text-sm focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-lg border border-edge bg-surface px-3 py-2 text-accent-strong font-bold text-sm focus:border-sky-400 focus:outline-none"
                 />
-                <span className="text-[10px] text-slate-500">= ১১.৬৬৪ গ্রাম = ১ ভরি</span>
+                <span className="text-[10px] text-ink-faint">= ১১.৬৬৪ গ্রাম = ১ ভরি</span>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                <label className="block text-slate-400 text-[11px] font-bold">আনা (Anna)</label>
+              <div className="bg-canvas p-3.5 rounded-xl border border-edge space-y-1">
+                <label className="block text-ink-muted text-[11px] font-bold">আনা (Anna)</label>
                 <input
                   type="number"
                   step="any"
@@ -1118,13 +1118,13 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       setUnitRatti(Math.round(val * 6 * 10) / 10);
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-white font-bold text-sm focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-lg border border-edge bg-surface px-3 py-2 text-ink font-bold text-sm focus:border-sky-400 focus:outline-none"
                 />
-                <span className="text-[10px] text-slate-500">১ আনা = ০.৭২৯ গ্রাম</span>
+                <span className="text-[10px] text-ink-faint">১ আনা = ০.৭২৯ গ্রাম</span>
               </div>
 
-              <div className="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
-                <label className="block text-slate-400 text-[11px] font-bold">রতি (Ratti)</label>
+              <div className="bg-canvas p-3.5 rounded-xl border border-edge space-y-1">
+                <label className="block text-ink-muted text-[11px] font-bold">রতি (Ratti)</label>
                 <input
                   type="number"
                   step="any"
@@ -1138,9 +1138,9 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       setUnitAnna(Math.round((val / 6) * 10) / 10);
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2 text-white font-bold text-sm focus:border-sky-400 focus:outline-none"
+                  className="w-full rounded-lg border border-edge bg-surface px-3 py-2 text-ink font-bold text-sm focus:border-sky-400 focus:outline-none"
                 />
-                <span className="text-[10px] text-slate-500">১ রতি = ০.১২১৫ গ্রাম</span>
+                <span className="text-[10px] text-ink-faint">১ রতি = ০.১২১৫ গ্রাম</span>
               </div>
             </div>
           </div>
@@ -1148,42 +1148,42 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
           {/* Educational Cheat Sheet: Gold Buying & Selling Rules */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Hallmark Identification */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-2">
-              <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
+            <div className="rounded-xl border border-edge bg-surface/60 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-warning font-bold text-xs">
                 <ShieldCheck className="h-4 w-4" />
                 <span>হলমার্কের কোড চেনার উপায়</span>
               </div>
-              <ul className="text-[11px] text-slate-300 space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
-                <li><strong className="text-white font-mono">22K / 916:</strong> ৯১.৬% বিশুদ্ধ স্বর্ণ (সবচেয়ে জনপ্রিয় গহনা)।</li>
-                <li><strong className="text-white font-mono">21K / 875:</strong> ৮৭.৫% বিশুদ্ধ স্বর্ণ।</li>
-                <li><strong className="text-white font-mono">18K / 750:</strong> ৭৫% বিশুদ্ধ স্বর্ণ (হালকা ও ডায়মন্ড গহনায় ব্যবহৃত)।</li>
-                <li><strong className="text-white font-mono">Traditional:</strong> সনাতন পদ্ধতির স্বর্ণ (হলমার্ক ছাড়া)।</li>
+              <ul className="text-[11px] text-ink-soft space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
+                <li><strong className="text-ink font-mono">22K / 916:</strong> ৯১.৬% বিশুদ্ধ স্বর্ণ (সবচেয়ে জনপ্রিয় গহনা)।</li>
+                <li><strong className="text-ink font-mono">21K / 875:</strong> ৮৭.৫% বিশুদ্ধ স্বর্ণ।</li>
+                <li><strong className="text-ink font-mono">18K / 750:</strong> ৭৫% বিশুদ্ধ স্বর্ণ (হালকা ও ডায়মন্ড গহনায় ব্যবহৃত)।</li>
+                <li><strong className="text-ink font-mono">Traditional:</strong> সনাতন পদ্ধতির স্বর্ণ (হলমার্ক ছাড়া)।</li>
               </ul>
             </div>
 
             {/* BAJUS Buyback / Return Policy */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-2">
-              <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
+            <div className="rounded-xl border border-edge bg-surface/60 p-4 space-y-2">
+              <div className="flex items-center gap-2 text-accent-strong font-bold text-xs">
                 <Percent className="h-4 w-4" />
                 <span>স্বর্ণ বিক্রি ও বদলানোর বাজুস নিয়ম</span>
               </div>
-              <ul className="text-[11px] text-slate-300 space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
-                <li><strong className="text-white">গহনা বদল (Exchange):</strong> বর্তমান বাজার দর থেকে ১০% কর্তন করা হয়।</li>
-                <li><strong className="text-white">ক্যাশ ফেরত (Cash Return):</strong> বর্তমান বাজার দর থেকে ২০% কর্তন করা হয়।</li>
+              <ul className="text-[11px] text-ink-soft space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
+                <li><strong className="text-ink">গহনা বদল (Exchange):</strong> বর্তমান বাজার দর থেকে ১০% কর্তন করা হয়।</li>
+                <li><strong className="text-ink">ক্যাশ ফেরত (Cash Return):</strong> বর্তমান বাজার দর থেকে ২০% কর্তন করা হয়।</li>
                 <li>মেকিং চার্জ ও ভ্যাটের টাকা ফেরত পাওয়া যায় না।</li>
                 <li>অবশ্যই ক্যাডমিয়াম হলমার্ক ও বাজুস মান্য রসিদ সংরক্ষণ করতে হবে।</li>
               </ul>
             </div>
 
             {/* Zakat & Tax Implications */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-4 space-y-2">
+            <div className="rounded-xl border border-edge bg-surface/60 p-4 space-y-2">
               <div className="flex items-center gap-2 text-sky-400 font-bold text-xs">
                 <Scale className="h-4 w-4" />
                 <span>যাকাত ও এনবিআর রিটার্ন সংযোগ</span>
               </div>
-              <ul className="text-[11px] text-slate-300 space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
-                <li><strong className="text-white">যাকাত নিসাব:</strong> ৭.৫ ভরি (৮৭.৪৮ গ্রাম) স্বর্ণের মালিক হলে ২.৫% যাকাত প্রযোজ্য।</li>
-                <li><strong className="text-white">NBR IT-10B:</strong> আয়কর রিটার্নে আপনার ক্রয়কৃত স্বর্ণের পরিমাণ ও ক্রয়মূল্য প্রদর্শন বাধ্যতামূলক।</li>
+              <ul className="text-[11px] text-ink-soft space-y-1.5 list-disc pl-4 leading-relaxed font-sans">
+                <li><strong className="text-ink">যাকাত নিসাব:</strong> ৭.৫ ভরি (৮৭.৪৮ গ্রাম) স্বর্ণের মালিক হলে ২.৫% যাকাত প্রযোজ্য।</li>
+                <li><strong className="text-ink">NBR IT-10B:</strong> আয়কর রিটার্নে আপনার ক্রয়কৃত স্বর্ণের পরিমাণ ও ক্রয়মূল্য প্রদর্শন বাধ্যতামূলক।</li>
                 <li>মানি ক্যানভাসে ১-ক্লিকেই যাকাত ও ট্যাক্স শিটে স্বর্ণের দর আপডেট হয়ে যায়।</li>
               </ul>
             </div>

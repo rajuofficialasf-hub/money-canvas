@@ -137,19 +137,19 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
     switch (severity) {
       case 'critical':
         return (
-          <span className="inline-flex items-center gap-1 rounded-md bg-rose-500/10 px-2 py-0.5 text-[11px] font-mono font-medium text-rose-400 border border-rose-500/20">
+          <span className="inline-flex items-center gap-1 rounded-md bg-negative/10 px-2 py-0.5 text-[11px] font-mono font-medium text-negative border border-negative/20">
             <AlertCircle className="h-3 w-3" /> Critical Due / Violation
           </span>
         );
       case 'warning':
         return (
-          <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/10 px-2 py-0.5 text-[11px] font-mono font-medium text-amber-400 border border-amber-500/20">
+          <span className="inline-flex items-center gap-1 rounded-md bg-warning/10 px-2 py-0.5 text-[11px] font-mono font-medium text-warning border border-warning/20">
             <AlertTriangle className="h-3 w-3" /> Warning / Action Needed
           </span>
         );
       case 'success':
         return (
-          <span className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-0.5 text-[11px] font-mono font-medium text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1 rounded-md bg-accent/10 px-2 py-0.5 text-[11px] font-mono font-medium text-accent-strong border border-accent/20">
             <CheckCircle2 className="h-3 w-3" /> Matured / Ready
           </span>
         );
@@ -165,34 +165,34 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
   const getCategoryIcon = (category: SystemAlert['category']) => {
     switch (category) {
       case 'dps_due':
-        return <Calendar className="h-5 w-5 text-emerald-400" />;
+        return <Calendar className="h-5 w-5 text-accent-strong" />;
       case 'loan_emi':
-        return <Landmark className="h-5 w-5 text-amber-400" />;
+        return <Landmark className="h-5 w-5 text-warning" />;
       case 'fd_maturity':
         return <PiggyBank className="h-5 w-5 text-sky-400" />;
       case 'budget_exceeded':
       case 'budget_warning':
-        return <PieChart className="h-5 w-5 text-rose-400" />;
+        return <PieChart className="h-5 w-5 text-negative" />;
       case 'goal_deadline':
         return <TrendingUp className="h-5 w-5 text-indigo-400" />;
       default:
-        return <Bell className="h-5 w-5 text-slate-400" />;
+        return <Bell className="h-5 w-5 text-ink-muted" />;
     }
   };
 
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Bell className="h-4 w-4" />
             <span>Financial Alerts & Reminders</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">
             Notifications & Due Reminders
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-ink-muted mt-1">
             Proactive monitoring for upcoming DPS installments, loan EMIs, budget limits, and cash flow thresholds.
           </p>
         </div>
@@ -202,9 +202,9 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             onClick={() => {
               systemAlerts.forEach((a) => dismissAlert(a.id));
             }}
-            className="self-start sm:self-auto px-3.5 py-2 rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 text-xs font-mono text-slate-300 hover:text-white flex items-center gap-2 transition-colors cursor-pointer"
+            className="self-start sm:self-auto px-3.5 py-2 rounded-lg border border-edge bg-surface hover:bg-raised text-xs font-mono text-ink-soft hover:text-ink flex items-center gap-2 transition-colors cursor-pointer"
           >
-            <CheckCheck className="h-4 w-4 text-emerald-400" />
+            <CheckCheck className="h-4 w-4 text-accent-strong" />
             <span>Dismiss All Alerts</span>
           </button>
         )}
@@ -219,20 +219,20 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-sm sm:text-base font-bold text-white">
+                <h3 className="text-sm sm:text-base font-bold text-ink">
                   ডিভাইস রিমাইন্ডার শিডিউলার (Device Push & Local Reminders)
                 </h3>
                 {permissionStatus === 'granted' ? (
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent-strong border border-accent/30 flex items-center gap-1">
                     <ShieldCheck className="h-3 w-3" /> Active
                   </span>
                 ) : (
-                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                  <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-warning/20 text-warning border border-warning/30 flex items-center gap-1">
                     <Clock className="h-3 w-3" /> Permission Needed
                   </span>
                 )}
               </div>
-              <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">
+              <p className="text-[11px] sm:text-xs text-ink-muted mt-0.5">
                 রিকারিং বিল, ডিপিএস কিস্তি, লোন ইএমআই ও এফডি/সঞ্চয়পত্র ম্যাচিউরিটির <strong>৭ দিন আগে</strong> এবং <strong>নির্ধারিত দিনে সকাল ৯:০০ টায়</strong> ডিভাইসে নোটিফিকেশন পাঠায়।
               </p>
             </div>
@@ -242,7 +242,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             <button
               type="button"
               onClick={handleSendTest}
-              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-raised hover:bg-slate-700 text-xs font-semibold text-ink-soft border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Send className="h-3.5 w-3.5 text-sky-400" />
               <span>টেস্ট নোটিফিকেশন</span>
@@ -252,7 +252,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
               type="button"
               disabled={isScheduling}
               onClick={handleSyncReminders}
-              className="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-sky-950 text-xs font-bold text-white flex items-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/40"
+              className="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-500 disabled:bg-sky-950 text-xs font-bold text-ink flex items-center gap-1.5 transition-colors cursor-pointer shadow-lg shadow-sky-950/40"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isScheduling ? 'animate-spin' : ''}`} />
               <span>{isScheduling ? 'শিডিউল হচ্ছে...' : 'রিমাইন্ডার সিঙ্ক করুন'}</span>
@@ -261,7 +261,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             <button
               type="button"
               onClick={handleCancelAll}
-              className="px-2.5 py-1.5 rounded-xl bg-slate-900 hover:bg-rose-950/40 text-slate-400 hover:text-rose-400 border border-slate-800 text-xs font-semibold transition-colors cursor-pointer"
+              className="px-2.5 py-1.5 rounded-xl bg-surface hover:bg-rose-950/40 text-ink-muted hover:text-negative border border-edge text-xs font-semibold transition-colors cursor-pointer"
               title="সকল শিডিউল বাতিল করুন"
             >
               <XCircle className="h-3.5 w-3.5" />
@@ -273,8 +273,8 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
           <div
             className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
               feedback.type === 'success'
-                ? 'bg-emerald-950/40 border border-emerald-500/40 text-emerald-300'
-                : 'bg-rose-950/40 border border-rose-500/40 text-rose-300'
+                ? 'bg-emerald-950/40 border border-accent/40 text-accent-strong'
+                : 'bg-rose-950/40 border border-negative/40 text-negative'
             }`}
           >
             <span>{feedback.message}</span>
@@ -282,27 +282,27 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1 text-xs">
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
-            <span className="text-slate-400 text-[11px]">আসন্ন রিমাইন্ডার কিউ:</span>
-            <div className="text-lg font-bold text-white font-mono mt-0.5">
+          <div className="p-3 rounded-xl bg-canvas/60 border border-edge/80">
+            <span className="text-ink-muted text-[11px]">আসন্ন রিমাইন্ডার কিউ:</span>
+            <div className="text-lg font-bold text-ink font-mono mt-0.5">
               {pendingReminders.length} টি
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
-            <span className="text-slate-400 text-[11px]">রিকারিং বিল:</span>
+          <div className="p-3 rounded-xl bg-canvas/60 border border-edge/80">
+            <span className="text-ink-muted text-[11px]">রিকারিং বিল:</span>
             <div className="text-lg font-bold text-sky-400 font-mono mt-0.5">
               {pendingReminders.filter((r) => r.category === 'recurring').length} টি
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
-            <span className="text-slate-400 text-[11px]">ডিপিএস ও লোন:</span>
-            <div className="text-lg font-bold text-amber-400 font-mono mt-0.5">
+          <div className="p-3 rounded-xl bg-canvas/60 border border-edge/80">
+            <span className="text-ink-muted text-[11px]">ডিপিএস ও লোন:</span>
+            <div className="text-lg font-bold text-warning font-mono mt-0.5">
               {pendingReminders.filter((r) => r.category === 'dps' || r.category === 'loan').length} টি
             </div>
           </div>
-          <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80">
-            <span className="text-slate-400 text-[11px]">এফডি/সঞ্চয়পত্র ম্যাচিউরিটি:</span>
-            <div className="text-lg font-bold text-emerald-400 font-mono mt-0.5">
+          <div className="p-3 rounded-xl bg-canvas/60 border border-edge/80">
+            <span className="text-ink-muted text-[11px]">এফডি/সঞ্চয়পত্র ম্যাচিউরিটি:</span>
+            <div className="text-lg font-bold text-accent-strong font-mono mt-0.5">
               {pendingReminders.filter((r) => r.category === 'fd').length} টি
             </div>
           </div>
@@ -311,54 +311,54 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
 
       {/* KPI Metric Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
+        <div className="rounded-xl border border-edge bg-surface/40 p-4">
+          <div className="flex items-center justify-between text-ink-muted text-xs font-mono">
             <span>Total Active Alerts</span>
-            <Bell className="h-4 w-4 text-slate-400" />
+            <Bell className="h-4 w-4 text-ink-muted" />
           </div>
-          <div className="text-2xl font-bold text-white font-mono mt-2">
+          <div className="text-2xl font-bold text-ink font-mono mt-2">
             {systemAlerts.length}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">Live background evaluations</div>
+          <div className="text-[11px] text-ink-faint mt-1">Live background evaluations</div>
         </div>
 
-        <div className="rounded-xl border border-rose-500/20 bg-rose-950/10 p-4">
-          <div className="flex items-center justify-between text-rose-400 text-xs font-mono">
+        <div className="rounded-xl border border-negative/20 bg-rose-950/10 p-4">
+          <div className="flex items-center justify-between text-negative text-xs font-mono">
             <span>Critical / Overdue</span>
-            <AlertCircle className="h-4 w-4 text-rose-400" />
+            <AlertCircle className="h-4 w-4 text-negative" />
           </div>
-          <div className="text-2xl font-bold text-rose-400 font-mono mt-2">
+          <div className="text-2xl font-bold text-negative font-mono mt-2">
             {criticalCount}
           </div>
-          <div className="text-[11px] text-rose-400/80 mt-1">Immediate action recommended</div>
+          <div className="text-[11px] text-negative/80 mt-1">Immediate action recommended</div>
         </div>
 
-        <div className="rounded-xl border border-amber-500/20 bg-amber-950/10 p-4">
-          <div className="flex items-center justify-between text-amber-400 text-xs font-mono">
+        <div className="rounded-xl border border-warning/20 bg-amber-950/10 p-4">
+          <div className="flex items-center justify-between text-warning text-xs font-mono">
             <span>Upcoming Dues (7 Days)</span>
-            <Calendar className="h-4 w-4 text-amber-400" />
+            <Calendar className="h-4 w-4 text-warning" />
           </div>
-          <div className="text-2xl font-bold text-amber-400 font-mono mt-2">
+          <div className="text-2xl font-bold text-warning font-mono mt-2">
             {duesCount}
           </div>
-          <div className="text-[11px] text-amber-400/80 mt-1">DPS, EMIs & Standing Orders</div>
+          <div className="text-[11px] text-warning/80 mt-1">DPS, EMIs & Standing Orders</div>
         </div>
 
-        <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4">
-          <div className="flex items-center justify-between text-slate-400 text-xs font-mono">
+        <div className="rounded-xl border border-edge bg-surface/40 p-4">
+          <div className="flex items-center justify-between text-ink-muted text-xs font-mono">
             <span>Budget Warnings</span>
-            <PieChart className="h-4 w-4 text-slate-400" />
+            <PieChart className="h-4 w-4 text-ink-muted" />
           </div>
-          <div className="text-2xl font-bold text-slate-200 font-mono mt-2">
+          <div className="text-2xl font-bold text-ink-soft font-mono mt-2">
             {budgetWarningsCount}
           </div>
-          <div className="text-[11px] text-slate-500 mt-1">&gt;80% threshold or exceeded</div>
+          <div className="text-[11px] text-ink-faint mt-1">&gt;80% threshold or exceeded</div>
         </div>
       </div>
 
       {/* Filter Navigation Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-800 pb-3 text-xs font-mono">
-        <div className="flex items-center gap-1.5 text-slate-500 mr-2">
+      <div className="flex flex-wrap items-center gap-2 border-b border-edge pb-3 text-xs font-mono">
+        <div className="flex items-center gap-1.5 text-ink-faint mr-2">
           <Filter className="h-3.5 w-3.5" />
           <span>Filter:</span>
         </div>
@@ -374,8 +374,8 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             onClick={() => setActiveFilter(tab.key as any)}
             className={`px-3 py-1.5 rounded-lg transition-colors ${
               activeFilter === tab.key
-                ? 'bg-emerald-500/20 text-emerald-300 font-medium border border-emerald-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-accent/20 text-accent-strong font-medium border border-accent/30'
+                : 'text-ink-muted hover:text-ink-soft hover:bg-surface'
             }`}
           >
             {tab.label}
@@ -386,12 +386,12 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
       {/* Alerts Feed List */}
       <div className="space-y-3">
         {filteredAlerts.length === 0 ? (
-          <div className="rounded-xl border border-slate-800/80 bg-slate-900/30 p-12 text-center space-y-3">
-            <div className="mx-auto w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div className="rounded-xl border border-edge/80 bg-surface/30 p-12 text-center space-y-3">
+            <div className="mx-auto w-12 h-12 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-strong">
               <CheckCircle2 className="h-6 w-6" />
             </div>
-            <div className="text-sm font-semibold text-white">All Clear! No Pending Alerts</div>
-            <p className="text-xs text-slate-400 max-w-md mx-auto">
+            <div className="text-sm font-semibold text-ink">All Clear! No Pending Alerts</div>
+            <p className="text-xs text-ink-muted max-w-md mx-auto">
               Your accounts are healthy, all upcoming installments are up to date, and no budget limits have been breached.
             </p>
           </div>
@@ -401,36 +401,36 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
               key={alert.id}
               className={`rounded-xl border p-4 sm:p-5 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
                 alert.severity === 'critical'
-                  ? 'border-rose-500/40 bg-rose-950/20'
+                  ? 'border-negative/40 bg-rose-950/20'
                   : alert.severity === 'warning'
-                  ? 'border-amber-500/40 bg-amber-950/20'
+                  ? 'border-warning/40 bg-amber-950/20'
                   : alert.severity === 'success'
-                  ? 'border-emerald-500/40 bg-emerald-950/20'
-                  : 'border-slate-800 bg-slate-900/50'
+                  ? 'border-accent/40 bg-emerald-950/20'
+                  : 'border-edge bg-surface/50'
               }`}
             >
               <div className="flex items-start gap-3.5">
-                <div className="p-2 rounded-lg bg-slate-950/60 border border-slate-800 shrink-0 mt-0.5">
+                <div className="p-2 rounded-lg bg-canvas/60 border border-edge shrink-0 mt-0.5">
                   {getCategoryIcon(alert.category)}
                 </div>
                 <div className="space-y-1">
                   <div className="flex flex-wrap items-center gap-2">
                     {getSeverityBadge(alert.severity)}
                     {alert.dueDate && (
-                      <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
+                      <span className="text-[11px] font-mono text-ink-muted flex items-center gap-1">
                         <Calendar className="h-3 w-3" /> Due: {alert.dueDate}
                       </span>
                     )}
                     {alert.amount !== undefined && (
-                      <span className="text-[11px] font-mono text-emerald-400 font-semibold flex items-center gap-0.5">
+                      <span className="text-[11px] font-mono text-accent-strong font-semibold flex items-center gap-0.5">
                         ৳{alert.amount.toLocaleString()}
                       </span>
                     )}
                   </div>
-                  <h3 className="text-sm font-bold text-white tracking-tight">
+                  <h3 className="text-sm font-bold text-ink tracking-tight">
                     {alert.title}
                   </h3>
-                  <p className="text-xs text-slate-300 leading-relaxed max-w-3xl">
+                  <p className="text-xs text-ink-soft leading-relaxed max-w-3xl">
                     {alert.message}
                   </p>
                 </div>
@@ -440,13 +440,13 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
               <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
                 <button
                   onClick={() => dismissAlert(alert.id)}
-                  className="px-3 py-1.5 rounded-lg text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition-colors"
+                  className="px-3 py-1.5 rounded-lg text-xs font-mono text-ink-muted hover:text-ink-soft hover:bg-raised/80 transition-colors"
                 >
                   Dismiss
                 </button>
                 <button
                   onClick={() => handleAction(alert)}
-                  className="px-4 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs font-mono flex items-center gap-1.5 transition-colors shadow-sm"
+                  className="px-4 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-semibold text-xs font-mono flex items-center gap-1.5 transition-colors shadow-sm"
                 >
                   <span>{alert.actionLabel || 'Take Action'}</span>
                   <ArrowRight className="h-3.5 w-3.5" />

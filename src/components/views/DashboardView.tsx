@@ -129,16 +129,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {systemAlerts.length > 0 && (
         <div
           onClick={() => onNavigate('notifications')}
-          className="rounded-xl border border-amber-500/30 bg-amber-950/20 hover:bg-amber-950/30 p-4 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
+          className="rounded-xl border border-warning/30 bg-amber-950/20 hover:bg-amber-950/30 p-4 transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
         >
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/20 text-warning border border-amber-500/30 shrink-0">
+            <div className="p-2 rounded-lg bg-warning/20 text-warning border border-warning/30 shrink-0">
               <Bell className="h-4 w-4" />
             </div>
             <div>
               <div className="text-ink font-bold flex items-center gap-2">
                 <span>{systemAlerts.length} Active Financial Reminders</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-warning border border-amber-500/30">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-warning/20 text-warning border border-warning/30">
                   {systemAlerts.filter((a) => a.severity === 'critical').length} Critical / Overdue
                 </span>
               </div>
@@ -588,10 +588,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       {/* BAJUS Gold & FX Rates Quick Callout */}
       <div
         onClick={() => onNavigate('gold_fx')}
-        className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-amber-500/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-amber-950/20"
+        className="rounded-2xl border border-warning/30 bg-gradient-to-r from-amber-950/40 via-slate-900 to-slate-950 p-5 cursor-pointer hover:border-warning/60 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-lg shadow-amber-950/20"
       >
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shrink-0">
+          <div className="p-3 rounded-xl bg-warning/20 text-warning border border-warning/30 shrink-0">
             <Coins className="h-6 w-6" />
           </div>
           <div>
@@ -599,7 +599,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               <h3 className="text-sm font-bold text-ink tracking-tight">
                 {t('dashBajusGoldRatesForeignExchange')}
               </h3>
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono font-bold border border-amber-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-warning/20 text-warning text-[10px] font-mono font-bold border border-warning/30">
                 LIVE 22K ৳1,43,526
               </span>
             </div>
@@ -609,7 +609,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-amber-400 text-xs font-semibold shrink-0">
+        <div className="flex items-center gap-2 text-warning text-xs font-semibold shrink-0">
           <span>{t('dashViewGoldFxRates')}</span>
           <ArrowRight className="h-4 w-4" />
         </div>

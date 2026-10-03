@@ -206,10 +206,10 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
       {notification && (
         <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg flex items-center justify-between shadow-sm animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+            <CheckCircle2 className="w-5 h-5 text-accent-deep" />
             <span className="text-sm font-medium">{notification}</span>
           </div>
-          <button onClick={() => setNotification(null)} className="text-emerald-600 hover:text-emerald-800">
+          <button onClick={() => setNotification(null)} className="text-accent-deep hover:text-emerald-800">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -225,7 +225,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
           <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
             Portfolio Analytics, XIRR & TWR
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
+          <p className="text-xs sm:text-sm text-ink-faint mt-0.5">
             Institutional Money-Weighted XIRR on external cash flows, Time-Weighted Return (TWR), and DSEX Index benchmarking.
           </p>
         </div>
@@ -284,15 +284,15 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
       </div>
 
       {/* Live Financial API Connection Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+      <div className="bg-surface border border-edge rounded-xl p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
         <div className="flex items-center gap-2">
           <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-strong opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
           </span>
-          <span className="font-mono text-emerald-400 font-semibold">StockChartBD / DSE Financial API Integrated</span>
-          <span className="text-slate-500">·</span>
-          <span className="text-slate-400">
+          <span className="font-mono text-accent-strong font-semibold">StockChartBD / DSE Financial API Integrated</span>
+          <span className="text-ink-faint">·</span>
+          <span className="text-ink-muted">
             {marketApiStatus ? `Last Synced: ${marketApiStatus.lastSync} (${marketApiStatus.count} securities)` : 'Ready to fetch live DSE LTP & calculate real-time XIRR / TWR'}
           </span>
         </div>
@@ -311,7 +311,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* 1. Annualized XIRR */}
         <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs relative overflow-hidden">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
+          <div className="flex items-center justify-between text-ink-faint mb-2">
             <div className="flex items-center gap-1.5">
               <span className="text-xs font-semibold uppercase tracking-wider">Investor Return</span>
               <span className="text-[10px] bg-indigo-100 text-indigo-700 font-bold px-1.5 py-0.5 rounded">XIRR</span>
@@ -321,82 +321,82 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
           <div className="flex items-baseline gap-2">
             <span
               className={`text-xl sm:text-2xl font-bold tracking-tight ${
-                portfolioPerformanceMetrics.xirrPct >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                portfolioPerformanceMetrics.xirrPct >= 0 ? 'text-accent-deep' : 'text-rose-600'
               }`}
             >
               {portfolioPerformanceMetrics.xirrPct >= 0 ? '+' : ''}
               {portfolioPerformanceMetrics.xirrPct.toFixed(2)}%
             </span>
-            <span className="text-xs text-slate-500 font-medium">p.a. (XIRR)</span>
+            <span className="text-xs text-ink-faint font-medium">p.a. (XIRR)</span>
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-ink-faint mt-2">
             Money-weighted return solving NPV = 0 across external deposits and terminal value.
           </p>
         </div>
 
         {/* 2. Cumulative TWR */}
         <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
+          <div className="flex items-center justify-between text-ink-faint mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Manager / Asset Return</span>
             <Scale className="w-4 h-4 text-cyan-600" />
           </div>
           <div className="flex items-baseline gap-2">
             <span
               className={`text-xl sm:text-2xl font-bold tracking-tight ${
-                portfolioPerformanceMetrics.twrPct >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                portfolioPerformanceMetrics.twrPct >= 0 ? 'text-accent-deep' : 'text-rose-600'
               }`}
             >
               {portfolioPerformanceMetrics.twrPct >= 0 ? '+' : ''}
               {portfolioPerformanceMetrics.twrPct.toFixed(2)}%
             </span>
-            <span className="text-xs text-slate-500 font-medium">Cumulative TWR</span>
+            <span className="text-xs text-ink-faint font-medium">Cumulative TWR</span>
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-ink-faint mt-2">
             Time-Weighted Return neutralizes the timing and scale of deposits & withdrawals.
           </p>
         </div>
 
         {/* 3. DSEX Benchmark Alpha */}
         <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
+          <div className="flex items-center justify-between text-ink-faint mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">DSEX Benchmark Alpha</span>
             <BarChart3 className="w-4 h-4 text-amber-600" />
           </div>
           <div className="flex items-baseline gap-2">
             <span
               className={`text-xl sm:text-2xl font-bold tracking-tight ${
-                portfolioPerformanceMetrics.alphaPct >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                portfolioPerformanceMetrics.alphaPct >= 0 ? 'text-accent-deep' : 'text-rose-600'
               }`}
             >
               {portfolioPerformanceMetrics.alphaPct >= 0 ? '+' : ''}
               {portfolioPerformanceMetrics.alphaPct.toFixed(2)}%
             </span>
-            <span className="text-xs text-slate-500 font-medium">
+            <span className="text-xs text-ink-faint font-medium">
               vs DSEX ({portfolioPerformanceMetrics.dsexTwrPct >= 0 ? '+' : ''}
               {portfolioPerformanceMetrics.dsexTwrPct.toFixed(2)}%)
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-2">
+          <p className="text-xs text-ink-faint mt-2">
             Excess return over the Dhaka Stock Exchange benchmark since inception.
           </p>
         </div>
 
         {/* 4. Total P/L Synthesis */}
         <div className="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
+          <div className="flex items-center justify-between text-ink-faint mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Total Net Profit</span>
-            <Coins className="w-4 h-4 text-emerald-600" />
+            <Coins className="w-4 h-4 text-accent-deep" />
           </div>
           <div className="flex items-baseline gap-2">
             <span
               className={`text-xl sm:text-2xl font-bold tracking-tight ${
-                portfolioPerformanceMetrics.totalNetProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                portfolioPerformanceMetrics.totalNetProfit >= 0 ? 'text-accent-deep' : 'text-rose-600'
               }`}
             >
               ৳{portfolioPerformanceMetrics.totalNetProfit.toLocaleString(undefined, { minimumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="flex items-center gap-3 text-xs text-slate-500 mt-2">
+          <div className="flex items-center gap-3 text-xs text-ink-faint mt-2">
             <span>Realized: +৳{portfolioPerformanceMetrics.totalRealizedGain.toLocaleString()}</span>
             <span>•</span>
             <span>Unrealized: {portfolioPerformanceMetrics.totalUnrealizedGain >= 0 ? '+' : ''}৳{portfolioPerformanceMetrics.totalUnrealizedGain.toLocaleString()}</span>
@@ -412,7 +412,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             className={`pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'overview'
                 ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                : 'border-transparent text-ink-faint hover:text-slate-900'
             }`}
           >
             <BarChart3 className="w-4 h-4 shrink-0" />
@@ -424,7 +424,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             className={`pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'cashflows'
                 ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                : 'border-transparent text-ink-faint hover:text-slate-900'
             }`}
           >
             <ShieldCheck className="w-4 h-4 shrink-0" />
@@ -436,7 +436,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             className={`pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'subperiods'
                 ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                : 'border-transparent text-ink-faint hover:text-slate-900'
             }`}
           >
             <Scale className="w-4 h-4 shrink-0" />
@@ -448,7 +448,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             className={`pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'snapshots'
                 ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                : 'border-transparent text-ink-faint hover:text-slate-900'
             }`}
           >
             <Layers className="w-4 h-4 shrink-0" />
@@ -460,7 +460,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             className={`pb-3 text-xs sm:text-sm font-semibold border-b-2 transition-colors flex items-center gap-1.5 whitespace-nowrap ${
               activeTab === 'prices'
                 ? 'border-indigo-600 text-indigo-600'
-                : 'border-transparent text-slate-500 hover:text-slate-900'
+                : 'border-transparent text-ink-faint hover:text-slate-900'
             }`}
           >
             <Database className="w-4 h-4 shrink-0" />
@@ -478,7 +478,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                 <h2 className="text-sm sm:text-base font-bold text-slate-900">
                   Time-Weighted Performance vs DSEX Index (Indexed to 100.00)
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-ink-faint mt-0.5">
                   Both curves are re-based to 100.00 at inception date to eliminate external deposit distortion.
                 </p>
               </div>
@@ -490,7 +490,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                   <span className="text-slate-700">Portfolio TWR ({benchmarkComparisonData[benchmarkComparisonData.length - 1]?.portfolioIndexed ?? 100.0})</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-500"></span>
+                  <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-warning"></span>
                   <span className="text-slate-700">DSEX Benchmark ({benchmarkComparisonData[benchmarkComparisonData.length - 1]?.dsexIndexed ?? 100.0})</span>
                 </div>
               </div>
@@ -638,7 +638,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                     <tr key={pt.date} className="hover:bg-slate-50/70 transition-colors">
                       <td className="py-2.5 px-3 sm:px-4 font-medium text-slate-900 whitespace-nowrap">{pt.date}</td>
                       <td className="py-2.5 px-3 sm:px-4 font-semibold text-indigo-700">{pt.portfolioIndexed.toFixed(2)}</td>
-                      <td className="py-2.5 px-3 sm:px-4 font-semibold text-emerald-600">
+                      <td className="py-2.5 px-3 sm:px-4 font-semibold text-accent-deep">
                         {pt.portfolioCumulativeReturnPct >= 0 ? '+' : ''}
                         {pt.portfolioCumulativeReturnPct.toFixed(2)}%
                       </td>
@@ -704,7 +704,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                       <tr key={h.stockId} className="hover:bg-slate-50 transition-colors">
                         <td className="py-3 px-3 sm:px-4">
                           <div className="font-bold text-slate-900">{h.symbol}</div>
-                          <div className="text-xs text-slate-400 truncate max-w-[140px]">{h.companyName}</div>
+                          <div className="text-xs text-ink-muted truncate max-w-[140px]">{h.companyName}</div>
                         </td>
                         <td className="py-3 px-3 sm:px-4 text-xs font-medium text-slate-600">{h.sector}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-mono font-medium">{h.quantity.toLocaleString()}</td>
@@ -714,7 +714,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                         <td className="py-3 px-3 sm:px-4 text-right font-mono text-xs whitespace-nowrap">
                           <span
                             className={`font-semibold ${
-                              gain >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                              gain >= 0 ? 'text-accent-deep' : 'text-rose-600'
                             }`}
                           >
                             {gain >= 0 ? '+' : ''}৳{gain.toLocaleString()} ({retPct >= 0 ? '+' : ''}
@@ -784,7 +784,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                           </span>
                         </td>
                         <td className="py-3 px-3 sm:px-4 font-sans text-xs text-slate-800">{cf.description}</td>
-                        <td className="py-3 px-3 sm:px-4 font-sans text-xs text-slate-500">
+                        <td className="py-3 px-3 sm:px-4 font-sans text-xs text-ink-faint">
                           {isDeposit && 'External capital contribution (Negative flow)'}
                           {cf.type === 'withdrawal' && 'External capital returned (Positive flow)'}
                           {isTerminal && 'Current Equity Valuation + Broker Cash'}
@@ -795,7 +795,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                               cf.amount < 0
                                 ? 'text-rose-600'
                                 : cf.amount > 0
-                                ? 'text-emerald-600'
+                                ? 'text-accent-deep'
                                 : 'text-slate-600'
                             }
                           >
@@ -817,7 +817,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
               <div className="text-xs font-mono text-slate-600 space-y-1">
                 <div>Equation: &Sigma; [ CF_i / (1 + r)^( &Delta;t_i / 365.25 ) ] = 0</div>
                 <div>Solved Annualized Rate: <strong>+{portfolioPerformanceMetrics.xirrPct.toFixed(2)}%</strong></div>
-                <div className="text-slate-500 text-[11px]">
+                <div className="text-ink-faint text-[11px]">
                   Status: Exact convergence achieved within 1e-6 error tolerance.
                 </div>
               </div>
@@ -834,7 +834,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Time-Weighted Return Sub-Periods Delineation
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-ink-faint mt-0.5">
                 Sub-periods are established at every external deposit or withdrawal event to measure asset appreciation free of cash flow timing bias.
               </p>
             </div>
@@ -864,7 +864,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                       <td className="py-3 px-3 sm:px-4 text-right font-bold text-slate-900">৳{sp.endValue.toLocaleString()}</td>
                       <td className="py-3 px-3 sm:px-4 text-right font-bold">
                         <span
-                          className={sp.subPeriodReturnPct >= 0 ? 'text-emerald-600' : 'text-rose-600'}
+                          className={sp.subPeriodReturnPct >= 0 ? 'text-accent-deep' : 'text-rose-600'}
                         >
                           {sp.subPeriodReturnPct >= 0 ? '+' : ''}
                           {sp.subPeriodReturnPct.toFixed(2)}%
@@ -890,7 +890,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
               <div>
                 <h3 className="text-sm sm:text-base font-bold text-slate-900">Historical Portfolio Snapshots</h3>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="text-xs text-ink-faint mt-0.5">
                   Point-in-time valuation records storing Invested Capital, Stock Market Value, and Broker Cash.
                 </p>
               </div>
@@ -928,14 +928,14 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                         <td className="py-3 px-3 sm:px-4 text-right text-slate-700">৳{snap.brokerCashBalance.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-bold text-indigo-700">৳{totalVal.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right whitespace-nowrap">
-                          <span className={snap.unrealizedPl >= 0 ? 'text-emerald-600' : 'text-rose-600'}>
+                          <span className={snap.unrealizedPl >= 0 ? 'text-accent-deep' : 'text-rose-600'}>
                             {snap.unrealizedPl >= 0 ? '+' : ''}৳{snap.unrealizedPl.toLocaleString()}
                           </span>
                         </td>
                         <td className="py-3 px-3 sm:px-4 text-right font-bold whitespace-nowrap">
                           <span
                             className={
-                              (snap.cumulativeTwr ?? 0) >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                              (snap.cumulativeTwr ?? 0) >= 0 ? 'text-accent-deep' : 'text-rose-600'
                             }
                           >
                             {(snap.cumulativeTwr ?? 0) >= 0 ? '+' : ''}
@@ -960,7 +960,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h3 className="text-sm sm:text-base font-bold text-slate-900">Stock Closing Price History</h3>
-                <p className="text-xs text-slate-500 mt-0.5">Authoritative historical closes feeding valuation views</p>
+                <p className="text-xs text-ink-faint mt-0.5">Authoritative historical closes feeding valuation views</p>
               </div>
 
               {/* Stock Selector */}
@@ -1004,13 +1004,13 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                   {filteredStockHistory.map((p) => (
                     <tr key={p.id} className="hover:bg-slate-50 transition-colors">
                       <td className="py-2 px-3 sm:px-4 font-bold text-slate-900 whitespace-nowrap">{p.priceDate}</td>
-                      <td className="py-2 px-3 sm:px-4 text-slate-500">{p.source}</td>
+                      <td className="py-2 px-3 sm:px-4 text-ink-faint">{p.source}</td>
                       <td className="py-2 px-3 sm:px-4 text-right font-bold text-slate-900">৳{p.closePrice.toFixed(2)}</td>
                     </tr>
                   ))}
                   {filteredStockHistory.length === 0 && (
                     <tr>
-                      <td colSpan={3} className="py-6 text-center text-xs text-slate-400">
+                      <td colSpan={3} className="py-6 text-center text-xs text-ink-muted">
                         No historical closes recorded yet for this security.
                       </td>
                     </tr>
@@ -1025,7 +1025,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm sm:text-base font-bold text-slate-900">DSEX Benchmark Index</h3>
-                <p className="text-xs text-slate-500">Dhaka Stock Exchange Broad Index</p>
+                <p className="text-xs text-ink-faint">Dhaka Stock Exchange Broad Index</p>
               </div>
               <button
                 onClick={() => setIsAddBenchModalOpen(true)}

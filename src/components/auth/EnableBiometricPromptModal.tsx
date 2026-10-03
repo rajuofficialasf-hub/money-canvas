@@ -53,12 +53,12 @@ export const EnableBiometricPromptModal: React.FC = () => {
       onClick={() => setPromptEnableModal(false)}
     >
       <div
-        className="relative w-full max-w-sm rounded-3xl border border-slate-800 bg-slate-950 p-6 sm:p-7 shadow-2xl text-center space-y-5 animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-sm rounded-3xl border border-edge bg-canvas p-6 sm:p-7 shadow-2xl text-center space-y-5 animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={() => setPromptEnableModal(false)}
-          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
+          className="absolute top-4 right-4 p-2 rounded-xl text-ink-muted hover:text-ink hover:bg-surface transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
@@ -66,20 +66,20 @@ export const EnableBiometricPromptModal: React.FC = () => {
         {/* Header Icon */}
         <div className="flex flex-col items-center space-y-3 pt-2">
           <div className="relative">
-            <div className="absolute -inset-2 bg-emerald-500/20 rounded-full blur-md" />
-            <div className="relative p-4 rounded-2xl bg-slate-900 border border-emerald-500/40 text-emerald-400 shadow-inner">
-              <Fingerprint className="h-10 w-10 text-emerald-400" />
+            <div className="absolute -inset-2 bg-accent/20 rounded-full blur-md" />
+            <div className="relative p-4 rounded-2xl bg-surface border border-accent/40 text-accent-strong shadow-inner">
+              <Fingerprint className="h-10 w-10 text-accent-strong" />
             </div>
           </div>
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-semibold">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-accent/10 text-accent-strong text-[10px] font-semibold">
               <Sparkles className="h-3 w-3" />
               <span>Fast & Secure Access</span>
             </div>
-            <h3 className="text-lg font-bold text-white tracking-tight">
+            <h3 className="text-lg font-bold text-ink tracking-tight">
               Enable {biometryTypeName} Lock?
             </h3>
-            <p className="text-xs text-slate-400 leading-relaxed max-w-xs mx-auto">
+            <p className="text-xs text-ink-muted leading-relaxed max-w-xs mx-auto">
               Protect your personal financial records and unlock Money Canvas instantly using your biometric credential.
             </p>
           </div>
@@ -87,16 +87,16 @@ export const EnableBiometricPromptModal: React.FC = () => {
 
         {/* Error notification */}
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2 text-left">
-            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-rose-400" />
+          <div className="p-3 rounded-xl bg-negative/10 border border-negative/30 text-negative text-xs flex items-start gap-2 text-left">
+            <AlertCircle className="h-4 w-4 shrink-0 mt-0.5 text-negative" />
             <span className="leading-tight flex-1">{errorMsg}</span>
           </div>
         )}
 
         {/* Success notification */}
         {success && (
-          <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center justify-center gap-2 font-medium">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <div className="p-3 rounded-xl bg-accent/10 border border-accent/30 text-accent-strong text-xs flex items-center justify-center gap-2 font-medium">
+            <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             <span>{biometryTypeName} lock enabled successfully!</span>
           </div>
         )}
@@ -107,7 +107,7 @@ export const EnableBiometricPromptModal: React.FC = () => {
             type="button"
             disabled={isLoading || success}
             onClick={handleEnable}
-            className="w-full py-3 px-4 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer"
+            className="w-full py-3 px-4 rounded-2xl bg-accent hover:bg-accent-strong active:bg-accent-deep text-accent-ink font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer"
           >
             {isLoading ? (
               <>
@@ -126,7 +126,7 @@ export const EnableBiometricPromptModal: React.FC = () => {
             type="button"
             disabled={isLoading}
             onClick={() => setPromptEnableModal(false)}
-            className="w-full py-2.5 px-4 rounded-xl text-slate-400 hover:text-slate-200 text-xs transition-colors"
+            className="w-full py-2.5 px-4 rounded-xl text-ink-muted hover:text-ink-soft text-xs transition-colors"
           >
             Not now, maybe later
           </button>

@@ -1029,7 +1029,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             onClick={() => setActiveTab('expense')}
             className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors ${
               activeTab === 'expense'
-                ? 'bg-rose-950/80 text-rose-300 border border-rose-800/40 shadow-sm'
+                ? 'bg-rose-950/80 text-negative border border-rose-800/40 shadow-sm'
                 : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
@@ -1040,7 +1040,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             onClick={() => setActiveTab('income')}
             className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors ${
               activeTab === 'income'
-                ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/40 shadow-sm'
+                ? 'bg-emerald-950/80 text-accent-strong border border-emerald-800/40 shadow-sm'
                 : 'text-ink-muted hover:text-ink-soft'
             }`}
           >

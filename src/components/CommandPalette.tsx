@@ -324,25 +324,25 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   );
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-100">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-100">
       <div
-        className="w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900 shadow-2xl overflow-hidden font-sans text-xs"
+        className="w-full max-w-xl rounded-2xl border border-edge bg-surface shadow-2xl overflow-hidden font-sans text-xs"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 border-b border-slate-800 px-4 py-3 bg-slate-950">
-          <Search className="h-4 w-4 text-slate-500 shrink-0" />
+        <div className="flex items-center gap-3 border-b border-edge px-4 py-3 bg-canvas">
+          <Search className="h-4 w-4 text-ink-faint shrink-0" />
           <input
             type="text"
             placeholder="Search commands, navigate, or switch profiles..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
-            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none"
+            className="w-full bg-transparent text-sm text-ink placeholder-slate-500 focus:outline-none"
           />
           <button
             onClick={onClose}
-            className="p-1 text-slate-500 hover:text-white rounded"
+            className="p-1 text-ink-faint hover:text-ink rounded"
             aria-label="Close Command Palette"
           >
             <X className="h-4 w-4" />
@@ -354,7 +354,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           {/* Navigation Links */}
           {filteredNav.length > 0 && (
             <div>
-              <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-500">
+              <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-ink-faint">
                 Go to Screen
               </div>
               <div className="space-y-0.5">
@@ -367,13 +367,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                         onNavigate(item.id);
                         onClose();
                       }}
-                      className="w-full text-left px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-800 hover:text-white flex items-center justify-between transition-colors"
+                      className="w-full text-left px-3 py-2 rounded-lg text-ink-soft hover:bg-raised hover:text-ink flex items-center justify-between transition-colors"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                        <Icon className="h-3.5 w-3.5 text-ink-muted shrink-0" />
                         <span>{item.title}</span>
                       </div>
-                      <span className="text-[10px] font-mono text-slate-500">{item.section}</span>
+                      <span className="text-[10px] font-mono text-ink-faint">{item.section}</span>
                     </button>
                   );
                 })}
@@ -384,7 +384,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           {/* Profiles Switcher */}
           {filteredProfiles.length > 0 && (
             <div>
-              <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-slate-500">
+              <div className="px-3 py-1 text-[10px] font-mono uppercase tracking-wider text-ink-faint">
                 Switch Profile
               </div>
               <div className="space-y-0.5">
@@ -397,19 +397,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                     }}
                     className={`w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors ${
                       p.id === user.id
-                        ? 'bg-emerald-950/40 text-emerald-300 font-medium'
-                        : 'text-slate-300 hover:bg-slate-800'
+                        ? 'bg-emerald-950/40 text-accent-strong font-medium'
+                        : 'text-ink-soft hover:bg-raised'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <User className="h-3.5 w-3.5 text-slate-400 shrink-0" />
+                      <User className="h-3.5 w-3.5 text-ink-muted shrink-0" />
                       <div>
                         <div>{p.fullName}</div>
-                        <div className="text-[10px] text-slate-500 font-mono">{p.email}</div>
+                        <div className="text-[10px] text-ink-faint font-mono">{p.email}</div>
                       </div>
                     </div>
                     {p.id === user.id && (
-                      <span className="text-[10px] font-mono text-emerald-400">Active</span>
+                      <span className="text-[10px] font-mono text-accent-strong">Active</span>
                     )}
                   </button>
                 ))}
@@ -419,7 +419,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         </div>
 
         {/* Footer shortcuts helper */}
-        <div className="border-t border-slate-800 bg-slate-950/80 px-4 py-2 flex items-center justify-between text-[11px] font-mono text-slate-500">
+        <div className="border-t border-edge bg-canvas/80 px-4 py-2 flex items-center justify-between text-[11px] font-mono text-ink-faint">
           <span>Navigate with mouse or ESC to close</span>
           <span>Weathfolio OS</span>
         </div>

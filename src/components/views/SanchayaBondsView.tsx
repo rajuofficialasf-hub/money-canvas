@@ -362,24 +362,24 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Top Banner Card */}
-      <div className="rounded-2xl border border-slate-800 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
+      <div className="rounded-2xl border border-edge bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 p-6 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-          <Landmark className="h-48 w-48 text-emerald-400" />
+          <Landmark className="h-48 w-48 text-accent-strong" />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1.5 font-mono">
+            <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1.5 font-mono">
               <ShieldCheck className="h-4 w-4" />
               <span>National Savings Directorate & Bangladesh Bank Securities</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] border border-emerald-500/20">
+              <span className="px-2 py-0.5 rounded-full bg-accent/10 text-accent-strong text-[10px] border border-accent/20">
                 {isBn ? '১০০% সার্বভৌম নিরাপত্তা' : '100% Sovereign Security'}
               </span>
             </div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight flex items-center gap-2.5">
               <span>{isBn ? 'সঞ্চয়পত্র, ট্রেজারি বন্ড ও সুকুক ট্র্যাকার' : 'Sanchayapatra, Treasury Bonds & Sukuk Tracker'}</span>
             </h1>
-            <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
+            <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
               {isBn
                 ? 'পরিবার সঞ্চয়পত্র, ৩-মাস অন্তর মুনাফা, পেনশনার সঞ্চয়পত্র, বাংলাদেশ ব্যাংক ট্রেজারি বন্ড (BGTB) ও সরকারি ইসলামিক সুকুকের মাসিক ক্যাশফ্লো এবং এনবিআর কর রেয়াত ব্যবস্থাপনা।'
                 : 'Track monthly cash flows, maturity schedules, AIT deductions, and NBR tax rebates for Poribar, 3-Month, Pensioner, Bangladesh Bank Treasury Bonds (BGTB), and Govt Islamic Sukuk.'}
@@ -407,7 +407,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 variant="secondary"
                 title={isBn ? 'আয়কর রিটার্ন প্ল্যানারে দেখুন' : 'View in NBR Tax Planner'}
               >
-                <FileText className="h-4 w-4 text-emerald-400" />
+                <FileText className="h-4 w-4 text-accent-strong" />
                 <span>{isBn ? 'আয়কর রিটার্নে দেখুন' : 'View in Tax Return'}</span>
               </Button>
             )}
@@ -416,62 +416,62 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
 
         {/* Action notification toast */}
         {actionFeedback && (
-          <div className="mt-4 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-in fade-in">
-            <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+          <div className="mt-4 p-3 rounded-xl bg-accent/10 border border-accent/30 text-accent-strong text-xs flex items-center gap-2 animate-in fade-in">
+            <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             <span>{actionFeedback}</span>
           </div>
         )}
 
         {/* High-level KPIs */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-slate-800/80">
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-edge/80">
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">
               {isBn ? 'মোট বিনিয়োগকৃত মূলধন' : 'Total Invested Principal'}
             </div>
-            <div className="text-base sm:text-lg font-bold text-white mt-0.5">
+            <div className="text-base sm:text-lg font-bold text-ink mt-0.5">
               {formatBDT(totalPrincipal)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1 flex items-center gap-1">
+            <div className="text-[10px] text-ink-muted mt-1 flex items-center gap-1">
               <span>{isBn ? 'সক্রিয় সার্টিফিকেট:' : 'Active Certificates:'}</span>
-              <span className="font-semibold text-emerald-400">
+              <span className="font-semibold text-accent-strong">
                 {activeBonds.length} {isBn ? 'টি' : ''}
               </span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">
               {isBn ? 'বাৎসরিক নিট প্যাসিভ ইনকাম' : 'Annual Net Passive Income'}
             </div>
-            <div className="text-base sm:text-lg font-bold text-emerald-400 mt-0.5">
+            <div className="text-base sm:text-lg font-bold text-accent-strong mt-0.5">
               {formatBDT(annualMetrics.netAnnual)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
+            <div className="text-[10px] text-ink-muted mt-1">
               {isBn ? 'গ্রস মুনাফা: ' : 'Gross Profit: '}
-              <span className="text-slate-300 font-semibold">{formatBDT(annualMetrics.grossAnnual)}</span>
+              <span className="text-ink-soft font-semibold">{formatBDT(annualMetrics.grossAnnual)}</span>
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-            <div className="text-[11px] font-mono text-slate-400">
+          <div className="bg-surface/80 border border-edge p-3.5 rounded-xl">
+            <div className="text-[11px] font-mono text-ink-muted">
               {isBn ? 'গড় মাসিক ক্যাশফ্লো (EFT)' : 'Avg Monthly Cash Flow (EFT)'}
             </div>
             <div className="text-base sm:text-lg font-bold text-sky-400 mt-0.5">
               {formatBDT(annualMetrics.monthlyNetAverage)}
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
+            <div className="text-[10px] text-ink-muted mt-1">
               {isBn ? 'সরাসরি ব্যাংক অ্যাকাউন্টে জমা' : 'Direct bank credit via EFT'}
             </div>
           </div>
 
-          <div className="bg-slate-900/80 border border-emerald-500/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
-            <div className="text-[11px] font-mono text-emerald-300">
+          <div className="bg-surface/80 border border-accent/40 p-3.5 rounded-xl bg-gradient-to-br from-emerald-950/30 to-slate-900/80">
+            <div className="text-[11px] font-mono text-accent-strong">
               {isBn ? 'গড় মুনাফার হার (Yield)' : 'Weighted Avg Yield'}
             </div>
-            <div className="text-base sm:text-lg font-bold text-white mt-0.5">
+            <div className="text-base sm:text-lg font-bold text-ink mt-0.5">
               {annualMetrics.weightedYield.toFixed(2)}%
             </div>
-            <div className="text-[10px] text-slate-400 mt-1">
+            <div className="text-[10px] text-ink-muted mt-1">
               {isBn ? 'সার্বভৌম জামানতযুক্ত আয়' : 'Sovereign guaranteed yield'}
             </div>
           </div>
@@ -479,13 +479,13 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-slate-900/90 border border-slate-800 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-xl bg-surface/90 border border-edge overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveTab('holdings')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
             activeTab === 'holdings'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <Layers className="h-3.5 w-3.5" />
@@ -500,8 +500,8 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           onClick={() => setActiveTab('calendar')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
             activeTab === 'calendar'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <CalendarClock className="h-3.5 w-3.5" />
@@ -512,8 +512,8 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           onClick={() => setActiveTab('calculator')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
             activeTab === 'calculator'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <Calculator className="h-3.5 w-3.5" />
@@ -524,8 +524,8 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           onClick={() => setActiveTab('rules')}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
             activeTab === 'rules'
-              ? 'bg-emerald-500 text-slate-950 shadow-md font-bold'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+              ? 'bg-accent text-accent-ink shadow-md font-bold'
+              : 'text-ink-soft hover:text-ink hover:bg-raised/60'
           }`}
         >
           <Info className="h-3.5 w-3.5" />
@@ -541,12 +541,12 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           {/* Sub Filter */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="text-xs text-slate-400">{isBn ? 'ক্যাটাগরি ফিল্টার:' : 'Category Filter:'}</span>
-              <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 p-1 rounded-lg text-xs">
+              <span className="text-xs text-ink-muted">{isBn ? 'ক্যাটাগরি ফিল্টার:' : 'Category Filter:'}</span>
+              <div className="flex items-center gap-1 bg-surface border border-edge p-1 rounded-lg text-xs">
                 <button
                   onClick={() => setCategoryFilter('all')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    categoryFilter === 'all' ? 'bg-slate-800 text-white font-bold' : 'text-slate-400 hover:text-white'
+                    categoryFilter === 'all' ? 'bg-raised text-ink font-bold' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
                   {isBn ? `সব (${activeBonds.length})` : `All (${activeBonds.length})`}
@@ -554,7 +554,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 <button
                   onClick={() => setCategoryFilter('sanchayapatra')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    categoryFilter === 'sanchayapatra' ? 'bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30' : 'text-slate-400 hover:text-white'
+                    categoryFilter === 'sanchayapatra' ? 'bg-accent/20 text-accent-strong font-bold border border-accent/30' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
                   {isBn ? 'সঞ্চয়পত্র' : 'Sanchayapatra'}
@@ -562,7 +562,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 <button
                   onClick={() => setCategoryFilter('treasury_bond')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    categoryFilter === 'treasury_bond' ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30' : 'text-slate-400 hover:text-white'
+                    categoryFilter === 'treasury_bond' ? 'bg-sky-500/20 text-sky-300 font-bold border border-sky-500/30' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
                   {isBn ? 'ট্রেজারি বন্ড (BGTB)' : 'Treasury Bonds (BGTB)'}
@@ -570,7 +570,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 <button
                   onClick={() => setCategoryFilter('islamic_sukuk')}
                   className={`px-2.5 py-1 rounded cursor-pointer ${
-                    categoryFilter === 'islamic_sukuk' ? 'bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30' : 'text-slate-400 hover:text-white'
+                    categoryFilter === 'islamic_sukuk' ? 'bg-warning/20 text-warning font-bold border border-warning/30' : 'text-ink-muted hover:text-ink'
                   }`}
                 >
                   {isBn ? 'ইসলামিক সুকুক' : 'Islamic Sukuk'}
@@ -578,9 +578,9 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               </div>
             </div>
 
-            <div className="text-xs text-slate-400 font-mono">
+            <div className="text-xs text-ink-muted font-mono">
               {isBn ? 'মোট ক্যাশফ্লো: ' : 'Total Cash Flow: '}
-              <span className="text-emerald-400 font-bold">
+              <span className="text-accent-strong font-bold">
                 {formatBDT(annualMetrics.netAnnual)} / {isBn ? 'বছর' : 'year'}
               </span>
             </div>
@@ -615,7 +615,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               return (
                 <div
                   key={bond.id}
-                  className="rounded-2xl border border-slate-800 bg-slate-900/70 p-5 space-y-4 hover:border-slate-700 transition-all flex flex-col justify-between"
+                  className="rounded-2xl border border-edge bg-surface/70 p-5 space-y-4 hover:border-slate-700 transition-all flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
@@ -624,86 +624,86 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase font-mono ${
                               bond.category === 'sanchayapatra'
-                                ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                ? 'bg-accent/20 text-accent-strong border border-accent/30'
                                 : bond.category === 'treasury_bond'
                                 ? 'bg-sky-500/20 text-sky-400 border border-sky-500/30'
-                                : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+                                : 'bg-warning/20 text-warning border border-warning/30'
                             }`}
                           >
                             {categoryBadge}
                           </span>
-                          <span className="text-xs text-slate-400 font-mono">#{bond.certificateNumber}</span>
+                          <span className="text-xs text-ink-muted font-mono">#{bond.certificateNumber}</span>
                         </div>
-                        <h3 className="text-base font-bold text-white mt-1">{bond.title}</h3>
-                        <p className="text-xs text-slate-400 mt-0.5 flex items-center gap-1.5">
-                          <Building2 className="h-3.5 w-3.5 text-slate-500" />
+                        <h3 className="text-base font-bold text-ink mt-1">{bond.title}</h3>
+                        <p className="text-xs text-ink-muted mt-0.5 flex items-center gap-1.5">
+                          <Building2 className="h-3.5 w-3.5 text-ink-faint" />
                           <span>{bond.issuer}</span>
                           {bond.issueOfficeBranch && <span>• {bond.issueOfficeBranch}</span>}
                         </p>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className="text-lg font-extrabold text-white font-mono">
+                        <div className="text-lg font-extrabold text-ink font-mono">
                           {formatBDT(bond.principalAmount)}
                         </div>
-                        <div className="text-xs font-semibold text-emerald-400">
+                        <div className="text-xs font-semibold text-accent-strong">
                           {bond.interestRate}% {isBn ? 'বার্ষিক' : 'p.a.'}
                         </div>
                       </div>
                     </div>
 
                     {/* Breakdown Box */}
-                    <div className="p-3 rounded-xl bg-slate-950 border border-slate-800/80 grid grid-cols-2 gap-3 text-xs font-mono">
+                    <div className="p-3 rounded-xl bg-canvas border border-edge/80 grid grid-cols-2 gap-3 text-xs font-mono">
                       <div>
-                        <span className="text-[10px] text-slate-400 block">
+                        <span className="text-[10px] text-ink-muted block">
                           {isBn ? 'প্রতি কিস্তিতে নিট জমা:' : 'Net Payout per Period:'}
                         </span>
-                        <span className="text-sm font-bold text-emerald-400">
+                        <span className="text-sm font-bold text-accent-strong">
                           {formatBDT(payout.netPerPeriod)}
                         </span>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">({freqLabel})</span>
+                        <span className="text-[10px] text-ink-muted block mt-0.5">({freqLabel})</span>
                       </div>
 
                       <div>
-                        <span className="text-[10px] text-slate-400 block">
+                        <span className="text-[10px] text-ink-muted block">
                           {isBn ? 'উৎসে কর (AIT):' : 'Source Tax (AIT):'}
                         </span>
-                        <span className="text-sm font-bold text-slate-300">
+                        <span className="text-sm font-bold text-ink-soft">
                           {bond.taxDeductionRate}%
                         </span>
-                        <span className="text-[10px] text-slate-400 block mt-0.5">
+                        <span className="text-[10px] text-ink-muted block mt-0.5">
                           {isBn ? 'কর্তন: ' : 'Deducted: '}{formatBDT(payout.taxPerPeriod)}
                         </span>
                       </div>
                     </div>
 
                     {/* Dates & Nominee */}
-                    <div className="space-y-1 text-xs text-slate-400">
+                    <div className="space-y-1 text-xs text-ink-muted">
                       <div className="flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
-                          <Calendar className="h-3.5 w-3.5 text-slate-500" />
+                          <Calendar className="h-3.5 w-3.5 text-ink-faint" />
                           {isBn ? 'ক্রয়: ' : 'Purchased: '}{bond.purchaseDate}
                         </span>
-                        <span className="flex items-center gap-1.5 font-medium text-slate-300">
-                          <Clock className="h-3.5 w-3.5 text-slate-500" />
+                        <span className="flex items-center gap-1.5 font-medium text-ink-soft">
+                          <Clock className="h-3.5 w-3.5 text-ink-faint" />
                           {isBn ? 'মেয়াদপূর্তি: ' : 'Maturity: '}{bond.maturityDate} ({bond.tenureYears} {isBn ? 'বছর' : 'years'})
                         </span>
                       </div>
 
                       {bond.nomineeName && (
-                        <div className="flex items-center justify-between pt-1 border-t border-slate-800/50 text-[11px]">
+                        <div className="flex items-center justify-between pt-1 border-t border-edge/50 text-[11px]">
                           <span>{isBn ? 'মনোনীত ব্যক্তি (Nominee):' : 'Nominee:'}</span>
-                          <span className="text-slate-300 font-semibold">{bond.nomineeName}</span>
+                          <span className="text-ink-soft font-semibold">{bond.nomineeName}</span>
                         </div>
                       )}
                     </div>
                   </div>
 
                   {/* Actions Footer */}
-                  <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+                  <div className="pt-3 border-t border-edge flex items-center justify-between gap-2">
                     <button
                       onClick={() => setEncashModalItem(bond)}
-                      className="px-3 py-1.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 text-xs font-semibold border border-amber-500/30 transition-colors flex items-center gap-1 cursor-pointer"
+                      className="px-3 py-1.5 rounded-lg bg-warning/10 hover:bg-warning/20 text-warning text-xs font-semibold border border-warning/30 transition-colors flex items-center gap-1 cursor-pointer"
                     >
                       <span>{isBn ? 'ভাঙ্গানোর হিসাব' : 'Encashment Calc'}</span>
                     </button>
@@ -711,7 +711,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleDeleteBond(bond.id)}
-                        className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                        className="p-1.5 rounded-lg text-ink-faint hover:text-negative hover:bg-negative/10 transition-colors cursor-pointer"
                         title={isBn ? 'সঞ্চয়পত্র রেকর্ড মুছুন' : 'Delete bond record'}
                       >
                         <Trash2 className="h-4 w-4" />
@@ -726,7 +726,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                             alert(isBn ? 'বর্তমান মেয়াদে কোনো বকেয়া মুনাফা নেই।' : 'No pending coupon payout for current period.');
                           }
                         }}
-                        className="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-sm transition-all flex items-center gap-1 cursor-pointer"
+                        className="px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-strong text-accent-ink font-bold text-xs shadow-sm transition-all flex items-center gap-1 cursor-pointer"
                       >
                         <Coins className="h-3.5 w-3.5" />
                         <span>{isBn ? 'মুনাফা এন্ট্রি' : 'Collect Profit'}</span>
@@ -739,12 +739,12 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           </div>
 
           {filteredBonds.length === 0 && (
-            <div className="text-center py-12 rounded-2xl border border-dashed border-slate-800 bg-slate-900/30">
+            <div className="text-center py-12 rounded-2xl border border-dashed border-edge bg-surface/30">
               <Landmark className="h-12 w-12 text-slate-600 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-slate-300">
+              <p className="text-sm font-semibold text-ink-soft">
                 {isBn ? 'কোনো সক্রিয় সঞ্চয়পত্র বা বন্ড পাওয়া যায়নি' : 'No active savings certificates or bonds found'}
               </p>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-ink-faint mt-1">
                 {isBn
                   ? 'উপরে "নতুন সঞ্চয়পত্র / বন্ড যুক্ত করুন" বাটনে ক্লিক করে যোগ করুন।'
                   : 'Click the "Add Sanchayapatra / Bond" button above to add your investments.'}
@@ -758,33 +758,33 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
       {/* TAB 2: 12-MONTH CASHFLOW CALENDAR */}
       {/* ----------------------------------------------------------------- */}
       {activeTab === 'calendar' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+          <div className="flex items-center justify-between border-b border-edge pb-3">
             <div>
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <CalendarClock className="h-4 w-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                <CalendarClock className="h-4 w-4 text-accent-strong" />
                 <span>{isBn ? 'আসন্ন মুনাফা জমা শিডিউল (Next 12 Months Cashflow)' : 'Upcoming Profit Schedule (Next 12 Months)'}</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-ink-muted mt-0.5">
                 {isBn
                   ? 'সরাসরি ব্যাংক অ্যাকাউন্টে ইএফটি মারফত জমা হওয়া প্রত্যাশিত মাসিক ও ত্রৈমাসিক মুনাফা।'
                   : 'Expected monthly, quarterly, and semi-annual profits credited directly via BEFTN/EFT.'}
               </p>
             </div>
-            <span className="text-xs font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">
+            <span className="text-xs font-mono font-bold text-accent-strong bg-accent/10 px-2.5 py-1 rounded-lg border border-accent/20">
               {isBn ? `মোট ১২ মাসের কিস্তি: ${masterSchedule.length} টি` : `Total 12-Month Installments: ${masterSchedule.length}`}
             </span>
           </div>
 
           {masterSchedule.length === 0 ? (
-            <div className="text-center py-10 text-slate-500 text-xs">
+            <div className="text-center py-10 text-ink-faint text-xs">
               {isBn ? 'কোনো আসন্ন কিস্তি বা কুপন শিডিউল নেই।' : 'No upcoming coupon or profit installments found.'}
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 uppercase text-[10px]">
+                  <tr className="border-b border-edge text-ink-muted uppercase text-[10px]">
                     <th className="py-2.5 px-3">{isBn ? 'তারিখ' : 'Date'}</th>
                     <th className="py-2.5 px-3">{isBn ? 'স্কিম ও সার্টিফিকেট' : 'Scheme & Certificate'}</th>
                     <th className="py-2.5 px-3">{isBn ? 'ক্যাটাগরি' : 'Category'}</th>
@@ -794,28 +794,28 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                     <th className="py-2.5 px-3 text-center">{isBn ? 'অ্যাকশন' : 'Action'}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 text-slate-200">
+                <tbody className="divide-y divide-edge/60 text-ink-soft">
                   {masterSchedule.map((sched) => {
                     const parentBond = activeBonds.find((b) => b.id === sched.investmentId);
                     return (
-                      <tr key={sched.id} className="hover:bg-slate-800/40 transition-colors">
-                        <td className="py-3 px-3 font-bold text-white whitespace-nowrap">
-                          <span className="px-2 py-1 rounded bg-slate-950 border border-slate-800">
+                      <tr key={sched.id} className="hover:bg-raised/40 transition-colors">
+                        <td className="py-3 px-3 font-bold text-ink whitespace-nowrap">
+                          <span className="px-2 py-1 rounded bg-canvas border border-edge">
                             {sched.paymentDate}
                           </span>
                         </td>
                         <td className="py-3 px-3">
-                          <div className="font-sans font-bold text-white">{sched.schemeTitle}</div>
-                          <div className="text-[10px] text-slate-400 font-mono">#{parentBond?.certificateNumber}</div>
+                          <div className="font-sans font-bold text-ink">{sched.schemeTitle}</div>
+                          <div className="text-[10px] text-ink-muted font-mono">#{parentBond?.certificateNumber}</div>
                         </td>
                         <td className="py-3 px-3">
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold ${
                               sched.category === 'sanchayapatra'
-                                ? 'bg-emerald-500/10 text-emerald-400'
+                                ? 'bg-accent/10 text-accent-strong'
                                 : sched.category === 'treasury_bond'
                                 ? 'bg-sky-500/10 text-sky-400'
-                                : 'bg-amber-500/10 text-amber-400'
+                                : 'bg-warning/10 text-warning'
                             }`}
                           >
                             {sched.category === 'sanchayapatra'
@@ -825,13 +825,13 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                               : (isBn ? 'ইসলামিক সুকুক' : 'Sukuk')}
                           </span>
                         </td>
-                        <td className="py-3 px-3 text-right text-slate-300">
+                        <td className="py-3 px-3 text-right text-ink-soft">
                           {formatBDT(sched.grossProfit)}
                         </td>
-                        <td className="py-3 px-3 text-right text-rose-400">
+                        <td className="py-3 px-3 text-right text-negative">
                           - {formatBDT(sched.taxDeducted)}
                         </td>
-                        <td className="py-3 px-3 text-right font-bold text-emerald-400 text-sm">
+                        <td className="py-3 px-3 text-right font-bold text-accent-strong text-sm">
                           {formatBDT(sched.netProfit)}
                         </td>
                         <td className="py-3 px-3 text-center">
@@ -841,7 +841,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                                 setCollectModalItem({ item: parentBond, schedule: sched });
                               }
                             }}
-                            className="px-2.5 py-1 rounded bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-[10px] font-bold transition-all cursor-pointer"
+                            className="px-2.5 py-1 rounded bg-raised hover:bg-accent hover:text-accent-ink text-ink-soft text-[10px] font-bold transition-all cursor-pointer"
                           >
                             {isBn ? 'জমা হয়েছে' : 'Mark Collected'}
                           </button>
@@ -862,13 +862,13 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
       {activeTab === 'calculator' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left: Scheme Comparison Calculator */}
-          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Calculator className="h-4 w-4 text-emerald-400" />
+          <div className="lg:col-span-6 rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                <Calculator className="h-4 w-4 text-accent-strong" />
                 <span>{isBn ? 'সঞ্চয়পত্র ও বন্ড রিটার্ন সিমুলেটর' : 'Savings Certificate & Bond Return Simulator'}</span>
               </h3>
-              <span className="text-[10px] text-emerald-400 font-mono">
+              <span className="text-[10px] text-accent-strong font-mono">
                 {isBn ? 'সর্বশেষ সরকারি রেট' : 'Latest Official Govt Rates'}
               </span>
             </div>
@@ -906,34 +906,34 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 const out = calculatePeriodicPayout(parseFloat(principalAmount) || 0, rate, freq, tax);
 
                 return (
-                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 font-mono text-xs mt-4">
-                    <div className="flex items-center justify-between text-slate-300">
+                  <div className="p-4 rounded-xl bg-canvas border border-edge space-y-3 font-mono text-xs mt-4">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>{isBn ? 'বাৎসরিক মুনাফা হার:' : 'Annual Profit Rate:'}</span>
-                      <span className="font-bold text-white">{rate}%</span>
+                      <span className="font-bold text-ink">{rate}%</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>{isBn ? 'প্রদেয় উৎসে কর (AIT):' : 'Applicable Source Tax (AIT):'}</span>
-                      <span className="font-bold text-amber-400">
+                      <span className="font-bold text-warning">
                         {tax}% ({isBn ? 'ধারা ১২৪' : 'Section 124'})
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>{isBn ? 'প্রতি কিস্তিতে গ্রস মুনাফা:' : 'Gross Profit per Period:'}</span>
-                      <span className="font-bold text-white">{formatBDT(out.grossPerPeriod)}</span>
+                      <span className="font-bold text-ink">{formatBDT(out.grossPerPeriod)}</span>
                     </div>
-                    <div className="flex items-center justify-between text-slate-300">
+                    <div className="flex items-center justify-between text-ink-soft">
                       <span>{isBn ? 'কিস্তিতে কর কর্তন:' : 'Tax Deducted per Period:'}</span>
-                      <span className="font-bold text-rose-400">- {formatBDT(out.taxPerPeriod)}</span>
+                      <span className="font-bold text-negative">- {formatBDT(out.taxPerPeriod)}</span>
                     </div>
-                    <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-sm">
-                      <span className="text-emerald-300 font-bold">
+                    <div className="pt-2 border-t border-edge flex items-center justify-between text-sm">
+                      <span className="text-accent-strong font-bold">
                         {isBn ? 'প্রতি কিস্তিতে নিট জমা (EFT):' : 'Net Deposit per Period (EFT):'}
                       </span>
-                      <span className="text-lg font-extrabold text-emerald-400">{formatBDT(out.netPerPeriod)}</span>
+                      <span className="text-lg font-extrabold text-accent-strong">{formatBDT(out.netPerPeriod)}</span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <div className="flex items-center justify-between text-[11px] text-ink-muted">
                       <span>{isBn ? 'বাৎসরিক নিট মোট প্যাসিভ আয়:' : 'Total Annual Net Passive Income:'}</span>
-                      <span className="font-bold text-white">{formatBDT(out.annualNet)}</span>
+                      <span className="font-bold text-ink">{formatBDT(out.annualNet)}</span>
                     </div>
                   </div>
                 );
@@ -942,40 +942,40 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           </div>
 
           {/* Right: Pre-Mature Encashment Rules & Guide */}
-          <div className="lg:col-span-6 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-amber-400" />
+          <div className="lg:col-span-6 rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-edge pb-3">
+              <h3 className="text-sm font-bold text-ink flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-warning" />
                 <span>{isBn ? 'মেয়াদপূর্ব ভাঙ্গানোর নিয়মাবলী (Encashment Rules)' : 'Pre-Mature Encashment Rules & Penalties'}</span>
               </h3>
-              <span className="text-[10px] text-amber-400 font-mono">
+              <span className="text-[10px] text-warning font-mono">
                 {isBn ? 'জাতীয় সঞ্চয় অধিদপ্তর' : 'National Savings Directorate'}
               </span>
             </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-ink-muted leading-relaxed">
               {isBn
                 ? 'সঞ্চয়পত্রের মেয়াদ পূর্ণ হওয়ার আগে ভাঙ্গালে বছরভিত্তিক রিডিউসড মুনাফা প্রযোজ্য হয়। ইতিপূর্বে অতিরিক্ত উত্তোলিত মুনাফা মূলধন থেকে সমন্বয় করা হয়:'
                 : 'Encashing savings certificates before full maturity applies a lower tenure-based rate. Previously drawn excess profit is adjusted from principal refund:'}
             </p>
 
             <div className="space-y-2 text-xs font-mono">
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
-                <span className="text-amber-400 font-bold block mb-1">
+              <div className="p-2.5 rounded-lg bg-canvas border border-edge/80">
+                <span className="text-warning font-bold block mb-1">
                   {isBn ? '১ম বছর পূর্ণ হওয়ার আগে ভাঙ্গালে:' : 'Encashment before completing 1st year:'}
                 </span>
-                <span className="text-slate-300 text-[11px]">
+                <span className="text-ink-soft text-[11px]">
                   {isBn
                     ? 'কোনো মুনাফা প্রাপ্য হবে না। ইতোপূর্বে যে মুনাফা তোলা হয়েছে তা সরাসরি মূলধন থেকে কেটে রাখা হবে।'
                     : 'No profit is earned. Any previously collected monthly profits will be fully deducted from the principal refund.'}
                 </span>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
-                <span className="text-emerald-400 font-bold block mb-1">
+              <div className="p-2.5 rounded-lg bg-canvas border border-edge/80">
+                <span className="text-accent-strong font-bold block mb-1">
                   {isBn ? 'পরিবার সঞ্চয়পত্র (৫ বছর মেয়াদী):' : 'Poribar Sanchayapatra (5-Year Tenure):'}
                 </span>
-                <ul className="text-slate-300 text-[11px] space-y-1 list-disc pl-4">
+                <ul className="text-ink-soft text-[11px] space-y-1 list-disc pl-4">
                   <li>{isBn ? '১ম বছর শেষ হলে: ৯.৫০% হারে' : 'After Year 1: 9.50% rate'}</li>
                   <li>{isBn ? '২য় বছর শেষ হলে: ১০.০০% হারে' : 'After Year 2: 10.00% rate'}</li>
                   <li>{isBn ? '৩য় বছর শেষ হলে: ১০.৫০% হারে' : 'After Year 3: 10.50% rate'}</li>
@@ -984,11 +984,11 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 </ul>
               </div>
 
-              <div className="p-2.5 rounded-lg bg-slate-950 border border-slate-800/80">
+              <div className="p-2.5 rounded-lg bg-canvas border border-edge/80">
                 <span className="text-sky-400 font-bold block mb-1">
                   {isBn ? '৩-মাস অন্তর মুনাফাভিত্তিক সঞ্চয়পত্র (৩ বছর):' : '3-Month Profit-Bearing Sanchayapatra (3-Year):'}
                 </span>
-                <ul className="text-slate-300 text-[11px] space-y-1 list-disc pl-4">
+                <ul className="text-ink-soft text-[11px] space-y-1 list-disc pl-4">
                   <li>{isBn ? '১ম বছর শেষ হলে: ১০.০০% হারে' : 'After Year 1: 10.00% rate'}</li>
                   <li>{isBn ? '২য় বছর শেষ হলে: ১০.৫০% হারে' : 'After Year 2: 10.50% rate'}</li>
                   <li>{isBn ? 'পূর্ণ ৩ বছর মেয়াদে: ১১.০৪% হারে' : 'At full 3-year maturity: 11.04% rate'}</li>
@@ -1003,17 +1003,17 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
       {/* TAB 4: OFFICIAL GUIDELINES & TAX RULES */}
       {/* ----------------------------------------------------------------- */}
       {activeTab === 'rules' && (
-        <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-6">
-          <div className="border-b border-slate-800 pb-4">
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-emerald-400" />
+        <div className="rounded-2xl border border-edge bg-surface/60 p-6 space-y-6">
+          <div className="border-b border-edge pb-4">
+            <h3 className="text-base font-bold text-ink flex items-center gap-2">
+              <ShieldCheck className="h-5 w-5 text-accent-strong" />
               <span>
                 {isBn
                   ? 'জাতীয় সঞ্চয়পত্র ও সরকারি বন্ডের অফিশিয়াল নির্দেশিকা ও এনবিআর কর আইন'
                   : 'Official Sanchayapatra & Treasury Bonds Guidelines & NBR Tax Rules'}
               </span>
             </h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+            <p className="text-xs text-ink-muted mt-1 leading-relaxed">
               {isBn
                 ? 'বাংলাদেশ ব্যাংক, জাতীয় সঞ্চয় অধিদপ্তর ও অর্থ মন্ত্রণালয়ের সর্বশেষ প্রজ্ঞাপন অনুযায়ী বিনিয়োগের বিধিমালা।'
                 : 'Regulatory investment guidelines per latest gazettes of Bangladesh Bank, National Savings Directorate & Ministry of Finance.'}
@@ -1023,16 +1023,16 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
             {/* Investment Limits */}
             <div className="space-y-3">
-              <h4 className="font-bold text-emerald-400 uppercase text-[11px] tracking-wider flex items-center gap-1.5">
+              <h4 className="font-bold text-accent-strong uppercase text-[11px] tracking-wider flex items-center gap-1.5">
                 <Landmark className="h-4 w-4" />
                 <span>{isBn ? 'বিনিয়োগের সর্বোচ্চ সীমা (Investment Ceiling)' : 'Investment Ceiling & Eligibility'}</span>
               </h4>
-              <div className="space-y-2 text-slate-300">
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+              <div className="space-y-2 text-ink-soft">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? 'একক ও যৌথ সর্বোচ্চ সীমা:' : 'Single & Joint Investment Limits:'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn ? (
                       <>
                         • একজন বিনিয়োগকারী একক নামে সঞ্চয়পত্রে সর্বোচ্চ ৳ ৫০,০০,০০০ (পঞ্চাশ লাখ) পর্যন্ত বিনিয়োগ করতে পারেন।<br />
@@ -1047,22 +1047,22 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? 'পরিবার সঞ্চয়পত্র যোগ্যতা:' : 'Poribar Sanchayapatra Eligibility:'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn
                       ? '১৮ বছর বা তদূর্ধ্ব বয়সের যেকোনো বাংলাদেশী নারী, শারীরিক প্রতিবন্ধী (পুরুষ/নারী) অথবা ৬৫ বছর ও তদূর্ধ্ব বয়সের যেকোনো নাগরিক।'
                       : 'Any Bangladeshi female citizen aged 18+, physically challenged citizens (male/female), or senior citizens aged 65+.'}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? 'ট্রেজারি বন্ড (BGTB) সীমা:' : 'Treasury Bond (BGTB) Limits:'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn
                       ? 'বাংলাদেশ ব্যাংক ট্রেজারি বন্ডে কোনো ব্যক্তি বিনিয়োগকারীর জন্য কোনো সর্বোচ্চ সীমা নেই। ন্যূনতম ১ লাখ টাকা থেকে শুরু করে যেকোনো অংক বিনিয়োগ সম্ভব।'
                       : 'No maximum ceiling for individual retail investors in Bangladesh Govt Treasury Bonds (BGTB). Minimum investment starts from BDT 1,00,000 with unlimited upper capacity.'}
@@ -1077,23 +1077,23 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                 <FileText className="h-4 w-4" />
                 <span>{isBn ? 'এনবিআর আয়কর রেয়াত ও সম্পদ বিবরণী (IT-10B)' : 'NBR Tax Rebate & Wealth Statement (IT-10B)'}</span>
               </h4>
-              <div className="space-y-2 text-slate-300">
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+              <div className="space-y-2 text-ink-soft">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? '১৫% বিনিয়োগ কর রেয়াত (ধারা ৭৮):' : '15% Investment Tax Rebate (Section 78):'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn
                       ? 'আয়কর আইন ২০২৩-এর ষষ্ঠ তফসিল অংশ ৩ অনুযায়ী, বাৎসরিক সর্বোচ্চ ৳ ৫,০০,০০০ (পাঁচ লাখ) টাকার সঞ্চয়পত্র ক্রয় বিনিয়োগ কর রেয়াতের জন্য অনুমোদিত।'
                       : 'Under Income Tax Act 2023 Sixth Schedule Part 3, fresh annual purchase of savings certificates up to BDT 5,00,000 is eligible for 15% tax rebate.'}
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? 'উৎস করের হার (AIT):' : 'Source Tax Rates (AIT):'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn ? (
                       <>
                         • মোট বিনিয়োগ ৫ লাখ টাকা পর্যন্ত হলে মুনাফার ওপর ৫% উৎসে কর কর্তন হয়।<br />
@@ -1110,11 +1110,11 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800">
-                  <div className="font-bold text-white">
+                <div className="p-3 rounded-xl bg-canvas border border-edge">
+                  <div className="font-bold text-ink">
                     {isBn ? 'আইটি-১০বি সম্পদ বিবরণীতে প্রদর্শন:' : 'Reporting in IT-10B Wealth Statement:'}
                   </div>
-                  <div className="text-[11px] text-slate-400 mt-1">
+                  <div className="text-[11px] text-ink-muted mt-1">
                     {isBn
                       ? 'আপনার ক্রয়কৃত সঞ্চয়পত্র ও সরকারি বন্ডের মূলধন আইটি-১০বি ফর্মে "Financial Assets / আর্থিক পরিসম্পদ" কলামে প্রদর্শন করা বাধ্যতামূলক।'
                       : 'All savings certificates and government bonds must be declared under "Financial Assets" in the NBR IT-10B Statement of Assets and Liabilities.'}
@@ -1134,7 +1134,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
         onClose={() => setIsAddModalOpen(false)}
         title={
           <span className="flex items-center gap-2">
-            <Landmark className="h-5 w-5 text-emerald-400" />
+            <Landmark className="h-5 w-5 text-accent-strong" />
             <span>{isBn ? 'নতুন সঞ্চয়পত্র / সরকারি বন্ড যুক্ত করুন' : 'Add New Sanchayapatra / Govt Bond'}</span>
           </span>
         }
@@ -1293,7 +1293,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
             </Field>
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
             <Button type="button" variant="secondary" onClick={() => setIsAddModalOpen(false)}>
               {isBn ? 'বাতিল' : 'Cancel'}
             </Button>
@@ -1312,7 +1312,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           isOpen={!!encashModalItem}
           onClose={() => setEncashModalItem(null)}
           title={
-            <span className="flex items-center gap-2 text-amber-400 text-sm font-bold">
+            <span className="flex items-center gap-2 text-warning text-sm font-bold">
               <AlertTriangle className="h-5 w-5" />
               <span>{isBn ? 'মেয়াদপূর্ব ভাঙ্গানোর হিসাব (Pre-Mature Encashment)' : 'Pre-Mature Encashment Calculation'}</span>
             </span>
@@ -1328,16 +1328,16 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
 
               return (
                 <div className="space-y-3 text-xs font-mono">
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-                    <div className="text-white font-bold">{encashModalItem.title}</div>
-                    <div className="text-slate-400 text-[11px]">
+                  <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1.5">
+                    <div className="text-ink font-bold">{encashModalItem.title}</div>
+                    <div className="text-ink-muted text-[11px]">
                       {isBn
                         ? `সার্টিফিকেট: #${encashModalItem.certificateNumber} • মূলধন: ${formatBDT(encashModalItem.principalAmount)}`
                         : `Certificate: #${encashModalItem.certificateNumber} • Principal: ${formatBDT(encashModalItem.principalAmount)}`}
                     </div>
                   </div>
 
-                  <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-2">
+                  <div className="p-3.5 rounded-xl bg-warning/10 border border-warning/30 text-amber-200 text-xs space-y-2">
                     <div className="font-bold flex items-center gap-1.5">
                       <span>
                         {isBn
@@ -1348,41 +1348,41 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
                     <p className="text-[11px] leading-relaxed">{encashCalc.notes}</p>
                   </div>
 
-                  <div className="space-y-2 text-slate-300">
+                  <div className="space-y-2 text-ink-soft">
                     <div className="flex items-center justify-between">
                       <span>{isBn ? 'বিনিয়োগকৃত দিন:' : 'Days Invested:'}</span>
-                      <span className="font-bold text-white">
+                      <span className="font-bold text-ink">
                         {encashCalc.investedDays} {isBn ? 'দিন' : 'days'}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>{isBn ? 'পুনর্নির্ধারিত মুনাফা হার:' : 'Revised Rate Applied:'}</span>
-                      <span className="font-bold text-emerald-400">{encashCalc.applicableRatePct}%</span>
+                      <span className="font-bold text-accent-strong">{encashCalc.applicableRatePct}%</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>{isBn ? 'প্রাপ্য মোট অর্জিত মুনাফা:' : 'Total Earned Profit Payable:'}</span>
-                      <span className="font-bold text-white">{formatBDT(encashCalc.totalProfitPayable)}</span>
+                      <span className="font-bold text-ink">{formatBDT(encashCalc.totalProfitPayable)}</span>
                     </div>
-                    <div className="flex items-center justify-between text-rose-400">
+                    <div className="flex items-center justify-between text-negative">
                       <span>{isBn ? 'অতিরিক্ত মুনাফা কর্তন:' : 'Excess Profit Deducted:'}</span>
                       <span className="font-bold">- {formatBDT(encashCalc.excessProfitToDeduct)}</span>
                     </div>
-                    <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-sm">
-                      <span className="font-bold text-white">{isBn ? 'কাউন্টারে ফেরতযোগ্য নিট অর্থ:' : 'Net Refund Payable at Counter:'}</span>
-                      <span className="font-extrabold text-emerald-400 text-base">
+                    <div className="pt-2 border-t border-edge flex items-center justify-between text-sm">
+                      <span className="font-bold text-ink">{isBn ? 'কাউন্টারে ফেরতযোগ্য নিট অর্থ:' : 'Net Refund Payable at Counter:'}</span>
+                      <span className="font-extrabold text-accent-strong text-base">
                         {formatBDT(encashCalc.netPayableAtCounter)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+                  <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
                     <Button type="button" variant="secondary" onClick={() => setEncashModalItem(null)}>
                       {isBn ? 'বাতিল' : 'Cancel'}
                     </Button>
                     <button
                       type="button"
                       onClick={handleConfirmEncashment}
-                      className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold shadow-md shadow-amber-500/20 cursor-pointer"
+                      className="px-4 py-2 rounded-xl bg-warning hover:bg-warning text-accent-ink text-xs font-bold shadow-md shadow-amber-500/20 cursor-pointer"
                     >
                       {isBn ? 'এখনই নগদায়ন নিশ্চিত করুন' : 'Confirm Encashment Now'}
                     </button>
@@ -1401,7 +1401,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           isOpen={!!collectModalItem}
           onClose={() => setCollectModalItem(null)}
           title={
-            <span className="flex items-center gap-2 text-emerald-400 text-sm font-bold">
+            <span className="flex items-center gap-2 text-accent-strong text-sm font-bold">
               <Coins className="h-5 w-5" />
               <span>{isBn ? 'মুনাফা প্রাপ্তি রেকর্ড (Collect Profit)' : 'Record Profit Collection'}</span>
             </span>
@@ -1409,37 +1409,37 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
           maxWidth="md"
         >
             <div className="space-y-3 text-xs font-mono">
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                <div className="font-bold text-white">{collectModalItem.item.title}</div>
-                <div className="text-[11px] text-slate-400">
+              <div className="p-3 rounded-xl bg-canvas border border-edge space-y-1">
+                <div className="font-bold text-ink">{collectModalItem.item.title}</div>
+                <div className="text-[11px] text-ink-muted">
                   {isBn ? 'তারিখ: ' : 'Date: '}{collectModalItem.schedule.paymentDate}
                 </div>
               </div>
 
-              <div className="space-y-2 text-slate-300">
+              <div className="space-y-2 text-ink-soft">
                 <div className="flex items-center justify-between">
                   <span>{isBn ? 'গ্রস মুনাফা:' : 'Gross Profit:'}</span>
-                  <span className="font-bold text-white">{formatBDT(collectModalItem.schedule.grossProfit)}</span>
+                  <span className="font-bold text-ink">{formatBDT(collectModalItem.schedule.grossProfit)}</span>
                 </div>
-                <div className="flex items-center justify-between text-rose-400">
+                <div className="flex items-center justify-between text-negative">
                   <span>{isBn ? 'উৎসে কর কর্তন (AIT):' : 'Source Tax Deducted (AIT):'}</span>
                   <span className="font-bold">- {formatBDT(collectModalItem.schedule.taxDeducted)}</span>
                 </div>
-                <div className="pt-2 border-t border-slate-800 flex items-center justify-between text-sm">
-                  <span className="font-bold text-emerald-300">{isBn ? 'ব্যাংক অ্যাকাউন্টে নিট জমা:' : 'Net Bank Credit:'}</span>
-                  <span className="font-extrabold text-emerald-400 text-base">
+                <div className="pt-2 border-t border-edge flex items-center justify-between text-sm">
+                  <span className="font-bold text-accent-strong">{isBn ? 'ব্যাংক অ্যাকাউন্টে নিট জমা:' : 'Net Bank Credit:'}</span>
+                  <span className="font-extrabold text-accent-strong text-base">
                     {formatBDT(collectModalItem.schedule.netProfit)}
                   </span>
                 </div>
               </div>
 
-              <p className="text-[11px] text-slate-400 leading-relaxed font-sans pt-1">
+              <p className="text-[11px] text-ink-muted leading-relaxed font-sans pt-1">
                 {isBn
                   ? 'নিশ্চিত করলে এই নিট অর্থ সরাসরি আপনার লিংক করা ব্যাংক অ্যাকাউন্টের ব্যালেন্সে ক্রেডিট হিসেবে যুক্ত হবে।'
                   : 'Confirming will credit this net profit directly to your linked bank account balance in the ledger.'}
               </p>
 
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-edge">
                 <Button type="button" variant="secondary" onClick={() => setCollectModalItem(null)}>
                   {isBn ? 'বাতিল' : 'Cancel'}
                 </Button>

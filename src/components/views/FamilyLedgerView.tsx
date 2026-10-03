@@ -309,8 +309,8 @@ export const FamilyLedgerView: React.FC = () => {
         permissions,
       });
     } else {
-      const colors = ['bg-emerald-600', 'bg-purple-600', 'bg-sky-600', 'bg-amber-600', 'bg-pink-600', 'bg-indigo-600'];
-      const chosenColor = `${colors[state.members.length % colors.length]} text-white`;
+      const colors = ['bg-accent-deep', 'bg-purple-600', 'bg-sky-600', 'bg-amber-600', 'bg-pink-600', 'bg-indigo-600'];
+      const chosenColor = `${colors[state.members.length % colors.length]} text-ink`;
 
       createFamilyMember({
         name: mbrName.trim(),
@@ -331,7 +331,7 @@ export const FamilyLedgerView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto py-2">
       {/* Simulation Member Switcher Bar */}
-      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-emerald-500/30 p-4 shadow-xl">
+      <div className="rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900 to-emerald-950/40 border border-accent/30 p-4 shadow-xl">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className={`w-11 h-11 rounded-xl flex items-center justify-center font-bold text-sm shadow-md ${activeMember.avatarColor}`}>
@@ -339,11 +339,11 @@ export const FamilyLedgerView: React.FC = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs uppercase font-mono tracking-wider text-emerald-400 font-semibold flex items-center gap-1">
+                <span className="text-xs uppercase font-mono tracking-wider text-accent-strong font-semibold flex items-center gap-1">
                   <UserCheck className="w-3.5 h-3.5" />
                   {isBn ? 'সদস্য পারমিশন সিমুলেটর (Active View)' : 'Active Simulation Member'}
                 </span>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-accent/20 text-accent-strong border border-accent/30">
                   {activeMember.role === 'family_head'
                     ? isBn ? 'পরিবারের প্রধান (অ্যাডমিন)' : 'Family Head (Admin)'
                     : activeMember.role === 'contributor'
@@ -353,13 +353,13 @@ export const FamilyLedgerView: React.FC = () => {
                     : isBn ? 'পরিদর্শক (Viewer)' : 'Viewer'}
                 </span>
               </div>
-              <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <h2 className="text-base font-bold text-ink flex items-center gap-2">
                 <span>{isBn ? activeMember.nameBn : activeMember.name}</span>
-                <span className="text-xs text-slate-400 font-normal">
+                <span className="text-xs text-ink-muted font-normal">
                   ({isBn ? `সম্পর্ক: ${activeMember.relation}` : `Relation: ${activeMember.relation}`})
                 </span>
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-ink-muted mt-0.5">
                 {activeMember.role === 'family_head'
                   ? isBn
                     ? 'সর্বোচ্চ অ্যাক্সেস: বাজেট তৈরি, সদস্য পরিচালনা, অনুমোদন ও যৌথ তহবিল নিয়ন্ত্রণ।'
@@ -373,16 +373,16 @@ export const FamilyLedgerView: React.FC = () => {
 
           {/* Quick Switch Dropdown */}
           <div className="flex flex-wrap items-center gap-2.5">
-            <span className="text-xs font-mono text-slate-400">{isBn ? 'অন্যান্য সদস্য হিসেবে ভিউ করুন:' : 'Switch simulated view:'}</span>
-            <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+            <span className="text-xs font-mono text-ink-muted">{isBn ? 'অন্যান্য সদস্য হিসেবে ভিউ করুন:' : 'Switch simulated view:'}</span>
+            <div className="flex items-center gap-1.5 bg-canvas p-1 rounded-xl border border-edge">
               {state.members.map((m) => (
                 <button
                   key={m.id}
                   onClick={() => switchActiveMember(m.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     activeMember.id === m.id
-                      ? 'bg-emerald-500 text-slate-950 font-bold shadow'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                      ? 'bg-accent text-accent-ink font-bold shadow'
+                      : 'text-ink-soft hover:text-ink hover:bg-surface'
                   }`}
                   title={`${m.name} (${m.role})`}
                 >
@@ -395,19 +395,19 @@ export const FamilyLedgerView: React.FC = () => {
       </div>
 
       {/* Main Header & Controls */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <HeartHandshake className="h-4 w-4" />
             <span>{isBn ? 'যৌথ সংসার খরচ ও ফ্যামিলি বাজেট' : 'Shared Household & Family Ledger'}</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink flex items-center gap-2">
             <span>{isBn ? state.familyNameBn : state.familyName}</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-800 text-slate-300 border border-slate-700">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-raised text-ink-soft border border-slate-700">
               BDT ৳
             </span>
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             {isBn
               ? 'পরিবারের সদস্যদের নির্দিষ্ট পারমিশন দিয়ে সংসার খরচ ট্র্যাকিং, যৌথ ক্যাশ বাক্স ও রিইমবার্সমেন্ট হিসাব।'
               : 'Multi-member household expense tracking with role-based limited permissions, joint cash pool, and reimbursements.'}
@@ -416,14 +416,14 @@ export const FamilyLedgerView: React.FC = () => {
 
         <div className="flex flex-wrap items-center gap-3">
           {/* Month Selector */}
-          <div className="flex items-center gap-2 border border-slate-800 bg-slate-900/60 rounded-xl px-3 py-2 text-xs font-mono text-slate-300">
-            <Calendar className="h-3.5 w-3.5 text-emerald-400" />
+          <div className="flex items-center gap-2 border border-edge bg-surface/60 rounded-xl px-3 py-2 text-xs font-mono text-ink-soft">
+            <Calendar className="h-3.5 w-3.5 text-accent-strong" />
             <span>{isBn ? 'মাস:' : 'Month:'}</span>
             <input
               type="month"
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="bg-transparent text-white border-0 focus:outline-none focus:ring-0 cursor-pointer font-bold"
+              className="bg-transparent text-ink border-0 focus:outline-none focus:ring-0 cursor-pointer font-bold"
             />
           </div>
 
@@ -455,8 +455,8 @@ export const FamilyLedgerView: React.FC = () => {
               {isBn ? 'সংসার খরচ যোগ করুন' : 'Record Expense'}
             </Button>
           ) : (
-            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-medium cursor-not-allowed">
-              <Lock className="w-3.5 h-3.5 text-slate-500" />
+            <div className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-surface border border-edge text-ink-muted text-xs font-medium cursor-not-allowed">
+              <Lock className="w-3.5 h-3.5 text-ink-faint" />
               <span>{isBn ? 'খরচ এন্ট্রি পারমিশন নেই' : 'Entry Restricted'}</span>
             </div>
           )}
@@ -466,30 +466,30 @@ export const FamilyLedgerView: React.FC = () => {
       {/* 4 Metric Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Joint Pool Balance */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+          <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'যৌথ তহবিল মোট ব্যালেন্স' : 'Joint Cash Pool Balance'}</span>
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <div className="w-8 h-8 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-strong">
               <Wallet className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-ink">
             ৳{totalJointBalance.toLocaleString()}
           </div>
-          <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-1">
+          <div className="text-[11px] text-ink-muted mt-1 flex items-center gap-1">
             <span>{state.jointAccounts.length} {isBn ? 'টি যৌথ অ্যাকাউন্ট (ক্যাশ ও ব্যাংক)' : 'joint accounts active'}</span>
           </div>
         </div>
 
         {/* Monthly Household Budget */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+          <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'মাসিক সংসার বাজেট' : 'Monthly Household Budget'}</span>
             <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
               <PieChart className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-ink">
             ৳{totalMonthlyAllocated.toLocaleString()}
           </div>
           <div className="text-[11px] text-purple-300/80 mt-1 flex items-center gap-1">
@@ -498,33 +498,33 @@ export const FamilyLedgerView: React.FC = () => {
         </div>
 
         {/* Monthly Spent & Progress */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+          <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'চলতি মাসে মোট ব্যয়' : 'Total Spent This Month'}</span>
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+            <div className="w-8 h-8 rounded-xl bg-warning/10 border border-warning/20 flex items-center justify-center text-warning">
               <TrendingDown className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-bold font-mono text-white">
+          <div className="text-2xl font-bold font-mono text-ink">
             ৳{totalMonthlySpent.toLocaleString()}
           </div>
           <div className="mt-2 space-y-1">
             <div className="flex items-center justify-between text-[10px] font-mono">
-              <span className={budgetProgressPct > 90 ? 'text-rose-400 font-bold' : 'text-slate-400'}>
+              <span className={budgetProgressPct > 90 ? 'text-negative font-bold' : 'text-ink-muted'}>
                 {budgetProgressPct.toFixed(1)}% {isBn ? 'ব্যয়িত' : 'used'}
               </span>
-              <span className="text-emerald-400">
+              <span className="text-accent-strong">
                 {isBn ? 'অবশিষ্ট' : 'Left'}: ৳{budgetRemaining.toLocaleString()}
               </span>
             </div>
-            <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-raised h-1.5 rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   budgetProgressPct > 100
-                    ? 'bg-rose-500'
+                    ? 'bg-negative'
                     : budgetProgressPct > 85
-                    ? 'bg-amber-500'
-                    : 'bg-emerald-500'
+                    ? 'bg-warning'
+                    : 'bg-accent'
                 }`}
                 style={{ width: `${Math.min(100, budgetProgressPct)}%` }}
               />
@@ -533,8 +533,8 @@ export const FamilyLedgerView: React.FC = () => {
         </div>
 
         {/* Reimbursement & Pending Approvals */}
-        <div className="p-4 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+          <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'রিইমবার্সমেন্ট ও অনুমোদন' : 'Reimbursements & Approval'}</span>
             <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
               <Receipt className="w-4 h-4" />
@@ -544,9 +544,9 @@ export const FamilyLedgerView: React.FC = () => {
             ৳{totalPendingReimbursements.toLocaleString()}
           </div>
           <div className="text-[11px] mt-1 flex items-center justify-between">
-            <span className="text-slate-400">{isBn ? 'সদস্যদের পাওনা' : 'Owed to members'}</span>
+            <span className="text-ink-muted">{isBn ? 'সদস্যদের পাওনা' : 'Owed to members'}</span>
             {pendingApprovalsCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-bold text-[10px] border border-amber-500/30">
+              <span className="px-1.5 py-0.5 rounded bg-warning/20 text-warning font-bold text-[10px] border border-warning/30">
                 {pendingApprovalsCount} {isBn ? 'অপেক্ষমাণ' : 'Pending'}
               </span>
             )}
@@ -555,13 +555,13 @@ export const FamilyLedgerView: React.FC = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-800 gap-2 overflow-x-auto pb-1 text-xs">
+      <div className="flex border-b border-edge gap-2 overflow-x-auto pb-1 text-xs">
         <button
           onClick={() => setActiveTab('overview')}
           className={`flex items-center gap-2 px-4 py-2.5 font-medium rounded-t-xl transition-all ${
             activeTab === 'overview'
-              ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-400'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-accent-strong border-b-2 border-accent-strong'
+              : 'text-ink-muted hover:text-ink-soft'
           }`}
         >
           <PieChart className="w-4 h-4" />
@@ -572,14 +572,14 @@ export const FamilyLedgerView: React.FC = () => {
           onClick={() => setActiveTab('expenses')}
           className={`flex items-center gap-2 px-4 py-2.5 font-medium rounded-t-xl transition-all relative ${
             activeTab === 'expenses'
-              ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-400'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-accent-strong border-b-2 border-accent-strong'
+              : 'text-ink-muted hover:text-ink-soft'
           }`}
         >
           <Receipt className="w-4 h-4" />
           <span>{isBn ? 'দৈনন্দিন খরচ খাতা' : 'Household Expenses Log'}</span>
           {pendingApprovalsCount > 0 && (
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-warning animate-pulse" />
           )}
         </button>
 
@@ -587,8 +587,8 @@ export const FamilyLedgerView: React.FC = () => {
           onClick={() => setActiveTab('accounts')}
           className={`flex items-center gap-2 px-4 py-2.5 font-medium rounded-t-xl transition-all ${
             activeTab === 'accounts'
-              ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-400'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-accent-strong border-b-2 border-accent-strong'
+              : 'text-ink-muted hover:text-ink-soft'
           }`}
         >
           <Building2 className="w-4 h-4" />
@@ -599,13 +599,13 @@ export const FamilyLedgerView: React.FC = () => {
           onClick={() => setActiveTab('members')}
           className={`flex items-center gap-2 px-4 py-2.5 font-medium rounded-t-xl transition-all ${
             activeTab === 'members'
-              ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-400'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-accent-strong border-b-2 border-accent-strong'
+              : 'text-ink-muted hover:text-ink-soft'
           }`}
         >
           <Users className="w-4 h-4" />
           <span>{isBn ? 'সদস্য ও পারমিশন কন্ট্রোল' : 'Members & Permissions'}</span>
-          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-slate-800 text-slate-300 font-mono">
+          <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-raised text-ink-soft font-mono">
             {state.members.length}
           </span>
         </button>
@@ -614,8 +614,8 @@ export const FamilyLedgerView: React.FC = () => {
           onClick={() => setActiveTab('reimbursements')}
           className={`flex items-center gap-2 px-4 py-2.5 font-medium rounded-t-xl transition-all ${
             activeTab === 'reimbursements'
-              ? 'bg-slate-900 text-emerald-400 border-b-2 border-emerald-400'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-surface text-accent-strong border-b-2 border-accent-strong'
+              : 'text-ink-muted hover:text-ink-soft'
           }`}
         >
           <HeartHandshake className="w-4 h-4" />
@@ -635,11 +635,11 @@ export const FamilyLedgerView: React.FC = () => {
           <div>
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <h3 className="text-base font-bold text-ink flex items-center gap-2">
                   <span>{isBn ? 'পারিবারিক খরচের খাত ও মাসিক লিমিট' : 'Household Category Budgets & Spending'}</span>
-                  <span className="text-xs font-mono font-normal text-slate-400">({selectedMonth})</span>
+                  <span className="text-xs font-mono font-normal text-ink-muted">({selectedMonth})</span>
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-ink-muted">
                   {isBn
                     ? 'প্রতিটি খাতের নির্ধারিত বাজেট সীমা, রিয়েল-টাইম খরচ এবং প্রগ্রেস বার।'
                     : 'Category allocation limits, actual spend, and warning threshold indicators.'}
@@ -647,7 +647,7 @@ export const FamilyLedgerView: React.FC = () => {
               </div>
 
               {canEditMasterBudget && (
-                <span className="text-xs text-emerald-400 font-mono flex items-center gap-1">
+                <span className="text-xs text-accent-strong font-mono flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5" />
                   {isBn ? 'বাজেট লিমিট এডিট করতে কার্ডে ক্লিক করুন' : 'Click limit to edit budget ceiling'}
                 </span>
@@ -671,25 +671,25 @@ export const FamilyLedgerView: React.FC = () => {
                     key={cat.key}
                     className={`rounded-2xl p-4 border transition-all ${
                       isOver
-                        ? 'bg-rose-950/20 border-rose-500/40'
+                        ? 'bg-rose-950/20 border-negative/40'
                         : isWarning
-                        ? 'bg-amber-950/20 border-amber-500/40'
-                        : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
+                        ? 'bg-amber-950/20 border-warning/40'
+                        : 'bg-surface/60 border-edge hover:border-slate-700'
                     }`}
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2.5">
                         <div
-                          className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-md"
+                          className="w-9 h-9 rounded-xl flex items-center justify-center text-ink shadow-md"
                           style={{ backgroundColor: cat.color }}
                         >
                           <Home className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-bold text-white leading-tight">
+                          <div className="text-sm font-bold text-ink leading-tight">
                             {isBn ? cat.nameBn : cat.nameEn}
                           </div>
-                          <div className="text-[10px] text-slate-400 line-clamp-1">
+                          <div className="text-[10px] text-ink-muted line-clamp-1">
                             {cat.descriptionBn}
                           </div>
                         </div>
@@ -703,7 +703,7 @@ export const FamilyLedgerView: React.FC = () => {
                             setExpPaidBy(activeMember.id);
                             setIsAddExpenseModalOpen(true);
                           }}
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-emerald-500/20 hover:text-emerald-400 text-slate-400 text-xs transition-all"
+                          className="p-1.5 rounded-lg bg-raised hover:bg-accent/20 hover:text-accent-strong text-ink-muted text-xs transition-all"
                           title={isBn ? 'এই খাতে খরচ যোগ করুন' : 'Add expense to this category'}
                         >
                           <Plus className="w-3.5 h-3.5" />
@@ -714,13 +714,13 @@ export const FamilyLedgerView: React.FC = () => {
                     {/* Spend vs Limit */}
                     <div className="flex items-baseline justify-between mb-1.5">
                       <div>
-                        <span className="text-lg font-bold font-mono text-white">৳{spent.toLocaleString()}</span>
-                        <span className="text-xs text-slate-400 font-mono ml-1">/ ৳{limit.toLocaleString()}</span>
+                        <span className="text-lg font-bold font-mono text-ink">৳{spent.toLocaleString()}</span>
+                        <span className="text-xs text-ink-muted font-mono ml-1">/ ৳{limit.toLocaleString()}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <span
                           className={`text-xs font-mono font-bold ${
-                            isOver ? 'text-rose-400' : isWarning ? 'text-amber-400' : 'text-emerald-400'
+                            isOver ? 'text-negative' : isWarning ? 'text-warning' : 'text-accent-strong'
                           }`}
                         >
                           {pct.toFixed(0)}%
@@ -729,21 +729,21 @@ export const FamilyLedgerView: React.FC = () => {
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden mb-2.5">
+                    <div className="w-full bg-raised h-2 rounded-full overflow-hidden mb-2.5">
                       <div
                         className={`h-full rounded-full transition-all duration-500 ${
-                          isOver ? 'bg-rose-500' : isWarning ? 'bg-amber-500' : 'bg-emerald-500'
+                          isOver ? 'bg-negative' : isWarning ? 'bg-warning' : 'bg-accent'
                         }`}
                         style={{ width: `${Math.min(100, pct)}%` }}
                       />
                     </div>
 
                     {/* Footer stats */}
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
+                    <div className="flex items-center justify-between text-[11px] text-ink-muted pt-1 border-t border-edge/80">
                       <span>
                         {spendData.approvedCount} {isBn ? 'টি খরচ এন্ট্রি' : 'transactions'}
                         {spendData.pendingCount > 0 && (
-                          <span className="text-amber-400 ml-1">
+                          <span className="text-warning ml-1">
                             ({spendData.pendingCount} {isBn ? 'অপেক্ষমাণ' : 'pending'})
                           </span>
                         )}
@@ -756,13 +756,13 @@ export const FamilyLedgerView: React.FC = () => {
                             setBudgetEditAmount(String(limit));
                             setIsBudgetEditModalOpen(true);
                           }}
-                          className="text-xs text-emerald-400 hover:underline flex items-center gap-1"
+                          className="text-xs text-accent-strong hover:underline flex items-center gap-1"
                         >
                           <Sliders className="w-3 h-3" />
                           <span>{isBn ? 'লিমিট পরিবর্তন' : 'Edit Limit'}</span>
                         </button>
                       ) : (
-                        <span className="text-slate-500 text-[10px]">
+                        <span className="text-ink-faint text-[10px]">
                           {isBn ? 'সীমা লকড' : 'Limit locked'}
                         </span>
                       )}
@@ -774,12 +774,12 @@ export const FamilyLedgerView: React.FC = () => {
           </div>
 
           {/* Member Contribution Scoreboard */}
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 p-5">
-            <h3 className="text-base font-bold text-white mb-1 flex items-center gap-2">
-              <Users className="w-4 h-4 text-emerald-400" />
+          <div className="rounded-2xl bg-surface/60 border border-edge p-5">
+            <h3 className="text-base font-bold text-ink mb-1 flex items-center gap-2">
+              <Users className="w-4 h-4 text-accent-strong" />
               <span>{isBn ? 'পারিবারিক তহবিল অবদান ও খরচ ট্র্যাকিং' : 'Member Contributions & Spending Breakdown'}</span>
             </h3>
-            <p className="text-xs text-slate-400 mb-4">
+            <p className="text-xs text-ink-muted mb-4">
               {isBn
                 ? 'পরিবারের কোন সদস্য যৌথ তহবিলে কত টাকা দিয়েছেন এবং ব্যক্তিগত পকেট থেকে সংসারের জন্য কত টাকা খরচ করেছেন।'
                 : 'Breakdown of who funded the joint pool and who paid out-of-pocket for family needs.'}
@@ -787,24 +787,24 @@ export const FamilyLedgerView: React.FC = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {memberSummaries.map((m) => (
-                <div key={m.memberId} className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2">
+                <div key={m.memberId} className="p-3.5 rounded-xl bg-canvas/70 border border-edge space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-xs text-white">
+                    <span className="font-bold text-xs text-ink">
                       {isBn ? m.memberNameBn : m.memberName}
                     </span>
-                    <span className="text-[10px] font-mono text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                    <span className="text-[10px] font-mono text-accent-strong px-1.5 py-0.5 rounded bg-accent/10 border border-accent/20">
                       {m.role}
                     </span>
                   </div>
 
                   <div className="space-y-1 text-xs">
-                    <div className="flex justify-between text-slate-400">
+                    <div className="flex justify-between text-ink-muted">
                       <span>{isBn ? 'যৌথ তহবিলে জমা:' : 'Contributed to Pool:'}</span>
-                      <span className="font-mono text-emerald-400 font-semibold">৳{m.totalContributed.toLocaleString()}</span>
+                      <span className="font-mono text-accent-strong font-semibold">৳{m.totalContributed.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between text-slate-400">
+                    <div className="flex justify-between text-ink-muted">
                       <span>{isBn ? 'ব্যক্তিগত পকেট থেকে ব্যয়:' : 'Direct Pocket Spend:'}</span>
-                      <span className="font-mono text-white">৳{m.totalDirectPaid.toLocaleString()}</span>
+                      <span className="font-mono text-ink">৳{m.totalDirectPaid.toLocaleString()}</span>
                     </div>
                     {m.pendingReimbursement > 0 && (
                       <div className="flex justify-between text-sky-400 font-semibold">
@@ -830,10 +830,10 @@ export const FamilyLedgerView: React.FC = () => {
       {activeTab === 'expenses' && (
         <div className="space-y-4">
           {/* Filters Bar */}
-          <div className="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div className="p-3 rounded-2xl bg-surface/60 border border-edge flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                <Filter className="w-3.5 h-3.5 text-emerald-400" />
+              <div className="flex items-center gap-1.5 text-xs text-ink-muted">
+                <Filter className="w-3.5 h-3.5 text-accent-strong" />
                 <span>{isBn ? 'ফিল্টার:' : 'Filter:'}</span>
               </div>
 
@@ -841,7 +841,7 @@ export const FamilyLedgerView: React.FC = () => {
               <select
                 value={filterCategory}
                 onChange={(e) => setFilterCategory(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-canvas border border-edge rounded-lg px-2.5 py-1 text-xs text-ink-soft focus:outline-none focus:border-accent"
               >
                 <option value="all">{isBn ? 'সকল ক্যাটাগরি' : 'All Categories'}</option>
                 {FAMILY_CATEGORIES.map((c) => (
@@ -855,7 +855,7 @@ export const FamilyLedgerView: React.FC = () => {
               <select
                 value={filterMember}
                 onChange={(e) => setFilterMember(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-canvas border border-edge rounded-lg px-2.5 py-1 text-xs text-ink-soft focus:outline-none focus:border-accent"
               >
                 <option value="all">{isBn ? 'সকল সদস্য' : 'All Members'}</option>
                 {state.members.map((m) => (
@@ -869,7 +869,7 @@ export const FamilyLedgerView: React.FC = () => {
               <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value)}
-                className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-emerald-500"
+                className="bg-canvas border border-edge rounded-lg px-2.5 py-1 text-xs text-ink-soft focus:outline-none focus:border-accent"
               >
                 <option value="all">{isBn ? 'সকল অবস্থা' : 'All Statuses'}</option>
                 <option value="approved">{isBn ? 'অনুমোদিত' : 'Approved'}</option>
@@ -878,16 +878,16 @@ export const FamilyLedgerView: React.FC = () => {
               </select>
             </div>
 
-            <div className="text-xs text-slate-400 font-mono">
+            <div className="text-xs text-ink-muted font-mono">
               <span>{filteredExpenses.length} {isBn ? 'টি রেকর্ড পাওয়া গেছে' : 'records found'}</span>
             </div>
           </div>
 
           {/* Expenses Table */}
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden">
+          <div className="rounded-2xl bg-surface/60 border border-edge overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950/80 border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase">
+                <thead className="bg-canvas/80 border-b border-edge text-ink-muted font-mono text-[11px] uppercase">
                   <tr>
                     <th className="py-3 px-4">{isBn ? 'তারিখ' : 'Date'}</th>
                     <th className="py-3 px-4">{isBn ? 'বিবরণ ও মেমো' : 'Description & Memo'}</th>
@@ -899,34 +899,34 @@ export const FamilyLedgerView: React.FC = () => {
                     <th className="py-3 px-4 text-center">{isBn ? 'অ্যাকশন' : 'Actions'}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-edge/60">
                   {filteredExpenses.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-12 text-center text-slate-500">
+                      <td colSpan={8} className="py-12 text-center text-ink-faint">
                         {isBn ? 'এই মাসে কোনো খরচ রেকর্ড পাওয়া যায়নি।' : 'No expense entries found for this month.'}
                       </td>
                     </tr>
                   ) : (
                     filteredExpenses.map((exp) => (
-                      <tr key={exp.id} className="hover:bg-slate-800/30 transition-all">
-                        <td className="py-3 px-4 font-mono text-slate-300 whitespace-nowrap">
+                      <tr key={exp.id} className="hover:bg-raised/30 transition-all">
+                        <td className="py-3 px-4 font-mono text-ink-soft whitespace-nowrap">
                           {exp.date}
                         </td>
                         <td className="py-3 px-4 max-w-xs">
-                          <div className="font-semibold text-white leading-tight">{exp.description}</div>
-                          {exp.memo && <div className="text-[11px] text-slate-400 mt-0.5">{exp.memo}</div>}
+                          <div className="font-semibold text-ink leading-tight">{exp.description}</div>
+                          {exp.memo && <div className="text-[11px] text-ink-muted mt-0.5">{exp.memo}</div>}
                           {exp.receiptNumber && (
-                            <span className="inline-block mt-1 px-1.5 py-0.2 rounded bg-slate-800 text-[10px] font-mono text-slate-400">
+                            <span className="inline-block mt-1 px-1.5 py-0.2 rounded bg-raised text-[10px] font-mono text-ink-muted">
                               #{exp.receiptNumber}
                             </span>
                           )}
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
-                          <span className="px-2 py-0.5 rounded-lg bg-slate-800 text-slate-300 font-medium">
+                          <span className="px-2 py-0.5 rounded-lg bg-raised text-ink-soft font-medium">
                             {isBn ? exp.categoryNameBn : exp.categoryName}
                           </span>
                         </td>
-                        <td className="py-3 px-4 whitespace-nowrap font-medium text-slate-200">
+                        <td className="py-3 px-4 whitespace-nowrap font-medium text-ink-soft">
                           {exp.paidByName}
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
@@ -935,27 +935,27 @@ export const FamilyLedgerView: React.FC = () => {
                               {exp.isReimbursed ? (isBn ? 'পকেট থেকে (রিইমবার্সড)' : 'Personal (Reimbursed)') : (isBn ? 'পকেট থেকে (পাওনা)' : 'Personal (Owed)')}
                             </span>
                           ) : (
-                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-accent/10 text-accent-strong border border-accent/20">
                               {isBn ? 'যৌথ তহবিল' : 'Joint Account'}
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-4 font-mono font-bold text-right text-white whitespace-nowrap">
+                        <td className="py-3 px-4 font-mono font-bold text-right text-ink whitespace-nowrap">
                           ৳{exp.amount.toLocaleString()}
                         </td>
                         <td className="py-3 px-4 whitespace-nowrap">
                           {exp.status === 'approved' ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-400">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-accent-strong">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>{isBn ? 'অনুমোদিত' : 'Approved'}</span>
                             </span>
                           ) : exp.status === 'pending_approval' ? (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-amber-400">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-warning">
                               <Clock className="w-3.5 h-3.5" />
                               <span>{isBn ? 'অনুমোদন প্রয়োজন' : 'Needs Approval'}</span>
                             </span>
                           ) : (
-                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-400">
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-negative">
                               <X className="w-3.5 h-3.5" />
                               <span>{isBn ? 'বাতিল' : 'Rejected'}</span>
                             </span>
@@ -968,14 +968,14 @@ export const FamilyLedgerView: React.FC = () => {
                               <>
                                 <button
                                   onClick={() => approveExpense(exp.id)}
-                                  className="p-1 rounded bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/40 text-[10px] font-bold"
+                                  className="p-1 rounded bg-accent/20 text-accent-strong hover:bg-accent/40 text-[10px] font-bold"
                                   title={isBn ? 'অনুমোদন করুন' : 'Approve'}
                                 >
                                   <Check className="w-3.5 h-3.5" />
                                 </button>
                                 <button
                                   onClick={() => rejectExpense(exp.id)}
-                                  className="p-1 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500/40 text-[10px] font-bold"
+                                  className="p-1 rounded bg-negative/20 text-negative hover:bg-negative/40 text-[10px] font-bold"
                                   title={isBn ? 'বাতিল করুন' : 'Reject'}
                                 >
                                   <X className="w-3.5 h-3.5" />
@@ -987,7 +987,7 @@ export const FamilyLedgerView: React.FC = () => {
                             {isHead && (
                               <button
                                 onClick={() => deleteExpense(exp.id)}
-                                className="p-1 rounded hover:bg-rose-500/20 text-slate-500 hover:text-rose-400"
+                                className="p-1 rounded hover:bg-negative/20 text-ink-faint hover:text-negative"
                                 title={isBn ? 'মুছুন' : 'Delete'}
                               >
                                 <X className="w-3.5 h-3.5" />
@@ -1010,11 +1010,11 @@ export const FamilyLedgerView: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-accent-strong" />
                 <span>{isBn ? 'যৌথ তহবিল ও গৃহস্থালী অ্যাকাউন্ট' : 'Joint Household Accounts & Cash Box'}</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-muted">
                 {isBn
                   ? 'ঘরের নগদ ক্যাশ বাক্স, যৌথ ব্যাংক অ্যাকাউন্ট ও শেয়ার্ড বিকাশ ওয়ালেটের রিয়েল-টাইম ব্যালেন্স।'
                   : 'Manage physical household cash box, joint bank accounts, and mobile wallets.'}
@@ -1036,11 +1036,11 @@ export const FamilyLedgerView: React.FC = () => {
             {state.jointAccounts.map((acc) => (
               <div
                 key={acc.id}
-                className="rounded-2xl p-5 bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all flex flex-col justify-between"
+                className="rounded-2xl p-5 bg-surface/60 border border-edge hover:border-slate-700 transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-full bg-accent/10 text-accent-strong border border-accent/20">
                       {acc.type === 'cash_box'
                         ? isBn ? 'নগদ ক্যাশ বাক্স' : 'Physical Cash'
                         : acc.type === 'joint_bank'
@@ -1048,34 +1048,34 @@ export const FamilyLedgerView: React.FC = () => {
                         : isBn ? 'শেয়ার্ড বিকাশ' : 'Mobile Wallet'}
                     </span>
                     {acc.isDefaultPaymentSource && (
-                      <span className="text-[10px] text-slate-400 font-mono">Default</span>
+                      <span className="text-[10px] text-ink-muted font-mono">Default</span>
                     )}
                   </div>
 
-                  <h4 className="text-base font-bold text-white mb-1">
+                  <h4 className="text-base font-bold text-ink mb-1">
                     {isBn ? acc.nameBn : acc.name}
                   </h4>
                   {acc.institutionName && (
-                    <div className="text-xs text-slate-400 flex items-center gap-1 mb-2">
+                    <div className="text-xs text-ink-muted flex items-center gap-1 mb-2">
                       <span>{acc.institutionName}</span>
                       {acc.accountNumberMask && <span className="font-mono">{acc.accountNumberMask}</span>}
                     </div>
                   )}
 
-                  <div className="text-2xl font-bold font-mono text-emerald-400 my-3">
+                  <div className="text-2xl font-bold font-mono text-accent-strong my-3">
                     ৳{acc.balance.toLocaleString()}
                   </div>
 
-                  {acc.notes && <p className="text-xs text-slate-400 mb-4">{acc.notes}</p>}
+                  {acc.notes && <p className="text-xs text-ink-muted mb-4">{acc.notes}</p>}
                 </div>
 
-                <div className="pt-3 border-t border-slate-800 flex items-center justify-between text-xs">
+                <div className="pt-3 border-t border-edge flex items-center justify-between text-xs">
                   <button
                     onClick={() => {
                       setCntAccountId(acc.id);
                       setIsContributeModalOpen(true);
                     }}
-                    className="text-emerald-400 hover:underline flex items-center gap-1"
+                    className="text-accent-strong hover:underline flex items-center gap-1"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>{isBn ? 'টাকা যোগ করুন' : 'Add Cash'}</span>
@@ -1086,15 +1086,15 @@ export const FamilyLedgerView: React.FC = () => {
           </div>
 
           {/* Recent Contributions History */}
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 p-5">
-            <h4 className="text-sm font-bold text-white mb-3 flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <div className="rounded-2xl bg-surface/60 border border-edge p-5">
+            <h4 className="text-sm font-bold text-ink mb-3 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-accent-strong" />
               <span>{isBn ? 'সাম্প্রতিক তহবিল অবদান হিস্ট্রি (Contributions History)' : 'Recent Fund Contributions'}</span>
             </h4>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="border-b border-slate-800 text-slate-400 font-mono text-[11px] uppercase">
+                <thead className="border-b border-edge text-ink-muted font-mono text-[11px] uppercase">
                   <tr>
                     <th className="py-2.5 px-3">{isBn ? 'তারিখ' : 'Date'}</th>
                     <th className="py-2.5 px-3">{isBn ? 'অবদানকারী সদস্য' : 'Contributed By'}</th>
@@ -1103,16 +1103,16 @@ export const FamilyLedgerView: React.FC = () => {
                     <th className="py-2.5 px-3 text-right">{isBn ? 'পরিমাণ' : 'Amount'}</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 font-mono">
+                <tbody className="divide-y divide-edge/60 font-mono">
                   {state.contributions.map((cnt) => {
                     const acc = state.jointAccounts.find((a) => a.id === cnt.jointAccountId);
                     return (
-                      <tr key={cnt.id} className="hover:bg-slate-800/30">
-                        <td className="py-2.5 px-3 text-slate-300">{cnt.date}</td>
-                        <td className="py-2.5 px-3 font-sans font-medium text-white">{cnt.memberName}</td>
-                        <td className="py-2.5 px-3 font-sans text-slate-300">{acc ? (isBn ? acc.nameBn : acc.name) : 'Joint Pool'}</td>
-                        <td className="py-2.5 px-3 font-sans text-slate-400">{cnt.note || '—'}</td>
-                        <td className="py-2.5 px-3 text-right font-bold text-emerald-400">
+                      <tr key={cnt.id} className="hover:bg-raised/30">
+                        <td className="py-2.5 px-3 text-ink-soft">{cnt.date}</td>
+                        <td className="py-2.5 px-3 font-sans font-medium text-ink">{cnt.memberName}</td>
+                        <td className="py-2.5 px-3 font-sans text-ink-soft">{acc ? (isBn ? acc.nameBn : acc.name) : 'Joint Pool'}</td>
+                        <td className="py-2.5 px-3 font-sans text-ink-muted">{cnt.note || '—'}</td>
+                        <td className="py-2.5 px-3 text-right font-bold text-accent-strong">
                           +৳{cnt.amount.toLocaleString()}
                         </td>
                       </tr>
@@ -1130,11 +1130,11 @@ export const FamilyLedgerView: React.FC = () => {
         <div className="space-y-6">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Users className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-base font-bold text-ink flex items-center gap-2">
+                <Users className="w-4 h-4 text-accent-strong" />
                 <span>{isBn ? 'পারিবারিক সদস্য ও সীমিত পারমিশন নিয়ন্ত্রণ' : 'Family Members & Role-Based Permissions'}</span>
               </h3>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-muted">
                 {isBn
                   ? 'পরিবারের প্রতিটি সদস্যের জন্য একক খরচ সীমা, অনুমোদন নীতিমালা এবং অনুমোদিত ক্যাটাগরি কনফিগার করুন।'
                   : 'Configure spending limits, approval requirements, and category whitelists per family member.'}
@@ -1159,8 +1159,8 @@ export const FamilyLedgerView: React.FC = () => {
                 key={member.id}
                 className={`rounded-2xl p-5 border transition-all ${
                   member.id === activeMember.id
-                    ? 'bg-slate-900 border-emerald-500/50 shadow-lg shadow-emerald-500/5'
-                    : 'bg-slate-900/60 border-slate-800'
+                    ? 'bg-surface border-accent/50 shadow-lg shadow-emerald-500/5'
+                    : 'bg-surface/60 border-edge'
                 }`}
               >
                 <div className="flex items-start justify-between mb-4">
@@ -1170,32 +1170,32 @@ export const FamilyLedgerView: React.FC = () => {
                     </div>
                     <div>
                       <div className="flex items-center gap-2">
-                        <h4 className="text-sm font-bold text-white">
+                        <h4 className="text-sm font-bold text-ink">
                           {isBn ? member.nameBn : member.name}
                         </h4>
                         {member.id === activeMember.id && (
-                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                          <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-accent/20 text-accent-strong font-bold border border-accent/30">
                             Current View
                           </span>
                         )}
                       </div>
-                      <div className="text-xs text-slate-400 mt-0.5">
+                      <div className="text-xs text-ink-muted mt-0.5">
                         {isBn ? `সম্পর্ক: ${member.relation}` : `Relation: ${member.relation}`}
                         {member.phone && ` · ${member.phone}`}
                       </div>
                     </div>
                   </div>
 
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-slate-800 text-slate-300 border border-slate-700">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-raised text-ink-soft border border-slate-700">
                     {member.role}
                   </span>
                 </div>
 
                 {/* Permissions Badges */}
-                <div className="space-y-2 mb-4 p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-xs">
-                  <div className="text-[11px] font-semibold text-slate-300 flex items-center justify-between">
+                <div className="space-y-2 mb-4 p-3 rounded-xl bg-canvas/60 border border-edge/80 text-xs">
+                  <div className="text-[11px] font-semibold text-ink-soft flex items-center justify-between">
                     <span>{isBn ? 'অনুমোদিত পারমিশনসমূহ:' : 'Assigned Permissions:'}</span>
-                    <span className="font-mono text-emerald-400">
+                    <span className="font-mono text-accent-strong">
                       {isBn ? 'একক লিমিট: ' : 'Max Limit: '}
                       {member.permissions.maxSingleExpenseLimit > 0
                         ? `৳${member.permissions.maxSingleExpenseLimit.toLocaleString()}`
@@ -1203,10 +1203,10 @@ export const FamilyLedgerView: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-1.5 text-[11px] text-slate-400">
+                  <div className="grid grid-cols-2 gap-1.5 text-[11px] text-ink-muted">
                     <div className="flex items-center gap-1.5">
                       {member.permissions.canAddExpenses ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
                         <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                       )}
@@ -1215,7 +1215,7 @@ export const FamilyLedgerView: React.FC = () => {
 
                     <div className="flex items-center gap-1.5">
                       {member.permissions.canEditMasterBudget ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
                         <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                       )}
@@ -1224,7 +1224,7 @@ export const FamilyLedgerView: React.FC = () => {
 
                     <div className="flex items-center gap-1.5">
                       {member.permissions.canApproveExpenses ? (
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
                         <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
                       )}
@@ -1233,16 +1233,16 @@ export const FamilyLedgerView: React.FC = () => {
 
                     <div className="flex items-center gap-1.5">
                       {member.permissions.requireApprovalAboveLimit ? (
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <AlertTriangle className="w-3.5 h-3.5 text-warning shrink-0" />
                       ) : (
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                        <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       )}
                       <span>{isBn ? 'উর্ধ্বতন অনুমোদন' : 'Approval Check'}</span>
                     </div>
                   </div>
 
                   {member.monthlyAllowance && (
-                    <div className="pt-1.5 mt-1 border-t border-slate-800 flex justify-between text-purple-300">
+                    <div className="pt-1.5 mt-1 border-t border-edge flex justify-between text-purple-300">
                       <span>{isBn ? 'মাসিক হাতখরচ (পকেট মানি):' : 'Monthly Allowance:'}</span>
                       <span className="font-mono font-bold">৳{member.monthlyAllowance.toLocaleString()}</span>
                     </div>
@@ -1252,7 +1252,7 @@ export const FamilyLedgerView: React.FC = () => {
                 <div className="flex items-center justify-between text-xs pt-1">
                   <button
                     onClick={() => switchActiveMember(member.id)}
-                    className="text-xs text-emerald-400 hover:underline font-medium flex items-center gap-1"
+                    className="text-xs text-accent-strong hover:underline font-medium flex items-center gap-1"
                   >
                     <UserCheck className="w-3.5 h-3.5" />
                     <span>{isBn ? 'এই সদস্য হিসেবে সুইচ করুন' : 'Simulate This Member'}</span>
@@ -1262,13 +1262,13 @@ export const FamilyLedgerView: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => openMemberModal(member)}
-                        className="text-slate-400 hover:text-white"
+                        className="text-ink-muted hover:text-ink"
                       >
                         {isBn ? 'এডিট' : 'Edit'}
                       </button>
                       <button
                         onClick={() => deleteFamilyMember(member.id)}
-                        className="text-slate-500 hover:text-rose-400"
+                        className="text-ink-faint hover:text-negative"
                       >
                         {isBn ? 'মুছুন' : 'Delete'}
                       </button>
@@ -1285,11 +1285,11 @@ export const FamilyLedgerView: React.FC = () => {
       {activeTab === 'reimbursements' && (
         <div className="space-y-6">
           <div>
-            <h3 className="text-base font-bold text-white flex items-center gap-2">
-              <HeartHandshake className="w-4 h-4 text-emerald-400" />
+            <h3 className="text-base font-bold text-ink flex items-center gap-2">
+              <HeartHandshake className="w-4 h-4 text-accent-strong" />
               <span>{isBn ? 'পারিবারিক রিইমবার্সমেন্ট ও হিসাব-নিকাশ' : 'Family Reimbursements & Settlements'}</span>
             </h3>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-ink-muted">
               {isBn
                 ? 'পরিবারের কোনো সদস্য ব্যক্তিগত কার্ড বা পকেট থেকে সংসারের জরুরি বাজার বা বিল দিলে, যৌথ তহবিল থেকে তার পাওনা রিইমবার্স করুন।'
                 : 'Settle out-of-pocket expenses paid by family members for household groceries, bills, or medical needs.'}
@@ -1297,8 +1297,8 @@ export const FamilyLedgerView: React.FC = () => {
           </div>
 
           {/* Pending Reimbursements List */}
-          <div className="rounded-2xl bg-slate-900/60 border border-slate-800 p-5 space-y-4">
-            <h4 className="text-sm font-bold text-white flex items-center justify-between">
+          <div className="rounded-2xl bg-surface/60 border border-edge p-5 space-y-4">
+            <h4 className="text-sm font-bold text-ink flex items-center justify-between">
               <span>{isBn ? 'অপেক্ষমাণ রিইমবার্সমেন্ট তালিকা' : 'Pending Reimbursements'}</span>
               <span className="font-mono text-xs text-sky-400">
                 {isBn ? 'মোট পাওনা:' : 'Total Owed:'} ৳{totalPendingReimbursements.toLocaleString()}
@@ -1306,23 +1306,23 @@ export const FamilyLedgerView: React.FC = () => {
             </h4>
 
             {state.expenses.filter((e) => e.paidFromPersonalPocket && !e.isReimbursed && e.status === 'approved').length === 0 ? (
-              <div className="py-10 text-center text-slate-500 text-xs">
-                <CheckCircle2 className="w-8 h-8 text-emerald-500/40 mx-auto mb-2" />
+              <div className="py-10 text-center text-ink-faint text-xs">
+                <CheckCircle2 className="w-8 h-8 text-accent/40 mx-auto mb-2" />
                 <span>{isBn ? 'কোনো অপেক্ষমাণ রিইমবার্সমেন্ট নেই! সকল হিসাব পরিশোধিত।' : 'All member personal expenses have been reimbursed!'}</span>
               </div>
             ) : (
-              <div className="divide-y divide-slate-800">
+              <div className="divide-y divide-edge">
                 {state.expenses
                   .filter((e) => e.paidFromPersonalPocket && !e.isReimbursed && e.status === 'approved')
                   .map((exp) => (
                     <div key={exp.id} className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-semibold text-white text-xs">{exp.description}</span>
-                          <span className="text-[10px] font-mono text-slate-400">({exp.date})</span>
+                          <span className="font-semibold text-ink text-xs">{exp.description}</span>
+                          <span className="text-[10px] font-mono text-ink-muted">({exp.date})</span>
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">
-                          {isBn ? 'পরিশোধ করেছেন:' : 'Paid by:'} <strong className="text-slate-200">{exp.paidByName}</strong> · {isBn ? exp.categoryNameBn : exp.categoryName}
+                        <div className="text-xs text-ink-muted mt-0.5">
+                          {isBn ? 'পরিশোধ করেছেন:' : 'Paid by:'} <strong className="text-ink-soft">{exp.paidByName}</strong> · {isBn ? exp.categoryNameBn : exp.categoryName}
                         </div>
                       </div>
 
@@ -1339,12 +1339,12 @@ export const FamilyLedgerView: React.FC = () => {
                                 reimburseExpense(exp.id, cashAcc.id);
                               }
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition-all shadow"
+                            className="px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-accent-ink text-xs font-bold transition-all shadow"
                           >
                             {isBn ? 'তহবিল থেকে পরিশোধ' : 'Reimburse Now'}
                           </button>
                         ) : (
-                          <span className="text-[11px] text-slate-500 font-mono">
+                          <span className="text-[11px] text-ink-faint font-mono">
                             {isBn ? 'হেড অনুমোদন দরকার' : 'Head only'}
                           </span>
                         )}
@@ -1363,7 +1363,7 @@ export const FamilyLedgerView: React.FC = () => {
         onClose={() => setIsAddExpenseModalOpen(false)}
         title={
           <span className="flex items-center gap-2">
-            <Receipt className="w-5 h-5 text-emerald-400" />
+            <Receipt className="w-5 h-5 text-accent-strong" />
             <span>{isBn ? 'পারিবারিক সংসার খরচ যোগ করুন' : 'Record Household Expense'}</span>
           </span>
         }
@@ -1444,12 +1444,12 @@ export const FamilyLedgerView: React.FC = () => {
                     onClick={() => setExpPaymentSourceType('joint')}
                     className={`p-2.5 rounded-xl border text-left transition-all ${
                       expPaymentSourceType === 'joint'
-                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-300'
-                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                        ? 'bg-accent/10 border-accent text-accent-strong'
+                        : 'bg-canvas border-edge text-ink-muted hover:text-ink'
                     }`}
                   >
                     <div className="font-bold text-xs">{isBn ? 'যৌথ অ্যাকাউন্ট' : 'Joint Account'}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">{isBn ? 'সংসার ক্যাশ বা ব্যাংক' : 'Direct from pool'}</div>
+                    <div className="text-[10px] text-ink-muted mt-0.5">{isBn ? 'সংসার ক্যাশ বা ব্যাংক' : 'Direct from pool'}</div>
                   </button>
 
                   <button
@@ -1458,11 +1458,11 @@ export const FamilyLedgerView: React.FC = () => {
                     className={`p-2.5 rounded-xl border text-left transition-all ${
                       expPaymentSourceType === 'personal'
                         ? 'bg-sky-500/10 border-sky-500 text-sky-300'
-                        : 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white'
+                        : 'bg-canvas border-edge text-ink-muted hover:text-ink'
                     }`}
                   >
                     <div className="font-bold text-xs">{isBn ? 'নিজস্ব পকেট থেকে' : 'Personal Pocket'}</div>
-                    <div className="text-[10px] text-slate-400 mt-0.5">{isBn ? 'রিইমবার্সমেন্ট পাওনা হবে' : 'Eligible for reimbursement'}</div>
+                    <div className="text-[10px] text-ink-muted mt-0.5">{isBn ? 'রিইমবার্সমেন্ট পাওনা হবে' : 'Eligible for reimbursement'}</div>
                   </button>
                 </div>
               </Field>
@@ -1501,7 +1501,7 @@ export const FamilyLedgerView: React.FC = () => {
                 </Field>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
+              <div className="pt-3 border-t border-edge flex justify-end gap-3">
                 <Button type="button" variant="outline" onClick={() => setIsAddExpenseModalOpen(false)}>
                     {isBn ? 'বাতিল' : 'Cancel'}
                 </Button>
@@ -1519,7 +1519,7 @@ export const FamilyLedgerView: React.FC = () => {
         onClose={() => setIsContributeModalOpen(false)}
         title={
           <span className="flex items-center gap-2">
-            <DollarSign className="w-5 h-5 text-emerald-400" />
+            <DollarSign className="w-5 h-5 text-accent-strong" />
             <span>{isBn ? 'যৌথ তহবিলে টাকা জমা দিন' : 'Fund Joint Account Pool'}</span>
           </span>
         }
@@ -1570,7 +1570,7 @@ export const FamilyLedgerView: React.FC = () => {
                 />
               </Field>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
+              <div className="pt-3 border-t border-edge flex justify-end gap-3">
                 <Button type="button" variant="outline" onClick={() => setIsContributeModalOpen(false)}>
                     {isBn ? 'বাতিল' : 'Cancel'}
                 </Button>
@@ -1588,7 +1588,7 @@ export const FamilyLedgerView: React.FC = () => {
         onClose={() => setIsMemberModalOpen(false)}
         title={
           <span className="flex items-center gap-2">
-            <Users className="w-5 h-5 text-emerald-400" />
+            <Users className="w-5 h-5 text-accent-strong" />
             <span>{editingMember
                     ? isBn ? 'সদস্য ও পারমিশন সম্পাদনা' : 'Edit Member & Permissions'
                     : isBn ? 'নতুন পারিবারিক সদস্য যোগ করুন' : 'Add New Family Member'}</span>
@@ -1645,8 +1645,8 @@ export const FamilyLedgerView: React.FC = () => {
               </div>
 
               {/* Granular Permission Toggles */}
-              <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2.5">
-                <span className="font-semibold text-slate-300 block text-xs">
+              <div className="p-3 rounded-xl bg-canvas border border-edge space-y-2.5">
+                <span className="font-semibold text-ink-soft block text-xs">
                   {isBn ? 'সীমিত পারমিশন কনফিগারেশন' : 'Fine-Grained Permission Rules'}
                 </span>
 
@@ -1656,9 +1656,9 @@ export const FamilyLedgerView: React.FC = () => {
                       type="checkbox"
                       checked={mbrCanAddExp}
                       onChange={(e) => setMbrCanAddExp(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0"
+                      className="rounded bg-surface border-slate-700 text-accent focus:ring-0"
                     />
-                    <span className="text-slate-300">{isBn ? 'খরচ এন্ট্রি করতে পারবে' : 'Can Add Expenses'}</span>
+                    <span className="text-ink-soft">{isBn ? 'খরচ এন্ট্রি করতে পারবে' : 'Can Add Expenses'}</span>
                   </label>
 
                   <label className="flex items-center gap-2 cursor-pointer">
@@ -1666,15 +1666,15 @@ export const FamilyLedgerView: React.FC = () => {
                       type="checkbox"
                       checked={mbrReqApproval}
                       onChange={(e) => setMbrReqApproval(e.target.checked)}
-                      className="rounded bg-slate-900 border-slate-700 text-emerald-500 focus:ring-0"
+                      className="rounded bg-surface border-slate-700 text-accent focus:ring-0"
                     />
-                    <span className="text-slate-300">{isBn ? 'সীমা অতিক্রম করলে অনুমোদন লাগবে' : 'Require Approval Above Limit'}</span>
+                    <span className="text-ink-soft">{isBn ? 'সীমা অতিক্রম করলে অনুমোদন লাগবে' : 'Require Approval Above Limit'}</span>
                   </label>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800/80">
+                <div className="grid grid-cols-2 gap-3 pt-2 border-t border-edge/80">
                   <div>
-                    <label className="block text-slate-400 text-[11px] mb-1">
+                    <label className="block text-ink-muted text-[11px] mb-1">
                       {isBn ? 'একক খরচের সর্বোচ্চ সীমা (৳)' : 'Max Single Expense Limit (৳)'}
                     </label>
                     <input
@@ -1683,12 +1683,12 @@ export const FamilyLedgerView: React.FC = () => {
                       onChange={(e) => setMbrMaxLimit(e.target.value)}
                       placeholder="e.g. 5000"
                       min="0"
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-surface border border-edge rounded-lg px-2.5 py-1.5 text-ink font-mono text-xs focus:outline-none focus:border-accent"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-slate-400 text-[11px] mb-1">
+                    <label className="block text-ink-muted text-[11px] mb-1">
                       {isBn ? 'মাসিক হাতখরচ / পকেট মানি (৳)' : 'Monthly Allowance / Pocket (৳)'}
                     </label>
                     <input
@@ -1697,13 +1697,13 @@ export const FamilyLedgerView: React.FC = () => {
                       onChange={(e) => setMbrAllowance(e.target.value)}
                       placeholder="e.g. 4000"
                       min="0"
-                      className="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-white font-mono text-xs focus:outline-none focus:border-emerald-500"
+                      className="w-full bg-surface border border-edge rounded-lg px-2.5 py-1.5 text-ink font-mono text-xs focus:outline-none focus:border-accent"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
+              <div className="pt-3 border-t border-edge flex justify-end gap-3">
                 <Button type="button" variant="outline" onClick={() => setIsMemberModalOpen(false)}>
                     {isBn ? 'বাতিল' : 'Cancel'}
                 </Button>
@@ -1721,7 +1721,7 @@ export const FamilyLedgerView: React.FC = () => {
         onClose={() => setIsBudgetEditModalOpen(false)}
         title={
           <span className="flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-emerald-400" />
+            <Sliders className="w-5 h-5 text-accent-strong" />
             <span>{isBn ? 'খাত বাজেট সীমা পরিবর্তন' : 'Edit Category Ceiling'}</span>
           </span>
         }
@@ -1739,7 +1739,7 @@ export const FamilyLedgerView: React.FC = () => {
                 />
               </Field>
 
-              <div className="pt-3 border-t border-slate-800 flex justify-end gap-3">
+              <div className="pt-3 border-t border-edge flex justify-end gap-3">
                 <Button
                   type="button"
                   variant="outline"

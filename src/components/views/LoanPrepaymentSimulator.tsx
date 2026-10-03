@@ -72,19 +72,19 @@ export const LoanPrepaymentSimulator: React.FC = () => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Simulator Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <Zap className="h-4 w-4" />
             <span>Smart Debt Elimination Engine</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-ink flex items-center gap-2">
             <span>Loan Prepayment & Early Payoff Simulator</span>
-            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <span className="text-xs font-mono font-bold px-2 py-0.5 rounded-full bg-accent/20 text-accent-strong border border-accent/30">
               FEAT-7
             </span>
           </h2>
-          <p className="text-slate-400 text-xs sm:text-sm mt-0.5">
+          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
             এককালীন বা মাসিক অতিরিক্ত পরিশোধের মাধ্যমে সুদ সাশ্রয় ও লোন মেয়াদ হ্রাসের ইন্টারেক্টিভ বিশ্লেষণ।
           </p>
         </div>
@@ -95,13 +95,13 @@ export const LoanPrepaymentSimulator: React.FC = () => {
         {/* Left Column: Simulation Parameters */}
         <div className="lg:col-span-5 space-y-5">
           {/* 1. Loan Selection Card */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
+          <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-                <Calculator className="h-4 w-4 text-emerald-400" />
+              <span className="text-xs font-bold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
+                <Calculator className="h-4 w-4 text-accent-strong" />
                 <span>লোন নির্বাচন (Select Loan)</span>
               </span>
-              <span className="text-[11px] font-mono text-emerald-400">
+              <span className="text-[11px] font-mono text-accent-strong">
                 {activeLoans.length} Active Loans
               </span>
             </div>
@@ -109,7 +109,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             <select
               value={selectedLoanId}
               onChange={(e) => setSelectedLoanId(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-semibold focus:outline-none focus:border-emerald-500"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-semibold focus:outline-none focus:border-accent"
             >
               {activeLoans.map((loan) => (
                 <option key={loan.id} value={loan.id}>
@@ -121,25 +121,25 @@ export const LoanPrepaymentSimulator: React.FC = () => {
 
             {/* Custom loan parameters if custom is selected */}
             {selectedLoanId === 'custom' && (
-              <div className="space-y-3 pt-2 border-t border-slate-800">
+              <div className="space-y-3 pt-2 border-t border-edge">
                 <div className="space-y-1">
-                  <label className="text-[11px] font-medium text-slate-300">
+                  <label className="text-[11px] font-medium text-ink-soft">
                     লোন বা বকেয়া মূলধন (Principal Amount):
                   </label>
                   <div className="relative">
-                    <span className="absolute left-3 top-2.5 text-xs text-slate-500 font-bold">৳</span>
+                    <span className="absolute left-3 top-2.5 text-xs text-ink-faint font-bold">৳</span>
                     <input
                       type="number"
                       value={customPrincipal}
                       onChange={(e) => setCustomPrincipal(Number(e.target.value) || 0)}
-                      className="w-full pl-8 pr-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
+                      className="w-full pl-8 pr-3.5 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-slate-300">
+                    <label className="text-[11px] font-medium text-ink-soft">
                       সুদের হার (Rate %):
                     </label>
                     <input
@@ -147,19 +147,19 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       step="any"
                       value={customRate}
                       onChange={(e) => setCustomRate(Number(e.target.value) || 0)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
+                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[11px] font-medium text-slate-300">
+                    <label className="text-[11px] font-medium text-ink-soft">
                       মেয়াদ (মাস / Months):
                     </label>
                     <input
                       type="number"
                       value={customTenure}
                       onChange={(e) => setCustomTenure(Number(e.target.value) || 0)}
-                      className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono font-bold focus:outline-none focus:border-emerald-500"
+                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
                 </div>
@@ -167,30 +167,30 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             )}
 
             {selectedLoan && (
-              <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1 text-xs">
-                <div className="flex justify-between text-slate-400">
+              <div className="p-3 rounded-xl bg-canvas/70 border border-edge space-y-1 text-xs">
+                <div className="flex justify-between text-ink-muted">
                   <span>বকেয়া মূলধন:</span>
-                  <span className="text-white font-mono font-bold">
+                  <span className="text-ink font-mono font-bold">
                     ৳{effectivePrincipal.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between text-ink-muted">
                   <span>মাসিক বর্তমান কিস্তি:</span>
-                  <span className="text-white font-mono font-bold">
+                  <span className="text-ink font-mono font-bold">
                     ৳{(selectedLoan.emiAmount || simulation.originalSummary.monthlyEmi).toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between text-slate-400">
+                <div className="flex justify-between text-ink-muted">
                   <span>সুদের হার:</span>
-                  <span className="text-white font-mono font-bold">{effectiveRate}%</span>
+                  <span className="text-ink font-mono font-bold">{effectiveRate}%</span>
                 </div>
               </div>
             )}
           </div>
 
           {/* 2. Strategy Selector Card */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-3">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+          <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-3">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-muted">
               প্রি-পেমেন্ট কৌশল (Strategy)
             </span>
 
@@ -200,15 +200,15 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 onClick={() => setStrategy('reduce_tenure')}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   strategy === 'reduce_tenure'
-                    ? 'border-emerald-500 bg-emerald-950/30 text-white shadow-lg shadow-emerald-950/40'
-                    : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                    ? 'border-accent bg-emerald-950/30 text-ink shadow-lg shadow-emerald-950/40'
+                    : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-bold text-xs">
-                  <Clock className="h-3.5 w-3.5 text-emerald-400" />
+                  <Clock className="h-3.5 w-3.5 text-accent-strong" />
                   <span>মেয়াদ কমান</span>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                <p className="text-[10px] text-ink-muted mt-1 leading-snug">
                   সর্বোচ্চ সুদ সাশ্রয় ও দ্রুত ঋণমুক্ত হওয়া (প্রস্তাবিত)।
                 </p>
               </button>
@@ -218,15 +218,15 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 onClick={() => setStrategy('reduce_emi')}
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   strategy === 'reduce_emi'
-                    ? 'border-sky-500 bg-sky-950/30 text-white shadow-lg shadow-sky-950/40'
-                    : 'border-slate-800 bg-slate-950 text-slate-400 hover:border-slate-700'
+                    ? 'border-sky-500 bg-sky-950/30 text-ink shadow-lg shadow-sky-950/40'
+                    : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-bold text-xs">
                   <TrendingDown className="h-3.5 w-3.5 text-sky-400" />
                   <span>মাসিক কিস্তি কমান</span>
                 </div>
-                <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                <p className="text-[10px] text-ink-muted mt-1 leading-snug">
                   মাসিক ক্যাশ-ফ্লো স্বস্তি ও খরচের চাপ কমানো।
                 </p>
               </button>
@@ -234,17 +234,17 @@ export const LoanPrepaymentSimulator: React.FC = () => {
           </div>
 
           {/* 3. Extra Payments Input Card */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 space-y-4">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
-              <Sparkles className="h-4 w-4 text-amber-400" />
+          <div className="rounded-2xl border border-edge bg-surface/60 p-5 space-y-4">
+            <span className="text-xs font-bold uppercase tracking-wider text-ink-muted flex items-center gap-1.5">
+              <Sparkles className="h-4 w-4 text-warning" />
               <span>অতিরিক্ত পরিশোধের পরিমাণ</span>
             </span>
 
             {/* Monthly Extra */}
             <div className="space-y-1.5">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-slate-300">মাসিক অতিরিক্ত পরিশোধ (Monthly Extra):</span>
-                <span className="font-mono font-bold text-emerald-400">৳{monthlyExtra.toLocaleString()}</span>
+                <span className="font-semibold text-ink-soft">মাসিক অতিরিক্ত পরিশোধ (Monthly Extra):</span>
+                <span className="font-mono font-bold text-accent-strong">৳{monthlyExtra.toLocaleString()}</span>
               </div>
               <input
                 type="range"
@@ -263,8 +263,8 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                     onClick={() => setMonthlyExtra(amt)}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-colors ${
                       monthlyExtra === amt
-                        ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-                        : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
+                        ? 'bg-accent/20 text-accent-strong border-accent/40'
+                        : 'bg-canvas text-ink-muted border-edge hover:border-slate-700'
                     }`}
                   >
                     +{amt.toLocaleString()}
@@ -274,10 +274,10 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             </div>
 
             {/* One-Time Lump Sum */}
-            <div className="space-y-1.5 pt-3 border-t border-slate-800">
+            <div className="space-y-1.5 pt-3 border-t border-edge">
               <div className="flex justify-between text-xs">
-                <span className="font-semibold text-slate-300">এককালীন লাম্পসাম পরিশোধ (Lump Sum):</span>
-                <span className="font-mono font-bold text-amber-400">৳{lumpSum.toLocaleString()}</span>
+                <span className="font-semibold text-ink-soft">এককালীন লাম্পসাম পরিশোধ (Lump Sum):</span>
+                <span className="font-mono font-bold text-warning">৳{lumpSum.toLocaleString()}</span>
               </div>
               <input
                 type="range"
@@ -296,8 +296,8 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                     onClick={() => setLumpSum(amt)}
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-colors ${
                       lumpSum === amt
-                        ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                        : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-700'
+                        ? 'bg-warning/20 text-warning border-warning/40'
+                        : 'bg-canvas text-ink-muted border-edge hover:border-slate-700'
                     }`}
                   >
                     +{amt.toLocaleString()}
@@ -307,11 +307,11 @@ export const LoanPrepaymentSimulator: React.FC = () => {
 
               {lumpSum > 0 && (
                 <div className="pt-2 flex items-center justify-between text-xs">
-                  <span className="text-slate-400">পরিশোধের মাস (Payment Month):</span>
+                  <span className="text-ink-muted">পরিশোধের মাস (Payment Month):</span>
                   <select
                     value={lumpSumMonth}
                     onChange={(e) => setLumpSumMonth(Number(e.target.value))}
-                    className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-700 text-xs font-mono font-bold text-white"
+                    className="px-2.5 py-1 rounded-lg bg-canvas border border-slate-700 text-xs font-mono font-bold text-ink"
                   >
                     {[1, 3, 6, 12, 18, 24, 36].map((m) => (
                       <option key={m} value={m}>
@@ -328,13 +328,13 @@ export const LoanPrepaymentSimulator: React.FC = () => {
         {/* Right Column: Simulation Results & Analytics */}
         <div className="lg:col-span-7 space-y-5">
           {/* Main Hero Card: Savings Breakdown */}
-          <div className="rounded-2xl border border-emerald-500/40 bg-gradient-to-br from-emerald-950/40 via-slate-900/90 to-slate-950 p-6 space-y-6 shadow-2xl shadow-emerald-950/20">
+          <div className="rounded-2xl border border-accent/40 bg-gradient-to-br from-emerald-950/40 via-slate-900/90 to-slate-950 p-6 space-y-6 shadow-2xl shadow-emerald-950/20">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+              <span className="text-xs font-mono uppercase tracking-wider text-accent-strong font-bold flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>সিমুলেশন ফলাফল (Simulation Impact)</span>
               </span>
-              <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+              <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-accent/20 text-accent-strong font-bold border border-accent/30">
                 {strategy === 'reduce_tenure' ? 'Reduce Tenure' : 'Reduce EMI'}
               </span>
             </div>
@@ -342,25 +342,25 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             {/* Primary KPI Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Interest Saved */}
-              <div className="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/30 space-y-1">
-                <span className="text-xs text-slate-400 font-medium">মোট সুদ সাশ্রয় (Interest Saved):</span>
-                <div className="text-2xl sm:text-3xl font-black text-emerald-400 font-mono tracking-tight">
+              <div className="p-4 rounded-xl bg-canvas/80 border border-accent/30 space-y-1">
+                <span className="text-xs text-ink-muted font-medium">মোট সুদ সাশ্রয় (Interest Saved):</span>
+                <div className="text-2xl sm:text-3xl font-black text-accent-strong font-mono tracking-tight">
                   ৳{simulation.comparison.interestSaved.toLocaleString()}
                 </div>
-                <div className="text-[11px] text-emerald-300/90 font-mono flex items-center gap-1">
+                <div className="text-[11px] text-accent-strong/90 font-mono flex items-center gap-1">
                   <span>{simulation.comparison.interestSavedPct}% কম সুদ পরিশোধ করতে হবে</span>
                 </div>
               </div>
 
               {/* Time Saved / Lower EMI */}
-              <div className="p-4 rounded-xl bg-slate-950/80 border border-sky-500/30 space-y-1">
-                <span className="text-xs text-slate-400 font-medium">
+              <div className="p-4 rounded-xl bg-canvas/80 border border-sky-500/30 space-y-1">
+                <span className="text-xs text-ink-muted font-medium">
                   {strategy === 'reduce_tenure' ? 'সময় সাশ্রয় (Time Saved):' : 'নতুন মাসিক কিস্তি (New EMI):'}
                 </span>
                 <div className="text-2xl sm:text-3xl font-black text-sky-400 font-mono tracking-tight">
                   {strategy === 'reduce_tenure' ? (
                     <span>
-                      {simulation.comparison.monthsSaved} মাস <span className="text-sm font-normal text-slate-400">({simulation.comparison.yearsSaved} বছর)</span>
+                      {simulation.comparison.monthsSaved} মাস <span className="text-sm font-normal text-ink-muted">({simulation.comparison.yearsSaved} বছর)</span>
                     </span>
                   ) : (
                     <span>৳{simulation.newSummary.monthlyEmi.toLocaleString()}</span>
@@ -375,8 +375,8 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             </div>
 
             {/* Visual Amortization Progress Bar */}
-            <div className="space-y-2 pt-2 border-t border-slate-800/80">
-              <div className="flex justify-between text-xs text-slate-300 font-mono">
+            <div className="space-y-2 pt-2 border-t border-edge/80">
+              <div className="flex justify-between text-xs text-ink-soft font-mono">
                 <span>মূল লোন বনাম নতুন লোন পরিশোধ তুলনা</span>
                 <span>
                   সর্বমোট সাশ্রয়: ৳
@@ -389,14 +389,14 @@ export const LoanPrepaymentSimulator: React.FC = () => {
               {/* Visual Bars */}
               <div className="space-y-2">
                 <div>
-                  <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+                  <div className="flex justify-between text-[11px] text-ink-muted mb-1">
                     <span>আগের মোট প্রদান (Original):</span>
-                    <span className="font-mono text-slate-200">
+                    <span className="font-mono text-ink-soft">
                       ৳{simulation.originalSummary.totalPayment.toLocaleString()} (সুদ ৳
                       {simulation.originalSummary.totalInterest.toLocaleString()})
                     </span>
                   </div>
-                  <div className="h-3 w-full rounded-full bg-slate-800 overflow-hidden flex">
+                  <div className="h-3 w-full rounded-full bg-raised overflow-hidden flex">
                     <div
                       className="bg-slate-500 h-full"
                       style={{
@@ -404,19 +404,19 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       }}
                       title="Principal"
                     />
-                    <div className="bg-rose-500/80 h-full flex-1" title="Interest" />
+                    <div className="bg-negative/80 h-full flex-1" title="Interest" />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[11px] text-slate-400 mb-1">
+                  <div className="flex justify-between text-[11px] text-ink-muted mb-1">
                     <span>প্রি-পেমেন্টসহ মোট প্রদান (With Prepayment):</span>
-                    <span className="font-mono text-emerald-400">
+                    <span className="font-mono text-accent-strong">
                       ৳{simulation.newSummary.totalPayment.toLocaleString()} (সুদ ৳
                       {simulation.newSummary.totalInterest.toLocaleString()})
                     </span>
                   </div>
-                  <div className="h-3 w-full rounded-full bg-slate-800 overflow-hidden flex">
+                  <div className="h-3 w-full rounded-full bg-raised overflow-hidden flex">
                     <div
                       className="bg-slate-500 h-full"
                       style={{
@@ -424,29 +424,29 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       }}
                       title="Principal"
                     />
-                    <div className="bg-emerald-500 h-full flex-1" title="Reduced Interest" />
+                    <div className="bg-accent h-full flex-1" title="Reduced Interest" />
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Financial Insight Quote */}
-            <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300 leading-relaxed">
-              <Info className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="p-3.5 rounded-xl bg-canvas/70 border border-edge flex items-start gap-2.5 text-xs text-ink-soft leading-relaxed">
+              <Info className="h-4 w-4 text-accent-strong shrink-0 mt-0.5" />
               <div>
                 <strong>স্মার্ট ফাইন্যান্সিয়াল ইনসাইট:</strong> লোনের অতিরিক্ত পরিশোধের সমতুল্য রিটার্ন{' '}
-                <strong className="text-emerald-400 font-mono">{effectiveRate}%</strong> (ঝুঁকিমুক্ত কর-পরবর্তী রিটার্ন)। 
+                <strong className="text-accent-strong font-mono">{effectiveRate}%</strong> (ঝুঁকিমুক্ত কর-পরবর্তী রিটার্ন)। 
                 ব্যাংক বা সঞ্চয়পত্রে বিনিয়োগের সুদের চেয়ে লোনের সুদের হার বেশি হলে অতিরিক্ত অর্থ লোন পরিশোধে ব্যবহার করাই সবচেয়ে লাভজনক সিদ্ধান্ত।
               </div>
             </div>
           </div>
 
           {/* Toggleable Amortization Schedule Table */}
-          <div className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden">
+          <div className="rounded-2xl border border-edge bg-surface/60 overflow-hidden">
             <button
               type="button"
               onClick={() => setShowScheduleTable((prev) => !prev)}
-              className="w-full p-4 flex items-center justify-between text-xs font-semibold text-slate-300 hover:text-white transition-colors cursor-pointer"
+              className="w-full p-4 flex items-center justify-between text-xs font-semibold text-ink-soft hover:text-ink transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-2">
                 <Layers className="h-4 w-4 text-sky-400" />
@@ -458,34 +458,34 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             </button>
 
             {showScheduleTable && (
-              <div className="p-4 pt-0 border-t border-slate-800 max-h-96 overflow-y-auto">
+              <div className="p-4 pt-0 border-t border-edge max-h-96 overflow-y-auto">
                 <table className="w-full text-[11px] font-mono text-left">
                   <thead>
-                    <tr className="border-b border-slate-800 text-slate-500">
+                    <tr className="border-b border-edge text-ink-faint">
                       <th className="py-2 px-1">Month</th>
                       <th className="py-2 px-1">Due Date</th>
                       <th className="py-2 px-1 text-right">Beg. Balance</th>
                       <th className="py-2 px-1 text-right">EMI</th>
-                      <th className="py-2 px-1 text-right text-amber-400">Extra</th>
-                      <th className="py-2 px-1 text-right text-emerald-400">Principal</th>
-                      <th className="py-2 px-1 text-right text-rose-400">Interest</th>
+                      <th className="py-2 px-1 text-right text-warning">Extra</th>
+                      <th className="py-2 px-1 text-right text-accent-strong">Principal</th>
+                      <th className="py-2 px-1 text-right text-negative">Interest</th>
                       <th className="py-2 px-1 text-right">End. Balance</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-800/60 text-slate-300">
+                  <tbody className="divide-y divide-edge/60 text-ink-soft">
                     {simulation.schedule.map((row) => (
-                      <tr key={row.month} className="hover:bg-slate-800/30">
+                      <tr key={row.month} className="hover:bg-raised/30">
                         <td className="py-2 px-1 font-bold">{row.month}</td>
-                        <td className="py-2 px-1 text-slate-400">{row.dueDate}</td>
+                        <td className="py-2 px-1 text-ink-muted">{row.dueDate}</td>
                         <td className="py-2 px-1 text-right">৳{row.beginningBalance.toLocaleString()}</td>
                         <td className="py-2 px-1 text-right">৳{row.scheduledEmi.toLocaleString()}</td>
-                        <td className="py-2 px-1 text-right font-bold text-amber-400">
+                        <td className="py-2 px-1 text-right font-bold text-warning">
                           {row.extraPrepayment > 0 ? `৳${row.extraPrepayment.toLocaleString()}` : '-'}
                         </td>
-                        <td className="py-2 px-1 text-right text-emerald-400">
+                        <td className="py-2 px-1 text-right text-accent-strong">
                           ৳{row.principalPaid.toLocaleString()}
                         </td>
-                        <td className="py-2 px-1 text-right text-rose-400">
+                        <td className="py-2 px-1 text-right text-negative">
                           ৳{row.interestPaid.toLocaleString()}
                         </td>
                         <td className="py-2 px-1 text-right font-bold">

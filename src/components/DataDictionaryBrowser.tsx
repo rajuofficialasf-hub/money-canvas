@@ -61,56 +61,56 @@ export const DataDictionaryBrowser: React.FC = () => {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-4">
-      <div className="border-b border-slate-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="border-b border-edge pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-emerald-400 mb-1.5">
+          <div className="flex items-center gap-2 text-xs font-mono text-accent-strong mb-1.5">
             <BookOpen className="h-4 w-4" />
             <span>DATA DICTIONARY & FIELD SPECIFICATIONS</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">PostgreSQL Column Registry</h1>
-          <p className="text-slate-400 text-xs mt-1">
+          <h1 className="text-2xl font-bold text-ink tracking-tight">PostgreSQL Column Registry</h1>
+          <p className="text-ink-muted text-xs mt-1">
             Authoritative definition of data types, nullability, defaults, and business rules across all tables.
           </p>
         </div>
 
         {/* Search Bar */}
         <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-ink-faint" />
           <input
             type="text"
             placeholder="Search column, table or rule..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full rounded-lg border border-slate-800 bg-slate-900/60 pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:border-emerald-500 focus:outline-none"
+            className="w-full rounded-lg border border-edge bg-surface/60 pl-9 pr-4 py-2 text-xs text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
           />
         </div>
       </div>
 
       {/* Module Filters */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
-        <Filter className="h-3.5 w-3.5 text-slate-500 shrink-0" />
+        <Filter className="h-3.5 w-3.5 text-ink-faint shrink-0" />
         {modules.map((m) => (
           <button
             key={m}
             onClick={() => setSelectedModule(m)}
             className={`px-3 py-1 rounded-md transition-colors whitespace-nowrap font-mono text-xs ${
               selectedModule === m
-                ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                : 'bg-slate-900/40 text-slate-400 hover:text-white border border-slate-800'
+                ? 'bg-accent/20 text-accent-strong border border-accent/40'
+                : 'bg-surface/40 text-ink-muted hover:text-ink border border-edge'
             }`}
           >
             {m}
           </button>
         ))}
-        <span className="text-xs text-slate-500 ml-auto font-mono">{filteredEntries.length} fields</span>
+        <span className="text-xs text-ink-faint ml-auto font-mono">{filteredEntries.length} fields</span>
       </div>
 
       {/* Dictionary Table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden">
+      <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-950/60 text-slate-400 font-mono">
+              <tr className="border-b border-edge bg-canvas/60 text-ink-muted font-mono">
                 <th className="py-3 px-4">Table</th>
                 <th className="py-3 px-4">Column Name</th>
                 <th className="py-3 px-4">Type</th>
@@ -119,21 +119,21 @@ export const DataDictionaryBrowser: React.FC = () => {
                 <th className="py-3 px-4">Business Description & Invariant</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800/60 font-mono">
+            <tbody className="divide-y divide-edge/60 font-mono">
               {filteredEntries.map((row, idx) => (
-                <tr key={idx} className="hover:bg-slate-800/30 transition-colors">
-                  <td className="py-3 px-4 text-slate-300 font-semibold">{row.table}</td>
-                  <td className="py-3 px-4 text-emerald-400">{row.column}</td>
-                  <td className="py-3 px-4 text-slate-400">{row.type}</td>
+                <tr key={idx} className="hover:bg-raised/30 transition-colors">
+                  <td className="py-3 px-4 text-ink-soft font-semibold">{row.table}</td>
+                  <td className="py-3 px-4 text-accent-strong">{row.column}</td>
+                  <td className="py-3 px-4 text-ink-muted">{row.type}</td>
                   <td className="py-3 px-4">
                     {row.nullable ? (
-                      <span className="text-slate-500">YES</span>
+                      <span className="text-ink-faint">YES</span>
                     ) : (
-                      <span className="text-amber-400 font-medium">NO</span>
+                      <span className="text-warning font-medium">NO</span>
                     )}
                   </td>
-                  <td className="py-3 px-4 text-slate-500">{row.defaultVal}</td>
-                  <td className="py-3 px-4 font-sans text-slate-300 max-w-md">{row.businessDescription}</td>
+                  <td className="py-3 px-4 text-ink-faint">{row.defaultVal}</td>
+                  <td className="py-3 px-4 font-sans text-ink-soft max-w-md">{row.businessDescription}</td>
                 </tr>
               ))}
             </tbody>

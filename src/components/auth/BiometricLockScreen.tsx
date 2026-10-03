@@ -40,15 +40,15 @@ export const BiometricLockScreen: React.FC = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-[10000] flex flex-col items-center justify-between p-6 bg-slate-950/98 backdrop-blur-xl text-white select-none">
+    <div className="fixed inset-0 z-[10000] flex flex-col items-center justify-between p-6 bg-canvas/98 backdrop-blur-xl text-ink select-none">
       {/* Top Security Banner */}
       <div className="w-full max-w-sm flex items-center justify-between pt-4">
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent-strong text-xs font-medium">
           <ShieldCheck className="h-3.5 w-3.5" />
           <span>Money Canvas Security</span>
         </div>
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 font-mono">
-          <Lock className="h-3.5 w-3.5 text-amber-400" />
+        <div className="flex items-center gap-1.5 text-xs text-ink-muted font-mono">
+          <Lock className="h-3.5 w-3.5 text-warning" />
           <span>Locked</span>
         </div>
       </div>
@@ -58,39 +58,39 @@ export const BiometricLockScreen: React.FC = () => {
         <div className="relative group cursor-pointer" onClick={() => !isAuthenticating && authenticate()}>
           {/* Animated Glow Rings */}
           <div className="absolute -inset-4 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-full blur-xl animate-pulse" />
-          <div className="relative p-7 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl flex items-center justify-center transition-transform active:scale-95 hover:border-emerald-500/40">
+          <div className="relative p-7 rounded-3xl bg-surface border border-edge shadow-2xl flex items-center justify-center transition-transform active:scale-95 hover:border-accent/40">
             {isAuthenticating ? (
-              <RefreshCw className="h-16 w-16 text-emerald-400 animate-spin" />
+              <RefreshCw className="h-16 w-16 text-accent-strong animate-spin" />
             ) : (
-              <Fingerprint className="h-16 w-16 text-emerald-400 drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
+              <Fingerprint className="h-16 w-16 text-accent-strong drop-shadow-[0_0_15px_rgba(16,185,129,0.4)]" />
             )}
           </div>
         </div>
 
         <div className="space-y-2">
-          <h1 className="text-2xl font-bold tracking-tight text-white flex items-center justify-center gap-2">
+          <h1 className="text-2xl font-bold tracking-tight text-ink flex items-center justify-center gap-2">
             <span>Money Canvas is Locked</span>
           </h1>
-          <p className="text-xs text-slate-400 max-w-xs leading-relaxed">
+          <p className="text-xs text-ink-muted max-w-xs leading-relaxed">
             Please authenticate using {biometryTypeName} to access your financial vault.
           </p>
         </div>
 
         {/* User Card */}
-        <div className="w-full p-3 rounded-2xl bg-slate-900/60 border border-slate-850 flex items-center gap-3 text-left">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-white text-sm shadow">
+        <div className="w-full p-3 rounded-2xl bg-surface/60 border border-slate-850 flex items-center gap-3 text-left">
+          <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center font-bold text-ink text-sm shadow">
             {user.fullName ? user.fullName[0].toUpperCase() : 'U'}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold text-white truncate">{user.fullName || 'User'}</div>
-            <div className="text-[11px] text-slate-400 font-mono truncate">{user.email || 'Google User'}</div>
+            <div className="text-xs font-semibold text-ink truncate">{user.fullName || 'User'}</div>
+            <div className="text-[11px] text-ink-muted font-mono truncate">{user.email || 'Google User'}</div>
           </div>
         </div>
 
         {/* Error Notice */}
         {authError && (
-          <div className="w-full p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-start gap-2.5 text-left">
-            <AlertCircle className="h-4 w-4 shrink-0 text-rose-400 mt-0.5" />
+          <div className="w-full p-3 rounded-xl bg-negative/10 border border-negative/30 text-negative text-xs flex items-start gap-2.5 text-left">
+            <AlertCircle className="h-4 w-4 shrink-0 text-negative mt-0.5" />
             <div className="leading-tight flex-1">{authError}</div>
           </div>
         )}
@@ -100,7 +100,7 @@ export const BiometricLockScreen: React.FC = () => {
           type="button"
           disabled={isAuthenticating}
           onClick={() => authenticate()}
-          className="w-full py-3.5 px-6 rounded-2xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] disabled:opacity-60 cursor-pointer"
+          className="w-full py-3.5 px-6 rounded-2xl bg-accent hover:bg-accent-strong active:bg-accent-deep text-accent-ink font-bold text-sm flex items-center justify-center gap-2.5 shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] disabled:opacity-60 cursor-pointer"
         >
           {isAuthenticating ? (
             <>
@@ -125,7 +125,7 @@ export const BiometricLockScreen: React.FC = () => {
               signOutGoogle();
             }
           }}
-          className="text-xs text-slate-400 hover:text-rose-300 flex items-center gap-1.5 transition-colors py-2 px-3 rounded-lg hover:bg-slate-900"
+          className="text-xs text-ink-muted hover:text-negative flex items-center gap-1.5 transition-colors py-2 px-3 rounded-lg hover:bg-surface"
         >
           <LogOut className="h-3.5 w-3.5" />
           <span>Sign Out / Switch Account</span>

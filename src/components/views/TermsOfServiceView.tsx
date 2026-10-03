@@ -5,33 +5,33 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
   const [lang, setLang] = useState<'en' | 'bn'>('en');
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-200 py-10 px-4 sm:px-6 lg:px-8 font-sans selection:bg-emerald-500/20 selection:text-emerald-300">
-      <div className="max-w-4xl mx-auto space-y-8 bg-slate-900/60 p-6 sm:p-10 rounded-2xl border border-slate-800 backdrop-blur-xl shadow-2xl">
+    <div className="min-h-screen bg-canvas text-ink-soft py-10 px-4 sm:px-6 lg:px-8 font-sans selection:bg-accent/20 selection:text-accent-strong">
+      <div className="max-w-4xl mx-auto space-y-8 bg-surface/60 p-6 sm:p-10 rounded-2xl border border-edge backdrop-blur-xl shadow-2xl">
         {/* Top Navigation */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-800 pb-6 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-edge pb-6 gap-4">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+            <div className="p-3 bg-accent/10 text-accent-strong rounded-xl border border-accent/20">
               <Scale className="h-7 w-7" />
             </div>
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">
                 {lang === 'en' ? 'Terms of Service' : 'ব্যবহারের শর্তাবলী'}
               </h1>
-              <p className="text-slate-400 text-xs sm:text-sm mt-1">
+              <p className="text-ink-muted text-xs sm:text-sm mt-1">
                 Money Canvas — Personal Wealth & Investment Operating System
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="flex items-center bg-slate-950 border border-slate-800 rounded-xl p-1 text-xs">
+            <div className="flex items-center bg-canvas border border-edge rounded-xl p-1 text-xs">
               <button
                 type="button"
                 onClick={() => setLang('en')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
                   lang === 'en'
-                    ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-accent text-accent-ink shadow-sm'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 English
@@ -41,8 +41,8 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
                 onClick={() => setLang('bn')}
                 className={`px-3 py-1.5 rounded-lg font-semibold transition-all ${
                   lang === 'bn'
-                    ? 'bg-emerald-500 text-slate-950 shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-accent text-accent-ink shadow-sm'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 বাংলা
@@ -53,7 +53,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
               <button
                 type="button"
                 onClick={onBack}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
+                className="px-4 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>{lang === 'en' ? 'Back' : 'ফিরে যান'}</span>
@@ -61,7 +61,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             ) : (
               <a
                 href="/"
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
+                className="px-4 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Home</span>
@@ -72,13 +72,13 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
 
         {/* Content */}
         {lang === 'en' ? (
-          <div className="space-y-6 text-sm text-slate-300 leading-relaxed">
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-300 text-xs">
+          <div className="space-y-6 text-sm text-ink-soft leading-relaxed">
+            <div className="p-4 bg-accent/10 border border-accent/20 rounded-xl text-accent-strong text-xs">
               Last updated: September 2026 • Effective immediately for all users of Money Canvas.
             </div>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 1. Acceptance of Terms
               </h2>
               <p>
@@ -87,7 +87,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 2. Description of Service
               </h2>
               <p>
@@ -96,7 +96,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 3. User Accounts and Authentication
               </h2>
               <p>
@@ -105,16 +105,16 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 4. Data Ownership & Privacy
               </h2>
               <p>
-                You retain complete ownership of all financial transactions, account details, and ledger data entered into Money Canvas. We do not sell, rent, or monetize your personal financial data. For more details, review our <a href="/privacy" className="text-emerald-400 hover:underline">Privacy Policy</a>.
+                You retain complete ownership of all financial transactions, account details, and ledger data entered into Money Canvas. We do not sell, rent, or monetize your personal financial data. For more details, review our <a href="/privacy" className="text-accent-strong hover:underline">Privacy Policy</a>.
               </p>
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 5. Disclaimer of Financial Advice
               </h2>
               <p>
@@ -123,24 +123,24 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 6. Contact Information
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-muted">
                 For questions regarding these Terms of Service, contact the developer at:
                 <br />
-                <span className="font-mono text-emerald-400 font-semibold">raju.official.asf@gmail.com</span>
+                <span className="font-mono text-accent-strong font-semibold">raju.official.asf@gmail.com</span>
               </p>
             </section>
           </div>
         ) : (
-          <div className="space-y-6 text-sm text-slate-300 leading-relaxed">
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-emerald-300 text-xs">
+          <div className="space-y-6 text-sm text-ink-soft leading-relaxed">
+            <div className="p-4 bg-accent/10 border border-accent/20 rounded-xl text-accent-strong text-xs">
               সর্বশেষ আপডেট: সেপ্টেম্বর ২০২৬ • Money Canvas ব্যবহারকারীদের জন্য প্রযোজ্য।
             </div>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 ১. শর্তাবলীর সম্মতি
               </h2>
               <p>
@@ -149,7 +149,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 ২. সেবার বিবরণ
               </h2>
               <p>
@@ -158,7 +158,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 ৩. ইউজার অ্যাকাউন্ট এবং নিরাপত্তা
               </h2>
               <p>
@@ -167,7 +167,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 ৪. ডাটার মালিকানা
               </h2>
               <p>
@@ -176,23 +176,23 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             </section>
 
             <section className="space-y-2">
-              <h2 className="text-lg font-bold text-white border-b border-slate-800 pb-2">
+              <h2 className="text-lg font-bold text-ink border-b border-edge pb-2">
                 ৫. যোগাযোগ
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-ink-muted">
                 ব্যবহারের শর্তাবলী সম্পর্কিত যেকোনো প্রশ্নের জন্য আমাদের সাথে যোগাযোগ করুন:
                 <br />
-                <span className="font-mono text-emerald-400 font-semibold">raju.official.asf@gmail.com</span>
+                <span className="font-mono text-accent-strong font-semibold">raju.official.asf@gmail.com</span>
               </p>
             </section>
           </div>
         )}
 
-        <div className="pt-6 border-t border-slate-800 flex justify-between items-center text-xs text-slate-500">
+        <div className="pt-6 border-t border-edge flex justify-between items-center text-xs text-ink-faint">
           <div>© {new Date().getFullYear()} Money Canvas. All rights reserved.</div>
           <div className="flex gap-4">
-            <a href="/privacy" className="text-slate-400 hover:text-emerald-400">Privacy Policy</a>
-            <a href="/" className="text-slate-400 hover:text-emerald-400">Home</a>
+            <a href="/privacy" className="text-ink-muted hover:text-accent-strong">Privacy Policy</a>
+            <a href="/" className="text-ink-muted hover:text-accent-strong">Home</a>
           </div>
         </div>
       </div>

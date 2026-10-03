@@ -26,7 +26,7 @@ export const LedgerHealthBanners: React.FC = () => {
       {integrityWarning && (
         <div
           role="alert"
-          className="pointer-events-auto flex items-start gap-2 bg-amber-950/95 border border-amber-500/40 text-amber-200 text-xs rounded-xl p-3 shadow-2xl backdrop-blur"
+          className="pointer-events-auto flex items-start gap-2 bg-amber-950/95 border border-warning/40 text-amber-200 text-xs rounded-xl p-3 shadow-2xl backdrop-blur"
         >
           <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
           <p className="leading-relaxed">{integrityWarning}</p>

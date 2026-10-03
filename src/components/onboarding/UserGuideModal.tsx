@@ -232,25 +232,25 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-slate-950/80 backdrop-blur-md animate-fade-in">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-slate-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5 bg-canvas/80 backdrop-blur-md animate-fade-in">
+      <div className="bg-surface border border-edge rounded-2xl shadow-2xl w-full max-w-4xl max-h-[92vh] flex flex-col overflow-hidden text-ink-soft">
         
         {/* Modal Top Header */}
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/60 shrink-0">
+        <div className="px-5 py-4 border-b border-edge flex items-center justify-between bg-canvas/60 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl border border-emerald-500/20">
+            <div className="p-2 bg-accent/10 text-accent-strong rounded-xl border border-accent/20">
               <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h3 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
+              <h3 className="text-sm sm:text-base font-bold text-ink flex items-center gap-2">
                 <span>{lang === 'en' ? 'App Walkthrough & User Guide' : 'অ্যাপ ব্যবহারের সহজ নির্দেশিকা'}</span>
                 {autoOpened && (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-accent/20 text-accent-strong border border-accent/30">
                     Quick Tour
                   </span>
                 )}
               </h3>
-              <p className="text-[11px] text-slate-400">
+              <p className="text-[11px] text-ink-muted">
                 {lang === 'en'
                   ? `Step ${currentStepIndex + 1} of ${GUIDE_STEPS.length} • Master Wealthfolio in 2 minutes`
                   : `ধাপ ${currentStepIndex + 1} / ${GUIDE_STEPS.length} • ২ মিনিটে অ্যাপের ব্যবহার শিখুন`}
@@ -260,14 +260,14 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
 
           <div className="flex items-center gap-2">
             {/* Language Switcher */}
-            <div className="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 text-xs">
+            <div className="flex items-center bg-surface border border-edge rounded-xl p-1 text-xs">
               <button
                 type="button"
                 onClick={() => setLanguage('en')}
                 className={`px-2.5 py-1 rounded-lg font-semibold text-[11px] transition-all ${
                   lang === 'en'
-                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-accent text-accent-ink font-bold shadow-xs'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 English
@@ -277,8 +277,8 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
                 onClick={() => setLanguage('bn')}
                 className={`px-2.5 py-1 rounded-lg font-semibold text-[11px] transition-all ${
                   lang === 'bn'
-                    ? 'bg-emerald-500 text-slate-950 font-bold shadow-xs'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-accent text-accent-ink font-bold shadow-xs'
+                    : 'text-ink-muted hover:text-ink'
                 }`}
               >
                 বাংলা
@@ -288,7 +288,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
             {/* Skip / Close Button */}
             <button
               onClick={handleComplete}
-              className="p-1.5 rounded-xl hover:bg-slate-800 text-slate-400 hover:text-white transition-colors"
+              className="p-1.5 rounded-xl hover:bg-raised text-ink-muted hover:text-ink transition-colors"
               title={lang === 'en' ? 'Close Tour' : 'বন্ধ করুন'}
             >
               <X className="h-5 w-5" />
@@ -297,19 +297,19 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-slate-950 h-1.5 shrink-0">
+        <div className="w-full bg-canvas h-1.5 shrink-0">
           <div
-            className="bg-emerald-500 h-1.5 transition-all duration-300 ease-out"
+            className="bg-accent h-1.5 transition-all duration-300 ease-out"
             style={{ width: `${((currentStepIndex + 1) / GUIDE_STEPS.length) * 100}%` }}
           />
         </div>
 
         {/* Main Content Area: Sidebar Steps List + Active Step View */}
-        <div className="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-12 min-h-0 divide-y md:divide-y-0 md:divide-x divide-slate-800">
+        <div className="flex-1 overflow-y-auto grid grid-cols-1 md:grid-cols-12 min-h-0 divide-y md:divide-y-0 md:divide-x divide-edge">
           
           {/* Left Steps Navigation (Desktop) */}
-          <div className="hidden md:block md:col-span-4 p-4 space-y-1.5 bg-slate-950/40 overflow-y-auto">
-            <p className="text-[10px] uppercase font-mono font-bold text-slate-500 px-2 mb-2">
+          <div className="hidden md:block md:col-span-4 p-4 space-y-1.5 bg-canvas/40 overflow-y-auto">
+            <p className="text-[10px] uppercase font-mono font-bold text-ink-faint px-2 mb-2">
               {lang === 'en' ? 'Guide Chapters' : 'নির্দেশিকার অধ্যায়সমূহ'}
             </p>
             {GUIDE_STEPS.map((step, idx) => {
@@ -323,19 +323,19 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
                   onClick={() => setCurrentStepIndex(idx)}
                   className={`w-full text-left p-2.5 rounded-xl border text-xs flex items-center gap-3 transition-all ${
                     isActive
-                      ? 'bg-emerald-500/10 border-emerald-500/40 text-white font-semibold shadow-xs'
+                      ? 'bg-accent/10 border-accent/40 text-ink font-semibold shadow-xs'
                       : isPast
-                      ? 'bg-slate-900/60 border-slate-800/80 text-slate-300 hover:bg-slate-800/50'
-                      : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-800/40 hover:text-slate-200'
+                      ? 'bg-surface/60 border-edge/80 text-ink-soft hover:bg-raised/50'
+                      : 'bg-transparent border-transparent text-ink-muted hover:bg-raised/40 hover:text-ink-soft'
                   }`}
                 >
                   <div
                     className={`p-1.5 rounded-lg shrink-0 ${
                       isActive
-                        ? 'bg-emerald-500 text-slate-950 font-bold'
+                        ? 'bg-accent text-accent-ink font-bold'
                         : isPast
-                        ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30'
-                        : 'bg-slate-800 text-slate-400'
+                        ? 'bg-emerald-950 text-accent-strong border border-accent/30'
+                        : 'bg-raised text-ink-muted'
                     }`}
                   >
                     <IconComp className="h-4 w-4" />
@@ -344,11 +344,11 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
                     <div className="truncate text-xs font-medium">
                       {lang === 'en' ? step.titleEn : step.titleBn}
                     </div>
-                    <div className="text-[10px] text-slate-500 truncate">
+                    <div className="text-[10px] text-ink-faint truncate">
                       {lang === 'en' ? step.badgeEn : step.badgeBn}
                     </div>
                   </div>
-                  {isPast && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}
+                  {isPast && <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong shrink-0" />}
                 </button>
               );
             })}
@@ -360,40 +360,40 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
             <div className="space-y-5">
               {/* Badge & Icon Header */}
               <div className="flex items-center justify-between gap-3">
-                <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 inline-flex items-center gap-1.5">
+                <span className="px-3 py-1 rounded-full text-xs font-mono font-semibold bg-accent/10 text-accent-strong border border-accent/20 inline-flex items-center gap-1.5">
                   <StepIcon className="h-3.5 w-3.5" />
                   <span>{lang === 'en' ? currentStep.badgeEn : currentStep.badgeBn}</span>
                 </span>
-                <span className="text-[11px] font-mono text-slate-500">
+                <span className="text-[11px] font-mono text-ink-faint">
                   {currentStepIndex + 1} / {GUIDE_STEPS.length}
                 </span>
               </div>
 
               {/* Title & Summary */}
               <div>
-                <h2 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-snug">
+                <h2 className="text-lg sm:text-2xl font-bold text-ink tracking-tight leading-snug">
                   {lang === 'en' ? currentStep.titleEn : currentStep.titleBn}
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed bg-slate-950/60 p-3.5 rounded-xl border border-slate-800/80">
+                <p className="text-xs sm:text-sm text-ink-soft mt-2 leading-relaxed bg-canvas/60 p-3.5 rounded-xl border border-edge/80">
                   {lang === 'en' ? currentStep.summaryEn : currentStep.summaryBn}
                 </p>
               </div>
 
               {/* Bullet Points */}
               <div className="space-y-2.5 pt-1">
-                <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider font-mono">
+                <h4 className="text-xs font-bold text-ink-muted uppercase tracking-wider font-mono">
                   {lang === 'en' ? 'Key Capabilities & Features' : 'প্রধান সুবিধাসমূহ:'}
                 </h4>
                 <div className="space-y-2">
                   {(lang === 'en' ? currentStep.pointsEn : currentStep.pointsBn).map((point, pIdx) => (
                     <div
                       key={pIdx}
-                      className="p-3 rounded-xl bg-slate-950/40 border border-slate-800 flex items-start gap-3 text-xs leading-relaxed"
+                      className="p-3 rounded-xl bg-canvas/40 border border-edge flex items-start gap-3 text-xs leading-relaxed"
                     >
-                      <div className="p-1 rounded bg-emerald-500/20 text-emerald-400 shrink-0 mt-0.5">
+                      <div className="p-1 rounded bg-accent/20 text-accent-strong shrink-0 mt-0.5">
                         <CheckCircle2 className="h-3.5 w-3.5" />
                       </div>
-                      <span className="text-slate-200">{point}</span>
+                      <span className="text-ink-soft">{point}</span>
                     </div>
                   ))}
                 </div>
@@ -401,10 +401,10 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
 
               {/* Pro Tip Box */}
               {currentStep.proTipEn && (
-                <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-200 text-xs flex items-start gap-2.5">
-                  <Sparkles className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="p-3.5 rounded-xl bg-warning/10 border border-warning/20 text-amber-200 text-xs flex items-start gap-2.5">
+                  <Sparkles className="h-4 w-4 text-warning shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-amber-300 font-semibold mr-1">
+                    <strong className="text-warning font-semibold mr-1">
                       {lang === 'en' ? 'Pro Tip:' : 'টিপস:'}
                     </strong>
                     <span>{lang === 'en' ? currentStep.proTipEn : currentStep.proTipBn}</span>
@@ -421,8 +421,8 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
                   onClick={() => setCurrentStepIndex(dotIdx)}
                   className={`h-1.5 rounded-full transition-all ${
                     dotIdx === currentStepIndex
-                      ? 'w-6 bg-emerald-500'
-                      : 'w-1.5 bg-slate-800'
+                      ? 'w-6 bg-accent'
+                      : 'w-1.5 bg-raised'
                   }`}
                 />
               ))}
@@ -432,11 +432,11 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
         </div>
 
         {/* Modal Bottom Actions */}
-        <div className="px-5 py-3.5 border-t border-slate-800 bg-slate-950 flex items-center justify-between shrink-0 gap-3">
+        <div className="px-5 py-3.5 border-t border-edge bg-canvas flex items-center justify-between shrink-0 gap-3">
           <button
             type="button"
             onClick={handleComplete}
-            className="text-xs font-semibold text-slate-400 hover:text-white px-2 py-1 transition-colors"
+            className="text-xs font-semibold text-ink-muted hover:text-ink px-2 py-1 transition-colors"
           >
             {lang === 'en' ? 'Skip Tour' : 'এখনই শুরু করুন (Skip)'}
           </button>
@@ -446,7 +446,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
               <button
                 type="button"
                 onClick={handlePrev}
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition-all"
+                className="px-3.5 py-2 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold border border-slate-700 flex items-center gap-1.5 transition-all"
               >
                 <ChevronLeft className="h-4 w-4" />
                 <span>{lang === 'en' ? 'Previous' : 'আগের ধাপ'}</span>
@@ -456,7 +456,7 @@ export const UserGuideModal: React.FC<UserGuideModalProps> = ({ isOpen, onClose,
             <button
               type="button"
               onClick={handleNext}
-              className="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg transition-all"
+              className="px-5 py-2 rounded-xl bg-accent hover:bg-accent-strong text-accent-ink font-bold text-xs flex items-center gap-2 shadow-lg transition-all"
             >
               <span>
                 {isLast
