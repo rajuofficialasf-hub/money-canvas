@@ -342,16 +342,16 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
   return (
     <div className="space-y-6 max-w-6xl mx-auto py-2">
       {/* Top Header */}
-      <div className="border-b border-slate-800 pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="border-b border-edge pb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 mb-1">
+          <div className="flex items-center gap-2 text-xs font-semibold text-accent-strong mb-1">
             <BookOpen className="h-4 w-4" />
             <span>Income & Expenses Journal</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-bold text-ink tracking-tight">
             Income & Expenses
           </h1>
-          <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
+          <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
             Track and balance all your income, expenses, and transfers seamlessly with double-entry precision.
           </p>
         </div>
@@ -370,10 +370,10 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
               <button
                 onClick={() => onNavigate('sms_parser')}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30 transition-all shadow-sm cursor-pointer"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent-strong text-xs font-semibold border border-accent/30 transition-all shadow-sm cursor-pointer"
                 title="Parse SMS from bKash, Nagad, Rocket or Bank alerts"
               >
-                <MessageSquare className="h-3.5 w-3.5 text-emerald-400" />
+                <MessageSquare className="h-3.5 w-3.5 text-accent-strong" />
                 <span>SMS পার্সার (100% Free)</span>
               </button>
             </>
@@ -383,7 +383,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
             onClick={() => setIsCategoryModalOpen(true)}
             variant="secondary"
           >
-            <Tag className="h-3.5 w-3.5 text-emerald-400" />
+            <Tag className="h-3.5 w-3.5 text-accent-strong" />
             <span>Manage Categories</span>
           </Button>
 
@@ -403,7 +403,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-1 p-1 bg-slate-900 rounded-lg border border-slate-800 overflow-x-auto w-full md:w-auto text-xs">
+        <div className="flex items-center gap-1 p-1 bg-surface rounded-lg border border-edge overflow-x-auto w-full md:w-auto text-xs">
           {[
             { id: 'all', label: 'All Transactions' },
             { id: 'expense', label: 'Expenses' },
@@ -418,8 +418,8 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               onClick={() => setTypeFilter(tab.id)}
               className={`px-3 py-1.5 font-medium rounded-md whitespace-nowrap transition-colors ${
                 typeFilter === tab.id
-                  ? 'bg-slate-800 text-white font-semibold shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-raised text-ink font-semibold shadow-sm'
+                  : 'text-ink-muted hover:text-ink-soft'
               }`}
             >
               {tab.label}
@@ -439,7 +439,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
       </div>
 
       {/* Transactions Journal Table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/40 overflow-hidden divide-y divide-slate-800/80">
+      <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden divide-y divide-edge/80">
         {filteredTransactions.map((tx) => {
           const lines = transactionLines.filter((l) => l.transactionId === tx.id);
           const isVoided = tx.status === 'voided';
@@ -448,42 +448,42 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
           return (
             <div
               key={tx.id}
-              className={`p-4 transition-colors ${isVoided ? 'bg-slate-950/60 opacity-70' : 'hover:bg-slate-800/20'}`}
+              className={`p-4 transition-colors ${isVoided ? 'bg-canvas/60 opacity-70' : 'hover:bg-raised/20'}`}
             >
               {/* Transaction Header Bar */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
                 <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="font-mono text-xs text-slate-400 flex items-center gap-1.5 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                    <Calendar className="h-3 w-3 text-slate-500" />
+                  <span className="font-mono text-xs text-ink-muted flex items-center gap-1.5 bg-canvas px-2 py-0.5 rounded border border-edge">
+                    <Calendar className="h-3 w-3 text-ink-faint" />
                     <span>{tx.date}</span>
                   </span>
 
-                  <span className="text-xs uppercase font-semibold text-slate-200 bg-slate-800/60 px-2 py-0.5 rounded">
+                  <span className="text-xs uppercase font-semibold text-ink-soft bg-raised/60 px-2 py-0.5 rounded">
                     {tx.type.replace('_', ' ')}
                   </span>
 
                   {isVoided && (
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-rose-950/60 text-rose-400 border border-rose-500/30">
+                    <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-rose-950/60 text-negative border border-negative/30">
                       Voided / Reversed
                     </span>
                   )}
 
                   {isReversal && (
-                    <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-amber-950/60 text-amber-400 border border-amber-500/30">
+                    <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-amber-950/60 text-warning border border-warning/30">
                       Reversal Entry
                     </span>
                   )}
                 </div>
 
                 <div className="flex items-center gap-3">
-                  <span className="text-[11px] font-mono text-slate-500">
+                  <span className="text-[11px] font-mono text-ink-faint">
                     #{tx.id.replace('tx-', '').slice(0, 10)}
                   </span>
 
                   {!isVoided && !isReversal && EDITABLE_TYPES.includes(tx.type) && (
                     <button
                       onClick={() => openEditModal(tx.id)}
-                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-emerald-400 transition-colors px-2 py-0.5 rounded hover:bg-emerald-950/30 border border-transparent hover:border-emerald-900/50"
+                      className="flex items-center gap-1 text-[11px] text-ink-muted hover:text-accent-strong transition-colors px-2 py-0.5 rounded hover:bg-emerald-950/30 border border-transparent hover:border-emerald-900/50"
                       title="Correct this entry: posts a fixed copy and auto-reverses the original"
                     >
                       <Pencil className="h-3 w-3" />
@@ -493,7 +493,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                   {!isVoided && !isReversal && (
                     <button
                       onClick={() => handleDeleteClick(tx.id)}
-                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-400 transition-colors px-2 py-0.5 rounded hover:bg-rose-950/30 border border-transparent hover:border-rose-900/50"
+                      className="flex items-center gap-1 text-[11px] text-ink-muted hover:text-negative transition-colors px-2 py-0.5 rounded hover:bg-rose-950/30 border border-transparent hover:border-rose-900/50"
                       title="Delete by posting a balanced reversal (audit-safe)"
                     >
                       <Trash2 className="h-3 w-3" />
@@ -505,16 +505,16 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
               {/* Note / Memo */}
               {tx.note && (
-                <div className="text-xs text-slate-300 mb-3 font-sans flex items-center gap-1.5">
-                  <span className="text-slate-500 font-medium">Memo:</span>
+                <div className="text-xs text-ink-soft mb-3 font-sans flex items-center gap-1.5">
+                  <span className="text-ink-faint font-medium">Memo:</span>
                   <span>{tx.note}</span>
                 </div>
               )}
 
               {/* Transaction Child Lines Table */}
-              <div className="rounded-lg border border-slate-800/80 bg-slate-950 p-3 space-y-1.5 text-xs">
+              <div className="rounded-lg border border-edge/80 bg-canvas p-3 space-y-1.5 text-xs">
                 {/* Desktop Column Header */}
-                <div className="hidden sm:grid grid-cols-12 text-[10px] uppercase font-semibold text-slate-400 pb-1.5 border-b border-slate-800/80">
+                <div className="hidden sm:grid grid-cols-12 text-[10px] uppercase font-semibold text-ink-muted pb-1.5 border-b border-edge/80">
                   <div className="col-span-3">Target Type</div>
                   <div className="col-span-4">Account / Category</div>
                   <div className="col-span-3">Line Memo</div>
@@ -528,7 +528,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                     : getCategoryName(line.categoryId);
 
                   return (
-                    <div key={line.id} className="border-b border-slate-900/60 last:border-none py-1.5">
+                    <div key={line.id} className="border-b border-edge-soft/60 last:border-none py-1.5">
                       {/* Mobile layout (< sm) */}
                       <div className="sm:hidden flex items-center justify-between gap-2">
                         <div className="min-w-0 flex-1 space-y-0.5">
@@ -542,19 +542,19 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             >
                               {isAccount ? 'Account' : 'Category'}
                             </span>
-                            <span className="text-slate-200 font-medium truncate text-xs">
+                            <span className="text-ink-soft font-medium truncate text-xs">
                               {entityName}
                             </span>
                           </div>
                           {line.memo && (
-                            <div className="text-slate-400 text-[10px] truncate">
+                            <div className="text-ink-muted text-[10px] truncate">
                               {line.memo}
                             </div>
                           )}
                         </div>
                         <div
                           className={`text-right font-semibold font-mono text-xs shrink-0 ${
-                            line.amount > 0 ? 'text-emerald-400' : 'text-rose-400'
+                            line.amount > 0 ? 'text-positive' : 'text-negative'
                           }`}
                         >
                           {line.amount > 0
@@ -576,15 +576,15 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             {isAccount ? 'Account' : 'Category'}
                           </span>
                         </div>
-                        <div className="col-span-4 text-slate-200 font-medium truncate">
+                        <div className="col-span-4 text-ink-soft font-medium truncate">
                           {entityName}
                         </div>
-                        <div className="col-span-3 text-slate-400 truncate text-[11px]">
+                        <div className="col-span-3 text-ink-muted truncate text-[11px]">
                           {line.memo || '—'}
                         </div>
                         <div
                           className={`col-span-2 text-right font-semibold font-mono ${
-                            line.amount > 0 ? 'text-emerald-400' : 'text-rose-400'
+                            line.amount > 0 ? 'text-positive' : 'text-negative'
                           }`}
                         >
                           {line.amount > 0
@@ -597,8 +597,8 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                 })}
 
                 {/* Double-Entry Check Footer */}
-                <div className="pt-2 mt-1 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                  <span className="flex items-center gap-1.5 text-emerald-400">
+                <div className="pt-2 mt-1 border-t border-edge/80 flex items-center justify-between text-[11px] text-ink-muted">
+                  <span className="flex items-center gap-1.5 text-accent-strong">
                     <ShieldCheck className="h-3.5 w-3.5" />
                     <span>Double-Entry Balance Verified</span>
                   </span>
@@ -610,7 +610,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
         })}
 
         {filteredTransactions.length === 0 && (
-          <div className="p-12 text-center text-slate-400 text-xs">
+          <div className="p-12 text-center text-ink-muted text-xs">
             No transactions found. Click &quot;+ Post Transaction&quot; to record your entries.
           </div>
         )}
@@ -626,9 +626,9 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
         title={
           <span className="flex items-center gap-2">
             {editingTxId ? (
-              <Pencil className="h-4 w-4 text-amber-400" />
+              <Pencil className="h-4 w-4 text-warning" />
             ) : (
-              <Plus className="h-4 w-4 text-emerald-400" />
+              <Plus className="h-4 w-4 text-accent-strong" />
             )}
             <span>{editingTxId ? 'Edit Transaction (Correction)' : 'Post Double-Entry Transaction'}</span>
           </span>
@@ -643,7 +643,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
       >
         <div className="space-y-4">
             {/* Mode Switcher Tabs */}
-            <div className="flex items-center gap-1 p-1 bg-slate-950 rounded-lg border border-slate-800">
+            <div className="flex items-center gap-1 p-1 bg-canvas rounded-lg border border-edge">
               {[
                 { id: 'expense', label: 'Expense' },
                 { id: 'income', label: 'Income' },
@@ -667,8 +667,8 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                   }}
                   className={`flex-1 py-1.5 text-xs font-medium rounded-md transition-colors ${
                     entryMode === m.id
-                      ? 'bg-slate-800 text-white font-semibold shadow-sm'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-raised text-ink font-semibold shadow-sm'
+                      : 'text-ink-muted hover:text-ink-soft'
                   }`}
                 >
                   {m.label}
@@ -707,11 +707,11 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               {/* Source Account */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-slate-300 font-medium">
+                  <label className="block text-ink-soft font-medium">
                     {entryMode === 'income' ? 'Deposit Into Account *' : 'Source Funding Account *'}
                   </label>
                   {selectedAccount && (
-                    <span className="text-[11px] font-mono text-emerald-400">
+                    <span className="text-[11px] font-mono text-accent-strong">
                       Balance: ৳{getAccountBalance(selectedAccount).toLocaleString()}
                     </span>
                   )}
@@ -740,15 +740,15 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                   if (parsedAmt <= bal) return null;
 
                   return (
-                    <div className="mt-2 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs space-y-1">
-                      <div className="font-semibold text-amber-200 flex items-center gap-1.5">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <div className="mt-2 p-2.5 rounded-lg bg-warning/10 border border-warning/30 text-warning text-xs space-y-1">
+                      <div className="font-semibold text-warning flex items-center gap-1.5">
+                        <AlertCircle className="w-3.5 h-3.5 text-warning shrink-0" />
                         <span>অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই (Insufficient Balance)</span>
                       </div>
-                      <div className="text-[11px] text-slate-300">
-                        "{acc.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold text-amber-400 font-mono">৳{bal.toLocaleString()}</span>, কিন্তু খরচ/ট্রান্সফার করতে চাওয়া হচ্ছে <span className="font-bold text-white font-mono">৳{parsedAmt.toLocaleString()}</span>।
+                      <div className="text-[11px] text-ink-soft">
+                        "{acc.name}" অ্যাকাউন্টে বর্তমান ব্যালেন্স: <span className="font-bold text-warning font-mono">৳{bal.toLocaleString()}</span>, কিন্তু খরচ/ট্রান্সফার করতে চাওয়া হচ্ছে <span className="font-bold text-ink font-mono">৳{parsedAmt.toLocaleString()}</span>।
                       </div>
-                      <div className="text-[11px] text-emerald-300 font-medium">
+                      <div className="text-[11px] text-accent-strong font-medium">
                         💡 লেনদেন সম্পন্ন করার পূর্বে অনুগ্রহ করে আগে এই অ্যাকাউন্টে টাকা ডিপোজিট/জমা করুন।
                       </div>
                     </div>
@@ -760,9 +760,9 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               {entryMode === 'transfer' && (
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="block text-slate-300 font-medium">Destination Target Account *</label>
+                    <label className="block text-ink-soft font-medium">Destination Target Account *</label>
                     {destinationAccount && (
-                      <span className="text-[11px] font-mono text-emerald-400">
+                      <span className="text-[11px] font-mono text-accent-strong">
                         Balance: ৳{getAccountBalance(destinationAccount).toLocaleString()}
                       </span>
                     )}
@@ -787,13 +787,13 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
               {(entryMode === 'expense' || entryMode === 'income') && (
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <label className="block text-slate-300 font-medium">
+                    <label className="block text-ink-soft font-medium">
                       {entryMode === 'expense' ? 'Expense Category *' : 'Income Category *'}
                     </label>
                     <button
                       type="button"
                       onClick={() => setIsCreatingInlineCategory(!isCreatingInlineCategory)}
-                      className="text-xs text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-medium"
+                      className="text-xs text-accent-strong hover:text-accent flex items-center gap-1 font-medium"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       <span>{isCreatingInlineCategory ? 'Cancel' : '+ Add Custom Category'}</span>
@@ -802,8 +802,8 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
                   {/* Inline Category Creator Form */}
                   {isCreatingInlineCategory ? (
-                    <div className="p-3 rounded-lg bg-slate-950 border border-emerald-500/40 space-y-3 animate-in fade-in">
-                      <div className="flex items-center justify-between text-xs font-semibold text-emerald-400">
+                    <div className="p-3 rounded-lg bg-canvas border border-accent/40 space-y-3 animate-in fade-in">
+                      <div className="flex items-center justify-between text-xs font-semibold text-accent-strong">
                         <span>Create New {entryMode === 'income' ? 'Income' : 'Expense'} Category</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -821,7 +821,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             type="color"
                             value={newCatColor}
                             onChange={(e) => setNewCatColor(e.target.value)}
-                            className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-slate-900 p-0.5"
+                            className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-surface p-0.5"
                             title="Choose color tag"
                           />
                           <Button
@@ -856,13 +856,13 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
 
               {/* Split Lines Editor */}
               {entryMode === 'split' && (
-                <div className="space-y-2 rounded-lg bg-slate-950 p-3 border border-slate-800">
-                  <div className="flex items-center justify-between text-xs font-semibold text-slate-300 mb-1">
+                <div className="space-y-2 rounded-lg bg-canvas p-3 border border-edge">
+                  <div className="flex items-center justify-between text-xs font-semibold text-ink-soft mb-1">
                     <span>Split Breakdown Categories</span>
                     <button
                       type="button"
                       onClick={() => setIsCategoryModalOpen(true)}
-                      className="text-emerald-400 hover:underline text-[11px]"
+                      className="text-accent-strong hover:underline text-[11px]"
                     >
                       + Manage Categories
                     </button>
@@ -877,7 +877,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             updated[idx].categoryId = e.target.value;
                             setSplitLines(updated);
                           }}
-                          className="w-full rounded border border-slate-800 bg-slate-900 p-1.5 text-xs text-white"
+                          className="w-full rounded border border-edge bg-surface p-1.5 text-xs text-ink"
                         >
                           {categories
                             .filter((c) => c.type === 'expense')
@@ -898,7 +898,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             updated[idx].amount = e.target.value;
                             setSplitLines(updated);
                           }}
-                          className="w-full rounded border border-slate-800 bg-slate-900 p-1.5 text-xs text-white font-mono"
+                          className="w-full rounded border border-edge bg-surface p-1.5 text-xs text-ink font-mono"
                         />
                       </div>
                       <div className="col-span-1 text-right">
@@ -906,7 +906,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                           <button
                             type="button"
                             onClick={() => setSplitLines(splitLines.filter((_, i) => i !== idx))}
-                            className="text-slate-500 hover:text-rose-400"
+                            className="text-ink-faint hover:text-negative"
                           >
                             <X className="h-3.5 w-3.5" />
                           </button>
@@ -922,7 +922,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                         { categoryId: categories.find((c) => c.type === 'expense')?.id || categories[0]?.id || '', amount: '', memo: '' },
                       ])
                     }
-                    className="text-[11px] text-emerald-400 hover:underline pt-1 block"
+                    className="text-[11px] text-accent-strong hover:underline pt-1 block"
                   >
                     + Add Another Split Item
                   </button>
@@ -939,7 +939,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                 />
               </Field>
 
-              <div className="border-t border-slate-800 pt-4 flex items-center justify-end gap-3">
+              <div className="border-t border-edge pt-4 flex items-center justify-end gap-3">
                 <Button
                   type="button"
                   variant="outline"
@@ -1013,7 +1013,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
       onClose={onClose}
       title={
         <span className="flex items-center gap-2">
-          <FolderPlus className="h-4 w-4 text-emerald-400" />
+          <FolderPlus className="h-4 w-4 text-accent-strong" />
           <span>Income & Expense Categories</span>
         </span>
       }
@@ -1023,14 +1023,14 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
     >
       <div className="space-y-4">
         {/* Tab Switcher */}
-        <div className="flex items-center gap-2 p-1 bg-slate-950 rounded-lg border border-slate-800">
+        <div className="flex items-center gap-2 p-1 bg-canvas rounded-lg border border-edge">
           <button
             type="button"
             onClick={() => setActiveTab('expense')}
             className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors ${
               activeTab === 'expense'
                 ? 'bg-rose-950/80 text-rose-300 border border-rose-800/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Expense Categories ({categories.filter((c) => c.type === 'expense').length})
@@ -1041,7 +1041,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             className={`flex-1 py-2 text-xs font-semibold rounded-md transition-colors ${
               activeTab === 'income'
                 ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/40 shadow-sm'
-                : 'text-slate-400 hover:text-slate-200'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             Income Categories ({categories.filter((c) => c.type === 'income').length})
@@ -1053,9 +1053,9 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
         {successMessage && <ErrorBanner variant="success" message={successMessage} />}
 
         {/* Add New Category Form */}
-        <form onSubmit={handleSubmit} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
-          <div className="text-xs font-semibold text-slate-200 flex items-center gap-1.5">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-400" />
+        <form onSubmit={handleSubmit} className="p-3.5 rounded-xl bg-canvas border border-edge space-y-2">
+          <div className="text-xs font-semibold text-ink-soft flex items-center gap-1.5">
+            <Sparkles className="h-3.5 w-3.5 text-accent-strong" />
             <span>Add New {activeTab === 'expense' ? 'Expense' : 'Income'} Category</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2">
@@ -1072,7 +1072,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                 type="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-slate-900 p-0.5 shrink-0"
+                className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-surface p-0.5 shrink-0"
                 title="Choose color tag"
               />
               <Button
@@ -1092,7 +1092,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
             {filteredCategories.map((cat) => (
               <div
                 key={cat.id}
-                className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between gap-2"
+                className="p-3 rounded-xl bg-canvas/80 border border-edge flex items-center justify-between gap-2"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span
@@ -1100,8 +1100,8 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                     style={{ backgroundColor: cat.color || (cat.type === 'income' ? '#10B981' : '#F59E0B') }}
                   />
                   <div className="truncate">
-                    <span className="font-medium text-slate-200 block truncate">{cat.name}</span>
-                    <span className="text-[10px] text-slate-500">
+                    <span className="font-medium text-ink-soft block truncate">{cat.name}</span>
+                    <span className="text-[10px] text-ink-faint">
                       {cat.isSystem ? 'Standard System' : 'User Custom'}
                     </span>
                   </div>
@@ -1115,7 +1115,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                         onDeleteCategory(cat.id);
                       }
                     }}
-                    className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-rose-950/40 rounded transition-colors shrink-0"
+                    className="p-1.5 text-ink-faint hover:text-negative hover:bg-rose-950/40 rounded transition-colors shrink-0"
                     title="Delete custom category"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -1126,7 +1126,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
           </div>
         </div>
 
-        <div className="border-t border-slate-800 pt-3 flex justify-end">
+        <div className="border-t border-edge pt-3 flex justify-end">
           <Button
             type="button"
             variant="secondary"

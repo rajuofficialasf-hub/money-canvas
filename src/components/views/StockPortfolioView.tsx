@@ -358,15 +358,15 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
   return (
     <div className="space-y-6">
       {/* Top Banner & Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-edge pb-5">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-bold text-white tracking-tight">Stock Portfolio & WAC Holdings</h1>
-            <span className="text-[10px] bg-emerald-500/10 text-emerald-400 font-mono px-2 py-0.5 rounded border border-emerald-500/20">
+            <h1 className="text-xl font-bold text-ink tracking-tight">Stock Portfolio & WAC Holdings</h1>
+            <span className="text-[10px] bg-accent/10 text-accent-strong font-mono px-2 py-0.5 rounded border border-accent/20">
               DSE Live & Offline Resilient
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-ink-muted mt-1">
             Real-time DSE equity holdings calculated using Weighted Average Cost (WAC) with Lock 4 cost basis and authoritative broker cash views.
           </p>
         </div>
@@ -374,14 +374,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={() => setIsAddStockModalOpen(true)}
-            className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
-            <Plus className="h-3.5 w-3.5 text-emerald-400" />
+            <Plus className="h-3.5 w-3.5 text-accent-strong" />
             <span>Add Security</span>
           </button>
           <button
             onClick={onNavigateToBrokerage}
-            className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
             <Building2 className="h-3.5 w-3.5 text-blue-400" />
             <span>Brokerage Accounts</span>
@@ -400,16 +400,16 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               onClick={onNavigateToDividends}
               className="px-3 py-2 bg-amber-950/60 border border-amber-700/60 hover:border-amber-500 text-amber-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
-              <Coins className="h-3.5 w-3.5 text-amber-400" />
+              <Coins className="h-3.5 w-3.5 text-warning" />
               <span>Dividends</span>
             </button>
           )}
           {onNavigateToReports && (
             <button
               onClick={onNavigateToReports}
-              className="px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
-              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              <FileSpreadsheet className="h-3.5 w-3.5 text-accent-strong" />
               <span>Reports</span>
             </button>
           )}
@@ -424,16 +424,16 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* DSE Live Market Feed & Multi-tier Synchronization Bar */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 shadow-sm">
+      <div className="bg-surface/80 border border-edge rounded-xl p-3.5 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex items-center gap-2">
-              <div className={`p-2 rounded-lg ${dseSyncStatus.isManualOnly ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}`}>
+              <div className={`p-2 rounded-lg ${dseSyncStatus.isManualOnly ? 'bg-warning/10 text-warning border border-warning/20' : 'bg-accent/10 text-accent-strong border border-accent/20'}`}>
                 {dseSyncStatus.isManualOnly ? <SlidersHorizontal className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-white">
+                  <span className="text-xs font-bold text-ink">
                     {dseSyncStatus.isManualOnly ? 'Manual Price Mode' : 'StockChartBD & DSE Market Feed'}
                   </span>
                   <span className={`text-[10px] px-1.5 py-0.5 rounded font-mono ${
@@ -442,8 +442,8 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       : dseSyncStatus.status === 'syncing' || isSyncingLocal
                       ? 'bg-sky-950 text-sky-300 border border-sky-800 animate-pulse'
                       : dseSyncStatus.status === 'success'
-                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-800'
-                      : 'bg-slate-800 text-slate-400'
+                      ? 'bg-emerald-950 text-accent-strong border border-emerald-800'
+                      : 'bg-raised text-ink-muted'
                   }`}>
                     {dseSyncStatus.isManualOnly
                       ? 'MANUAL ACTIVE'
@@ -456,14 +456,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       : 'OFFLINE / CACHED'}
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-400 mt-0.5 flex items-center gap-1.5">
+                <div className="text-[11px] text-ink-muted mt-0.5 flex items-center gap-1.5">
                   <span>
                     {dseSyncStatus.lastSyncedAt
                       ? `Last updated: ${new Date(dseSyncStatus.lastSyncedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
                       : 'Not synced yet'}
                   </span>
                   <span>•</span>
-                  <span className="text-slate-500">{stocks.length} tracked tickers</span>
+                  <span className="text-ink-faint">{stocks.length} tracked tickers</span>
                 </div>
               </div>
             </div>
@@ -478,10 +478,10 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors border ${
                 dseSyncStatus.isManualOnly
                   ? 'bg-amber-950/40 border-amber-700/60 text-amber-200 hover:bg-amber-900/50'
-                  : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                  : 'bg-canvas border-edge text-ink-soft hover:border-slate-700'
               }`}
             >
-              <SlidersHorizontal className="h-3.5 w-3.5 text-amber-400" />
+              <SlidersHorizontal className="h-3.5 w-3.5 text-warning" />
               <span>{dseSyncStatus.isManualOnly ? 'Switch to Auto API' : 'Manual Override'}</span>
             </button>
 
@@ -490,7 +490,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <button
                 onClick={handleTriggerSync}
                 disabled={isSyncingLocal}
-                className="px-3 py-1.5 bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-emerald-300 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                className="px-3 py-1.5 bg-accent-deep/20 hover:bg-accent-deep/30 border border-accent/30 text-accent-strong rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors disabled:opacity-50"
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isSyncingLocal ? 'animate-spin' : ''}`} />
                 <span>{isSyncingLocal ? 'Syncing...' : 'Sync Live Prices'}</span>
@@ -500,7 +500,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             {/* Bulk Price Editor */}
             <button
               onClick={handleOpenBatchModal}
-              className="px-3 py-1.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-canvas border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <Edit3 className="h-3.5 w-3.5 text-sky-400" />
               <span>Bulk Price Editor</span>
@@ -509,9 +509,9 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             {/* CSV Import/Export */}
             <button
               onClick={() => setIsCsvModalOpen(true)}
-              className="px-3 py-1.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-canvas border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
-              <FileSpreadsheet className="h-3.5 w-3.5 text-emerald-400" />
+              <FileSpreadsheet className="h-3.5 w-3.5 text-accent-strong" />
               <span>CSV Sheet</span>
             </button>
           </div>
@@ -521,15 +521,15 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         {syncNotice && (
           <div className={`mt-3 p-2.5 rounded-lg text-xs flex items-center gap-2 border ${
             syncNotice.type === 'success'
-              ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300'
+              ? 'bg-emerald-950/40 border-emerald-800/60 text-accent-strong'
               : syncNotice.type === 'error'
               ? 'bg-rose-950/40 border-rose-800/60 text-rose-300'
               : 'bg-sky-950/40 border-sky-800/60 text-sky-300'
           }`}>
             {syncNotice.type === 'success' ? (
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+              <CheckCircle2 className="h-4 w-4 shrink-0 text-accent-strong" />
             ) : syncNotice.type === 'error' ? (
-              <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+              <AlertCircle className="h-4 w-4 shrink-0 text-negative" />
             ) : (
               <RefreshCw className="h-4 w-4 shrink-0 animate-spin text-sky-400" />
             )}
@@ -570,7 +570,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
           value={`৳${totalBrokerCash.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           subtitle={
             <span className="flex items-center gap-1">
-              <ShieldCheck className="h-3 w-3 text-emerald-400" />
+              <ShieldCheck className="h-3 w-3 text-accent-strong" />
               <span>v_broker_cash_balance sub-ledger</span>
             </span>
           }
@@ -589,15 +589,15 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* Lock 4 & WAC Invariant Explanation Box */}
-      <div className="p-3.5 bg-slate-900/80 border border-emerald-500/20 rounded-xl flex items-start gap-3">
-        <ShieldCheck className="h-5 w-5 text-emerald-400 shrink-0 mt-0.5" />
-        <div className="text-xs text-slate-300 leading-relaxed">
-          <span className="font-semibold text-white">Resilient Price Architecture:</span> Stock prices can be synced in real-time from StockChartBD or manually adjusted anytime. In all cases, buy trade charges are capitalized into WAC cost basis (<code className="text-emerald-300 font-mono text-[11px]">Cost Basis = Gross + Charges</code>) and realized gains follow strict weighted cost standards.
+      <div className="p-3.5 bg-surface/80 border border-accent/20 rounded-xl flex items-start gap-3">
+        <ShieldCheck className="h-5 w-5 text-accent-strong shrink-0 mt-0.5" />
+        <div className="text-xs text-ink-soft leading-relaxed">
+          <span className="font-semibold text-ink">Resilient Price Architecture:</span> Stock prices can be synced in real-time from StockChartBD or manually adjusted anytime. In all cases, buy trade charges are capitalized into WAC cost basis (<code className="text-accent-strong font-mono text-[11px]">Cost Basis = Gross + Charges</code>) and realized gains follow strict weighted cost standards.
         </div>
       </div>
 
       {/* Filters and Search Bar */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-slate-900/40 p-3 rounded-xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-surface/40 p-3 rounded-xl border border-edge">
         <div className="flex-1 max-w-md">
           <Input
             icon={Search}
@@ -609,11 +609,11 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="text-xs text-slate-400">Sector:</label>
+          <label className="text-xs text-ink-muted">Sector:</label>
           <select
             value={selectedSector}
             onChange={(e) => setSelectedSector(e.target.value)}
-            className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-emerald-500"
+            className="bg-canvas border border-edge rounded-lg px-2.5 py-1.5 text-xs text-ink-soft focus:outline-none focus:border-accent"
           >
             {sectors.map((sec) => (
               <option key={sec} value={sec}>
@@ -625,14 +625,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* Holdings Table */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-800 flex items-center justify-between">
-          <div className="text-xs font-semibold text-white flex items-center gap-2">
+      <div className="bg-surface/60 border border-edge rounded-xl overflow-hidden">
+        <div className="px-4 py-3 border-b border-edge flex items-center justify-between">
+          <div className="text-xs font-semibold text-ink flex items-center gap-2">
             <span>Authoritative Equity Holdings (v_stock_holdings)</span>
-            <span className="text-[10px] font-mono text-slate-400">({filteredHoldings.length} securities)</span>
+            <span className="text-[10px] font-mono text-ink-muted">({filteredHoldings.length} securities)</span>
           </div>
-          <div className="text-[11px] text-slate-400 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
+          <div className="text-[11px] text-ink-muted flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-accent"></span>
             <span>Real-time WAC valuation</span>
           </div>
         </div>
@@ -640,8 +640,8 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         {filteredHoldings.length === 0 ? (
           <div className="p-8 text-center">
             <AlertCircle className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-            <div className="text-sm font-semibold text-slate-300">No active stock positions found</div>
-            <p className="text-xs text-slate-500 max-w-sm mx-auto mt-1">
+            <div className="text-sm font-semibold text-ink-soft">No active stock positions found</div>
+            <p className="text-xs text-ink-faint max-w-sm mx-auto mt-1">
               Either all shares have been closed out, or no matching trade has been executed yet.
             </p>
             <Button
@@ -657,7 +657,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
-              <thead className="bg-slate-950/60 text-slate-400 border-b border-slate-800 text-[11px] font-mono uppercase">
+              <thead className="bg-canvas/60 text-ink-muted border-b border-edge text-[11px] font-mono uppercase">
                 <tr>
                   <th className="py-3 px-4">Symbol / Company</th>
                   <th className="py-3 px-4">BO Account</th>
@@ -670,7 +670,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                   <th className="py-3 px-4 text-center">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60 text-slate-300">
+              <tbody className="divide-y divide-edge/60 text-ink-soft">
                 {filteredHoldings.map((h) => {
                   const stock = stocks.find((s) => s.id === h.stockId);
                   const boAcc = brokerAccounts.find((b) => b.id === h.brokerAccountId);
@@ -682,78 +682,78 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                   const unrlGainPct = h.unrealizedGainPct ?? h.unrealizedPLPct;
 
                   return (
-                    <tr key={`${h.brokerAccountId}-${h.stockId}`} className="hover:bg-slate-800/40 transition-colors">
+                    <tr key={`${h.brokerAccountId}-${h.stockId}`} className="hover:bg-raised/40 transition-colors">
                       {/* Symbol & Company */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-2">
-                          <div className="font-bold text-white text-sm">{h.symbol}</div>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">
+                          <div className="font-bold text-ink text-sm">{h.symbol}</div>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-raised text-ink-muted font-mono">
                             {stock?.category ? `Cat ${stock.category}` : stock?.exchange || 'DSE'}
                           </span>
                         </div>
-                        <div className="text-[11px] text-slate-400 mt-0.5 truncate max-w-[180px]">
+                        <div className="text-[11px] text-ink-muted mt-0.5 truncate max-w-[180px]">
                           {h.companyName}
                         </div>
-                        <div className="text-[10px] text-slate-500 font-mono mt-0.5">{stock?.sector}</div>
+                        <div className="text-[10px] text-ink-faint font-mono mt-0.5">{stock?.sector}</div>
                       </td>
 
                       {/* BO Account */}
-                      <td className="py-3.5 px-4 font-mono text-[11px] text-slate-300">
+                      <td className="py-3.5 px-4 font-mono text-[11px] text-ink-soft">
                         <div>{boAcc?.accountName || 'Primary BO'}</div>
-                        <div className="text-slate-500 text-[10px]">BO: {boAcc?.boId}</div>
+                        <div className="text-ink-faint text-[10px]">BO: {boAcc?.boId}</div>
                       </td>
 
                       {/* Shares */}
-                      <td className="py-3.5 px-4 text-right font-mono font-semibold text-white">
+                      <td className="py-3.5 px-4 text-right font-mono font-semibold text-ink">
                         {h.quantity.toLocaleString()}
                       </td>
 
                       {/* WAC Cost / Share */}
-                      <td className="py-3.5 px-4 text-right font-mono text-slate-200">
+                      <td className="py-3.5 px-4 text-right font-mono text-ink-soft">
                         ৳{h.weightedAverageCost.toFixed(2)}
                       </td>
 
                       {/* Market Price & Manual Trigger */}
                       <td className="py-3.5 px-4 text-right font-mono">
                         <div className="flex items-center justify-end gap-1.5">
-                          <span className="font-semibold text-white">৳{curPrice.toFixed(2)}</span>
+                          <span className="font-semibold text-ink">৳{curPrice.toFixed(2)}</span>
                           {stock && (
                             <button
                               onClick={() => handleOpenPriceModal(stock)}
                               title="Update market price (Manual or API)"
-                              className="p-1 text-slate-500 hover:text-emerald-400 hover:bg-slate-800 rounded transition-colors"
+                              className="p-1 text-ink-faint hover:text-accent-strong hover:bg-raised rounded transition-colors"
                             >
                               <RefreshCw className="h-3 w-3" />
                             </button>
                           )}
                         </div>
                         {stock?.priceSource && (
-                          <div className="text-[9px] text-slate-500 uppercase tracking-wider mt-0.5">
+                          <div className="text-[9px] text-ink-faint uppercase tracking-wider mt-0.5">
                             {stock.priceSource === 'api' ? 'StockChartBD' : 'Manual'}
                           </div>
                         )}
                       </td>
 
                       {/* Cost Basis */}
-                      <td className="py-3.5 px-4 text-right font-mono text-slate-300">
+                      <td className="py-3.5 px-4 text-right font-mono text-ink-soft">
                         ৳{costBasis.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
 
                       {/* Market Value */}
-                      <td className="py-3.5 px-4 text-right font-mono font-bold text-white">
+                      <td className="py-3.5 px-4 text-right font-mono font-bold text-ink">
                         ৳{mktVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                       </td>
 
                       {/* Unrealized P/L */}
                       <td className="py-3.5 px-4 text-right font-mono">
-                        <div className={`font-semibold ${isGain ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className={`font-semibold ${isGain ? 'text-positive' : 'text-negative'}`}>
                           {isGain ? '+' : ''}৳
                           {unrlGain.toLocaleString(undefined, {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           })}
                         </div>
-                        <div className={`text-[10px] ${isGain ? 'text-emerald-500' : 'text-rose-500'}`}>
+                        <div className={`text-[10px] ${isGain ? 'text-positive' : 'text-negative'}`}>
                           {isGain ? '+' : ''}
                           {unrlGainPct.toFixed(2)}%
                         </div>
@@ -764,7 +764,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             onClick={() => onNavigateToTrades && onNavigateToTrades(h.stockId)}
-                            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[11px] font-medium transition-colors"
+                            className="px-2.5 py-1 bg-raised hover:bg-slate-700 text-ink-soft rounded text-[11px] font-medium transition-colors"
                           >
                             Trade
                           </button>
@@ -780,13 +780,13 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* DSE Master Securities Catalog Section */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-4">
+      <div className="bg-surface/60 border border-edge rounded-xl p-4">
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
-            <h2 className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+            <h2 className="text-xs font-bold text-ink uppercase tracking-wider font-mono">
               Securities Watchlist & Master Catalog
             </h2>
-            <p className="text-[11px] text-slate-400 mt-0.5">
+            <p className="text-[11px] text-ink-muted mt-0.5">
               Custom stock watchlist for Dhaka Stock Exchange (DSE). User created & customizable.
             </p>
           </div>
@@ -795,7 +795,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               <button
                 onClick={handleClearUnused}
                 title="Remove all stocks that have no trade history"
-                className="text-xs text-rose-400 hover:text-rose-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-lg transition-colors"
+                className="text-xs text-negative hover:text-rose-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-canvas border border-edge rounded-lg transition-colors"
               >
                 <Trash2 className="h-3 w-3" />
                 <span>Clear Unused</span>
@@ -804,14 +804,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             <button
               onClick={handleOpenBatchModal}
               disabled={stocks.length === 0}
-              className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-lg disabled:opacity-40"
+              className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-canvas border border-edge rounded-lg disabled:opacity-40"
             >
               <Edit3 className="h-3 w-3" />
               <span>Bulk Edit</span>
             </button>
             <button
               onClick={() => setIsAddStockModalOpen(true)}
-              className="text-xs text-emerald-400 hover:text-emerald-300 font-medium flex items-center gap-1 px-2.5 py-1 bg-slate-950 border border-slate-800 rounded-lg shadow-sm"
+              className="text-xs text-accent-strong hover:text-accent-strong font-medium flex items-center gap-1 px-2.5 py-1 bg-canvas border border-edge rounded-lg shadow-sm"
             >
               <Plus className="h-3 w-3" />
               <span>Add Stock</span>
@@ -825,23 +825,23 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             className={`mb-3 p-2.5 rounded-xl border text-xs flex items-center gap-2 animate-in fade-in duration-150 ${
               catalogToast.isError
                 ? 'bg-rose-950/40 border-rose-800/60 text-rose-300'
-                : 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300'
+                : 'bg-emerald-950/40 border-emerald-800/60 text-accent-strong'
             }`}
           >
             {catalogToast.isError ? (
-              <AlertCircle className="h-4 w-4 text-rose-400 shrink-0" />
+              <AlertCircle className="h-4 w-4 text-negative shrink-0" />
             ) : (
-              <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+              <CheckCircle2 className="h-4 w-4 text-accent-strong shrink-0" />
             )}
             <span>{catalogToast.text}</span>
           </div>
         )}
 
         {stocks.length === 0 ? (
-          <div className="text-center py-10 px-4 bg-slate-950/40 rounded-xl border border-dashed border-slate-800/80">
+          <div className="text-center py-10 px-4 bg-canvas/40 rounded-xl border border-dashed border-edge/80">
             <Sparkles className="h-8 w-8 text-slate-600 mx-auto mb-2" />
-            <div className="text-xs font-semibold text-slate-300">Watchlist is completely clean</div>
-            <p className="text-[11px] text-slate-500 max-w-sm mx-auto mt-1 mb-3">
+            <div className="text-xs font-semibold text-ink-soft">Watchlist is completely clean</div>
+            <p className="text-[11px] text-ink-faint max-w-sm mx-auto mt-1 mb-3">
               No preloaded stocks. You can search and add any Dhaka Stock Exchange (DSE) company by clicking "+ Add Stock".
             </p>
             <Button
@@ -864,22 +864,22 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               return (
                 <div
                   key={stock.id}
-                  className="p-3 bg-slate-950/80 border border-slate-800/80 rounded-lg hover:border-slate-700 transition-colors flex flex-col justify-between group"
+                  className="p-3 bg-canvas/80 border border-edge/80 rounded-lg hover:border-slate-700 transition-colors flex flex-col justify-between group"
                 >
                   <div className="flex items-start justify-between gap-1">
                     <div>
-                      <div className="font-bold text-white text-xs flex items-center gap-1.5">
+                      <div className="font-bold text-ink text-xs flex items-center gap-1.5">
                         <span>{stock.symbol}</span>
                         {stock.category && (
-                          <span className="text-[9px] px-1 py-0.2 bg-slate-800 text-slate-400 rounded font-mono">
+                          <span className="text-[9px] px-1 py-0.2 bg-raised text-ink-muted rounded font-mono">
                             {stock.category}
                           </span>
                         )}
                         {hasPosition && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Held in portfolio"></span>
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent-strong" title="Held in portfolio"></span>
                         )}
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate max-w-[110px]" title={stock.companyName}>
+                      <div className="text-[10px] text-ink-muted truncate max-w-[110px]" title={stock.companyName}>
                         {stock.companyName}
                       </div>
                     </div>
@@ -887,32 +887,32 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       <button
                         onClick={() => handleOpenPriceModal(stock)}
                         title="Edit Market Price"
-                        className="p-1 text-slate-500 hover:text-white rounded transition-colors"
+                        className="p-1 text-ink-faint hover:text-ink rounded transition-colors"
                       >
                         <Sliders className="h-3 w-3" />
                       </button>
                       <button
                         onClick={() => handleDeleteStock(stock)}
                         title="Remove from watchlist"
-                        className="p-1 text-slate-500 hover:text-rose-400 rounded transition-colors"
+                        className="p-1 text-ink-faint hover:text-negative rounded transition-colors"
                       >
                         <Trash2 className="h-3 w-3" />
                       </button>
                     </div>
                   </div>
 
-                  <div className="mt-2.5 pt-2 border-t border-slate-800/60 flex items-end justify-between">
+                  <div className="mt-2.5 pt-2 border-t border-edge/60 flex items-end justify-between">
                     <div>
-                      <div className="font-mono text-xs font-bold text-white">৳{stock.currentPrice.toFixed(1)}</div>
+                      <div className="font-mono text-xs font-bold text-ink">৳{stock.currentPrice.toFixed(1)}</div>
                       {stock.ycp !== undefined && stock.ycp > 0 && (
-                        <div className={`text-[10px] font-mono flex items-center gap-0.5 ${isUp ? 'text-emerald-400' : 'text-rose-400'}`}>
+                        <div className={`text-[10px] font-mono flex items-center gap-0.5 ${isUp ? 'text-positive' : 'text-negative'}`}>
                           {isUp ? '+' : ''}{changePct.toFixed(1)}%
                         </div>
                       )}
                     </div>
                     <button
                       onClick={() => onNavigateToTrades && onNavigateToTrades(stock.id)}
-                      className="text-[10px] text-emerald-400 hover:text-emerald-300 font-semibold px-2 py-0.5 bg-slate-900 rounded border border-slate-800 hover:border-slate-700"
+                      className="text-[10px] text-accent-strong hover:text-accent-strong font-semibold px-2 py-0.5 bg-surface rounded border border-edge hover:border-slate-700"
                     >
                       Trade
                     </button>
@@ -925,17 +925,17 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
       </div>
 
       {/* Attribution and API Documentation Badge */}
-      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 text-xs flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-400">
+      <div className="bg-canvas/60 border border-edge rounded-xl p-3 text-xs flex flex-col sm:flex-row items-center justify-between gap-2 text-ink-muted">
         <div className="flex items-center gap-2">
-          <Globe className="h-4 w-4 text-emerald-400 shrink-0" />
+          <Globe className="h-4 w-4 text-accent-strong shrink-0" />
           <span>
-            Market data powered by <strong className="text-slate-200">StockChartBD API</strong>. Attributed to <span className="text-slate-300">DSE Intelligence</span> & <span className="text-slate-300">dsebd.org</span>.
+            Market data powered by <strong className="text-ink-soft">StockChartBD API</strong>. Attributed to <span className="text-ink-soft">DSE Intelligence</span> & <span className="text-ink-soft">dsebd.org</span>.
           </span>
         </div>
         <div className="flex items-center gap-3 text-[11px] font-mono">
-          <span className="text-slate-500">Free & Commercial Permitted</span>
-          <span className="text-slate-500">•</span>
-          <span className="text-emerald-400/90">Rate Limit: 120 req/hr</span>
+          <span className="text-ink-faint">Free & Commercial Permitted</span>
+          <span className="text-ink-faint">•</span>
+          <span className="text-accent-strong/90">Rate Limit: 120 req/hr</span>
         </div>
       </div>
 
@@ -964,16 +964,16 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                   className="font-mono text-sm"
                 />
               </Field>
-              <div className="flex items-center justify-between text-[11px] text-slate-400 mt-2 bg-slate-950/60 p-2 rounded border border-slate-800">
+              <div className="flex items-center justify-between text-[11px] text-ink-muted mt-2 bg-canvas/60 p-2 rounded border border-edge">
                 <span>Yesterday Close (YCP):</span>
-                <span className="font-mono text-slate-200">৳{(selectedStockForPrice.ycp ?? selectedStockForPrice.currentPrice).toFixed(2)}</span>
+                <span className="font-mono text-ink-soft">৳{(selectedStockForPrice.ycp ?? selectedStockForPrice.currentPrice).toFixed(2)}</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-1.5">
+              <p className="text-[11px] text-ink-faint mt-1.5">
                 Saving will record this rate to the historical price ledger and recalculate all portfolio P/L immediately.
               </p>
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-end gap-2 pt-2 border-t border-edge">
               <Button
                 type="button"
                 variant="ghost"
@@ -1007,9 +1007,9 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               />
             </div>
 
-            <div className="overflow-y-auto flex-1 min-h-0 border border-slate-800 rounded-xl bg-slate-950/50">
+            <div className="overflow-y-auto flex-1 min-h-0 border border-edge rounded-xl bg-canvas/50">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-950 text-slate-400 border-b border-slate-800 sticky top-0 text-[11px] font-mono">
+                <thead className="bg-canvas text-ink-muted border-b border-edge sticky top-0 text-[11px] font-mono">
                   <tr>
                     <th className="py-2.5 px-3">Symbol</th>
                     <th className="py-2.5 px-3">Company Name</th>
@@ -1018,7 +1018,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                     <th className="py-2.5 px-3 text-right">New Price (BDT)</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-edge/60">
                   {stocks
                     .filter((s) =>
                       s.symbol.toLowerCase().includes(batchSearch.toLowerCase()) ||
@@ -1029,11 +1029,11 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       const hasChanged = curVal !== s.currentPrice;
 
                       return (
-                        <tr key={s.id} className="hover:bg-slate-800/30">
-                          <td className="py-2 px-3 font-bold text-white">{s.symbol}</td>
-                          <td className="py-2 px-3 text-slate-400 truncate max-w-[160px]">{s.companyName}</td>
-                          <td className="py-2 px-3 text-slate-500 text-[11px]">{s.sector}</td>
-                          <td className="py-2 px-3 text-right font-mono text-slate-400">৳{s.currentPrice.toFixed(2)}</td>
+                        <tr key={s.id} className="hover:bg-raised/30">
+                          <td className="py-2 px-3 font-bold text-ink">{s.symbol}</td>
+                          <td className="py-2 px-3 text-ink-muted truncate max-w-[160px]">{s.companyName}</td>
+                          <td className="py-2 px-3 text-ink-faint text-[11px]">{s.sector}</td>
+                          <td className="py-2 px-3 text-right font-mono text-ink-muted">৳{s.currentPrice.toFixed(2)}</td>
                           <td className="py-2 px-3 text-right">
                             <input
                               type="number"
@@ -1047,10 +1047,10 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                                   [s.id]: isNaN(val) ? 0 : val,
                                 }));
                               }}
-                              className={`w-24 px-2 py-1 bg-slate-900 border rounded text-xs font-mono text-right focus:outline-none ${
+                              className={`w-24 px-2 py-1 bg-surface border rounded text-xs font-mono text-right focus:outline-none ${
                                 hasChanged
-                                  ? 'border-emerald-500 text-emerald-300 bg-emerald-950/20'
-                                  : 'border-slate-700 text-white'
+                                  ? 'border-accent text-accent-strong bg-emerald-950/20'
+                                  : 'border-slate-700 text-ink'
                               }`}
                             />
                           </td>
@@ -1061,8 +1061,8 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               </table>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-slate-800 mt-3">
-              <div className="text-xs text-slate-400">
+            <div className="flex items-center justify-between pt-4 border-t border-edge mt-3">
+              <div className="text-xs text-ink-muted">
                 {Object.keys(batchDraft).filter((k) => {
                   const s = stocks.find((st) => st.id === k);
                   return s && batchDraft[k] !== s.currentPrice;
@@ -1108,19 +1108,19 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-xs font-medium text-slate-300">Paste CSV or Market Sheet Content</label>
-                <span className="text-[10px] text-slate-500 font-mono">Format: Symbol, Price</span>
+                <label className="text-xs font-medium text-ink-soft">Paste CSV or Market Sheet Content</label>
+                <span className="text-[10px] text-ink-faint font-mono">Format: Symbol, Price</span>
               </div>
               <textarea
                 rows={6}
                 value={csvText}
                 onChange={(e) => setCsvText(e.target.value)}
                 placeholder={`GP, 280.5\nBATBC, 392.2\nSQURPHARMA, 224.8\nBRACBANK, 56.4`}
-                className="w-full p-3 bg-slate-950 border border-slate-800 rounded-lg text-xs font-mono text-white placeholder-slate-600 focus:outline-none focus:border-emerald-500"
+                className="w-full p-3 bg-canvas border border-edge rounded-lg text-xs font-mono text-ink placeholder-slate-600 focus:outline-none focus:border-accent"
               />
             </div>
 
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+            <div className="flex items-center justify-between pt-2 border-t border-edge">
               <Button
                 type="button"
                 variant="outline"
@@ -1169,14 +1169,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                 <div
                   className={`p-2.5 rounded-xl text-xs flex items-center gap-2 border animate-in fade-in duration-150 ${
                     apiSyncBadge.isLive
-                      ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300'
-                      : 'bg-slate-950/60 border-slate-800 text-slate-300'
+                      ? 'bg-emerald-950/40 border-emerald-800/60 text-accent-strong'
+                      : 'bg-canvas/60 border-edge text-ink-soft'
                   }`}
                 >
                   {isFetchingQuote ? (
-                    <Loader2 className="h-4 w-4 animate-spin text-emerald-400 shrink-0" />
+                    <Loader2 className="h-4 w-4 animate-spin text-accent-strong shrink-0" />
                   ) : apiSyncBadge.isLive ? (
-                    <Sparkles className="h-4 w-4 text-emerald-400 shrink-0" />
+                    <Sparkles className="h-4 w-4 text-accent-strong shrink-0" />
                   ) : (
                     <Activity className="h-4 w-4 text-sky-400 shrink-0" />
                   )}
@@ -1199,7 +1199,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                       className="font-mono uppercase"
                       rightElement={
                         isFetchingQuote ? (
-                          <Loader2 className="h-3.5 w-3.5 text-emerald-400 animate-spin" />
+                          <Loader2 className="h-3.5 w-3.5 text-accent-strong animate-spin" />
                         ) : undefined
                       }
                     />
@@ -1207,7 +1207,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
                   {/* 409+ DSE Companies Autocomplete Dropdown */}
                   {showSuggestions && symbol.length >= 1 && (
-                    <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-slate-900 border border-slate-700 rounded-xl shadow-2xl z-50 divide-y divide-slate-800/60">
+                    <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-surface border border-slate-700 rounded-xl shadow-2xl z-50 divide-y divide-edge/60">
                       {allCompanies
                         .filter(
                           (c) =>
@@ -1220,18 +1220,18 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                             key={c.symbol}
                             type="button"
                             onClick={() => handleSelectCompany(c)}
-                            className="w-full text-left p-2 hover:bg-slate-800/80 transition-colors flex items-center justify-between group"
+                            className="w-full text-left p-2 hover:bg-raised/80 transition-colors flex items-center justify-between group"
                           >
                             <div>
-                              <div className="text-xs font-bold text-emerald-400 font-mono group-hover:text-emerald-300">
+                              <div className="text-xs font-bold text-accent-strong font-mono group-hover:text-accent-strong">
                                 {c.symbol}
                               </div>
-                              <div className="text-[11px] text-slate-400 truncate max-w-[190px]">
+                              <div className="text-[11px] text-ink-muted truncate max-w-[190px]">
                                 {c.name}
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-medium border border-slate-700">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-raised text-ink-soft font-medium border border-slate-700">
                                 {c.category || 'A'}
                               </span>
                             </div>
@@ -1295,7 +1295,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                   }
                   className="font-mono"
                   rightElement={
-                    <span className="text-[10px] text-emerald-400 font-semibold font-mono">
+                    <span className="text-[10px] text-accent-strong font-semibold font-mono">
                       BDT
                     </span>
                   }
