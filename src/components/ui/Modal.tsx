@@ -119,7 +119,7 @@ export const Modal: React.FC<ModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-canvas/80 backdrop-blur-sm animate-in fade-in duration-150"
       onClick={handleBackdropClick}
       aria-hidden="false"
     >
@@ -130,18 +130,18 @@ export const Modal: React.FC<ModalProps> = ({
         aria-labelledby={title ? generatedTitleId : undefined}
         aria-describedby={description ? generatedDescId : undefined}
         tabIndex={-1}
-        className={`w-full ${maxWidthClasses[maxWidth] || 'max-w-lg'} rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-2xl font-sans text-xs space-y-4 focus:outline-none animate-in zoom-in-95 duration-150 ${className}`}
+        className={`w-full ${maxWidthClasses[maxWidth] || 'max-w-lg'} rounded-2xl border border-edge bg-surface p-6 shadow-2xl font-sans text-xs space-y-4 focus:outline-none animate-in zoom-in-95 duration-150 ${className}`}
       >
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="flex items-center justify-between border-b border-edge pb-3">
             <div>
               {title && (
-                <h2 id={generatedTitleId} className="text-base font-bold text-white tracking-tight">
+                <h2 id={generatedTitleId} className="text-base font-bold text-ink tracking-tight">
                   {title}
                 </h2>
               )}
               {description && (
-                <p id={generatedDescId} className="text-slate-400 text-xs mt-0.5">
+                <p id={generatedDescId} className="text-ink-muted text-xs mt-0.5">
                   {description}
                 </p>
               )}
@@ -151,7 +151,7 @@ export const Modal: React.FC<ModalProps> = ({
                 type="button"
                 onClick={onClose}
                 aria-label="Close dialog"
-                className="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors cursor-pointer"
+                className="p-1 text-ink-muted hover:text-ink hover:bg-raised rounded-lg transition-colors cursor-pointer"
               >
                 <X className="h-4 w-4" />
               </button>

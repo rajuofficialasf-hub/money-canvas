@@ -1,5 +1,111 @@
 @import "tailwindcss";
 
+/* ============================================================
+   UX-3: Multi-theme color system.
+   Semantic tokens (--mc-*) are defined per data-theme; Tailwind
+   maps them to utility colors below (bg-surface, text-ink, ...).
+   "emerald-dark" is byte-identical to the app's original palette.
+   ============================================================ */
+:root,
+:root[data-theme='emerald-dark'] {
+  --mc-canvas: #020617; /* slate-950 */
+  --mc-surface: #0f172a; /* slate-900 */
+  --mc-raised: #1e293b; /* slate-800 */
+  --mc-edge: #1e293b; /* slate-800 */
+  --mc-edge-soft: #0f172a;
+  --mc-ink: #ffffff;
+  --mc-ink-soft: #cbd5e1; /* slate-300 */
+  --mc-ink-muted: #94a3b8; /* slate-400 */
+  --mc-ink-faint: #64748b; /* slate-500 */
+  --mc-accent-deep: #059669; /* emerald-600 */
+  --mc-accent: #10b981; /* emerald-500 */
+  --mc-accent-strong: #34d399; /* emerald-400 */
+  --mc-accent-ink: #020617;
+  --mc-positive: #34d399;
+  --mc-negative: #fb7185; /* rose-400 */
+  --mc-warning: #fbbf24; /* amber-400 */
+  color-scheme: dark;
+}
+
+:root[data-theme='ocean-dark'] {
+  --mc-canvas: #030b17;
+  --mc-surface: #0a1a2f;
+  --mc-raised: #142b47;
+  --mc-edge: #1c3a5e;
+  --mc-edge-soft: #0f2238;
+  --mc-ink: #f3f8ff;
+  --mc-ink-soft: #c4d7ee;
+  --mc-ink-muted: #8aa8c8;
+  --mc-ink-faint: #6b89ab;
+  --mc-accent-deep: #0891b2;
+  --mc-accent: #22d3ee; /* cyan-400 */
+  --mc-accent-strong: #67e8f9;
+  --mc-accent-ink: #042430;
+  --mc-positive: #34d399;
+  --mc-negative: #fb7185;
+  --mc-warning: #fbbf24;
+  color-scheme: dark;
+}
+
+:root[data-theme='royal-dark'] {
+  --mc-canvas: #0c0613;
+  --mc-surface: #171026;
+  --mc-raised: #261a3e;
+  --mc-edge: #342450;
+  --mc-edge-soft: #1d1430;
+  --mc-ink: #faf7ff;
+  --mc-ink-soft: #d8ccee;
+  --mc-ink-muted: #a292c4;
+  --mc-ink-faint: #7f6fa3;
+  --mc-accent-deep: #9333ea;
+  --mc-accent: #c084fc; /* purple-400 */
+  --mc-accent-strong: #d8b4fe;
+  --mc-accent-ink: #1e1035;
+  --mc-positive: #4ade80;
+  --mc-negative: #fb7185;
+  --mc-warning: #facc15;
+  color-scheme: dark;
+}
+
+:root[data-theme='soft-light'] {
+  --mc-canvas: #eef2f7;
+  --mc-surface: #ffffff;
+  --mc-raised: #e2e8f0;
+  --mc-edge: #cbd5e1;
+  --mc-edge-soft: #e2e8f0;
+  --mc-ink: #0f172a;
+  --mc-ink-soft: #334155;
+  --mc-ink-muted: #64748b;
+  --mc-ink-faint: #94a3b8;
+  --mc-accent-deep: #047857;
+  --mc-accent: #059669; /* emerald-600 */
+  --mc-accent-strong: #047857;
+  --mc-accent-ink: #ffffff;
+  --mc-positive: #059669;
+  --mc-negative: #e11d48;
+  --mc-warning: #d97706;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-canvas: var(--mc-canvas);
+  --color-surface: var(--mc-surface);
+  --color-raised: var(--mc-raised);
+  --color-edge: var(--mc-edge);
+  --color-edge-soft: var(--mc-edge-soft);
+  --color-ink: var(--mc-ink);
+  --color-ink-soft: var(--mc-ink-soft);
+  --color-ink-muted: var(--mc-ink-muted);
+  --color-ink-faint: var(--mc-ink-faint);
+  --color-accent: var(--mc-accent);
+  --color-accent-deep: var(--mc-accent-deep);
+  --color-accent-strong: var(--mc-accent-strong);
+  --color-accent-ink: var(--mc-accent-ink);
+  --color-positive: var(--mc-positive);
+  --color-negative: var(--mc-negative);
+  --color-warning: var(--mc-warning);
+}
+
 :root {
   --sat: env(safe-area-inset-top, 0px);
   --sar: env(safe-area-inset-right, 0px);

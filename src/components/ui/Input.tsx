@@ -11,7 +11,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="relative w-full">
         {Icon && (
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-ink-faint">
             <Icon className="h-3.5 w-3.5" />
           </div>
         )}
@@ -21,11 +21,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           aria-invalid={error ? 'true' : undefined}
           className={`w-full rounded-xl border ${
             error
-              ? 'border-rose-500/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/30'
-              : 'border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20'
-          } bg-slate-950 ${Icon ? 'pl-9' : 'px-3'} ${
+              ? 'border-negative/80 focus:border-rose-400 focus:ring-1 focus:ring-rose-500/30'
+              : 'border-edge focus:border-accent focus:ring-1 focus:ring-accent/20'
+          } bg-canvas ${Icon ? 'pl-9' : 'px-3'} ${
             rightElement ? 'pr-10' : 'pr-3'
-          } py-2 text-white font-sans text-xs placeholder-slate-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+          } py-2 text-ink font-sans text-xs placeholder-slate-500 outline-none transition-all disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
           {...props}
         />
 

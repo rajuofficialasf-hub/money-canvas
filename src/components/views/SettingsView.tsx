@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
+import { useTheme } from '../../lib/theme-context';
 import { useBiometrics } from '../../lib/biometric-context';
 import { useLanguage } from '../../lib/language-context';
 import { PrivacyPolicyView } from './PrivacyPolicyView';
@@ -45,6 +46,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
   const { user, firebaseUser, availableProfiles, switchProfile, updateProfile, createProfile, resetAllUserData, deleteAccountAndData } = useAuth();
   const { language, setLanguage, isBn } = useLanguage();
   const { wipeCloudLedger } = useLedger();
+  const { theme, setTheme, options: themeOptions } = useTheme();
   const { checkForUpdate, downloadApp, isChecking: checkingUpdate } = useAppUpdate();
   const {
     isAvailable,
@@ -298,6 +300,59 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     <span>English (ইংরেজি)</span>
                     {language === 'en' && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}
                   </button>
+                </div>
+              </div>
+
+              {/* UX-3: Color Theme Picker */}
+              <div className="rounded-lg bg-slate-950 p-4 border border-slate-800 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-xs text-white font-semibold">
+                    <Sparkles className="h-4 w-4 text-emerald-400" />
+                    <span>{isBn ? 'কালার থিম (Color Theme)' : 'Color Theme'}</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-500">{themeOptions.length} themes</span>
+                </div>
+                <p className="text-[11px] text-slate-400 font-sans leading-relaxed">
+                  {isBn
+                    ? 'পুরো অ্যাপের রঙের আবহ বদলান — পছন্দটি এই ডিভাইসে মনে রাখা হবে।'
+                    : 'Change the color mood of the entire app — your choice is remembered on this device.'}
+                </p>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+                  {themeOptions.map((opt) => {
+                    const isActive = theme === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setTheme(opt.id)}
+                        aria-pressed={isActive}
+                        className={`rounded-xl border p-2.5 text-left transition-all cursor-pointer ${
+                          isActive
+                            ? 'border-emerald-500 ring-1 ring-emerald-500/40 bg-slate-900'
+                            : 'border-slate-800 bg-slate-900/60 hover:border-slate-600'
+                        }`}
+                      >
+                        <div
+                          className="h-10 rounded-lg border border-black/20 overflow-hidden flex"
+                          style={{ backgroundColor: opt.preview[0] }}
+                        >
+                          <div className="w-1/3 h-full" style={{ backgroundColor: opt.preview[1] }} />
+                          <div className="flex-1 flex items-center justify-center">
+                            <span
+                              className="inline-block h-3.5 w-3.5 rounded-full"
+                              style={{ backgroundColor: opt.preview[2] }}
+                            />
+                          </div>
+                        </div>
+                        <div className="mt-1.5 flex items-center justify-between gap-1">
+                          <span className="text-[11px] font-semibold text-slate-200 leading-tight">
+                            {isBn ? opt.nameBn : opt.nameEn}
+                          </span>
+                          {isActive && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

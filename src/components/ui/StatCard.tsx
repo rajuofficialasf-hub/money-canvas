@@ -19,19 +19,19 @@ export interface StatCardProps {
 }
 
 const valueColorClasses: Record<StatCardVariant, string> = {
-  default: 'text-white',
-  emerald: 'text-emerald-400',
+  default: 'text-ink',
+  emerald: 'text-accent-strong',
   sky: 'text-sky-400',
-  rose: 'text-rose-400',
-  amber: 'text-amber-400',
+  rose: 'text-negative',
+  amber: 'text-warning',
 };
 
 const iconBgClasses: Record<StatCardVariant, string> = {
-  default: 'bg-slate-800 text-slate-300 border-slate-700',
-  emerald: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+  default: 'bg-raised text-ink-soft border-slate-700',
+  emerald: 'bg-accent/10 text-accent-strong border-accent/20',
   sky: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
-  rose: 'bg-rose-500/10 text-rose-400 border-rose-500/20',
-  amber: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+  rose: 'bg-negative/10 text-negative border-negative/20',
+  amber: 'bg-amber-500/10 text-warning border-amber-500/20',
 };
 
 export const StatCard: React.FC<StatCardProps> = ({
@@ -47,13 +47,13 @@ export const StatCard: React.FC<StatCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`rounded-2xl border border-slate-800 bg-slate-900/60 p-4 sm:p-5 flex flex-col justify-between space-y-2 shadow-sm transition-all ${
-        onClick ? 'cursor-pointer hover:border-slate-700 hover:bg-slate-900/80 active:scale-[0.99]' : ''
+      className={`rounded-2xl border border-edge bg-surface/60 p-4 sm:p-5 flex flex-col justify-between space-y-2 shadow-sm transition-all ${
+        onClick ? 'cursor-pointer hover:border-slate-700 hover:bg-surface/80 active:scale-[0.99]' : ''
       } ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="space-y-1">
-          <div className="text-xs font-mono uppercase tracking-wider text-slate-400">
+          <div className="text-xs font-mono uppercase tracking-wider text-ink-muted">
             {title}
           </div>
           <div
@@ -73,13 +73,13 @@ export const StatCard: React.FC<StatCardProps> = ({
       </div>
 
       {(subtitle || trend) && (
-        <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-800/60 text-[11px] font-mono">
-          {subtitle && <span className="text-slate-500 truncate">{subtitle}</span>}
+        <div className="flex items-center justify-between gap-2 pt-1 border-t border-edge/60 text-[11px] font-mono">
+          {subtitle && <span className="text-ink-faint truncate">{subtitle}</span>}
 
           {trend && (
             <span
               className={`inline-flex items-center gap-1 font-semibold ${
-                trend.isPositive ? 'text-emerald-400' : 'text-rose-400'
+                trend.isPositive ? 'text-accent-strong' : 'text-negative'
               }`}
             >
               {trend.isPositive ? (
@@ -88,7 +88,7 @@ export const StatCard: React.FC<StatCardProps> = ({
                 <TrendingDown className="h-3 w-3" />
               )}
               <span>{trend.value}</span>
-              {trend.label && <span className="text-slate-500 text-[10px] font-normal">{trend.label}</span>}
+              {trend.label && <span className="text-ink-faint text-[10px] font-normal">{trend.label}</span>}
             </span>
           )}
         </div>

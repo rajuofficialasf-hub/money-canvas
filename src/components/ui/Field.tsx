@@ -25,22 +25,22 @@ export const Field: React.FC<FieldProps> = ({
       {label && (
         <label
           htmlFor={htmlFor}
-          className="block text-xs font-mono text-slate-300 font-medium"
+          className="block text-xs font-mono text-ink-soft font-medium"
         >
           {label}
-          {required && <span className="text-rose-400 ml-1 select-none">*</span>}
+          {required && <span className="text-negative ml-1 select-none">*</span>}
         </label>
       )}
 
       {children}
 
       {error ? (
-        <div className="flex items-center gap-1.5 text-[11px] text-rose-400 font-medium animate-in fade-in">
+        <div className="flex items-center gap-1.5 text-[11px] text-negative font-medium animate-in fade-in">
           <AlertCircle className="h-3.5 w-3.5 shrink-0" />
           <span>{error}</span>
         </div>
       ) : hint ? (
-        <p className="text-[11px] text-slate-500 font-sans leading-normal">
+        <p className="text-[11px] text-ink-faint font-sans leading-normal">
           {hint}
         </p>
       ) : null}

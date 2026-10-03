@@ -157,13 +157,13 @@ export const Header: React.FC<HeaderProps> = React.memo(({
   const viewMeta = getViewMeta();
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-slate-800/80 bg-slate-950/80 px-4 sm:px-6 backdrop-blur-xl">
+    <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-edge/80 bg-canvas/80 px-4 sm:px-6 backdrop-blur-xl">
       {/* Left: Mobile menu toggle & Crisp Breadcrumb Header */}
       <div className="flex items-center gap-3 min-w-0">
         {onToggleSidebar && (
           <button
             onClick={onToggleSidebar}
-            className="p-1.5 -ml-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-900 lg:hidden transition-colors shrink-0"
+            className="p-1.5 -ml-1 text-ink-muted hover:text-ink rounded-lg hover:bg-surface lg:hidden transition-colors shrink-0"
             aria-label="Toggle Navigation Menu"
           >
             <Menu className="h-5 w-5" />
@@ -171,11 +171,11 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         )}
 
         <div className="flex items-center gap-2 min-w-0">
-          <span className="hidden sm:inline text-xs font-medium text-slate-500 shrink-0">
+          <span className="hidden sm:inline text-xs font-medium text-ink-faint shrink-0">
             {viewMeta.category}
           </span>
           <span className="hidden sm:inline text-slate-700 text-xs">/</span>
-          <h1 className="text-sm font-semibold text-white truncate tracking-tight">
+          <h1 className="text-sm font-semibold text-ink truncate tracking-tight">
             {viewMeta.title}
           </h1>
         </div>
@@ -185,13 +185,13 @@ export const Header: React.FC<HeaderProps> = React.memo(({
       <div className="flex-1 max-w-md mx-4 hidden md:block">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-400 hover:text-slate-300 transition-all group"
+          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-slate-700 text-xs text-ink-muted hover:text-ink-soft transition-all group"
         >
           <div className="flex items-center gap-2.5">
-            <Search className="h-3.5 w-3.5 text-slate-500 group-hover:text-emerald-400 transition-colors" />
-            <span className="text-slate-400">Search commands, accounts or records...</span>
+            <Search className="h-3.5 w-3.5 text-ink-faint group-hover:text-accent-strong transition-colors" />
+            <span className="text-ink-muted">Search commands, accounts or records...</span>
           </div>
-          <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-slate-700/80 bg-slate-800/80 text-[10px] font-mono text-slate-400">
+          <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-slate-700/80 bg-raised/80 text-[10px] font-mono text-ink-muted">
             ⌘K
           </kbd>
         </button>
@@ -202,7 +202,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         {/* Mobile Search Button */}
         <button
           onClick={onOpenCommandPalette}
-          className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 transition-colors"
+          className="md:hidden p-2 rounded-lg text-ink-muted hover:text-ink hover:bg-surface transition-colors"
           aria-label="Quick Search"
         >
           <Search className="h-4 w-4" />
@@ -213,43 +213,43 @@ export const Header: React.FC<HeaderProps> = React.memo(({
           <button
             onClick={() => checkForUpdate(true)}
             disabled={isChecking}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent-strong border border-accent/30 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
             title="অ্যাপের নতুন ভার্সন চেক করুন"
           >
             {isChecking ? (
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
             ) : (
-              <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+              <ArrowUpCircle className="h-3.5 w-3.5 text-accent-strong" />
             )}
-            <span className="font-mono text-[11px] font-bold text-emerald-400">{currentVersionName}</span>
-            <span className="hidden sm:inline text-[11px] font-medium text-emerald-300">আপডেট</span>
+            <span className="font-mono text-[11px] font-bold text-accent-strong">{currentVersionName}</span>
+            <span className="hidden sm:inline text-[11px] font-medium text-accent-strong">আপডেট</span>
           </button>
         ) : (
           <button
             onClick={() => downloadApp()}
             disabled={isChecking}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600/20 to-teal-600/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20 group"
+            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg bg-gradient-to-r from-emerald-600/20 to-teal-600/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-accent-strong border border-accent/40 text-xs font-semibold transition-all active:scale-95 disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20 group"
             title="মোবাইলের জন্য অ্যান্ড্রয়েড APK অ্যাপ ডাউনলোড করুন"
           >
             {isChecking ? (
-              <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+              <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
             ) : (
-              <Smartphone className="h-3.5 w-3.5 text-emerald-400 group-hover:scale-110 transition-transform" />
+              <Smartphone className="h-3.5 w-3.5 text-accent-strong group-hover:scale-110 transition-transform" />
             )}
-            <span className="font-medium text-white text-[11px] sm:text-xs">Download App</span>
-            <Download className="h-3 w-3 text-emerald-400 hidden sm:inline" />
+            <span className="font-medium text-ink text-[11px] sm:text-xs">Download App</span>
+            <Download className="h-3 w-3 text-accent-strong hidden sm:inline" />
           </button>
         )}
 
         {/* Sync Status Badge (Compact & Clean) */}
         {isGoogleAuthenticated ? (
           <div
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-accent/10 border border-accent/20 text-accent-strong text-xs font-medium"
             title="Google Drive Auto Sync Active"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-strong opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
             </span>
             <HardDrive className="h-3.5 w-3.5 ml-0.5" />
             <span className="text-[11px] font-mono hidden xl:inline">Drive Synced</span>
@@ -257,7 +257,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         ) : (
           <button
             onClick={openAuthModal}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold border border-emerald-500/30 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent-strong text-xs font-semibold border border-accent/30 transition-colors"
           >
             <ShieldCheck className="h-3.5 w-3.5" />
             <span>Sign In</span>
@@ -268,21 +268,21 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         <div className="relative" ref={alertsRef}>
           <button
             onClick={() => setIsAlertsMenuOpen(!isAlertsMenuOpen)}
-            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-transparent hover:border-slate-800 transition-colors"
+            className="relative p-2 rounded-lg text-ink-muted hover:text-ink hover:bg-surface border border-transparent hover:border-edge transition-colors"
             aria-label="View Financial Alerts"
           >
             <Bell className="h-4 w-4" />
             {systemAlerts.length > 0 && (
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 ring-2 ring-slate-950" />
+              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-negative ring-2 ring-slate-950" />
             )}
           </button>
 
           {/* Quick Alerts Dropdown */}
           {isAlertsMenuOpen && (
-            <div className="fixed sm:absolute inset-x-2 sm:inset-x-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-96 rounded-xl border border-slate-800 bg-slate-950/95 p-3 shadow-2xl z-50 text-xs backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 space-y-2">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2 px-1">
-                <div className="flex items-center gap-1.5 font-bold text-white text-xs">
-                  <Bell className="h-3.5 w-3.5 text-emerald-400" />
+            <div className="fixed sm:absolute inset-x-2 sm:inset-x-auto sm:right-0 top-16 sm:top-auto sm:mt-2 w-auto sm:w-96 rounded-xl border border-edge bg-canvas/95 p-3 shadow-2xl z-50 text-xs backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100 space-y-2">
+              <div className="flex items-center justify-between border-b border-edge pb-2 px-1">
+                <div className="flex items-center gap-1.5 font-bold text-ink text-xs">
+                  <Bell className="h-3.5 w-3.5 text-accent-strong" />
                   <span>Financial Alerts ({systemAlerts.length})</span>
                 </div>
                 <div className="flex items-center gap-2.5">
@@ -292,7 +292,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                         e.stopPropagation();
                         systemAlerts.forEach((a) => dismissAlert(a.id));
                       }}
-                      className="text-[11px] text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors"
+                      className="text-[11px] text-ink-muted hover:text-negative flex items-center gap-1 transition-colors"
                       title="Clear all alerts"
                     >
                       <Trash2 className="h-3 w-3" />
@@ -304,7 +304,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       onNavigate('notifications');
                       setIsAlertsMenuOpen(false);
                     }}
-                    className="text-[11px] font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                    className="text-[11px] font-mono text-accent-strong hover:underline flex items-center gap-1"
                   >
                     <span>View All</span>
                     <ArrowRight className="h-3 w-3" />
@@ -312,16 +312,16 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                 </div>
               </div>
 
-              <div className="max-h-64 overflow-y-auto space-y-1.5 divide-y divide-slate-800/40 pr-0.5">
+              <div className="max-h-64 overflow-y-auto space-y-1.5 divide-y divide-edge/40 pr-0.5">
                 {systemAlerts.length === 0 ? (
-                  <div className="p-4 text-center text-xs text-slate-500 font-mono">
+                  <div className="p-4 text-center text-xs text-ink-faint font-mono">
                     No active alerts. All accounts healthy!
                   </div>
                 ) : (
                   systemAlerts.slice(0, 5).map((alert) => (
                     <div
                       key={alert.id}
-                      className="p-2 rounded-lg hover:bg-slate-900 transition-colors space-y-1 pt-2 group relative"
+                      className="p-2 rounded-lg hover:bg-surface transition-colors space-y-1 pt-2 group relative"
                     >
                       <div className="flex items-center justify-between text-[11px] gap-2">
                         <span
@@ -331,24 +331,24 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                           }}
                           className={`font-semibold cursor-pointer hover:underline flex-1 truncate ${
                             alert.severity === 'critical'
-                              ? 'text-rose-400'
+                              ? 'text-negative'
                               : alert.severity === 'warning'
-                              ? 'text-amber-400'
-                              : 'text-emerald-400'
+                              ? 'text-warning'
+                              : 'text-accent-strong'
                           }`}
                         >
                           {alert.title}
                         </span>
                         <div className="flex items-center gap-1.5 shrink-0">
                           {alert.dueDate && (
-                            <span className="text-[10px] font-mono text-slate-500">{alert.dueDate}</span>
+                            <span className="text-[10px] font-mono text-ink-faint">{alert.dueDate}</span>
                           )}
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               dismissAlert(alert.id);
                             }}
-                            className="p-1 rounded text-slate-500 hover:text-rose-400 hover:bg-slate-800 transition-colors"
+                            className="p-1 rounded text-ink-faint hover:text-negative hover:bg-raised transition-colors"
                             title="Dismiss notification"
                             aria-label="Clear alert"
                           >
@@ -361,7 +361,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                           onNavigate(alert.targetView || 'notifications');
                           setIsAlertsMenuOpen(false);
                         }}
-                        className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed cursor-pointer"
+                        className="text-[11px] text-ink-muted line-clamp-2 leading-relaxed cursor-pointer"
                       >
                         {alert.message}
                       </p>
@@ -370,14 +370,14 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                 )}
               </div>
 
-              <div className="border-t border-slate-800 pt-2 flex items-center justify-between text-[10px] font-mono text-slate-500 px-1">
+              <div className="border-t border-edge pt-2 flex items-center justify-between text-[10px] font-mono text-ink-faint px-1">
                 <span>{systemAlerts.length} Active Alert{systemAlerts.length === 1 ? '' : 's'}</span>
                 <button
                   onClick={() => {
                     onNavigate('notifications');
                     setIsAlertsMenuOpen(false);
                   }}
-                  className="text-slate-300 hover:text-white"
+                  className="text-ink-soft hover:text-ink"
                 >
                   Manage Reminders
                 </button>
@@ -390,48 +390,48 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            className="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-lg bg-slate-900/60 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs transition-all"
+            className="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-slate-700 text-xs transition-all"
             aria-label="User Menu"
           >
             {user.avatarUrl ? (
               <img
                 src={user.avatarUrl}
                 alt={user.fullName}
-                className="h-6 w-6 rounded-md object-cover border border-emerald-500/40"
+                className="h-6 w-6 rounded-md object-cover border border-accent/40"
               />
             ) : (
-              <div className="h-6 w-6 rounded-md bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center font-mono font-semibold text-emerald-300 text-xs">
+              <div className="h-6 w-6 rounded-md bg-accent/20 border border-accent/40 flex items-center justify-center font-mono font-semibold text-accent-strong text-xs">
                 {user.fullName.charAt(0)}
               </div>
             )}
 
             <div className="hidden xl:block text-left">
-              <div className="text-white font-medium leading-none text-xs truncate max-w-[100px]">
+              <div className="text-ink font-medium leading-none text-xs truncate max-w-[100px]">
                 {user.fullName}
               </div>
             </div>
-            <ChevronDown className="h-3 w-3 text-slate-500" />
+            <ChevronDown className="h-3 w-3 text-ink-faint" />
           </button>
 
           {/* Clean User Dropdown Menu */}
           {isProfileMenuOpen && (
-            <div className="absolute right-0 mt-2 w-72 rounded-xl border border-slate-800 bg-slate-950 p-2 shadow-2xl z-50 text-xs backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100">
+            <div className="absolute right-0 mt-2 w-72 rounded-xl border border-edge bg-canvas p-2 shadow-2xl z-50 text-xs backdrop-blur-xl animate-in fade-in zoom-in-95 duration-100">
               {/* Active Profile Info */}
-              <div className="p-2.5 border-b border-slate-800/80 mb-1">
+              <div className="p-2.5 border-b border-edge/80 mb-1">
                 <div className="flex items-center justify-between">
-                  <div className="font-semibold text-white truncate">{user.fullName}</div>
+                  <div className="font-semibold text-ink truncate">{user.fullName}</div>
                   {isGoogleAuthenticated ? (
-                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 rounded">
+                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-accent/20 text-accent-strong border border-accent/30 rounded">
                       Google Account
                     </span>
                   ) : (
-                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-slate-800 text-slate-400 rounded">
+                    <span className="px-1.5 py-0.5 text-[9px] font-mono bg-raised text-ink-muted rounded">
                       Local Vault
                     </span>
                   )}
                 </div>
-                <div className="text-[11px] text-slate-400 font-mono truncate mt-0.5">{user.email}</div>
-                <div className="flex items-center gap-1.5 mt-2 text-[10px] font-mono text-emerald-400">
+                <div className="text-[11px] text-ink-muted font-mono truncate mt-0.5">{user.email}</div>
+                <div className="flex items-center gap-1.5 mt-2 text-[10px] font-mono text-accent-strong">
                   <Shield className="h-3 w-3" />
                   <span className="truncate">UID: {user.id.slice(0, 14)}...</span>
                 </div>
@@ -439,7 +439,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
 
               {/* Google Sign-in / Cloud Status Banner */}
               {!isGoogleAuthenticated && (
-                <div className="p-2 border-b border-slate-800/80 mb-1 space-y-1.5">
+                <div className="p-2 border-b border-edge/80 mb-1 space-y-1.5">
                   <button
                     onClick={() => {
                       openAuthModal();
@@ -450,7 +450,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                     <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
                     <span>Sign In with Google</span>
                   </button>
-                  <p className="text-[10px] text-slate-400 text-center">
+                  <p className="text-[10px] text-ink-muted text-center">
                     Enable automatic Google Drive backups and cloud sync.
                   </p>
                 </div>
@@ -464,7 +464,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       onNavigate('admin_users');
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-900 flex items-center gap-2.5 text-xs transition-colors"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-ink-soft hover:bg-surface flex items-center gap-2.5 text-xs transition-colors"
                   >
                     <Users className="h-3.5 w-3.5 text-purple-400" />
                     <span>Admin Panel & Users</span>
@@ -476,9 +476,9 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                     onNavigate('user_guide');
                     setIsProfileMenuOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-900 flex items-center gap-2.5 text-xs transition-colors"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-ink-soft hover:bg-surface flex items-center gap-2.5 text-xs transition-colors"
                 >
-                  <BookOpen className="h-3.5 w-3.5 text-amber-400" />
+                  <BookOpen className="h-3.5 w-3.5 text-warning" />
                   <span>User Guide & Tour</span>
                 </button>
 
@@ -488,13 +488,13 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       onOpenShortcuts();
                       setIsProfileMenuOpen(false);
                     }}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-900 flex items-center justify-between text-xs transition-colors"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-ink-soft hover:bg-surface flex items-center justify-between text-xs transition-colors"
                   >
                     <div className="flex items-center gap-2.5">
-                      <Keyboard className="h-3.5 w-3.5 text-slate-400" />
+                      <Keyboard className="h-3.5 w-3.5 text-ink-muted" />
                       <span>Keyboard Shortcuts</span>
                     </div>
-                    <kbd className="text-[10px] font-mono text-slate-500">⌘/</kbd>
+                    <kbd className="text-[10px] font-mono text-ink-faint">⌘/</kbd>
                   </button>
                 )}
 
@@ -503,9 +503,9 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                     onNavigate('backup_restore');
                     setIsProfileMenuOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-900 flex items-center gap-2.5 text-xs transition-colors"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-ink-soft hover:bg-surface flex items-center gap-2.5 text-xs transition-colors"
                 >
-                  <HardDrive className="h-3.5 w-3.5 text-emerald-400" />
+                  <HardDrive className="h-3.5 w-3.5 text-accent-strong" />
                   <span>Backup & Drive Sync</span>
                 </button>
 
@@ -514,9 +514,9 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                     onNavigate('settings');
                     setIsProfileMenuOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-slate-300 hover:bg-slate-900 flex items-center gap-2.5 text-xs transition-colors"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-ink-soft hover:bg-surface flex items-center gap-2.5 text-xs transition-colors"
                 >
-                  <Sliders className="h-3.5 w-3.5 text-slate-400" />
+                  <Sliders className="h-3.5 w-3.5 text-ink-muted" />
                   <span>App Preferences</span>
                 </button>
 
@@ -527,17 +527,17 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       checkForUpdate(true);
                     }}
                     disabled={isChecking}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-950/30 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-accent-strong hover:bg-emerald-950/30 flex items-center justify-between text-xs transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2.5">
                       {isChecking ? (
-                        <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                        <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
                       ) : (
-                        <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+                        <ArrowUpCircle className="h-3.5 w-3.5 text-accent-strong" />
                       )}
                       <span>Check for Updates</span>
                     </div>
-                    <span className="text-[10px] font-mono text-emerald-400/90 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                    <span className="text-[10px] font-mono text-accent-strong/90 bg-accent/20 px-1.5 py-0.5 rounded border border-accent/30">
                       {currentVersionName}
                     </span>
                   </button>
@@ -548,17 +548,17 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       downloadApp();
                     }}
                     disabled={isChecking}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-300 hover:bg-emerald-950/30 flex items-center justify-between text-xs transition-colors cursor-pointer"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-accent-strong hover:bg-emerald-950/30 flex items-center justify-between text-xs transition-colors cursor-pointer"
                   >
                     <div className="flex items-center gap-2.5">
                       {isChecking ? (
-                        <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                        <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
                       ) : (
-                        <Smartphone className="h-3.5 w-3.5 text-emerald-400" />
+                        <Smartphone className="h-3.5 w-3.5 text-accent-strong" />
                       )}
                       <span>Download Android App</span>
                     </div>
-                    <span className="flex items-center gap-1 text-[10px] font-mono text-emerald-400/90 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+                    <span className="flex items-center gap-1 text-[10px] font-mono text-accent-strong/90 bg-accent/20 px-1.5 py-0.5 rounded border border-accent/30">
                       <Download className="h-2.5 w-2.5" />
                       <span>APK</span>
                     </span>
@@ -571,24 +571,24 @@ export const Header: React.FC<HeaderProps> = React.memo(({
                       setIsProfileMenuOpen(false);
                       lockApp();
                     }}
-                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-emerald-400 hover:bg-emerald-950/30 flex items-center gap-2.5 text-xs transition-colors"
+                    className="w-full text-left px-2.5 py-1.5 rounded-lg text-accent-strong hover:bg-emerald-950/30 flex items-center gap-2.5 text-xs transition-colors"
                   >
-                    <Fingerprint className="h-3.5 w-3.5 text-emerald-400" />
+                    <Fingerprint className="h-3.5 w-3.5 text-accent-strong" />
                     <span>Lock App Now</span>
                   </button>
                 )}
               </div>
 
               {/* Sign Out / Switch Profile */}
-              <div className="border-t border-slate-800/80 pt-1 mt-1">
+              <div className="border-t border-edge/80 pt-1 mt-1">
                 <button
                   onClick={() => {
                     signOut();
                     setIsProfileMenuOpen(false);
                   }}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-rose-400 hover:bg-rose-950/30 flex items-center gap-2.5 text-xs transition-colors"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg text-negative hover:bg-rose-950/30 flex items-center gap-2.5 text-xs transition-colors"
                 >
-                  <LogOut className="h-3.5 w-3.5 text-rose-400" />
+                  <LogOut className="h-3.5 w-3.5 text-negative" />
                   <span>{isGoogleAuthenticated ? 'Sign Out Google' : 'Switch Profile'}</span>
                 </button>
               </div>

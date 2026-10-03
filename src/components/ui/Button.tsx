@@ -14,17 +14,17 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-slate-950 font-bold shadow-lg shadow-emerald-500/20 border border-emerald-400/50',
+    'bg-accent hover:bg-accent-strong active:scale-95 text-accent-ink font-bold shadow-lg shadow-emerald-500/20 border border-emerald-400/50',
   secondary:
-    'bg-slate-800 hover:bg-slate-700 active:scale-95 text-slate-200 font-semibold border border-slate-700',
+    'bg-raised hover:bg-slate-700 active:scale-95 text-ink-soft font-semibold border border-slate-700',
   outline:
-    'bg-transparent hover:bg-slate-800 active:scale-95 text-slate-300 font-medium border border-slate-800 hover:border-slate-700',
+    'bg-transparent hover:bg-raised active:scale-95 text-ink-soft font-medium border border-edge hover:border-slate-700',
   danger:
-    'bg-rose-500/10 hover:bg-rose-500/20 active:scale-95 text-rose-400 font-semibold border border-rose-500/30',
+    'bg-negative/10 hover:bg-negative/20 active:scale-95 text-negative font-semibold border border-negative/30',
   ghost:
-    'bg-transparent hover:bg-slate-800/60 active:scale-95 text-slate-400 hover:text-slate-200 font-medium border-transparent',
+    'bg-transparent hover:bg-raised/60 active:scale-95 text-ink-muted hover:text-ink-soft font-medium border-transparent',
   success:
-    'bg-emerald-500/10 hover:bg-emerald-500/20 active:scale-95 text-emerald-400 font-semibold border border-emerald-500/30',
+    'bg-accent/10 hover:bg-accent/20 active:scale-95 text-accent-strong font-semibold border border-accent/30',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

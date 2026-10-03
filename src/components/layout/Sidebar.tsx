@@ -61,8 +61,8 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
     const isActive = currentView === viewId;
     return `group w-full text-left px-3 py-2 rounded-lg text-xs font-medium flex items-center justify-between transition-all duration-150 ${
       isActive
-        ? 'bg-emerald-500/10 text-emerald-400 font-semibold shadow-sm shadow-emerald-950/20'
-        : 'text-slate-400 hover:text-slate-100 hover:bg-slate-900/70'
+        ? 'bg-accent/10 text-accent-strong font-semibold shadow-sm shadow-emerald-950/20'
+        : 'text-ink-muted hover:text-ink hover:bg-surface/70'
     }`;
   };
 
@@ -78,14 +78,14 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
       {/* Mobile Backdrop */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-slate-950/80 backdrop-blur-sm lg:hidden transition-opacity"
+          className="fixed inset-0 z-40 bg-canvas/80 backdrop-blur-sm lg:hidden transition-opacity"
           onClick={onClose}
         />
       )}
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-64 border-r border-slate-800/80 bg-slate-950/95 p-4 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 w-64 border-r border-edge/80 bg-canvas/95 p-4 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:translate-x-0 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -99,20 +99,20 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className="h-8 w-8 rounded-lg shadow-md shadow-emerald-500/20"
               />
               <div>
-                <div className="text-sm font-bold tracking-tight text-white flex items-center gap-1.5">
+                <div className="text-sm font-bold tracking-tight text-ink flex items-center gap-1.5">
                   <span>Money Canvas</span>
-                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono uppercase bg-emerald-500/10 text-emerald-400 font-bold border border-emerald-500/20">
+                  <span className="px-1.5 py-0.2 rounded text-[9px] font-mono uppercase bg-accent/10 text-accent-strong font-bold border border-accent/20">
                     OS
                   </span>
                 </div>
-                <div className="text-[11px] text-slate-500 font-sans mt-0.5">
+                <div className="text-[11px] text-ink-faint font-sans mt-0.5">
                   Wealth & Accounting OS
                 </div>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-900 lg:hidden transition-colors"
+              className="p-1.5 text-ink-muted hover:text-ink rounded-lg hover:bg-surface lg:hidden transition-colors"
               aria-label="Close Sidebar"
             >
               <X className="h-4 w-4" />
@@ -123,7 +123,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
           <div className="space-y-4 pt-1">
             {/* 1. Daily Cash Flow & Accounts */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Cash Flow & Accounts
               </div>
               <button
@@ -131,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('dashboard')}
               >
                 <div className="flex items-center gap-2.5">
-                  <LayoutDashboard className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <LayoutDashboard className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Executive Dashboard</span>
                 </div>
               </button>
@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('accounts')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Building2 className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Building2 className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Accounts & Balances</span>
                 </div>
               </button>
@@ -149,7 +149,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('ledger')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Wallet className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Wallet className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Income & Expenses</span>
                 </div>
               </button>
@@ -158,7 +158,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('sms_parser')}
               >
                 <div className="flex items-center gap-2.5">
-                  <MessageSquare className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <MessageSquare className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>SMS Parser</span>
                 </div>
               </button>
@@ -166,7 +166,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 2. Savings & Term Deposits */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Savings & Deposits
               </div>
               <button
@@ -174,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('dps')}
               >
                 <div className="flex items-center gap-2.5">
-                  <CalendarClock className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <CalendarClock className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>DPS Accounts</span>
                 </div>
               </button>
@@ -183,7 +183,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('fixed_deposits')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Landmark className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Landmark className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Fixed Deposits (FDR)</span>
                 </div>
               </button>
@@ -192,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('sanchaya_bonds')}
               >
                 <div className="flex items-center gap-2.5">
-                  <ShieldCheck className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <ShieldCheck className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Sanchayapatra & Bonds</span>
                 </div>
               </button>
@@ -200,7 +200,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 3. Investments & Capital Markets */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Investments & Markets
               </div>
               <button
@@ -208,7 +208,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('stocks')}
               >
                 <div className="flex items-center gap-2.5">
-                  <TrendingUp className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <TrendingUp className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Stock Portfolio & WAC</span>
                 </div>
               </button>
@@ -217,7 +217,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('trades')}
               >
                 <div className="flex items-center gap-2.5">
-                  <ArrowLeftRight className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <ArrowLeftRight className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Trade Execution</span>
                 </div>
               </button>
@@ -226,7 +226,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('brokerage')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Building2 className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Building2 className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>BO & Brokerage Ledger</span>
                 </div>
               </button>
@@ -235,7 +235,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('dividends')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Coins className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Coins className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Dividends & Actions</span>
                 </div>
               </button>
@@ -244,7 +244,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('performance')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Activity className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Activity className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Portfolio Analytics & XIRR</span>
                 </div>
               </button>
@@ -253,7 +253,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('gold_fx')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Coins className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Coins className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Gold & FX Rates</span>
                 </div>
               </button>
@@ -261,7 +261,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 4. Planning & Budgets */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Planning & Budgets
               </div>
               <button
@@ -269,7 +269,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('budgets')}
               >
                 <div className="flex items-center gap-2.5">
-                  <PieChart className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <PieChart className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Monthly Budgets</span>
                 </div>
               </button>
@@ -278,7 +278,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('family_budget')}
               >
                 <div className="flex items-center gap-2.5">
-                  <HeartHandshake className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <HeartHandshake className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Family & Shared Ledgers</span>
                 </div>
               </button>
@@ -287,7 +287,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('recurring')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Repeat className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Repeat className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Recurring Bills & Subs</span>
                 </div>
               </button>
@@ -296,7 +296,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('goals')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Target className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Target className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Financial Goals</span>
                 </div>
               </button>
@@ -305,7 +305,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('fire')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Flame className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Flame className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>FIRE & Retirement</span>
                 </div>
               </button>
@@ -313,7 +313,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 5. Debts & Liabilities */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Debts & Assets
               </div>
               <button
@@ -321,7 +321,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('debts')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Users className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Users className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Debts & Receivables</span>
                 </div>
               </button>
@@ -330,7 +330,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('loans')}
               >
                 <div className="flex items-center gap-2.5">
-                  <FileSpreadsheet className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <FileSpreadsheet className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Loans & Mortgages</span>
                 </div>
               </button>
@@ -339,7 +339,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('assets')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Home className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Home className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Physical Assets</span>
                 </div>
               </button>
@@ -347,7 +347,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 6. Tax, Net Worth & Reports */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 Tax & Reports
               </div>
               <button
@@ -355,7 +355,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('zakat')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Coins className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Coins className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Net Worth & Zakat</span>
                 </div>
               </button>
@@ -364,7 +364,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('tax')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Landmark className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Landmark className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Income Tax (IT-10B)</span>
                 </div>
               </button>
@@ -373,7 +373,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('reports')}
               >
                 <div className="flex items-center gap-2.5">
-                  <FileSpreadsheet className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <FileSpreadsheet className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Financial Statements</span>
                 </div>
               </button>
@@ -381,7 +381,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
             {/* 7. System & Utilities */}
             <div className="space-y-0.5">
-              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 font-mono">
+              <div className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-ink-faint font-mono">
                 System & Utilities
               </div>
               <button
@@ -389,11 +389,11 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('notifications')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Bell className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Bell className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Alerts & Reminders</span>
                 </div>
                 {unreadAlertsCount > 0 && (
-                  <span className="px-1.5 py-0.2 rounded-full bg-rose-500 text-[10px] font-mono font-bold text-white">
+                  <span className="px-1.5 py-0.2 rounded-full bg-negative text-[10px] font-mono font-bold text-ink">
                     {unreadAlertsCount}
                   </span>
                 )}
@@ -403,7 +403,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('backup_restore')}
               >
                 <div className="flex items-center gap-2.5">
-                  <HardDrive className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <HardDrive className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Backup & Drive Sync</span>
                 </div>
               </button>
@@ -412,7 +412,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('audit_logs')}
               >
                 <div className="flex items-center gap-2.5">
-                  <History className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <History className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Audit Trail & Activity</span>
                 </div>
               </button>
@@ -433,7 +433,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                   className={navItemClass('rls')}
                 >
                   <div className="flex items-center gap-2.5">
-                    <ShieldCheck className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <ShieldCheck className="h-4 w-4 shrink-0 text-accent-strong" />
                     <span>RLS Data Protection</span>
                   </div>
                 </button>
@@ -444,7 +444,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                   className={navItemClass('playstore_kit')}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Smartphone className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                    <Smartphone className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                     <span>Play Store Kit</span>
                   </div>
                 </button>
@@ -454,7 +454,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('user_guide')}
               >
                 <div className="flex items-center gap-2.5">
-                  <BookOpen className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <BookOpen className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>User Guide & Tour</span>
                 </div>
               </button>
@@ -463,7 +463,7 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
                 className={navItemClass('settings')}
               >
                 <div className="flex items-center gap-2.5">
-                  <Sliders className="h-4 w-4 shrink-0 text-slate-400 group-hover:text-emerald-400 transition-colors" />
+                  <Sliders className="h-4 w-4 shrink-0 text-ink-muted group-hover:text-accent-strong transition-colors" />
                   <span>Preferences & Settings</span>
                 </div>
               </button>
@@ -478,17 +478,17 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
             <button
               onClick={() => checkForUpdate(true)}
               disabled={isChecking}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-accent/10 hover:bg-accent/20 border border-accent/30 text-accent-strong text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
             >
               <div className="flex items-center gap-2">
                 {isChecking ? (
-                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
                 ) : (
-                  <ArrowUpCircle className="h-3.5 w-3.5 text-emerald-400" />
+                  <ArrowUpCircle className="h-3.5 w-3.5 text-accent-strong" />
                 )}
                 <span className="font-semibold">আপডেট চেক করুন</span>
               </div>
-              <span className="font-mono text-[10px] text-emerald-400 bg-emerald-500/20 px-1.5 py-0.5 rounded border border-emerald-500/30">
+              <span className="font-mono text-[10px] text-accent-strong bg-accent/20 px-1.5 py-0.5 rounded border border-accent/30">
                 {currentVersionName}
               </span>
             </button>
@@ -496,18 +496,18 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
             <button
               onClick={() => downloadApp()}
               disabled={isChecking}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500/15 to-teal-500/15 hover:from-emerald-500/25 hover:to-teal-500/25 border border-emerald-500/40 text-emerald-200 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500/15 to-teal-500/15 hover:from-emerald-500/25 hover:to-teal-500/25 border border-accent/40 text-emerald-200 text-xs font-medium transition-all active:scale-[0.98] disabled:opacity-50 cursor-pointer shadow-sm shadow-emerald-950/20"
               title="অ্যান্ড্রয়েড ফোন বা ট্যাবলেটে ব্যবহারের জন্য অ্যাপ ডাউনলোড করুন"
             >
               <div className="flex items-center gap-2">
                 {isChecking ? (
-                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-emerald-400" />
+                  <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
                 ) : (
-                  <Smartphone className="h-3.5 w-3.5 text-emerald-400" />
+                  <Smartphone className="h-3.5 w-3.5 text-accent-strong" />
                 )}
-                <span className="font-semibold text-white">Download App</span>
+                <span className="font-semibold text-ink">Download App</span>
               </div>
-              <span className="flex items-center gap-1 font-mono text-[10px] text-emerald-300 bg-emerald-500/20 px-2 py-0.5 rounded-md border border-emerald-500/30 font-bold">
+              <span className="flex items-center gap-1 font-mono text-[10px] text-accent-strong bg-accent/20 px-2 py-0.5 rounded-md border border-accent/30 font-bold">
                 <Download className="h-2.5 w-2.5" />
                 <span>APK</span>
               </span>
@@ -516,17 +516,17 @@ export const Sidebar: React.FC<SidebarProps> = React.memo(({
 
           <PWAInstallButton variant="sidebar" />
 
-          <div className="rounded-xl bg-slate-900/40 p-2.5 border border-slate-800/60">
+          <div className="rounded-xl bg-surface/40 p-2.5 border border-edge/60">
             <div className="flex items-center justify-between text-[11px] mb-0.5">
-              <span className="font-semibold text-white truncate max-w-[130px]">{user.fullName}</span>
+              <span className="font-semibold text-ink truncate max-w-[130px]">{user.fullName}</span>
               <div className="flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span className="font-mono text-emerald-400 text-[10px]">Vault Active</span>
+                <span className="h-1.5 w-1.5 rounded-full bg-accent-strong animate-pulse"></span>
+                <span className="font-mono text-accent-strong text-[10px]">Vault Active</span>
               </div>
             </div>
-            <div className="text-[10px] text-slate-400 font-mono truncate">{user.email}</div>
-            <div className="text-[10px] text-slate-500 font-sans mt-1.5 flex items-center gap-1.5 pt-1 border-t border-slate-800/40">
-              <Lock className="h-3 w-3 text-slate-500 shrink-0" />
+            <div className="text-[10px] text-ink-muted font-mono truncate">{user.email}</div>
+            <div className="text-[10px] text-ink-faint font-sans mt-1.5 flex items-center gap-1.5 pt-1 border-t border-edge/40">
+              <Lock className="h-3 w-3 text-ink-faint shrink-0" />
               <span className="truncate">100% Offline Vault · Double-Entry OS</span>
             </div>
           </div>

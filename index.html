@@ -6,6 +6,18 @@
     <title>Money Canvas — Personal Wealth & Investment Operating System</title>
     <meta name="description" content="Comprehensive personal wealth, double-entry accounting, investment portfolio, banking, and financial analytics management system." />
     <meta name="theme-color" content="#020617" />
+    <script>
+      // UX-3: apply the saved color theme before first paint to avoid a flash
+      (function () {
+        try {
+          var t = localStorage.getItem('pfos_theme');
+          var ok = ['emerald-dark', 'ocean-dark', 'royal-dark', 'soft-light'];
+          document.documentElement.dataset.theme = ok.indexOf(t) >= 0 ? t : 'emerald-dark';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'emerald-dark';
+        }
+      })();
+    </script>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />

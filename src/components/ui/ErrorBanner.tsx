@@ -20,17 +20,17 @@ const variantStyles: Record<
   { container: string; icon: typeof AlertCircle; iconColor: string; titleColor: string; textColor: string }
 > = {
   error: {
-    container: 'border-rose-500/30 bg-rose-500/10',
+    container: 'border-negative/30 bg-negative/10',
     icon: AlertCircle,
-    iconColor: 'text-rose-400',
+    iconColor: 'text-negative',
     titleColor: 'text-rose-300',
     textColor: 'text-rose-200/90',
   },
   warning: {
     container: 'border-amber-500/30 bg-amber-500/10',
     icon: AlertTriangle,
-    iconColor: 'text-amber-400',
-    titleColor: 'text-amber-300',
+    iconColor: 'text-warning',
+    titleColor: 'text-warning',
     textColor: 'text-amber-200/90',
   },
   info: {
@@ -41,10 +41,10 @@ const variantStyles: Record<
     textColor: 'text-sky-200/90',
   },
   success: {
-    container: 'border-emerald-500/30 bg-emerald-500/10',
+    container: 'border-accent/30 bg-accent/10',
     icon: CheckCircle2,
-    iconColor: 'text-emerald-400',
-    titleColor: 'text-emerald-300',
+    iconColor: 'text-accent-strong',
+    titleColor: 'text-accent-strong',
     textColor: 'text-emerald-200/90',
   },
 };
@@ -87,7 +87,7 @@ export const ErrorBanner: React.FC<ErrorBannerProps> = ({
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss banner"
-          className="text-slate-400 hover:text-white p-0.5 rounded transition-colors"
+          className="text-ink-muted hover:text-ink p-0.5 rounded transition-colors"
         >
           <X className="h-4 w-4" />
         </button>

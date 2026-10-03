@@ -15,6 +15,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { ClipboardSmsBanner } from './components/common/ClipboardSmsBanner';
 import { SyncConflictModal } from './components/common/SyncConflictModal';
 import { LedgerHealthBanners } from './components/common/LedgerHealthBanners';
+import { ThemeProvider } from './lib/theme-context';
 import { Capacitor } from '@capacitor/core';
 import { UserGuideModal } from './components/onboarding/UserGuideModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
@@ -72,7 +73,7 @@ const DataDeletionRequestView = lazy(() => import('./components/views/DataDeleti
 
 const ViewLoader: React.FC = () => (
   <div className="flex items-center justify-center py-24" role="status" aria-label="Loading view">
-    <div className="h-8 w-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-400 animate-spin" />
+    <div className="h-8 w-8 rounded-full border-2 border-accent/30 border-t-emerald-400 animate-spin" />
   </div>
 );
 
@@ -202,7 +203,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex font-sans selection:bg-emerald-500/20 selection:text-emerald-300 pb-24 lg:pb-0">
+    <div className="min-h-screen bg-canvas text-ink flex font-sans selection:bg-accent/20 selection:text-accent-strong pb-24 lg:pb-0">
       {/* Collapsible / Responsive Navigation Sidebar */}
       <Sidebar
         currentView={currentView}
@@ -432,14 +433,14 @@ function AppContent() {
         {/* Mobile Bottom Quick-Access Bar (visible on < lg) */}
         <nav
           aria-label="Mobile Bottom Navigation"
-          className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-md border-t border-slate-800/80 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] flex items-center justify-around shadow-2xl"
+          className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-canvas/95 backdrop-blur-md border-t border-edge/80 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] flex items-center justify-around shadow-2xl"
         >
           <button
             onClick={() => setCurrentView('dashboard')}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl text-[10px] font-mono transition-all active:scale-95 ${
               currentView === 'dashboard'
-                ? 'text-emerald-400 font-bold bg-emerald-500/10'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-accent-strong font-bold bg-accent/10'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             <LayoutDashboard className="h-4.5 w-4.5 mb-0.5" />
@@ -449,8 +450,8 @@ function AppContent() {
             onClick={() => setCurrentView('ledger')}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl text-[10px] font-mono transition-all active:scale-95 ${
               currentView === 'ledger'
-                ? 'text-emerald-400 font-bold bg-emerald-500/10'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-accent-strong font-bold bg-accent/10'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             <Wallet className="h-4.5 w-4.5 mb-0.5" />
@@ -460,8 +461,8 @@ function AppContent() {
             onClick={() => setCurrentView('stocks')}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl text-[10px] font-mono transition-all active:scale-95 ${
               currentView === 'stocks'
-                ? 'text-emerald-400 font-bold bg-emerald-500/10'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-accent-strong font-bold bg-accent/10'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             <TrendingUp className="h-4.5 w-4.5 mb-0.5" />
@@ -471,8 +472,8 @@ function AppContent() {
             onClick={() => setCurrentView('notifications')}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl text-[10px] font-mono transition-all active:scale-95 ${
               currentView === 'notifications'
-                ? 'text-emerald-400 font-bold bg-emerald-500/10'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-accent-strong font-bold bg-accent/10'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             <Bell className="h-4.5 w-4.5 mb-0.5" />
@@ -482,8 +483,8 @@ function AppContent() {
             onClick={() => setCurrentView('backup_restore')}
             className={`flex flex-col items-center justify-center min-w-[56px] min-h-[48px] px-2 py-1 rounded-xl text-[10px] font-mono transition-all active:scale-95 ${
               currentView === 'backup_restore'
-                ? 'text-emerald-400 font-bold bg-emerald-500/10'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-accent-strong font-bold bg-accent/10'
+                : 'text-ink-muted hover:text-ink-soft'
             }`}
           >
             <History className="h-4.5 w-4.5 mb-0.5" />
@@ -497,6 +498,7 @@ function AppContent() {
 
 export default function App() {
   return (
+    <ThemeProvider>
     <AuthProvider>
       <BiometricProvider>
         <LedgerProvider>
@@ -512,5 +514,6 @@ export default function App() {
         </LedgerProvider>
       </BiometricProvider>
     </AuthProvider>
+    </ThemeProvider>
   );
 }
