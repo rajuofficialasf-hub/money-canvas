@@ -210,6 +210,45 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
         )}
       </div>
 
+      {/* UX-12: Status hero — permission state + total scheduled reminders at a glance */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-2xl border border-edge bg-surface/60 p-5 flex items-center gap-4 shadow-lg">
+          <div
+            className={`p-3 rounded-xl border shrink-0 ${
+              permissionStatus === 'granted'
+                ? 'bg-accent/10 text-accent-strong border-accent/30'
+                : 'bg-warning/10 text-warning border-warning/30'
+            }`}
+          >
+            {permissionStatus === 'granted' ? <ShieldCheck className="h-6 w-6" /> : <Clock className="h-6 w-6" />}
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] text-ink-muted uppercase font-mono">নোটিফিকেশন পারমিশন (Permission)</p>
+            <p
+              className={`text-lg sm:text-xl font-bold mt-0.5 ${
+                permissionStatus === 'granted' ? 'text-accent-strong' : 'text-warning'
+              }`}
+            >
+              {permissionStatus === 'granted'
+                ? 'সক্রিয় (Granted)'
+                : permissionStatus === 'denied'
+                ? 'ব্লকড (Denied)'
+                : 'পারমিশন প্রয়োজন (Needed)'}
+            </p>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-edge bg-surface/60 p-5 flex items-center gap-4 shadow-lg">
+          <div className="p-3 rounded-xl bg-accent/10 text-accent-strong border border-accent/20 shrink-0">
+            <Bell className="h-6 w-6" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-[11px] text-ink-muted uppercase font-mono">মোট শিডিউলড রিমাইন্ডার (Scheduled Reminders)</p>
+            <p className="text-3xl font-bold text-ink font-mono mt-0.5">{pendingReminders.length}</p>
+          </div>
+        </div>
+      </div>
+
       {/* FEAT-5: Device Reminder & Push Notification Scheduler Center */}
       <div className="rounded-2xl border border-sky-500/30 bg-gradient-to-br from-sky-950/20 via-surface/90 to-canvas p-5 sm:p-6 space-y-4 shadow-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -232,7 +271,10 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
                   </span>
                 )}
               </div>
-              <p className="text-[11px] sm:text-xs text-ink-muted mt-0.5">
+              <p
+                className="text-[11px] sm:text-xs text-ink-muted mt-0.5 truncate max-w-md"
+                title="Reminders are sent to this device 7 days before and at 9:00 AM on the due date — recurring bills, DPS installments, loan EMIs, and FD/Sanchayapatra maturities."
+              >
                 রিকারিং বিল, ডিপিএস কিস্তি, লোন ইএমআই ও এফডি/সঞ্চয়পত্র ম্যাচিউরিটির <strong>৭ দিন আগে</strong> এবং <strong>নির্ধারিত দিনে সকাল ৯:০০ টায়</strong> ডিভাইসে নোটিফিকেশন পাঠায়।
               </p>
             </div>
@@ -242,7 +284,7 @@ export const NotificationsView: React.FC<NotificationsViewProps> = ({ onNavigate
             <button
               type="button"
               onClick={handleSendTest}
-              className="px-3 py-1.5 rounded-xl bg-raised hover:bg-slate-700 text-xs font-semibold text-ink-soft border border-slate-700 flex items-center gap-1.5 transition-colors cursor-pointer"
+              className="px-3 py-1.5 rounded-xl bg-raised hover:bg-raised-2 text-xs font-semibold text-ink-soft border border-edge-strong flex items-center gap-1.5 transition-colors cursor-pointer"
             >
               <Send className="h-3.5 w-3.5 text-sky-400" />
               <span>টেস্ট নোটিফিকেশন</span>

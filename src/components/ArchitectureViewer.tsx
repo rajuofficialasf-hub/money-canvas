@@ -116,7 +116,7 @@ export const ArchitectureViewer: React.FC = () => {
                 className={`w-full text-left p-3.5 rounded-lg border transition-all text-xs ${
                   activeLockIndex === idx
                     ? 'border-accent/50 bg-emerald-950/20 text-ink'
-                    : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
+                    : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-edge-strong hover:text-ink-soft'
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">

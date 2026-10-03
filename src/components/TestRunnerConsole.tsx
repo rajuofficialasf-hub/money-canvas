@@ -88,7 +88,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 className={`w-full text-left p-3 rounded-lg border transition-all text-xs flex items-center justify-between ${
                   isSelected
                     ? 'border-accent/50 bg-emerald-950/20 text-ink font-medium'
-                    : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
+                    : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-edge-strong hover:text-ink-soft'
                 }`}
               >
                 <div className="flex items-center gap-2.5 truncate">
@@ -103,7 +103,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 {isSelected ? (
                   <ChevronDown className="h-4 w-4 text-accent-strong shrink-0" />
                 ) : (
-                  <ChevronRight className="h-4 w-4 text-slate-600 shrink-0" />
+                  <ChevronRight className="h-4 w-4 text-ink-faint shrink-0" />
                 )}
               </button>
             );
@@ -189,7 +189,7 @@ export const TestRunnerConsole: React.FC<TestRunnerConsoleProps> = ({
                 <div className="rounded-lg bg-canvas p-3 border border-edge text-xs font-mono text-ink-muted space-y-1">
                   {selectedTest.logs.map((log, idx) => (
                     <div key={idx} className="flex items-start gap-2">
-                      <span className="text-slate-600 select-none">&gt;</span>
+                      <span className="text-ink-faint select-none">&gt;</span>
                       <span>{log}</span>
                     </div>
                   ))}

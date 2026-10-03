@@ -86,7 +86,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
 
         {showIOSGuide && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 animate-in fade-in">
-            <div className="w-full max-w-sm rounded-2xl bg-surface border border-slate-700 p-6 shadow-2xl space-y-4">
+            <div className="w-full max-w-sm rounded-2xl bg-surface border border-edge-strong p-6 shadow-2xl space-y-4">
               <div className="flex items-center justify-between border-b border-edge pb-3">
                 <div className="flex items-center gap-2 font-bold text-ink text-sm">
                   <Smartphone className="h-4 w-4 text-sky-400" />
@@ -135,7 +135,7 @@ export const PWAInstallButton: React.FC<PWAInstallButtonProps> = ({ variant = 'h
 
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="w-full py-2.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft font-mono text-xs font-semibold transition-colors"
+                className="w-full py-2.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft font-mono text-xs font-semibold transition-colors"
               >
                 Got It
               </button>

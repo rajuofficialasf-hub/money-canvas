@@ -45,7 +45,7 @@ export const PWAUpdateToast: React.FC = () => {
 
             <button
               onClick={() => dismissUpdate()}
-              className="px-3 py-2 rounded-xl bg-raised/80 hover:bg-slate-700 text-ink-soft hover:text-ink text-xs font-medium transition-colors cursor-pointer"
+              className="px-3 py-2 rounded-xl bg-raised/80 hover:bg-raised-2 text-ink-soft hover:text-ink text-xs font-medium transition-colors cursor-pointer"
             >
               পরে
             </button>

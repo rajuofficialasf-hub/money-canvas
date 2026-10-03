@@ -19,6 +19,7 @@ export const ZakatView: React.FC = () => {
   const {
     accounts,
     accountBalances,
+    getAccountBalance,
     netWorthSnapshots,
     zakatSettings,
     debts,
@@ -119,6 +120,11 @@ export const ZakatView: React.FC = () => {
     deductibleLiabilities,
   });
 
+  // UX-10: disburse source-account context (informational only)
+  const numDisburseAmount = typeof disburseAmount === 'number' ? disburseAmount : 0;
+  const disburseAcctBalance = disburseAccountId ? getAccountBalance(disburseAccountId) : 0;
+  const disburseAcctAfter = disburseAcctBalance - numDisburseAmount;
+
   const handleDisburseSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setDisburseError('');
@@ -177,7 +183,7 @@ export const ZakatView: React.FC = () => {
         <div className="flex items-center gap-2.5">
           <button
             onClick={() => setIsSettingsModalOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 hover:bg-raised text-ink-soft font-medium text-xs transition-colors"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-edge-strong hover:bg-raised text-ink-soft font-medium text-xs transition-colors"
           >
             <Sliders className="h-3.5 w-3.5 text-ink-muted" />
             <span>Nisab Rates</span>
@@ -402,8 +408,11 @@ export const ZakatView: React.FC = () => {
                   <Info className="h-4 w-4 text-sky-400 shrink-0" />
                   <span>Nisab Basis Guidance</span>
                 </div>
-                <p className="text-ink-muted text-[11px] leading-relaxed">
-                  Classical scholars (Hanafi, Maliki, Hanbali) advise using the <strong className="text-ink">Silver Nisab</strong> for currency, bank balances, and mixed portfolios because it establishes an equitable threshold that benefits more recipients in society.
+                <p
+                  className="text-ink-muted text-[11px] truncate"
+                  title="Classical scholars (Hanafi, Maliki, Hanbali) advise using the Silver Nisab for currency, bank balances, and mixed portfolios because it establishes an equitable threshold that benefits more recipients in society."
+                >
+                  Classical scholars advise the <strong className="text-ink">Silver Nisab</strong> for currency &amp; bank balances.
                 </p>
               </div>
 
@@ -445,7 +454,7 @@ export const ZakatView: React.FC = () => {
                 placeholder="Optional snapshot note..."
                 value={snapshotNote}
                 onChange={(e) => setSnapshotNote(e.target.value)}
-                className="rounded-lg border border-slate-700 bg-canvas px-3 py-1.5 text-xs text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                className="rounded-lg border border-edge-strong bg-canvas px-3 py-1.5 text-xs text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
               />
               <button
                 onClick={handleCaptureSnapshot}
@@ -519,6 +528,20 @@ export const ZakatView: React.FC = () => {
             )}
 
             <form onSubmit={handleDisburseSubmit} className="space-y-4 text-xs font-sans">
+              {/* UX-10: computed zakat hero */}
+              <div className="rounded-xl border border-accent/30 bg-accent/10 p-3 text-center">
+                <div className="text-[10px] uppercase font-mono text-ink-faint">
+                  হিসাবকৃত বার্ষিক যাকাত (Computed Zakat Due · 2.5%)
+                </div>
+                <div className="text-2xl font-bold font-mono text-accent-strong mt-0.5">
+                  ৳{zakatCalc.zakatDue.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </div>
+                <div className="text-[10px] font-mono text-ink-faint mt-0.5">
+                  Nisab {zakatCalc.isNisabMet ? 'Met' : 'Below'} · Net Pool ৳
+                  {zakatCalc.netZakatablePool.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-ink-soft font-medium mb-1">
                   Disbursement Amount (৳ BDT) *
@@ -530,7 +553,7 @@ export const ZakatView: React.FC = () => {
                   required
                   value={disburseAmount}
                   onChange={(e) => setDisburseAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                 />
               </div>
 
@@ -541,14 +564,49 @@ export const ZakatView: React.FC = () => {
                 <select
                   value={disburseAccountId}
                   onChange={(e) => setDisburseAccountId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
-                      {acc.name} ({acc.accountType})
+                      {acc.name} ({acc.accountType}) — ৳{getAccountBalance(acc.id).toLocaleString()}
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* UX-10: source-account balance context (informational only) */}
+              <div
+                className={`rounded-xl border p-3 transition-colors ${
+                  disburseAcctAfter < 0 ? 'bg-negative/10 border-negative/50' : 'bg-canvas border-edge'
+                }`}
+              >
+                <div className="grid grid-cols-2 gap-2 text-center divide-x divide-edge/80">
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      ব্যালেন্স এখন (Now)
+                    </div>
+                    <div className="text-sm sm:text-base font-bold font-mono text-ink mt-0.5">
+                      ৳{disburseAcctBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      যাকাত প্রদানের পর থাকবে
+                    </div>
+                    <div
+                      className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                        disburseAcctAfter < 0 ? 'text-negative' : 'text-ink'
+                      }`}
+                    >
+                      ৳{disburseAcctAfter.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                </div>
+                {disburseAcctAfter < 0 && (
+                  <p className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed">
+                    ব্যালেন্সের চেয়ে বেশি প্রদান — অ্যাকাউন্ট নেগেটিভ হবে (তথ্যমূলক)।
+                  </p>
+                )}
               </div>
 
               <div>
@@ -559,7 +617,7 @@ export const ZakatView: React.FC = () => {
                   type="text"
                   value={disburseNote}
                   onChange={(e) => setDisburseNote(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -574,7 +632,7 @@ export const ZakatView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsDisburseModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
@@ -615,7 +673,7 @@ export const ZakatView: React.FC = () => {
                 <select
                   value={nisabBasis}
                   onChange={(e) => setNisabBasis(e.target.value as 'gold' | 'silver')}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="silver">Silver Standard (612.36g) — Recommended for Currency</option>
                   <option value="gold">Gold Standard (87.48g)</option>
@@ -632,7 +690,7 @@ export const ZakatView: React.FC = () => {
                   required
                   value={silverRate}
                   onChange={(e) => setSilverRate(parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink font-mono"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink font-mono"
                 />
                 <div className="text-[10px] text-ink-faint mt-1">
                   Computed Nisab: ৳{(612.36 * silverRate).toLocaleString()}
@@ -649,7 +707,7 @@ export const ZakatView: React.FC = () => {
                   required
                   value={goldRate}
                   onChange={(e) => setGoldRate(parseFloat(e.target.value))}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink font-mono"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink font-mono"
                 />
                 <div className="text-[10px] text-ink-faint mt-1">
                   Computed Nisab: ৳{(87.48 * goldRate).toLocaleString()}
@@ -660,7 +718,7 @@ export const ZakatView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsSettingsModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>

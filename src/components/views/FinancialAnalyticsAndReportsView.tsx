@@ -473,8 +473,12 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
               Phase 8 Active · NBR Compliant
             </span>
           </div>
-          <p className="text-xs text-ink-muted mt-1">
-            Authoritative Capital Gains Tax Engine (Finance Act 2024), Multi-Asset Balance Sheet, Lock 6 Income Statement, and Sector Diversification Analytics.
+          {/* UX-11: long feature paragraph compressed to one line; full text kept in the tooltip */}
+          <p
+            className="text-xs text-ink-muted mt-1 truncate max-w-xl cursor-help"
+            title="Authoritative Capital Gains Tax Engine (Finance Act 2024), Multi-Asset Balance Sheet, Lock 6 Income Statement, and Sector Diversification Analytics."
+          >
+            NBR-compliant capital gains tax, financial statements &amp; sector analytics
           </p>
         </div>
 
@@ -733,7 +737,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                   </div>
                   <button
                     onClick={() => setExemptionThreshold(5000000)}
-                    className="text-[10px] px-2 py-1 bg-raised hover:bg-slate-700 text-ink-soft rounded transition-colors"
+                    className="text-[10px] px-2 py-1 bg-raised hover:bg-raised-2 text-ink-soft rounded transition-colors"
                   >
                     Set ৳50 Lakh
                   </button>
@@ -876,7 +880,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
 
             {taxSummary.gainItems.length === 0 ? (
               <div className="p-8 text-center text-ink-muted">
-                <Receipt className="h-8 w-8 mx-auto text-slate-600 mb-2" />
+                <Receipt className="h-8 w-8 mx-auto text-ink-faint mb-2" />
                 <p className="text-sm font-medium text-ink-soft">No stock sales recorded yet</p>
                 <p className="text-xs text-ink-faint mt-1 max-w-sm mx-auto">
                   When you sell equities in the Trading module, the realized gain/loss and 0.05% AIT turnover tax will automatically appear here.
@@ -931,7 +935,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                             className={`text-[10px] px-2 py-0.5 rounded font-mono ${
                               item.holdingType === 'long_term'
                                 ? 'bg-indigo-500/10 text-indigo-400 border border-indigo-500/20'
-                                : 'bg-raised text-ink-muted border border-slate-700'
+                                : 'bg-raised text-ink-muted border border-edge-strong'
                             }`}
                           >
                             {item.holdingType === 'long_term' ? 'Long-Term (≥1y)' : 'Short-Term'}
@@ -985,7 +989,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
             ) : (
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {harvestCandidates.map((h) => (
-                  <div key={h.stockId} className="bg-canvas border border-edge rounded-xl p-3.5 hover:border-slate-700 transition-colors">
+                  <div key={h.stockId} className="bg-canvas border border-edge rounded-xl p-3.5 hover:border-edge-strong transition-colors">
                     <div className="flex items-start justify-between">
                       <div>
                         <div className="font-bold text-ink text-xs">{h.symbol}</div>
@@ -1118,7 +1122,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                     {sec.stocks.map((s) => (
                       <span
                         key={s.symbol}
-                        className="text-[10px] px-2 py-0.5 bg-raised text-ink-soft rounded border border-slate-700/60 font-mono"
+                        className="text-[10px] px-2 py-0.5 bg-raised text-ink-soft rounded border border-edge-strong/60 font-mono"
                       >
                         {s.symbol}: ৳{s.marketValue.toLocaleString()} ({s.percentage.toFixed(1)}%)
                       </span>
@@ -1203,6 +1207,32 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           {/* Sub-Tab 1: Balance Sheet */}
           {statementSubTab === 'balance_sheet' && (
             <div className="space-y-6">
+              {/* UX-11: Hero totals strip — Net Worth leads the statement */}
+              <div className="bg-surface/80 border border-edge rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-ink-muted">
+                    Net Worth (Owner's Equity) · নিট সম্পদ
+                  </div>
+                  <div className={`text-2xl sm:text-3xl font-bold font-mono ${balanceSheet.netWorth >= 0 ? 'text-positive' : 'text-negative'}`}>
+                    ৳{balanceSheet.netWorth.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+                <div className="flex items-center gap-5 font-mono shrink-0">
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Total Assets</div>
+                    <div className="text-sm font-bold text-ink">৳{balanceSheet.totalAssets.toLocaleString()}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Total Liabilities</div>
+                    <div className="text-sm font-bold text-negative">৳{balanceSheet.totalLiabilities.toLocaleString()}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Solvency</div>
+                    <div className="text-sm font-bold text-accent-strong">{balanceSheet.solvencyRatio.toFixed(1)}%</div>
+                  </div>
+                </div>
+              </div>
+
               {/* Assets & Liabilities 2-column view */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 {/* Left: ASSETS */}
@@ -1313,7 +1343,7 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
                               </div>
                               <div className="mt-1.5 space-y-1 text-[11px] text-ink-muted">
                                 {cat.items.length === 0 ? (
-                                  <div className="text-[11px] text-slate-600 italic">No open obligations</div>
+                                  <div className="text-[11px] text-ink-faint italic">No open obligations</div>
                                 ) : (
                                   cat.items.map((item) => (
                                     <div key={item.id} className="flex items-center justify-between gap-2 py-0.5">
@@ -1367,6 +1397,32 @@ export const FinancialAnalyticsAndReportsView: React.FC<FinancialAnalyticsAndRep
           {/* Sub-Tab 2: Income Statement (P&L) */}
           {statementSubTab === 'pnl' && (
             <div className="space-y-6">
+              {/* UX-11: Hero totals strip — Net Surplus leads the statement */}
+              <div className="bg-surface/80 border border-edge rounded-xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-ink-muted">
+                    Net Operating Surplus / (Deficit) · নিট উদ্বৃত্ত
+                  </div>
+                  <div className={`text-2xl sm:text-3xl font-bold font-mono ${incomeStatement.netSurplus >= 0 ? 'text-positive' : 'text-negative'}`}>
+                    {incomeStatement.netSurplus >= 0 ? '+' : ''}৳{incomeStatement.netSurplus.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                  </div>
+                </div>
+                <div className="flex items-center gap-5 font-mono shrink-0">
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Income</div>
+                    <div className="text-sm font-bold text-accent-strong">৳{incomeStatement.totalIncome.toLocaleString()}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Expenses</div>
+                    <div className="text-sm font-bold text-negative">৳{incomeStatement.totalExpenses.toLocaleString()}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[10px] uppercase text-ink-muted">Savings Rate</div>
+                    <div className="text-sm font-bold text-indigo-400">{incomeStatement.savingsRatePct.toFixed(1)}%</div>
+                  </div>
+                </div>
+              </div>
+
               <div className="bg-surface/60 border border-edge rounded-xl p-3.5 sm:p-5">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-edge pb-3 mb-4 gap-2">
                   <div>

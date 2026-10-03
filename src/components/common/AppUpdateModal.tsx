@@ -112,7 +112,7 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
             <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
               {isNative ? (
                 <>
-                  <span className="px-2.5 py-1 rounded-lg bg-raised/90 text-ink-muted font-mono border border-slate-700">
+                  <span className="px-2.5 py-1 rounded-lg bg-raised/90 text-ink-muted font-mono border border-edge-strong">
                     বর্তমান: <span className="text-ink-soft font-bold">v{updateInfo.currentVersion}</span>
                   </span>
                   <span className="text-ink-faint">➔</span>
@@ -198,7 +198,7 @@ export const AppUpdateModal: React.FC<AppUpdateModalProps> = ({
             <button
               type="button"
               onClick={handleDismiss}
-              className="w-full sm:w-1/3 px-4 py-2.5 rounded-xl bg-raised hover:bg-slate-700/80 border border-slate-700 text-ink-soft text-xs font-semibold transition-colors cursor-pointer text-center"
+              className="w-full sm:w-1/3 px-4 py-2.5 rounded-xl bg-raised hover:bg-raised-2/80 border border-edge-strong text-ink-soft text-xs font-semibold transition-colors cursor-pointer text-center"
             >
               {isNative ? 'পরে মনে করান' : 'বন্ধ করুন'}
             </button>

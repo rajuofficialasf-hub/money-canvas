@@ -22,6 +22,7 @@ export const AssetsView: React.FC = () => {
     staticLiabilities,
     accounts,
     accountBalances,
+    getAccountBalance,
     createPhysicalAsset,
     createStaticLiability,
   } = useLedger();
@@ -76,6 +77,11 @@ export const AssetsView: React.FC = () => {
     const bal = accountBalances.find((b) => b.accountId === asset.assetAccountId);
     return bal ? bal.currentBalance : asset.purchasePrice;
   };
+
+  // UX-10: funding-account purchase context (informational only)
+  const numPurchasePrice = typeof purchasePrice === 'number' ? purchasePrice : 0;
+  const fundingAcctBalance = fundingAccountId ? getAccountBalance(fundingAccountId) : 0;
+  const fundingAcctAfter = fundingAcctBalance - numPurchasePrice;
 
   const totalAssetValuation = physicalAssets.reduce((sum, a) => sum + getAssetBalance(a), 0);
   const totalStaticLiabilities = staticLiabilities.reduce((sum, l) => sum + l.initialAmount, 0);
@@ -317,7 +323,7 @@ export const AssetsView: React.FC = () => {
         <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/80 overflow-hidden">
           {physicalAssets.length === 0 ? (
             <div className="p-12 text-center text-ink-faint space-y-2">
-              <Home className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
+              <Home className="h-8 w-8 mx-auto text-ink-faint stroke-[1.5]" />
               <div className="text-sm font-medium text-ink-muted">No physical assets registered</div>
               <div className="text-xs">Add your vehicle, real estate, gold bullion, or land to track their balance sheet equity.</div>
             </div>
@@ -372,7 +378,7 @@ export const AssetsView: React.FC = () => {
         <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/80 overflow-hidden">
           {staticLiabilities.length === 0 ? (
             <div className="p-12 text-center text-ink-faint space-y-2">
-              <Shield className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
+              <Shield className="h-8 w-8 mx-auto text-ink-faint stroke-[1.5]" />
               <div className="text-sm font-medium text-ink-muted">No static liabilities registered</div>
               <div className="text-xs">Record promissory obligations or custom balance sheet liabilities.</div>
             </div>
@@ -434,7 +440,7 @@ export const AssetsView: React.FC = () => {
                     placeholder="e.g. Toyota Premio G-Superior"
                     value={assetName}
                     onChange={(e) => setAssetName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
 
@@ -482,7 +488,7 @@ export const AssetsView: React.FC = () => {
                           placeholder="e.g. Machinery, Art & Antiques, Farm"
                           value={customAssetCatName}
                           onChange={(e) => setCustomAssetCatName(e.target.value)}
-                          className="flex-1 bg-surface border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
+                          className="flex-1 bg-surface border border-edge-strong rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
                         />
                         <button
                           type="button"
@@ -503,7 +509,7 @@ export const AssetsView: React.FC = () => {
                           setAssetCategory(e.target.value as any);
                         }
                       }}
-                      className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
+                      className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
                     >
                       <option value="vehicle">Vehicle / Car / Motorcycle</option>
                       <option value="real_estate">Real Estate / Apartment</option>
@@ -534,7 +540,7 @@ export const AssetsView: React.FC = () => {
                     required
                     value={purchasePrice}
                     onChange={(e) => setPurchasePrice(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
@@ -547,7 +553,7 @@ export const AssetsView: React.FC = () => {
                     required
                     value={purchaseDate}
                     onChange={(e) => setPurchaseDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -560,7 +566,7 @@ export const AssetsView: React.FC = () => {
                 <select
                   value={fundingMethod}
                   onChange={(e) => setFundingMethod(e.target.value as FundingMethod)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   <option value="full_cash">100% Cash / Bank Funding</option>
                   <option value="cash_plus_loan">Downpayment + Loan Financing (Test Case 13)</option>
@@ -569,21 +575,58 @@ export const AssetsView: React.FC = () => {
               </div>
 
               {fundingMethod === 'full_cash' && (
-                <div>
-                  <label className="block text-ink-soft font-medium mb-1">
-                    Source Bank Account *
-                  </label>
-                  <select
-                    value={fundingAccountId}
-                    onChange={(e) => setFundingAccountId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-ink-soft font-medium mb-1">
+                      Source Bank Account *
+                    </label>
+                    <select
+                      value={fundingAccountId}
+                      onChange={(e) => setFundingAccountId(e.target.value)}
+                      className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                    >
+                      {liquidAccounts.map((acc) => (
+                        <option key={acc.id} value={acc.id}>
+                          {acc.name} ({acc.accountType}) — ৳{getAccountBalance(acc.id).toLocaleString()}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* UX-10: funding-account balance context (informational only) */}
+                  <div
+                    className={`rounded-xl border p-3 transition-colors ${
+                      fundingAcctAfter < 0 ? 'bg-negative/10 border-negative/50' : 'bg-canvas border-edge'
+                    }`}
                   >
-                    {liquidAccounts.map((acc) => (
-                      <option key={acc.id} value={acc.id}>
-                        {acc.name} ({acc.accountType})
-                      </option>
-                    ))}
-                  </select>
+                    <div className="grid grid-cols-2 gap-2 text-center divide-x divide-edge/80">
+                      <div>
+                        <div className="text-[10px] uppercase font-mono text-ink-faint">
+                          ব্যালেন্স এখন (Now)
+                        </div>
+                        <div className="text-sm sm:text-base font-bold font-mono text-ink mt-0.5">
+                          ৳{fundingAcctBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] uppercase font-mono text-ink-faint">
+                          কেনার পর থাকবে
+                        </div>
+                        <div
+                          className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                            fundingAcctAfter < 0 ? 'text-negative' : 'text-ink'
+                          }`}
+                        >
+                          ৳{fundingAcctAfter.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                        </div>
+                      </div>
+                    </div>
+                    {fundingAcctAfter < 0 && (
+                      <p className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed">
+                        ব্যালেন্সের চেয়ে দাম বেশি — কেনার পর অ্যাকাউন্ট নেগেটিভ হবে (তথ্যমূলক)।
+                      </p>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -598,7 +641,7 @@ export const AssetsView: React.FC = () => {
                       step="any"
                       value={cashDownpayment}
                       onChange={(e) => setCashDownpayment(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full rounded-lg border border-slate-700 bg-surface px-3 py-2 text-ink font-mono"
+                      className="w-full rounded-lg border border-edge-strong bg-surface px-3 py-2 text-ink font-mono"
                     />
                   </div>
                   <div>
@@ -610,22 +653,25 @@ export const AssetsView: React.FC = () => {
                       step="any"
                       value={loanFinancedAmount}
                       onChange={(e) => setLoanFinancedAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                      className="w-full rounded-lg border border-slate-700 bg-surface px-3 py-2 text-ink font-mono"
+                      className="w-full rounded-lg border border-edge-strong bg-surface px-3 py-2 text-ink font-mono"
                     />
                   </div>
                 </div>
               )}
 
               <div>
-                <label className="block text-ink-soft font-medium mb-1">
-                  Asset Description / Identifier (Deed #, VIN, Hallmarked weight)
+                <label
+                  className="block text-ink-soft font-medium mb-1"
+                  title="Deed #, VIN, Hallmarked weight — any identifying reference for the asset"
+                >
+                  Asset Description / Identifier
                 </label>
                 <input
                   type="text"
                   placeholder="e.g. Dhaka Metro GA-35 • 40g 22K certified hallmarked"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -633,7 +679,7 @@ export const AssetsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewAssetModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
@@ -684,7 +730,7 @@ export const AssetsView: React.FC = () => {
                   placeholder="e.g. Promissory Note to Business Partner"
                   value={liabName}
                   onChange={(e) => setLiabName(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-negative focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-negative focus:outline-none"
                 />
               </div>
 
@@ -699,7 +745,7 @@ export const AssetsView: React.FC = () => {
                   required
                   value={liabAmount}
                   onChange={(e) => setLiabAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-negative focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-negative focus:outline-none font-mono"
                 />
               </div>
 
@@ -707,7 +753,7 @@ export const AssetsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewLiabModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>

@@ -215,7 +215,7 @@ export const AccountsView: React.FC = () => {
               className={`rounded-xl border p-5 flex flex-col justify-between transition-all ${
                 acc.isArchived
                   ? 'border-edge/60 bg-canvas/40 opacity-60'
-                  : 'border-edge bg-surface/50 hover:border-slate-700'
+                  : 'border-edge bg-surface/50 hover:border-edge-strong'
               }`}
             >
               <div className="space-y-3">
@@ -271,7 +271,7 @@ export const AccountsView: React.FC = () => {
                   {acc.isArchived ? (
                     <button
                       onClick={() => unarchiveAccount(acc.id)}
-                      className="text-[11px] font-mono text-ink-muted hover:text-ink px-2 py-1 rounded bg-raised hover:bg-slate-700 transition-colors"
+                      className="text-[11px] font-mono text-ink-muted hover:text-ink px-2 py-1 rounded bg-raised hover:bg-raised-2 transition-colors"
                     >
                       Unarchive
                     </button>

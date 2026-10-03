@@ -325,7 +325,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
           {onNavigate && (
             <button
               onClick={() => onNavigate('ledger')}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold border border-slate-700 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-raised hover:bg-raised-2 text-ink-soft text-xs font-semibold border border-edge-strong transition-all cursor-pointer"
             >
               <BookOpen className="h-3.5 w-3.5 text-ink-muted" />
               <span>লেজারে ফিরে যান</span>
@@ -334,7 +334,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
 
           <button
             onClick={handleDownloadSampleCsv}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface hover:bg-raised text-ink-soft text-xs font-semibold border border-slate-700 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface hover:bg-raised text-ink-soft text-xs font-semibold border border-edge-strong transition-all cursor-pointer"
           >
             <Download className="h-3.5 w-3.5 text-sky-400" />
             <span>স্যাম্পল CSV ডাউনলোড</span>
@@ -421,7 +421,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={selectedAccountId}
                   onChange={(e) => setSelectedAccountId(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-medium focus:outline-none focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-medium focus:outline-none focus:border-sky-500"
                 >
                   {accounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -441,7 +441,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={selectedPresetId}
                   onChange={(e) => handlePresetChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-medium focus:outline-none focus:border-sky-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-medium focus:outline-none focus:border-sky-500"
                 >
                   {BANK_PRESETS.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -457,7 +457,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-700 hover:border-sky-500 bg-surface/30 hover:bg-surface/60 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all space-y-3"
+              className="border-2 border-dashed border-edge-strong hover:border-sky-500 bg-surface/30 hover:bg-surface/60 rounded-2xl p-8 flex flex-col items-center justify-center text-center cursor-pointer transition-all space-y-3"
             >
               <input
                 type="file"
@@ -484,7 +484,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 </p>
               </div>
 
-              <span className="px-4 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold border border-slate-700">
+              <span className="px-4 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-semibold border border-edge-strong">
                 কম্পিউটার বা মোবাইল থেকে ব্রাউজ করুন
               </span>
             </div>
@@ -517,7 +517,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => setCurrentStep(1)}
-                  className="px-3.5 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-medium flex items-center gap-1.5 cursor-pointer"
+                  className="px-3.5 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-medium flex items-center gap-1.5 cursor-pointer"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" />
                   <span>ফাইল বদলান</span>
@@ -574,7 +574,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={mapping.dateColIndex}
                   onChange={(e) => setMapping({ ...mapping, dateColIndex: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   {parsedTable.headers.map((h, i) => (
                     <option key={i} value={i}>
@@ -590,7 +590,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={mapping.descriptionColIndex}
                   onChange={(e) => setMapping({ ...mapping, descriptionColIndex: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   {parsedTable.headers.map((h, i) => (
                     <option key={i} value={i}>
@@ -606,7 +606,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={mapping.amountMode}
                   onChange={(e) => setMapping({ ...mapping, amountMode: e.target.value as AmountMode })}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   <option value="separate_dr_cr">আলাদা ডেবিট ও ক্রেডিট কলাম (ব্যাংক স্ট্যান্ডার্ড)</option>
                   <option value="single_amount_signed">একটি মাত্র কলাম (চিহ্ন বা বিবরণ দিয়ে আয়/ব্যয়)</option>
@@ -622,7 +622,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                   <select
                     value={mapping.debitColIndex !== undefined ? mapping.debitColIndex : ''}
                     onChange={(e) => setMapping({ ...mapping, debitColIndex: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-negative"
+                    className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-negative"
                   >
                     {parsedTable.headers.map((h, i) => (
                       <option key={i} value={i}>
@@ -637,7 +637,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                   <select
                     value={mapping.creditColIndex !== undefined ? mapping.creditColIndex : ''}
                     onChange={(e) => setMapping({ ...mapping, creditColIndex: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-accent"
+                    className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-accent"
                   >
                     {parsedTable.headers.map((h, i) => (
                       <option key={i} value={i}>
@@ -653,7 +653,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={mapping.amountColIndex !== undefined ? mapping.amountColIndex : ''}
                   onChange={(e) => setMapping({ ...mapping, amountColIndex: parseInt(e.target.value) })}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   {parsedTable.headers.map((h, i) => (
                     <option key={i} value={i}>
@@ -671,7 +671,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={defaultExpenseCatId}
                   onChange={(e) => setDefaultExpenseCatId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   {categories
                     .filter((c) => c.type === 'expense')
@@ -688,7 +688,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 <select
                   value={defaultIncomeCatId}
                   onChange={(e) => setDefaultIncomeCatId(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                  className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                 >
                   {categories
                     .filter((c) => c.type === 'income')
@@ -776,14 +776,14 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={handleSelectNonDuplicatesOnly}
-                className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-medium cursor-pointer"
+                className="px-3 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-medium cursor-pointer"
               >
                 ডুপ্লিকেট বাদে সব নির্বাচন
               </button>
 
               <button
                 onClick={() => handleSelectAll(false)}
-                className="px-2.5 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-muted hover:text-ink text-xs cursor-pointer"
+                className="px-2.5 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-muted hover:text-ink text-xs cursor-pointer"
               >
                 সব বাতিল
               </button>
@@ -816,7 +816,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                       type="checkbox"
                       checked={metrics.selectedCount === metrics.total && metrics.total > 0}
                       onChange={(e) => handleSelectAll(e.target.checked)}
-                      className="rounded border-slate-700 bg-raised text-sky-500 focus:ring-0 cursor-pointer"
+                      className="rounded border-edge-strong bg-raised text-sky-500 focus:ring-0 cursor-pointer"
                     />
                   </th>
                   <th className="px-3 py-2.5">তারিখ (Date)</th>
@@ -852,7 +852,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                           checked={row.selected}
                           disabled={!row.isValid}
                           onChange={() => handleToggleRow(row.rowNumber)}
-                          className="rounded border-slate-700 bg-raised text-sky-500 focus:ring-0 cursor-pointer"
+                          className="rounded border-edge-strong bg-raised text-sky-500 focus:ring-0 cursor-pointer"
                         />
                       </td>
 
@@ -865,7 +865,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                           type="text"
                           value={row.cleanDescription}
                           onChange={(e) => handleRowDescriptionChange(row.rowNumber, e.target.value)}
-                          className="w-full px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500 truncate"
+                          className="w-full px-2 py-1 rounded bg-surface border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500 truncate"
                         />
                       </td>
 
@@ -873,7 +873,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                         <select
                           value={row.suggestedCategoryId}
                           onChange={(e) => handleRowCategoryChange(row.rowNumber, e.target.value)}
-                          className="px-2 py-1 rounded bg-surface border border-slate-700 text-ink text-xs focus:outline-none focus:border-sky-500"
+                          className="px-2 py-1 rounded bg-surface border border-edge-strong text-ink text-xs focus:outline-none focus:border-sky-500"
                         >
                           {categories
                             .filter((c) => c.type === row.type)
@@ -965,7 +965,7 @@ export const CsvImportView: React.FC<CsvImportViewProps> = ({ onNavigate }) => {
                 setStatementRows([]);
                 setCurrentStep(1);
               }}
-              className="px-4 py-2.5 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold border border-slate-700 cursor-pointer"
+              className="px-4 py-2.5 rounded-xl bg-raised hover:bg-raised-2 text-ink-soft text-xs font-semibold border border-edge-strong cursor-pointer"
             >
               আরেকটি ফাইল ইমপোর্ট করুন
             </button>

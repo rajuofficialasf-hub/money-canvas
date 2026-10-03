@@ -664,7 +664,7 @@ export const GoldFxRatesView: React.FC<GoldFxRatesViewProps> = ({ onNavigate }) 
                       className={`p-2 rounded-lg border text-center font-bold transition-all cursor-pointer ${
                         calcKarat === k
                           ? 'bg-warning/20 border-warning text-warning shadow-sm'
-                          : 'bg-canvas border-edge text-ink-muted hover:text-ink hover:border-slate-700'
+                          : 'bg-canvas border-edge text-ink-muted hover:text-ink hover:border-edge-strong'
                       }`}
                     >
                       {k.toUpperCase()}

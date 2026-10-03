@@ -366,7 +366,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
             {assets.map((asset, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-edge bg-surface/70 p-4 flex flex-col justify-between hover:border-slate-700 transition-all group"
+                className="rounded-xl border border-edge bg-surface/70 p-4 flex flex-col justify-between hover:border-edge-strong transition-all group"
               >
                 <div>
                   {/* Title & Badge */}
@@ -374,7 +374,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     <h4 className="text-xs font-bold text-ink truncate">
                       {isBn ? asset.titleBn : asset.titleEn}
                     </h4>
-                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-raised text-accent-strong border border-slate-700 shrink-0">
+                    <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-raised text-accent-strong border border-edge-strong shrink-0">
                       {asset.dimension}
                     </span>
                   </div>
@@ -395,7 +395,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                       loading="lazy"
                     />
                     <div className="absolute inset-0 bg-canvas/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="px-2.5 py-1 rounded bg-surface/90 border border-slate-700 text-[10px] font-mono text-ink">
+                      <span className="px-2.5 py-1 rounded bg-surface/90 border border-edge-strong text-[10px] font-mono text-ink">
                         Click to Zoom
                       </span>
                     </div>
@@ -422,7 +422,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     <a
                       href={asset.svgUrl}
                       download={asset.svgUrl.split('/').pop()}
-                      className="px-3 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      className="px-3 py-2 rounded-lg bg-raised hover:bg-raised-2 border border-edge-strong text-ink-soft font-semibold font-mono text-xs flex items-center justify-center gap-1.5 transition-colors"
                     >
                       <Download className="h-3.5 w-3.5" />
                       <span>SVG Vector</span>
@@ -440,7 +440,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
               onClick={() => setSelectedPreview(null)}
             >
               <div
-                className="relative max-w-4xl max-h-[90vh] bg-surface rounded-xl border border-slate-700 p-4 flex flex-col items-center gap-3 overflow-hidden shadow-2xl"
+                className="relative max-w-4xl max-h-[90vh] bg-surface rounded-xl border border-edge-strong p-4 flex flex-col items-center gap-3 overflow-hidden shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between w-full border-b border-edge pb-2">
@@ -510,7 +510,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                   </div>
                   <button
                     onClick={() => copyToClipboard(appTitleBn, 'title_bn')}
-                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
                     {copiedKey === 'title_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'title_bn' ? 'Copied' : 'Copy'}</span>
@@ -526,7 +526,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                   </div>
                   <button
                     onClick={() => copyToClipboard(appTitleEn, 'title_en')}
-                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
                     {copiedKey === 'title_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'title_en' ? 'Copied' : 'Copy'}</span>
@@ -552,7 +552,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                   </div>
                   <button
                     onClick={() => copyToClipboard(shortDescBn, 'short_bn')}
-                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
                     {copiedKey === 'short_bn' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'short_bn' ? 'Copied' : 'Copy'}</span>
@@ -568,7 +568,7 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                   </div>
                   <button
                     onClick={() => copyToClipboard(shortDescEn, 'short_en')}
-                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
+                    className="px-3 py-1.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-xs font-mono flex items-center gap-1.5 shrink-0 transition-colors"
                   >
                     {copiedKey === 'short_en' ? <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                     <span>{copiedKey === 'short_en' ? 'Copied' : 'Copy'}</span>
@@ -815,14 +815,14 @@ Master your wealth and take control of your financial destiny with Money Canvas!
                     className={`p-4 rounded-lg border transition-all cursor-pointer flex items-start gap-3.5 ${
                       isChecked
                         ? 'bg-emerald-950/20 border-accent/40 text-accent-strong'
-                        : 'bg-canvas/60 border-edge hover:border-slate-700 text-ink-soft'
+                        : 'bg-canvas/60 border-edge hover:border-edge-strong text-ink-soft'
                     }`}
                   >
                     <div className="pt-0.5 shrink-0">
                       {isChecked ? (
                         <CheckSquare className="h-5 w-5 text-accent-strong" />
                       ) : (
-                        <Square className="h-5 w-5 text-slate-600" />
+                        <Square className="h-5 w-5 text-ink-faint" />
                       )}
                     </div>
                     <div className="space-y-0.5 flex-1">

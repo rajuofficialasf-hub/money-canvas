@@ -208,7 +208,7 @@ export const LedgerSandbox: React.FC = () => {
 
         <button
           onClick={handleResetSandbox}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-surface text-ink-soft hover:text-ink hover:border-slate-600 transition-colors w-fit"
+          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-edge-strong bg-surface text-ink-soft hover:text-ink hover:border-edge-strong transition-colors w-fit"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           <span>Reset Sandbox</span>

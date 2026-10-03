@@ -185,13 +185,13 @@ export const Header: React.FC<HeaderProps> = React.memo(({
       <div className="flex-1 max-w-md mx-4 hidden md:block">
         <button
           onClick={onOpenCommandPalette}
-          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-slate-700 text-xs text-ink-muted hover:text-ink-soft transition-all group"
+          className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-edge-strong text-xs text-ink-muted hover:text-ink-soft transition-all group"
         >
           <div className="flex items-center gap-2.5">
             <Search className="h-3.5 w-3.5 text-ink-faint group-hover:text-accent-strong transition-colors" />
             <span className="text-ink-muted">Search commands, accounts or records...</span>
           </div>
-          <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-slate-700/80 bg-raised/80 text-[10px] font-mono text-ink-muted">
+          <kbd className="hidden lg:inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border border-edge-strong/80 bg-raised/80 text-[10px] font-mono text-ink-muted">
             ⌘K
           </kbd>
         </button>
@@ -390,7 +390,7 @@ export const Header: React.FC<HeaderProps> = React.memo(({
         <div className="relative" ref={menuRef}>
           <button
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
-            className="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-slate-700 text-xs transition-all"
+            className="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-lg bg-surface/60 hover:bg-surface border border-edge/80 hover:border-edge-strong text-xs transition-all"
             aria-label="User Menu"
           >
             {user.avatarUrl ? (

@@ -622,7 +622,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
 
             {/* Benchmark Table Summary */}
             <div className="mt-6 overflow-x-auto scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[620px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[620px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-3 px-3 sm:px-4">Date</th>
@@ -682,7 +682,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[680px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[680px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-3 px-3 sm:px-4">Instrument</th>
@@ -706,9 +706,9 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                           <div className="font-bold text-slate-900">{h.symbol}</div>
                           <div className="text-xs text-ink-muted truncate max-w-[140px]">{h.companyName}</div>
                         </td>
-                        <td className="py-3 px-3 sm:px-4 text-xs font-medium text-slate-600">{h.sector}</td>
+                        <td className="py-3 px-3 sm:px-4 text-xs font-medium text-ink-faint">{h.sector}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-mono font-medium">{h.quantity.toLocaleString()}</td>
-                        <td className="py-3 px-3 sm:px-4 text-right font-mono text-xs text-slate-600">৳{h.weightedAverageCost.toFixed(2)}</td>
+                        <td className="py-3 px-3 sm:px-4 text-right font-mono text-xs text-ink-faint">৳{h.weightedAverageCost.toFixed(2)}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-mono font-semibold text-slate-900">৳{h.currentMarketPrice.toFixed(2)}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-mono font-bold text-slate-900">৳{mv.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-mono text-xs whitespace-nowrap">
@@ -748,7 +748,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[560px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[560px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-3 px-3 sm:px-4">Date</th>
@@ -796,7 +796,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                                 ? 'text-rose-600'
                                 : cf.amount > 0
                                 ? 'text-accent-deep'
-                                : 'text-slate-600'
+                                : 'text-ink-faint'
                             }
                           >
                             {cf.amount < 0 ? '-' : '+'}৳{Math.abs(cf.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
@@ -814,7 +814,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
                 Newton-Raphson Solver Confirmation
               </h4>
-              <div className="text-xs font-mono text-slate-600 space-y-1">
+              <div className="text-xs font-mono text-ink-faint space-y-1">
                 <div>Equation: &Sigma; [ CF_i / (1 + r)^( &Delta;t_i / 365.25 ) ] = 0</div>
                 <div>Solved Annualized Rate: <strong>+{portfolioPerformanceMetrics.xirrPct.toFixed(2)}%</strong></div>
                 <div className="text-ink-faint text-[11px]">
@@ -840,7 +840,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[620px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[620px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-3 px-3 sm:px-4">Period</th>
@@ -905,7 +905,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[660px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[660px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-3 px-3 sm:px-4">Snapshot Date</th>
@@ -923,7 +923,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
                     return (
                       <tr key={snap.id} className="hover:bg-slate-50 transition-colors">
                         <td className="py-3 px-3 sm:px-4 font-bold text-slate-900 whitespace-nowrap">{snap.snapshotDate}</td>
-                        <td className="py-3 px-3 sm:px-4 text-right text-slate-600">৳{snap.totalInvested.toLocaleString()}</td>
+                        <td className="py-3 px-3 sm:px-4 text-right text-ink-faint">৳{snap.totalInvested.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-medium text-slate-900">৳{snap.currentMarketValue.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right text-slate-700">৳{snap.brokerCashBalance.toLocaleString()}</td>
                         <td className="py-3 px-3 sm:px-4 text-right font-bold text-indigo-700">৳{totalVal.toLocaleString()}</td>
@@ -992,7 +992,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             )}
 
             <div className="overflow-x-auto scrollbar-thin">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[340px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[340px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200">
                   <tr>
                     <th className="py-2.5 px-3 sm:px-4">Date</th>
@@ -1029,7 +1029,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
               </div>
               <button
                 onClick={() => setIsAddBenchModalOpen(true)}
-                className="p-1.5 text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 text-ink-faint hover:bg-slate-100 rounded-lg transition-colors"
                 title="Add Benchmark Price"
               >
                 <Plus className="w-4 h-4" />
@@ -1037,7 +1037,7 @@ export const PortfolioAnalyticsView: React.FC<PortfolioAnalyticsViewProps> = ({
             </div>
 
             <div className="overflow-x-auto scrollbar-thin max-h-[380px]">
-              <table className="w-full text-left text-sm text-slate-600 min-w-[240px]">
+              <table className="w-full text-left text-sm text-ink-faint min-w-[240px]">
                 <thead className="bg-slate-50 text-slate-700 uppercase font-semibold text-xs border-y border-slate-200 sticky top-0">
                   <tr>
                     <th className="py-2 px-3">Date</th>

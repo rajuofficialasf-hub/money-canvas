@@ -46,6 +46,15 @@ export const DebtsView: React.FC = () => {
   const [settleNote, setSettleNote] = useState('');
   const [settleError, setSettleError] = useState('');
 
+  // UX-10: settling-account balance context (informational only)
+  const settleAcctBalance = settleAccountId ? getAccountBalance(settleAccountId) : 0;
+  const numSettleAmount = typeof settleAmount === 'number' ? settleAmount : 0;
+  const settleAcctAfter = settlingDebt
+    ? settlingDebt.direction === 'lent'
+      ? settleAcctBalance + numSettleAmount
+      : settleAcctBalance - numSettleAmount
+    : settleAcctBalance;
+
   // Eligible bank/cash accounts for funding or receiving
   const liquidAccounts = accounts.filter(
     (a) => !a.isArchived && (a.accountType === 'bank' || a.accountType === 'cash' || a.accountType === 'mobile_wallet')
@@ -282,7 +291,7 @@ export const DebtsView: React.FC = () => {
       <div className="rounded-xl border border-edge bg-surface/40 overflow-hidden">
         {filteredDebts.length === 0 ? (
           <div className="p-12 text-center text-ink-faint space-y-2">
-            <Users className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
+            <Users className="h-8 w-8 mx-auto text-ink-faint stroke-[1.5]" />
             <div className="text-sm font-medium text-ink-muted">No debts found</div>
             <div className="text-xs">
               {activeTab === 'all'
@@ -358,19 +367,23 @@ export const DebtsView: React.FC = () => {
                   {/* Right Financial Balances & Actions */}
                   <div className="flex items-center justify-between sm:justify-end gap-6 pt-2 sm:pt-0 border-t sm:border-t-0 border-edge">
                     <div className="text-left sm:text-right">
-                      <div className="text-[10px] text-ink-faint font-mono uppercase">
-                        Remaining Balance
+                      <div
+                        className={`text-[10px] font-mono uppercase font-semibold ${
+                          isSettled ? 'text-ink-faint' : isLent ? 'text-positive' : 'text-negative'
+                        }`}
+                      >
+                        {isLent ? 'পাব (Receivable)' : 'দেব (Payable)'}
                       </div>
                       <div
-                        className={`text-lg font-bold font-mono ${
+                        className={`text-xl font-bold font-mono ${
                           isSettled
                             ? 'text-ink-faint line-through'
                             : isLent
-                            ? 'text-accent-strong'
+                            ? 'text-positive'
                             : 'text-negative'
                         }`}
                       >
-                        ৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        {isSettled ? '' : isLent ? '+' : '−'}৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </div>
                       <div className="text-[10px] text-ink-faint font-mono">
                         Initial: ৳{debt.initialAmount.toLocaleString()}
@@ -446,7 +459,7 @@ export const DebtsView: React.FC = () => {
                     className={`p-3 rounded-lg border text-left transition-colors flex flex-col gap-1 ${
                       direction === 'lent'
                         ? 'border-accent bg-emerald-950/20 text-ink'
-                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                     }`}
                   >
                     <div className="flex items-center gap-1.5 text-xs font-bold text-accent-strong">
@@ -464,7 +477,7 @@ export const DebtsView: React.FC = () => {
                     className={`p-3 rounded-lg border text-left transition-colors flex flex-col gap-1 ${
                       direction === 'borrowed'
                         ? 'border-negative bg-rose-950/20 text-ink'
-                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                     }`}
                   >
                     <div className="flex items-center gap-1.5 text-xs font-bold text-negative">
@@ -490,7 +503,7 @@ export const DebtsView: React.FC = () => {
                     placeholder="e.g. Rahim Chowdhury"
                     value={personName}
                     onChange={(e) => setPersonName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
 
@@ -503,7 +516,7 @@ export const DebtsView: React.FC = () => {
                     placeholder="e.g. +880 1819-234567"
                     value={contactPhone}
                     onChange={(e) => setContactPhone(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
               </div>
@@ -522,7 +535,7 @@ export const DebtsView: React.FC = () => {
                     placeholder="e.g. 20000"
                     value={initialAmount}
                     onChange={(e) => setInitialAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
@@ -533,7 +546,7 @@ export const DebtsView: React.FC = () => {
                   <select
                     value={sourceOrDestAccountId}
                     onChange={(e) => setSourceOrDestAccountId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {liquidAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
@@ -554,7 +567,7 @@ export const DebtsView: React.FC = () => {
                     type="date"
                     value={dueDate}
                     onChange={(e) => setDueDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
@@ -567,20 +580,20 @@ export const DebtsView: React.FC = () => {
                     placeholder="e.g. Medical emergency assistance"
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
               </div>
 
-              {/* Invariant Explanation Banner */}
-              <div className="rounded-lg bg-canvas p-3 border border-edge text-[11px] text-ink-muted space-y-1">
-                <div className="font-semibold text-ink-soft flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong" />
-                  <span>Double-Entry Invariant Guarantee</span>
-                </div>
-                <div>
-                  Posting this record automatically creates a dedicated canonical {direction === 'lent' ? 'receivable' : 'payable'} account and recognizes a balanced 2-line transaction.
-                </div>
+              {/* Invariant Explanation Banner (UX-10: compressed to one line + tooltip) */}
+              <div
+                className="rounded-lg bg-canvas p-3 border border-edge text-[11px] text-ink-muted flex items-center gap-1.5"
+                title={`Posting this record automatically creates a dedicated canonical ${direction === 'lent' ? 'receivable' : 'payable'} account and recognizes a balanced 2-line transaction.`}
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-accent-strong shrink-0" />
+                <span className="truncate">
+                  Double-Entry Invariant — auto {direction === 'lent' ? 'receivable' : 'payable'} account, balanced 2-line posting.
+                </span>
               </div>
 
               {/* Submit / Cancel Buttons */}
@@ -588,7 +601,7 @@ export const DebtsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewDebtModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
@@ -648,7 +661,7 @@ export const DebtsView: React.FC = () => {
                   required
                   value={settleAmount}
                   onChange={(e) => setSettleAmount(e.target.value ? parseFloat(e.target.value) : '')}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                 />
               </div>
 
@@ -659,7 +672,7 @@ export const DebtsView: React.FC = () => {
                 <select
                   value={settleAccountId}
                   onChange={(e) => setSettleAccountId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -667,6 +680,45 @@ export const DebtsView: React.FC = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* UX-10: settling-account balance context (informational only) */}
+              <div
+                className={`rounded-xl border p-3 transition-colors ${
+                  settleAcctAfter < 0 ? 'bg-negative/10 border-negative/50' : 'bg-canvas border-edge'
+                }`}
+              >
+                <div className="grid grid-cols-2 gap-2 text-center divide-x divide-edge/80">
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      ব্যালেন্স এখন (Now)
+                    </div>
+                    <div className="text-sm sm:text-base font-bold font-mono text-ink mt-0.5">
+                      ৳{settleAcctBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      নিষ্পত্তির পর থাকবে
+                    </div>
+                    <div
+                      className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                        settleAcctAfter < 0
+                          ? 'text-negative'
+                          : settlingDebt.direction === 'lent' && numSettleAmount > 0
+                          ? 'text-positive'
+                          : 'text-ink'
+                      }`}
+                    >
+                      ৳{settleAcctAfter.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                </div>
+                {settleAcctAfter < 0 && (
+                  <p className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed">
+                    ব্যালেন্সের চেয়ে বেশি পরিশোধ — নিষ্পত্তির পর অ্যাকাউন্ট নেগেটিভ হবে (তথ্যমূলক)।
+                  </p>
+                )}
               </div>
 
               <div>
@@ -678,7 +730,7 @@ export const DebtsView: React.FC = () => {
                   placeholder="e.g. Partial repayment via bKash"
                   value={settleNote}
                   onChange={(e) => setSettleNote(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                 />
               </div>
 
@@ -686,7 +738,7 @@ export const DebtsView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSettlingDebt(null)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>

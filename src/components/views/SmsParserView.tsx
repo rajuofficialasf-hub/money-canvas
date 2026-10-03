@@ -269,7 +269,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
     if (p.includes('rocket')) return 'bg-purple-500/20 text-purple-300 border-purple-500/30';
     if (p.includes('cellfin') || p.includes('ibbl')) return 'bg-accent/20 text-accent-strong border-accent/30';
     if (p.includes('ebl')) return 'bg-warning/20 text-warning border-warning/30';
-    return 'bg-slate-700 text-ink-soft border-slate-600';
+    return 'bg-raised-2 text-ink-soft border-edge-strong';
   };
 
   return (
@@ -305,7 +305,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
         {onNavigate && (
           <button
             onClick={() => onNavigate('ledger')}
-            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface border border-edge text-xs font-medium text-ink-soft hover:text-ink hover:border-slate-700 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface border border-edge text-xs font-medium text-ink-soft hover:text-ink hover:border-edge-strong transition-colors"
           >
             <Layers className="h-3.5 w-3.5 text-accent-strong" />
             <span>{isBn ? 'লেজার খতিয়ানে যান' : 'Go to Ledger'}</span>
@@ -380,7 +380,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
                 ? 'উদাহরণস্বরূপ বিকাশ, নগদ বা সিটি ব্যাংকের এসএমএস পেস্ট করুন:\n"Payment Tk 850.00 to Shwapno successful. Ref: GROCERY. TrxID 9K8L1M2N3P at 26/09/2026 14:30. Balance Tk 5,420.00."'
                 : 'e.g. Paste one or multiple bank SMSes:\n"Payment Tk 850.00 to Shwapno successful. Ref: GROCERY. TrxID 9K8L1M2N3P at 26/09/2026 14:30. Balance Tk 5,420.00."'
             }
-            className="w-full rounded-xl bg-canvas border border-edge p-3.5 text-xs text-ink placeholder:text-slate-600 font-mono focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed resize-y"
+            className="w-full rounded-xl bg-canvas border border-edge p-3.5 text-xs text-ink placeholder:text-ink-faint font-mono focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent leading-relaxed resize-y"
           />
         </div>
 
@@ -482,7 +482,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
                   type="checkbox"
                   checked={parsedItems.every((i) => i.selected)}
                   onChange={(e) => toggleSelectAll(e.target.checked)}
-                  className="rounded border-slate-700 bg-canvas text-accent focus:ring-accent h-4 w-4"
+                  className="rounded border-edge-strong bg-canvas text-accent focus:ring-accent h-4 w-4"
                 />
                 <span>{isBn ? 'সবগুলো নির্বাচন করুন' : 'Select All'}</span>
               </label>
@@ -528,7 +528,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
                 key={item.id}
                 className={`p-4 rounded-xl border transition-all ${
                   item.selected
-                    ? 'bg-surface border-slate-700 shadow-md'
+                    ? 'bg-surface border-edge-strong shadow-md'
                     : 'bg-canvas/60 border-edge/80 opacity-60'
                 }`}
               >
@@ -539,7 +539,7 @@ export const SmsParserView: React.FC<SmsParserViewProps> = ({ onNavigate }) => {
                       type="checkbox"
                       checked={item.selected}
                       onChange={() => toggleSelect(item.id)}
-                      className="mt-1 rounded border-slate-700 bg-canvas text-accent focus:ring-accent h-4 w-4 cursor-pointer"
+                      className="mt-1 rounded border-edge-strong bg-canvas text-accent focus:ring-accent h-4 w-4 cursor-pointer"
                     />
 
                     <div className="space-y-1.5 flex-1 min-w-0">

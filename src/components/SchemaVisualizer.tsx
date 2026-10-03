@@ -207,7 +207,7 @@ export const SchemaVisualizer: React.FC = () => {
               className={`w-full text-left p-3 rounded-lg border transition-all text-xs flex items-center justify-between ${
                 selectedTable.name === t.name
                   ? 'border-accent/50 bg-emerald-950/20 text-ink font-medium'
-                  : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
+                  : 'border-edge/80 bg-surface/40 text-ink-muted hover:border-edge-strong hover:text-ink-soft'
               }`}
             >
               <div className="flex items-center gap-2.5 truncate">
@@ -237,7 +237,7 @@ export const SchemaVisualizer: React.FC = () => {
 
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-slate-700 bg-raised text-ink-soft hover:text-ink hover:border-slate-600 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-mono rounded-lg border border-edge-strong bg-raised text-ink-soft hover:text-ink hover:border-edge-strong transition-colors"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-accent-strong" /> : <Copy className="h-3.5 w-3.5" />}
                 <span>{copied ? 'Copied' : 'Copy DDL'}</span>

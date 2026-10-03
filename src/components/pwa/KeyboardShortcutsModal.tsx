@@ -49,7 +49,7 @@ export const KeyboardShortcutsModal: React.FC<KeyboardShortcutsModalProps> = ({
               className="flex items-center justify-between p-2.5 rounded-lg bg-canvas/80 border border-edge/80 text-xs"
             >
               <span className="text-ink-soft">{sc.desc}</span>
-              <kbd className="px-2 py-1 rounded bg-raised text-accent-strong font-mono text-[11px] font-semibold border border-slate-700 shrink-0">
+              <kbd className="px-2 py-1 rounded bg-raised text-accent-strong font-mono text-[11px] font-semibold border border-edge-strong shrink-0">
                 {sc.key}
               </kbd>
             </div>

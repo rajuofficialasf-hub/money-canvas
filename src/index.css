@@ -11,6 +11,8 @@
   --mc-canvas: #020617; /* slate-950 */
   --mc-surface: #0f172a; /* slate-900 */
   --mc-raised: #1e293b; /* slate-800 */
+  --mc-raised-2: #334155; /* slate-700 */
+  --mc-edge-strong: #334155;
   --mc-edge: #1e293b; /* slate-800 */
   --mc-edge-soft: #0f172a;
   --mc-ink: #ffffff;
@@ -31,6 +33,8 @@
   --mc-canvas: #06101f;
   --mc-surface: #0c1f3a;
   --mc-raised: #17345c;
+  --mc-raised-2: #1d4066;
+  --mc-edge-strong: #2c5585;
   --mc-edge: #23497c;
   --mc-edge-soft: #122b4c;
   --mc-ink: #f2f8ff;
@@ -51,6 +55,8 @@
   --mc-canvas: #140a26;
   --mc-surface: #221340;
   --mc-raised: #342059;
+  --mc-raised-2: #3f296b;
+  --mc-edge-strong: #533a85;
   --mc-edge: #452e75;
   --mc-edge-soft: #2a1a4a;
   --mc-ink: #fbf7ff;
@@ -71,6 +77,8 @@
   --mc-canvas: #eef2f7;
   --mc-surface: #ffffff;
   --mc-raised: #e2e8f0;
+  --mc-raised-2: #cbd5e1;
+  --mc-edge-strong: #94a3b8;
   --mc-edge: #cbd5e1;
   --mc-edge-soft: #e2e8f0;
   --mc-ink: #0f172a;
@@ -91,7 +99,9 @@
   --color-canvas: var(--mc-canvas);
   --color-surface: var(--mc-surface);
   --color-raised: var(--mc-raised);
+  --color-raised-2: var(--mc-raised-2);
   --color-edge: var(--mc-edge);
+  --color-edge-strong: var(--mc-edge-strong);
   --color-edge-soft: var(--mc-edge-soft);
   --color-ink: var(--mc-ink);
   --color-ink-soft: var(--mc-ink-soft);

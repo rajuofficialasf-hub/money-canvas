@@ -143,7 +143,7 @@ export const SpendingInsightsView: React.FC<SpendingInsightsViewProps> = ({
               <span className="text-ink-soft">Actual Spend</span>
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded bg-slate-700 border border-slate-600 inline-block" />
+              <span className="w-3 h-3 rounded bg-raised-2 border border-edge-strong inline-block" />
               <span className="text-ink-muted">Budget Ceiling</span>
             </div>
           </div>
@@ -176,7 +176,7 @@ export const SpendingInsightsView: React.FC<SpendingInsightsViewProps> = ({
                   <div className="w-full flex items-end justify-center gap-1 sm:gap-1.5 h-44">
                     {/* Budget Bar */}
                     <div
-                      className="w-2.5 sm:w-4 rounded-t bg-raised border-t border-slate-600 transition-all duration-300"
+                      className="w-2.5 sm:w-4 rounded-t bg-raised border-t border-edge-strong transition-all duration-300"
                       style={{ height: `${Math.max(4, Math.min(100, budgetHeightPct))}%` }}
                     />
                     {/* Actual Spend Bar */}

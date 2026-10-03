@@ -81,7 +81,7 @@ export const UserGuideView: React.FC = () => {
         </p>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-6 py-3 bg-raised hover:bg-slate-700 text-ink font-bold text-xs rounded-xl border border-slate-700 inline-flex items-center gap-2 transition-all shadow-md"
+          className="px-6 py-3 bg-raised hover:bg-raised-2 text-ink font-bold text-xs rounded-xl border border-edge-strong inline-flex items-center gap-2 transition-all shadow-md"
         >
           <span>Open Full Interactive Manual</span>
           <ArrowRight className="h-4 w-4 text-accent-strong" />

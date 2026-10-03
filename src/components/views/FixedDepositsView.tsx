@@ -217,7 +217,7 @@ export const FixedDepositsView: React.FC = () => {
                 key={fd.id}
                 className={`rounded-xl border p-5 flex flex-col justify-between space-y-4 transition-all ${
                   isActive
-                    ? 'border-edge bg-surface/50 hover:border-slate-700'
+                    ? 'border-edge bg-surface/50 hover:border-edge-strong'
                     : 'border-edge/60 bg-canvas/40 opacity-70'
                 }`}
               >

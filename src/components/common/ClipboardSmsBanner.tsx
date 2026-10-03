@@ -268,7 +268,7 @@ export const ClipboardSmsBanner: React.FC<ClipboardSmsBannerProps> = ({ onNaviga
             <button
               type="button"
               onClick={handleOpenInParser}
-              className="py-2 px-3 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft font-semibold text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer border border-slate-700"
+              className="py-2 px-3 rounded-xl bg-raised hover:bg-raised-2 text-ink-soft font-semibold text-xs flex items-center justify-center gap-1 transition-colors cursor-pointer border border-edge-strong"
               title="এডিট বা বিস্তারিত দেখুন"
             >
               <span>{isBn ? 'রিভিউ' : 'Review'}</span>

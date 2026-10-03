@@ -208,7 +208,7 @@ export const BudgetsView: React.FC = () => {
           {currentBudgets.length > 0 && activeTab === 'budgets' && (
             <button
               onClick={handleDuplicateToNextMonth}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-700 bg-raised/80 text-xs text-ink-soft hover:text-ink transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-edge-strong bg-raised/80 text-xs text-ink-soft hover:text-ink transition-colors"
               title="Copy all current allocations to the following month"
             >
               <Copy className="h-3.5 w-3.5" />
@@ -390,7 +390,7 @@ export const BudgetsView: React.FC = () => {
 
             {budgetSummaries.length === 0 ? (
               <div className="p-8 text-center border border-edge/80 rounded-xl bg-surface/20">
-                <PieChart className="h-8 w-8 text-slate-600 mx-auto mb-2" />
+                <PieChart className="h-8 w-8 text-ink-faint mx-auto mb-2" />
                 <div className="text-sm font-medium text-ink-soft">
                   No budgets configured for {formatMonthLabel(selectedMonth, false)}
                 </div>
@@ -414,7 +414,7 @@ export const BudgetsView: React.FC = () => {
                   return (
                     <div
                       key={summary.budgetId}
-                      className="rounded-xl border border-edge bg-surface/40 p-4 space-y-3 hover:border-slate-700 transition-colors"
+                      className="rounded-xl border border-edge bg-surface/40 p-4 space-y-3 hover:border-edge-strong transition-colors"
                     >
                       <div className="flex items-start justify-between">
                         <div>
@@ -443,7 +443,7 @@ export const BudgetsView: React.FC = () => {
                             className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono border transition-colors ${
                               summary.rolloverEnabled
                                 ? 'bg-accent/10 text-accent-strong border-accent/30 hover:bg-accent/20'
-                                : 'bg-raised/80 text-ink-faint border-slate-700 hover:text-ink-soft'
+                                : 'bg-raised/80 text-ink-faint border-edge-strong hover:text-ink-soft'
                             }`}
                             title={
                               summary.rolloverEnabled
@@ -463,6 +463,27 @@ export const BudgetsView: React.FC = () => {
                           >
                             <Trash2 className="h-3.5 w-3.5" />
                           </button>
+                        </div>
+                      </div>
+
+                      {/* UX-9: remaining-to-spend is the primary number */}
+                      <div className="font-mono">
+                        <div className="text-[10px] uppercase tracking-wider text-ink-muted">
+                          আর কত খরচ করা যাবে (Left to Spend)
+                        </div>
+                        <div
+                          className={`text-2xl font-bold ${
+                            isOver
+                              ? 'text-negative'
+                              : summary.remainingSafeMargin > 0
+                              ? 'text-positive'
+                              : 'text-ink'
+                          }`}
+                        >
+                          {isOver ? '−' : ''}৳
+                          {Math.abs(summary.remainingSafeMargin).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                          })}
                         </div>
                       </div>
 
@@ -596,7 +617,7 @@ export const BudgetsView: React.FC = () => {
                         placeholder="e.g. Gaming, Baby Care, Pet Supplies"
                         value={customCatName}
                         onChange={(e) => setCustomCatName(e.target.value)}
-                        className="flex-1 bg-surface border border-slate-700 rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
+                        className="flex-1 bg-surface border border-edge-strong rounded-lg px-2.5 py-1.5 text-ink text-xs focus:outline-none focus:border-accent"
                       />
                       <button
                         type="button"
@@ -668,15 +689,16 @@ export const BudgetsView: React.FC = () => {
                   id="rolloverToggle"
                   checked={formRollover}
                   onChange={(e) => setFormRollover(e.target.checked)}
-                  className="mt-0.5 rounded border-slate-700 text-accent focus:ring-accent bg-surface cursor-pointer"
+                  className="mt-0.5 rounded border-edge-strong text-accent focus:ring-accent bg-surface cursor-pointer"
                 />
-                <label htmlFor="rolloverToggle" className="cursor-pointer text-ink-soft">
+                <label
+                  htmlFor="rolloverToggle"
+                  className="cursor-pointer text-ink-soft"
+                  title="মাস শেষে এই ক্যাটাগরির অবশিষ্ট উদ্বৃত্ত টাকা পরবর্তী মাসের বাজেটের সাথে স্বয়ংক্রিয়ভাবে যোগ হবে। (Unspent surplus auto-adds to next month's ceiling.)"
+                >
                   <div className="font-semibold text-ink flex items-center gap-1.5">
                     <Sparkles className="h-3.5 w-3.5 text-warning" />
                     <span>অব্যবহৃত বাজেট রোলওভার (Budget Rollover)</span>
-                  </div>
-                  <div className="text-[11px] text-ink-muted mt-0.5 leading-normal">
-                    মাস শেষে এই ক্যাটাগরির অবশিষ্ট উদ্বৃত্ত টাকা পরবর্তী মাসের বাজেটের সাথে স্বয়ংক্রিয়ভাবে যোগ হবে।
                   </div>
                 </label>
               </div>

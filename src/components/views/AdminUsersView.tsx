@@ -106,7 +106,7 @@ export const AdminUsersView: React.FC = () => {
             <button
               onClick={loadUsers}
               disabled={loading}
-              className="px-4 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-medium rounded-xl border border-slate-700 flex items-center gap-2 transition-all"
+              className="px-4 py-2 bg-raised hover:bg-raised-2 text-ink-soft text-xs font-medium rounded-xl border border-edge-strong flex items-center gap-2 transition-all"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin text-accent-strong' : ''}`} />
               <span>রিফ্রেশ করুন</span>
@@ -115,7 +115,7 @@ export const AdminUsersView: React.FC = () => {
             {!isGoogleAuthenticated && (
               <button
                 onClick={signInWithGoogle}
-                className="px-4 py-2 bg-surface hover:bg-raised text-ink text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-2 shadow-lg transition-all"
+                className="px-4 py-2 bg-surface hover:bg-raised text-ink text-xs font-semibold rounded-xl border border-edge-strong flex items-center gap-2 shadow-lg transition-all"
               >
                 <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
                 <span>Sign In with Google</span>
@@ -181,7 +181,7 @@ export const AdminUsersView: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               roleFilter === 'all'
                 ? 'bg-accent/20 text-accent-strong border border-accent/30'
-                : 'bg-raised text-ink-muted border border-slate-700 hover:text-ink-soft'
+                : 'bg-raised text-ink-muted border border-edge-strong hover:text-ink-soft'
             }`}
           >
             সবাই ({totalUsers})
@@ -191,7 +191,7 @@ export const AdminUsersView: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               roleFilter === 'admin'
                 ? 'bg-purple-500/20 text-purple-400 border border-purple-500/30'
-                : 'bg-raised text-ink-muted border border-slate-700 hover:text-ink-soft'
+                : 'bg-raised text-ink-muted border border-edge-strong hover:text-ink-soft'
             }`}
           >
             অ্যাডমিন ({adminUsersCount})
@@ -201,7 +201,7 @@ export const AdminUsersView: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
               roleFilter === 'user'
                 ? 'bg-blue-500/20 text-blue-400 border border-blue-500/30'
-                : 'bg-raised text-ink-muted border border-slate-700 hover:text-ink-soft'
+                : 'bg-raised text-ink-muted border border-edge-strong hover:text-ink-soft'
             }`}
           >
             সাধারণ ব্যবহারকারী ({totalUsers - adminUsersCount})
@@ -218,7 +218,7 @@ export const AdminUsersView: React.FC = () => {
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="p-12 text-center">
-            <Users className="h-12 w-12 text-slate-600 mx-auto mb-3" />
+            <Users className="h-12 w-12 text-ink-faint mx-auto mb-3" />
             <h3 className="text-base font-semibold text-ink-soft">কোনো নিবন্ধিত ব্যবহারকারী পাওয়া যায়নি</h3>
             <p className="text-xs text-ink-faint mt-1">
               {searchTerm ? 'অনুসন্ধানের সাথে মিল রেখে কোনো ইউজার পাওয়া যায়নি।' : 'এখনও কেউ গুগল দিয়ে সাইন-ইন করেননি।'}
@@ -246,7 +246,7 @@ export const AdminUsersView: React.FC = () => {
                           <img
                             src={u.photoURL}
                             alt={u.displayName}
-                            className="h-9 w-9 rounded-full object-cover border border-slate-700 shadow-sm"
+                            className="h-9 w-9 rounded-full object-cover border border-edge-strong shadow-sm"
                           />
                         ) : (
                           <div className="h-9 w-9 rounded-full bg-accent/20 text-accent-strong border border-accent/30 flex items-center justify-center font-bold text-sm">
@@ -320,7 +320,7 @@ export const AdminUsersView: React.FC = () => {
                           প্রসেসিং
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-raised text-ink-muted border border-slate-700">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium bg-raised text-ink-muted border border-edge-strong">
                           <HardDrive className="h-3 w-3" />
                           লোকাল ড্রাইভ
                         </span>

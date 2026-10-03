@@ -219,7 +219,7 @@ export const DpsView: React.FC = () => {
 
         {dpsAccounts.length === 0 ? (
           <div className="p-8 text-center border border-edge/80 rounded-xl bg-surface/20">
-            <CalendarClock className="h-8 w-8 text-slate-600 mx-auto mb-2" />
+            <CalendarClock className="h-8 w-8 text-ink-faint mx-auto mb-2" />
             <div className="text-sm font-medium text-ink-soft">No DPS schemes opened</div>
             <p className="text-xs text-ink-faint mt-1 max-w-sm mx-auto">
               Open a Deposit Pension Scheme to accumulate long-term wealth with compound monthly returns.
@@ -248,7 +248,7 @@ export const DpsView: React.FC = () => {
                   className={`rounded-xl border p-5 transition-colors space-y-4 ${
                     isMatured
                       ? 'border-edge/60 bg-canvas/40 opacity-70'
-                      : 'border-edge bg-surface/40 hover:border-slate-700'
+                      : 'border-edge bg-surface/40 hover:border-edge-strong'
                   }`}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
@@ -344,7 +344,7 @@ export const DpsView: React.FC = () => {
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => setScheduleModalDpsId(dps.id)}
-                        className="px-3 py-1.5 rounded-lg border border-slate-700 bg-raised/80 text-ink-soft hover:text-ink transition-colors flex items-center gap-1.5"
+                        className="px-3 py-1.5 rounded-lg border border-edge-strong bg-raised/80 text-ink-soft hover:text-ink transition-colors flex items-center gap-1.5"
                       >
                         <FileText className="h-3.5 w-3.5" />
                         <span>View Schedule</span>

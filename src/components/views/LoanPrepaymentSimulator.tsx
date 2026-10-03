@@ -109,7 +109,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
             <select
               value={selectedLoanId}
               onChange={(e) => setSelectedLoanId(e.target.value)}
-              className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-semibold focus:outline-none focus:border-accent"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-semibold focus:outline-none focus:border-accent"
             >
               {activeLoans.map((loan) => (
                 <option key={loan.id} value={loan.id}>
@@ -132,7 +132,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       type="number"
                       value={customPrincipal}
                       onChange={(e) => setCustomPrincipal(Number(e.target.value) || 0)}
-                      className="w-full pl-8 pr-3.5 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
+                      className="w-full pl-8 pr-3.5 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
                 </div>
@@ -147,7 +147,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       step="any"
                       value={customRate}
                       onChange={(e) => setCustomRate(Number(e.target.value) || 0)}
-                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
+                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
 
@@ -159,7 +159,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                       type="number"
                       value={customTenure}
                       onChange={(e) => setCustomTenure(Number(e.target.value) || 0)}
-                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
+                      className="w-full px-3 py-2 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-mono font-bold focus:outline-none focus:border-accent"
                     />
                   </div>
                 </div>
@@ -201,7 +201,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   strategy === 'reduce_tenure'
                     ? 'border-accent bg-emerald-950/30 text-ink shadow-lg shadow-emerald-950/40'
-                    : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                    : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-bold text-xs">
@@ -219,7 +219,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                 className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
                   strategy === 'reduce_emi'
                     ? 'border-sky-500 bg-sky-950/30 text-ink shadow-lg shadow-sky-950/40'
-                    : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                    : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                 }`}
               >
                 <div className="flex items-center gap-1.5 font-bold text-xs">
@@ -264,7 +264,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-colors ${
                       monthlyExtra === amt
                         ? 'bg-accent/20 text-accent-strong border-accent/40'
-                        : 'bg-canvas text-ink-muted border-edge hover:border-slate-700'
+                        : 'bg-canvas text-ink-muted border-edge hover:border-edge-strong'
                     }`}
                   >
                     +{amt.toLocaleString()}
@@ -297,7 +297,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                     className={`px-2 py-0.5 rounded-lg text-[10px] font-mono border transition-colors ${
                       lumpSum === amt
                         ? 'bg-warning/20 text-warning border-warning/40'
-                        : 'bg-canvas text-ink-muted border-edge hover:border-slate-700'
+                        : 'bg-canvas text-ink-muted border-edge hover:border-edge-strong'
                     }`}
                   >
                     +{amt.toLocaleString()}
@@ -311,7 +311,7 @@ export const LoanPrepaymentSimulator: React.FC = () => {
                   <select
                     value={lumpSumMonth}
                     onChange={(e) => setLumpSumMonth(Number(e.target.value))}
-                    className="px-2.5 py-1 rounded-lg bg-canvas border border-slate-700 text-xs font-mono font-bold text-ink"
+                    className="px-2.5 py-1 rounded-lg bg-canvas border border-edge-strong text-xs font-mono font-bold text-ink"
                   >
                     {[1, 3, 6, 12, 18, 24, 36].map((m) => (
                       <option key={m} value={m}>

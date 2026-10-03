@@ -192,7 +192,7 @@ export const RlsInspectorView: React.FC = () => {
 
           <button
             onClick={handleCopySql}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-700 bg-raised text-ink-soft hover:bg-slate-700 text-xs font-medium transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-edge-strong bg-raised text-ink-soft hover:bg-raised-2 text-xs font-medium transition-colors"
             title="Copy PostgreSQL RLS Migration SQL"
           >
             {copied ? <Check className="h-4 w-4 text-accent-strong" /> : <Copy className="h-4 w-4" />}
@@ -502,7 +502,7 @@ export const RlsInspectorView: React.FC = () => {
                   className={`w-full text-left p-3 rounded-xl border transition-all text-xs flex items-center justify-between ${
                     isSelected
                       ? 'border-accent/50 bg-emerald-950/30 text-ink font-semibold'
-                      : 'border-edge bg-surface/40 text-ink-muted hover:border-slate-700 hover:text-ink-soft'
+                      : 'border-edge bg-surface/40 text-ink-muted hover:border-edge-strong hover:text-ink-soft'
                   }`}
                 >
                   <div className="flex items-center gap-2.5 truncate">

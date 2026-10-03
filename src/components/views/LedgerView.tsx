@@ -983,7 +983,7 @@ export const LedgerView: React.FC<LedgerViewProps> = ({ onNavigate }) => {
                             type="color"
                             value={newCatColor}
                             onChange={(e) => setNewCatColor(e.target.value)}
-                            className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-surface p-0.5"
+                            className="h-8 w-10 rounded cursor-pointer border border-edge-strong bg-surface p-0.5"
                             title="Choose color tag"
                           />
                           <Button
@@ -1234,7 +1234,7 @@ const CategoryManagerModal: React.FC<CategoryManagerModalProps> = ({
                 type="color"
                 value={color}
                 onChange={(e) => setColor(e.target.value)}
-                className="h-8 w-10 rounded cursor-pointer border border-slate-700 bg-surface p-0.5 shrink-0"
+                className="h-8 w-10 rounded cursor-pointer border border-edge-strong bg-surface p-0.5 shrink-0"
                 title="Choose color tag"
               />
               <Button

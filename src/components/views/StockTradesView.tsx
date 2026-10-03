@@ -449,7 +449,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
 
         {filteredTrades.length === 0 ? (
           <div className="p-8 text-center">
-            <AlertCircle className="h-7 w-7 text-slate-600 mx-auto mb-2" />
+            <AlertCircle className="h-7 w-7 text-ink-faint mx-auto mb-2" />
             <div className="text-xs font-semibold text-ink-soft">No stock trades recorded</div>
             <p className="text-[11px] text-ink-faint mt-0.5">
               Click &quot;New Trade Order&quot; above to execute a trade.
@@ -746,7 +746,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                               className={`px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-all flex items-center gap-1.5 border ${
                                 isSel
                                   ? 'bg-negative/20 border-negative text-negative shadow-sm'
-                                  : 'bg-canvas border-edge text-ink-soft hover:border-slate-700'
+                                  : 'bg-canvas border-edge text-ink-soft hover:border-edge-strong'
                               }`}
                             >
                               <span className="font-bold text-ink">{st?.symbol || 'STOCK'}</span>
@@ -955,7 +955,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                         >
                           All ({availableSharesToSell})
                         </button>
-                        <span className="text-slate-600">·</span>
+                        <span className="text-ink-faint">·</span>
                         <button
                           type="button"
                           onClick={() => setQuantity(Math.floor(availableSharesToSell / 2))}
@@ -973,7 +973,7 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                         >
                           100
                         </button>
-                        <span className="text-slate-600">·</span>
+                        <span className="text-ink-faint">·</span>
                         <button
                           type="button"
                           onClick={() => setQuantity(500)}

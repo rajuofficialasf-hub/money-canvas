@@ -374,14 +374,14 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
         <div className="flex items-center gap-2.5 flex-wrap">
           <button
             onClick={() => setIsAddStockModalOpen(true)}
-            className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 bg-surface border border-edge hover:border-edge-strong text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
             <Plus className="h-3.5 w-3.5 text-accent-strong" />
             <span>Add Security</span>
           </button>
           <button
             onClick={onNavigateToBrokerage}
-            className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-3 py-2 bg-surface border border-edge hover:border-edge-strong text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
             <Building2 className="h-3.5 w-3.5 text-blue-400" />
             <span>Brokerage Accounts</span>
@@ -407,7 +407,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
           {onNavigateToReports && (
             <button
               onClick={onNavigateToReports}
-              className="px-3 py-2 bg-surface border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-2 bg-surface border border-edge hover:border-edge-strong text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <FileSpreadsheet className="h-3.5 w-3.5 text-accent-strong" />
               <span>Reports</span>
@@ -510,7 +510,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               className={`px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors border ${
                 dseSyncStatus.isManualOnly
                   ? 'bg-amber-950/40 border-amber-700/60 text-amber-200 hover:bg-amber-900/50'
-                  : 'bg-canvas border-edge text-ink-soft hover:border-slate-700'
+                  : 'bg-canvas border-edge text-ink-soft hover:border-edge-strong'
               }`}
             >
               <SlidersHorizontal className="h-3.5 w-3.5 text-warning" />
@@ -532,7 +532,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             {/* Bulk Price Editor */}
             <button
               onClick={handleOpenBatchModal}
-              className="px-3 py-1.5 bg-canvas border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-canvas border border-edge hover:border-edge-strong text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <Edit3 className="h-3.5 w-3.5 text-sky-400" />
               <span>Bulk Price Editor</span>
@@ -541,7 +541,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
             {/* CSV Import/Export */}
             <button
               onClick={() => setIsCsvModalOpen(true)}
-              className="px-3 py-1.5 bg-canvas border border-edge hover:border-slate-700 text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="px-3 py-1.5 bg-canvas border border-edge hover:border-edge-strong text-ink-soft rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <FileSpreadsheet className="h-3.5 w-3.5 text-accent-strong" />
               <span>CSV Sheet</span>
@@ -674,7 +674,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
         {filteredHoldings.length === 0 ? (
           <div className="p-8 text-center">
-            <AlertCircle className="h-8 w-8 text-slate-600 mx-auto mb-2" />
+            <AlertCircle className="h-8 w-8 text-ink-faint mx-auto mb-2" />
             <div className="text-sm font-semibold text-ink-soft">No active stock positions found</div>
             <p className="text-xs text-ink-faint max-w-sm mx-auto mt-1">
               Either all shares have been closed out, or no matching trade has been executed yet.
@@ -799,7 +799,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             onClick={() => onNavigateToTrades && onNavigateToTrades(h.stockId)}
-                            className="px-2.5 py-1 bg-raised hover:bg-slate-700 text-ink-soft rounded text-[11px] font-medium transition-colors"
+                            className="px-2.5 py-1 bg-raised hover:bg-raised-2 text-ink-soft rounded text-[11px] font-medium transition-colors"
                           >
                             Trade
                           </button>
@@ -874,7 +874,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
         {stocks.length === 0 ? (
           <div className="text-center py-10 px-4 bg-canvas/40 rounded-xl border border-dashed border-edge/80">
-            <Sparkles className="h-8 w-8 text-slate-600 mx-auto mb-2" />
+            <Sparkles className="h-8 w-8 text-ink-faint mx-auto mb-2" />
             <div className="text-xs font-semibold text-ink-soft">Watchlist is completely clean</div>
             <p className="text-[11px] text-ink-faint max-w-sm mx-auto mt-1 mb-3">
               No preloaded stocks. You can search and add any Dhaka Stock Exchange (DSE) company by clicking "+ Add Stock".
@@ -899,7 +899,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
               return (
                 <div
                   key={stock.id}
-                  className="p-3 bg-canvas/80 border border-edge/80 rounded-lg hover:border-slate-700 transition-colors flex flex-col justify-between group"
+                  className="p-3 bg-canvas/80 border border-edge/80 rounded-lg hover:border-edge-strong transition-colors flex flex-col justify-between group"
                 >
                   <div className="flex items-start justify-between gap-1">
                     <div>
@@ -947,7 +947,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                     </div>
                     <button
                       onClick={() => onNavigateToTrades && onNavigateToTrades(stock.id)}
-                      className="text-[10px] text-accent-strong hover:text-accent-strong font-semibold px-2 py-0.5 bg-surface rounded border border-edge hover:border-slate-700"
+                      className="text-[10px] text-accent-strong hover:text-accent-strong font-semibold px-2 py-0.5 bg-surface rounded border border-edge hover:border-edge-strong"
                     >
                       Trade
                     </button>
@@ -1085,7 +1085,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                               className={`w-24 px-2 py-1 bg-surface border rounded text-xs font-mono text-right focus:outline-none ${
                                 hasChanged
                                   ? 'border-accent text-accent-strong bg-emerald-950/20'
-                                  : 'border-slate-700 text-ink'
+                                  : 'border-edge-strong text-ink'
                               }`}
                             />
                           </td>
@@ -1151,7 +1151,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                 value={csvText}
                 onChange={(e) => setCsvText(e.target.value)}
                 placeholder={`GP, 280.5\nBATBC, 392.2\nSQURPHARMA, 224.8\nBRACBANK, 56.4`}
-                className="w-full p-3 bg-canvas border border-edge rounded-lg text-xs font-mono text-ink placeholder-slate-600 focus:outline-none focus:border-accent"
+                className="w-full p-3 bg-canvas border border-edge rounded-lg text-xs font-mono text-ink placeholder-ink-faint focus:outline-none focus:border-accent"
               />
             </div>
 
@@ -1242,7 +1242,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
 
                   {/* 409+ DSE Companies Autocomplete Dropdown */}
                   {showSuggestions && symbol.length >= 1 && (
-                    <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-surface border border-slate-700 rounded-xl shadow-2xl z-50 divide-y divide-edge/60">
+                    <div className="absolute left-0 right-0 top-full mt-1 max-h-48 overflow-y-auto bg-surface border border-edge-strong rounded-xl shadow-2xl z-50 divide-y divide-edge/60">
                       {allCompanies
                         .filter(
                           (c) =>
@@ -1266,7 +1266,7 @@ export const StockPortfolioView: React.FC<StockPortfolioViewProps> = ({
                               </div>
                             </div>
                             <div className="text-right">
-                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-raised text-ink-soft font-medium border border-slate-700">
+                              <span className="text-[10px] px-1.5 py-0.5 rounded bg-raised text-ink-soft font-medium border border-edge-strong">
                                 {c.category || 'A'}
                               </span>
                             </div>

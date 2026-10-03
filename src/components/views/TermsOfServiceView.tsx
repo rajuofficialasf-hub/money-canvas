@@ -53,7 +53,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
               <button
                 type="button"
                 onClick={onBack}
-                className="px-4 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
+                className="px-4 py-2 bg-raised hover:bg-raised-2 text-ink-soft text-xs font-semibold rounded-xl border border-edge-strong flex items-center gap-1.5 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>{lang === 'en' ? 'Back' : 'ফিরে যান'}</span>
@@ -61,7 +61,7 @@ export const TermsOfServiceView: React.FC<{ onBack?: () => void }> = ({ onBack }
             ) : (
               <a
                 href="/"
-                className="px-4 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-semibold rounded-xl border border-slate-700 flex items-center gap-1.5 transition-all"
+                className="px-4 py-2 bg-raised hover:bg-raised-2 text-ink-soft text-xs font-semibold rounded-xl border border-edge-strong flex items-center gap-1.5 transition-all"
               >
                 <ArrowLeft className="h-4 w-4" />
                 <span>Home</span>

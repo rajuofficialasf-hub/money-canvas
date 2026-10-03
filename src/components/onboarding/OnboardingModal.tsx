@@ -126,7 +126,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({ isOpen, onComp
             <button
               type="button"
               onClick={handleQuickStart}
-              className="py-2.5 px-4 bg-raised hover:bg-slate-700 text-ink-soft font-medium rounded-xl text-xs transition-colors"
+              className="py-2.5 px-4 bg-raised hover:bg-raised-2 text-ink-soft font-medium rounded-xl text-xs transition-colors"
             >
               Default Setup
             </button>

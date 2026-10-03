@@ -205,7 +205,14 @@ export const AuditLogsView: React.FC = () => {
               ? 'Activity History & Data Verification'
               : 'অ্যাক্টিভিটি হিস্ট্রি ও ভেরিফিকেশন (Audit Logs)'}
           </h1>
-          <p className="text-xs sm:text-sm text-ink-soft leading-relaxed max-w-2xl">
+          <p
+            className="text-xs sm:text-sm text-ink-soft max-w-2xl truncate"
+            title={
+              language === 'bn'
+                ? 'প্রতিটি এন্ট্রি ক্রিপ্টোগ্রাফিক হ্যাশ-চেইনে (ডিজিটাল সিলমোহর) সুরক্ষিত — কোনো পরিবর্তন হলে সাথে সাথে ধরা পড়ে। CA-স্ট্যান্ডার্ড অডিট প্রমাণ।'
+                : 'Every transaction, trade, and balance change is secured with a tamper-evident cryptographic hash chain. Complete transparency and CA-standard audit proof.'
+            }
+          >
             {language === 'bn'
               ? 'আপনার প্রতিটি লেনদেন, স্টক ক্রয়/বিক্রয় ও ব্যালেন্স পরিবর্তন স্বয়ংক্রিয় ডিজিটাল সিলমোহর (Hash) দ্বারা সংরক্ষিত। কোনো হিসাব পরিবর্তন বা ভুল হলে সাথে সাথে ধরা পড়বে।'
               : language === 'en'
@@ -242,7 +249,7 @@ export const AuditLogsView: React.FC = () => {
 
           <button
             onClick={handleExportAuditPdf}
-            className="px-3.5 py-2 rounded-xl bg-raised hover:bg-slate-700 text-ink-soft border border-slate-700 text-xs font-medium flex items-center gap-1.5 transition-colors shadow-sm"
+            className="px-3.5 py-2 rounded-xl bg-raised hover:bg-raised-2 text-ink-soft border border-edge-strong text-xs font-medium flex items-center gap-1.5 transition-colors shadow-sm"
             title="Download Official Audit Certificate"
           >
             <FileText className="h-4 w-4 text-accent-strong" />
@@ -485,12 +492,28 @@ export const AuditLogsView: React.FC = () => {
         </div>
       </div>
 
+      {/* UX-12: One-line filter summary above the log table */}
+      <div className="text-xs text-ink-muted font-mono px-1">
+        {language === 'bn' ? 'মোট' : 'Total'} <strong className="text-ink">{filteredLogs.length}</strong>{' '}
+        {language === 'bn' ? 'ইভেন্ট' : 'events'} ·{' '}
+        {language === 'bn' ? 'সর্বশেষ' : 'latest'}{' '}
+        <strong className="text-ink">
+          {filteredLogs.length > 0
+            ? new Date(filteredLogs[0].timestamp).toLocaleDateString(language === 'bn' ? 'bn-BD' : 'en-US', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+              })
+            : '—'}
+        </strong>
+      </div>
+
       {/* Audit Log Stream (User Friendly Cards) */}
       <div className="rounded-2xl border border-edge bg-surface/60 overflow-hidden shadow-xl">
         <div className="divide-y divide-edge/80">
           {filteredLogs.length === 0 ? (
             <div className="p-12 text-center text-ink-faint space-y-2">
-              <Layers className="w-8 h-8 mx-auto text-slate-600 opacity-50" />
+              <Layers className="w-8 h-8 mx-auto text-ink-faint opacity-50" />
               <div className="text-sm font-medium">
                 {language === 'bn'
                   ? 'কোনো অডিট রেকর্ড পাওয়া যায়নি।'

@@ -27,7 +27,7 @@ const valueColorClasses: Record<StatCardVariant, string> = {
 };
 
 const iconBgClasses: Record<StatCardVariant, string> = {
-  default: 'bg-raised text-ink-soft border-slate-700',
+  default: 'bg-raised text-ink-soft border-edge-strong',
   emerald: 'bg-accent/10 text-accent-strong border-accent/20',
   sky: 'bg-sky-500/10 text-sky-400 border-sky-500/20',
   rose: 'bg-negative/10 text-negative border-negative/20',
@@ -48,7 +48,7 @@ export const StatCard: React.FC<StatCardProps> = ({
     <div
       onClick={onClick}
       className={`rounded-2xl border border-edge bg-surface/60 p-4 sm:p-5 flex flex-col justify-between space-y-2 shadow-sm transition-all ${
-        onClick ? 'cursor-pointer hover:border-slate-700 hover:bg-surface/80 active:scale-[0.99]' : ''
+        onClick ? 'cursor-pointer hover:border-edge-strong hover:bg-surface/80 active:scale-[0.99]' : ''
       } ${className}`}
     >
       <div className="flex items-start justify-between gap-3">

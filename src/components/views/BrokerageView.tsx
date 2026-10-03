@@ -411,7 +411,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
             return (
               <div
                 key={bo.id}
-                className="bg-canvas border border-edge rounded-xl p-3.5 hover:border-slate-700 transition-colors"
+                className="bg-canvas border border-edge rounded-xl p-3.5 hover:border-edge-strong transition-colors"
               >
                 <div className="flex items-start justify-between">
                   <div>
@@ -515,7 +515,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
         {/* Ledger Table */}
         {filteredTxs.length === 0 ? (
           <div className="p-8 text-center">
-            <AlertCircle className="h-7 w-7 text-slate-600 mx-auto mb-2" />
+            <AlertCircle className="h-7 w-7 text-ink-faint mx-auto mb-2" />
             <div className="text-xs font-semibold text-ink-soft">No broker cash transactions recorded</div>
             <p className="text-[11px] text-ink-faint mt-0.5">
               Deposit cash from a bank account to fund your brokerage operations.
@@ -971,7 +971,7 @@ export const BrokerageView: React.FC<BrokerageViewProps> = ({ onNavigateToTrades
               id="boDefault"
               checked={newBoIsDefault}
               onChange={(e) => setNewBoIsDefault(e.target.checked)}
-              className="rounded border-slate-700 bg-canvas text-accent focus:ring-accent"
+              className="rounded border-edge-strong bg-canvas text-accent focus:ring-accent"
             />
             <label htmlFor="boDefault" className="text-xs text-ink-soft">
               Set as primary/default BO account for trades

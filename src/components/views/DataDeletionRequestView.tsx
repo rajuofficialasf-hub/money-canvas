@@ -179,7 +179,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                     setReason('');
                     setAgreeChecked(false);
                   }}
-                  className="px-4 py-2 rounded-xl bg-raised hover:bg-slate-700 text-xs font-semibold text-ink-soft"
+                  className="px-4 py-2 rounded-xl bg-raised hover:bg-raised-2 text-xs font-semibold text-ink-soft"
                 >
                   Submit Another Request
                 </button>
@@ -204,7 +204,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="e.g. yourname@example.com"
                   required
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-slate-600 focus:outline-none focus:border-negative"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-ink-faint focus:outline-none focus:border-negative"
                 />
                 <p className="text-[11px] text-ink-faint">
                   The email associated with your Google Sign-in or Money Canvas profile.
@@ -220,7 +220,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   onChange={(e) => setReason(e.target.value)}
                   rows={2}
                   placeholder="Optional feedback or reason for closing your account..."
-                  className="w-full px-3.5 py-2 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-slate-600 focus:outline-none focus:border-negative resize-none"
+                  className="w-full px-3.5 py-2 rounded-xl bg-canvas border border-edge text-ink text-xs placeholder:text-ink-faint focus:outline-none focus:border-negative resize-none"
                 />
               </div>
 
@@ -230,7 +230,7 @@ export const DataDeletionRequestView: React.FC<DataDeletionRequestViewProps> = (
                   id="agree-delete"
                   checked={agreeChecked}
                   onChange={(e) => setAgreeChecked(e.target.checked)}
-                  className="mt-0.5 rounded bg-canvas border-slate-700 text-negative focus:ring-rose-500 cursor-pointer"
+                  className="mt-0.5 rounded bg-canvas border-edge-strong text-negative focus:ring-rose-500 cursor-pointer"
                 />
                 <label htmlFor="agree-delete" className="text-xs text-ink-soft leading-snug cursor-pointer">
                   I understand that this action is irreversible and permanently erases all my transactions, 

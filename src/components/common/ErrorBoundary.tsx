@@ -166,7 +166,7 @@ ${errorInfo?.componentStack || 'No component stack'}
               <button
                 type="button"
                 onClick={this.handleReload}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-raised hover:bg-slate-700 active:scale-95 text-ink-soft font-semibold text-xs border border-slate-700 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-raised hover:bg-raised-2 active:scale-95 text-ink-soft font-semibold text-xs border border-edge-strong transition-all cursor-pointer"
               >
                 <RefreshCw className="h-4 w-4 text-sky-400" />
                 <span>{isRoot ? 'পৃষ্ঠা রিলোড করুন (Reload Page)' : 'পুনরায় চেষ্টা করুন (Retry)'}</span>
@@ -196,7 +196,7 @@ ${errorInfo?.componentStack || 'No component stack'}
                   <button
                     type="button"
                     onClick={this.handleCopyDiagnostics}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft text-[11px] font-mono border border-slate-700 transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft text-[11px] font-mono border border-edge-strong transition-colors cursor-pointer"
                   >
                     {copied ? (
                       <>

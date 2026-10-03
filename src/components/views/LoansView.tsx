@@ -50,6 +50,12 @@ export const LoansView: React.FC = () => {
   const [paymentAccountId, setPaymentAccountId] = useState('');
   const [paymentError, setPaymentError] = useState('');
 
+  // UX-10: EMI payment source-account context (informational only)
+  const emiSourceBalance = paymentAccountId ? getAccountBalance(paymentAccountId) : 0;
+  const emiAfterPayment = payingInstallment
+    ? emiSourceBalance - payingInstallment.scheduledEmiAmount
+    : emiSourceBalance;
+
   // Liquid accounts for disbursement and EMI payment
   const liquidAccounts = accounts.filter(
     (a) => !a.isArchived && (a.accountType === 'bank' || a.accountType === 'cash' || a.accountType === 'mobile_wallet')
@@ -284,7 +290,7 @@ export const LoansView: React.FC = () => {
       {/* Main Workspace: Loans Selector & Schedule Table */}
       {loans.length === 0 ? (
         <div className="p-12 text-center text-ink-faint rounded-xl border border-edge bg-surface/40 space-y-2">
-          <Building2 className="h-8 w-8 mx-auto text-slate-600 stroke-[1.5]" />
+          <Building2 className="h-8 w-8 mx-auto text-ink-faint stroke-[1.5]" />
           <div className="text-sm font-medium text-ink-muted">No bank loans found</div>
           <div className="text-xs">
             Record a formal home, auto, or personal loan facility to generate its amortization schedule.
@@ -311,7 +317,7 @@ export const LoansView: React.FC = () => {
                     className={`p-4 rounded-xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'border-accent/50 bg-emerald-950/20 shadow-lg'
-                        : 'border-edge bg-surface/40 hover:border-slate-700'
+                        : 'border-edge bg-surface/40 hover:border-edge-strong'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5">
@@ -335,6 +341,29 @@ export const LoansView: React.FC = () => {
                         ৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                       </span>
                     </div>
+
+                    {/* UX-10: thin principal progress — paid vs original principal */}
+                    {loan.principal > 0 && (() => {
+                      const paidPrincipal = Math.min(loan.principal, Math.max(0, loan.principal - remaining));
+                      const paidPct = (paidPrincipal / loan.principal) * 100;
+                      return (
+                        <div
+                          className="mt-2"
+                          title={`Original principal ৳${loan.principal.toLocaleString()} · Paid ৳${paidPrincipal.toLocaleString()} (${paidPct.toFixed(1)}%)`}
+                        >
+                          <div className="h-1.5 rounded-full bg-raised overflow-hidden">
+                            <div
+                              className="h-full rounded-full bg-accent"
+                              style={{ width: `${paidPct}%` }}
+                            />
+                          </div>
+                          <div className="flex items-center justify-between text-[10px] text-ink-faint font-mono mt-1">
+                            <span>পরিশোধিত {paidPct.toFixed(0)}%</span>
+                            <span>মূলধন ৳{loan.principal.toLocaleString()}</span>
+                          </div>
+                        </div>
+                      );
+                    })()}
 
                     <div className="flex items-center justify-between text-[11px] text-ink-muted font-mono mt-2 pt-2 border-t border-edge/60">
                       <span>EMI: ৳{loan.emiAmount.toLocaleString()}</span>
@@ -498,7 +527,7 @@ export const LoansView: React.FC = () => {
                     placeholder="e.g. BRAC Bank Limited"
                     value={institutionName}
                     onChange={(e) => setInstitutionName(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink placeholder-slate-500 focus:border-accent focus:outline-none"
                   />
                 </div>
 
@@ -509,7 +538,7 @@ export const LoansView: React.FC = () => {
                   <select
                     value={loanType}
                     onChange={(e) => setLoanType(e.target.value as LoanType)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none capitalize"
                   >
                     <option value="home">Home Mortgage</option>
                     <option value="auto">Auto / Vehicle Loan</option>
@@ -529,7 +558,7 @@ export const LoansView: React.FC = () => {
                   <select
                     value={interestMethod}
                     onChange={(e) => setInterestMethod(e.target.value as LoanInterestMethod)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     <option value="reducing">Reducing Balance (Compounded)</option>
                     <option value="flat">Flat Rate</option>
@@ -547,7 +576,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={principal}
                     onChange={(e) => setPrincipal(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -565,7 +594,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={annualInterestRate}
                     onChange={(e) => setAnnualInterestRate(e.target.value ? parseFloat(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
 
@@ -580,7 +609,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={tenureMonths}
                     onChange={(e) => setTenureMonths(e.target.value ? parseInt(e.target.value) : '')}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -594,7 +623,7 @@ export const LoansView: React.FC = () => {
                   <select
                     value={disbursementAccountId}
                     onChange={(e) => setDisbursementAccountId(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                   >
                     {liquidAccounts.map((acc) => (
                       <option key={acc.id} value={acc.id}>
@@ -613,7 +642,7 @@ export const LoansView: React.FC = () => {
                     required
                     value={disbursementDate}
                     onChange={(e) => setDisbursementDate(e.target.value)}
-                    className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
+                    className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none font-mono"
                   />
                 </div>
               </div>
@@ -645,7 +674,7 @@ export const LoansView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setIsNewLoanModalOpen(false)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>
@@ -720,7 +749,7 @@ export const LoansView: React.FC = () => {
                 <select
                   value={paymentAccountId}
                   onChange={(e) => setPaymentAccountId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-700 bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
+                  className="w-full rounded-lg border border-edge-strong bg-canvas px-3 py-2 text-ink focus:border-accent focus:outline-none"
                 >
                   {liquidAccounts.map((acc) => (
                     <option key={acc.id} value={acc.id}>
@@ -730,10 +759,48 @@ export const LoansView: React.FC = () => {
                 </select>
               </div>
 
-              <div className="rounded-lg bg-emerald-950/20 border border-accent/20 p-2.5 text-[11px] text-accent-strong flex items-start gap-2">
-                <Info className="h-4 w-4 shrink-0 mt-0.5" />
-                <span>
-                  Posting will debit Bank for full EMI, credit Loan Account for Principal reduction, and credit Loan Interest Expense. Zero imbalance guaranteed.
+              {/* UX-10: source-account balance context (informational only) */}
+              <div
+                className={`rounded-xl border p-3 transition-colors ${
+                  emiAfterPayment < 0 ? 'bg-negative/10 border-negative/50' : 'bg-canvas border-edge'
+                }`}
+              >
+                <div className="grid grid-cols-2 gap-2 text-center divide-x divide-edge/80">
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      ব্যালেন্স এখন (Now)
+                    </div>
+                    <div className="text-sm sm:text-base font-bold font-mono text-ink mt-0.5">
+                      ৳{emiSourceBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[10px] uppercase font-mono text-ink-faint">
+                      EMI পরিশোধের পর থাকবে
+                    </div>
+                    <div
+                      className={`text-sm sm:text-base font-bold font-mono mt-0.5 ${
+                        emiAfterPayment < 0 ? 'text-negative' : 'text-ink'
+                      }`}
+                    >
+                      ৳{emiAfterPayment.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                    </div>
+                  </div>
+                </div>
+                {emiAfterPayment < 0 && (
+                  <p className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed">
+                    ব্যালেন্সের চেয়ে EMI বেশি — পরিশোধের পর অ্যাকাউন্ট নেগেটিভ হবে (তথ্যমূলক)।
+                  </p>
+                )}
+              </div>
+
+              <div
+                className="rounded-lg bg-emerald-950/20 border border-accent/20 p-2.5 text-[11px] text-accent-strong flex items-center gap-2"
+                title="Posting will debit Bank for full EMI, credit Loan Account for Principal reduction, and credit Loan Interest Expense. Zero imbalance guaranteed."
+              >
+                <Info className="h-4 w-4 shrink-0" />
+                <span className="truncate">
+                  Double-entry EMI split — bank debit, principal + interest credit. Zero imbalance.
                 </span>
               </div>
 
@@ -741,7 +808,7 @@ export const LoansView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setPayingInstallment(null)}
-                  className="px-4 py-2 rounded-lg border border-slate-700 text-ink-soft hover:bg-raised text-xs transition-colors"
+                  className="px-4 py-2 rounded-lg border border-edge-strong text-ink-soft hover:bg-raised text-xs transition-colors"
                 >
                   Cancel
                 </button>

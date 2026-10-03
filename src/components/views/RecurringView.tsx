@@ -1,4 +1,4 @@
-import { todayLocalISO } from '../../lib/date-utils';
+import { todayLocalISO, addDaysISO } from '../../lib/date-utils';
 import React, { useState } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { RecurringFrequency } from '../../types/accounting';
@@ -10,6 +10,7 @@ import {
   Trash2,
   X,
   CheckCircle2,
+  CalendarClock,
 } from 'lucide-react';
 
 export const RecurringView: React.FC = () => {
@@ -47,6 +48,13 @@ export const RecurringView: React.FC = () => {
       );
       return sum + (debitLine ? Math.abs(debitLine.amount) : 0);
     }, 0);
+
+  // UX-9: active schedules due within the next 7 days (date-string compare)
+  const todayISO = todayLocalISO();
+  const weekAheadISO = addDaysISO(todayISO, 7);
+  const upcomingWeek = recurringTransactions
+    .filter((r) => !r.isPaused && r.nextRun >= todayISO && r.nextRun <= weekAheadISO)
+    .sort((a, b) => a.nextRun.localeCompare(b.nextRun));
 
   const handleRunNow = (id: string, name: string) => {
     const res = executeRecurringNow(id);
@@ -142,8 +150,11 @@ export const RecurringView: React.FC = () => {
             <span>Recurring Transactions & Automation</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink">Recurring Schedules & Standing Orders</h1>
-          <p className="text-ink-muted text-xs sm:text-sm mt-0.5">
-            Configure automated rules for rent, utility bills, salary income, and periodic fund transfers.
+          <p
+            className="text-ink-muted text-xs sm:text-sm mt-0.5"
+            title="Configure automated rules for rent, utility bills, salary income, and periodic fund transfers."
+          >
+            Automated rules for rent, bills, salary &amp; transfers.
           </p>
         </div>
 
@@ -191,6 +202,40 @@ export const RecurringView: React.FC = () => {
         </div>
       </div>
 
+      {/* UX-9: next-7-days due timeline strip */}
+      {upcomingWeek.length > 0 && (
+        <div className="rounded-xl border border-edge bg-surface/30 p-3 space-y-2">
+          <div className="flex items-center gap-2 text-[11px] font-mono uppercase tracking-wider text-ink-muted">
+            <CalendarClock className="h-3.5 w-3.5 text-accent-strong" />
+            <span>আগামী ৭ দিনের ডিউ (Due in Next 7 Days)</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {upcomingWeek.map((r) => {
+              const dueAmount = Math.abs(r.templateTransaction.lines[0]?.amount || 0);
+              return (
+                <div
+                  key={r.id}
+                  className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg border border-edge bg-canvas text-xs font-mono"
+                  title={`${r.name} — ${r.frequency}`}
+                >
+                  <span
+                    className={`font-semibold ${
+                      r.nextRun === todayISO ? 'text-warning' : 'text-accent-strong'
+                    }`}
+                  >
+                    {r.nextRun === todayISO ? 'আজ (Today)' : r.nextRun}
+                  </span>
+                  <span className="text-ink">{r.name}</span>
+                  {dueAmount > 0 && (
+                    <span className="text-ink-soft">৳{dueAmount.toLocaleString()}</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Schedules List */}
       <div className="space-y-3">
         <h3 className="text-sm font-semibold font-mono uppercase tracking-wider text-ink-soft">
@@ -199,7 +244,7 @@ export const RecurringView: React.FC = () => {
 
         {recurringTransactions.length === 0 ? (
           <div className="p-8 text-center border border-edge/80 rounded-xl bg-surface/20">
-            <Repeat className="h-8 w-8 text-slate-600 mx-auto mb-2" />
+            <Repeat className="h-8 w-8 text-ink-faint mx-auto mb-2" />
             <div className="text-sm font-medium text-ink-soft">No recurring schedules active</div>
             <p className="text-xs text-ink-faint mt-1 max-w-sm mx-auto">
               Automate rent payments, utility bills, or subscription renewals.
@@ -217,7 +262,7 @@ export const RecurringView: React.FC = () => {
                   className={`rounded-xl border p-4 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4 ${
                     r.isPaused
                       ? 'border-edge/60 bg-canvas/40 opacity-70'
-                      : 'border-edge bg-surface/40 hover:border-slate-700'
+                      : 'border-edge bg-surface/40 hover:border-edge-strong'
                   }`}
                 >
                   <div className="space-y-1">

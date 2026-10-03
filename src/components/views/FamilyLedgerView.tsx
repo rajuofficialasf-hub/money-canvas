@@ -149,6 +149,16 @@ export const FamilyLedgerView: React.FC = () => {
     return null;
   }, [expAmount, selectedPayingMember, expCategory, isBn]);
 
+  // UX-9: one-line member access summary (full text shown in tooltip)
+  const memberAccessSummary =
+    activeMember.role === 'family_head'
+      ? isBn
+        ? 'সর্বোচ্চ অ্যাক্সেস: বাজেট তৈরি, সদস্য পরিচালনা, অনুমোদন ও যৌথ তহবিল নিয়ন্ত্রণ।'
+        : 'Full Access: Manage budgets, approve member expenses, manage joint accounts.'
+      : isBn
+      ? `সীমিত পারমিশন: একক খরচ সীমা ৳${activeMember.permissions.maxSingleExpenseLimit.toLocaleString()} · ${activeMember.permissions.requireApprovalAboveLimit ? 'উর্ধ্বতন অনুমোদন সাপেক্ষ' : 'স্বয়ংক্রিয় অনুমোদন'} · ব্যক্তিগত আর্থিক তথ্য লকড।`
+      : `Limited Permission: Max single limit ৳${activeMember.permissions.maxSingleExpenseLimit.toLocaleString()} · ${activeMember.permissions.requireApprovalAboveLimit ? 'Approval required above limit' : 'Direct'} · Private finances protected.`;
+
   // Overall Month Budget %
   const budgetProgressPct = totalMonthlyAllocated > 0 ? (totalMonthlySpent / totalMonthlyAllocated) * 100 : 0;
   const budgetRemaining = Math.max(0, totalMonthlyAllocated - totalMonthlySpent);
@@ -359,14 +369,11 @@ export const FamilyLedgerView: React.FC = () => {
                   ({isBn ? `সম্পর্ক: ${activeMember.relation}` : `Relation: ${activeMember.relation}`})
                 </span>
               </h2>
-              <p className="text-xs text-ink-muted mt-0.5">
-                {activeMember.role === 'family_head'
-                  ? isBn
-                    ? 'সর্বোচ্চ অ্যাক্সেস: বাজেট তৈরি, সদস্য পরিচালনা, অনুমোদন ও যৌথ তহবিল নিয়ন্ত্রণ।'
-                    : 'Full Access: Manage budgets, approve member expenses, manage joint accounts.'
-                  : isBn
-                  ? `সীমিত পারমিশন: একক খরচ সীমা ৳${activeMember.permissions.maxSingleExpenseLimit.toLocaleString()} · ${activeMember.permissions.requireApprovalAboveLimit ? 'উর্ধ্বতন অনুমোদন সাপেক্ষ' : 'স্বয়ংক্রিয় অনুমোদন'} · ব্যক্তিগত আর্থিক তথ্য লকড।`
-                  : `Limited Permission: Max single limit ৳${activeMember.permissions.maxSingleExpenseLimit.toLocaleString()} · ${activeMember.permissions.requireApprovalAboveLimit ? 'Approval required above limit' : 'Direct'} · Private finances protected.`}
+              <p
+                className="text-xs text-ink-muted mt-0.5 truncate max-w-[16rem] sm:max-w-md lg:max-w-xl"
+                title={memberAccessSummary}
+              >
+                {memberAccessSummary}
               </p>
             </div>
           </div>
@@ -403,7 +410,7 @@ export const FamilyLedgerView: React.FC = () => {
           </div>
           <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-ink flex items-center gap-2">
             <span>{isBn ? state.familyNameBn : state.familyName}</span>
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-raised text-ink-soft border border-slate-700">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-raised text-ink-soft border border-edge-strong">
               BDT ৳
             </span>
           </h1>
@@ -466,7 +473,7 @@ export const FamilyLedgerView: React.FC = () => {
       {/* 4 Metric Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Joint Pool Balance */}
-        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-edge-strong transition-all">
           <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'যৌথ তহবিল মোট ব্যালেন্স' : 'Joint Cash Pool Balance'}</span>
             <div className="w-8 h-8 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent-strong">
@@ -482,7 +489,7 @@ export const FamilyLedgerView: React.FC = () => {
         </div>
 
         {/* Monthly Household Budget */}
-        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-edge-strong transition-all">
           <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'মাসিক সংসার বাজেট' : 'Monthly Household Budget'}</span>
             <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
@@ -498,7 +505,7 @@ export const FamilyLedgerView: React.FC = () => {
         </div>
 
         {/* Monthly Spent & Progress */}
-        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-edge-strong transition-all">
           <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'চলতি মাসে মোট ব্যয়' : 'Total Spent This Month'}</span>
             <div className="w-8 h-8 rounded-xl bg-warning/10 border border-warning/20 flex items-center justify-center text-warning">
@@ -533,7 +540,7 @@ export const FamilyLedgerView: React.FC = () => {
         </div>
 
         {/* Reimbursement & Pending Approvals */}
-        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-slate-700 transition-all">
+        <div className="p-4 rounded-2xl bg-surface/60 border border-edge hover:border-edge-strong transition-all">
           <div className="flex items-center justify-between text-xs text-ink-muted mb-2">
             <span className="font-medium">{isBn ? 'রিইমবার্সমেন্ট ও অনুমোদন' : 'Reimbursements & Approval'}</span>
             <div className="w-8 h-8 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
@@ -674,7 +681,7 @@ export const FamilyLedgerView: React.FC = () => {
                         ? 'bg-rose-950/20 border-negative/40'
                         : isWarning
                         ? 'bg-amber-950/20 border-warning/40'
-                        : 'bg-surface/60 border-edge hover:border-slate-700'
+                        : 'bg-surface/60 border-edge hover:border-edge-strong'
                     }`}
                   >
                     <div className="flex items-start justify-between mb-3">
@@ -1036,7 +1043,7 @@ export const FamilyLedgerView: React.FC = () => {
             {state.jointAccounts.map((acc) => (
               <div
                 key={acc.id}
-                className="rounded-2xl p-5 bg-surface/60 border border-edge hover:border-slate-700 transition-all flex flex-col justify-between"
+                className="rounded-2xl p-5 bg-surface/60 border border-edge hover:border-edge-strong transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between mb-3">
@@ -1186,7 +1193,7 @@ export const FamilyLedgerView: React.FC = () => {
                     </div>
                   </div>
 
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-raised text-ink-soft border border-slate-700">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-raised text-ink-soft border border-edge-strong">
                     {member.role}
                   </span>
                 </div>
@@ -1208,7 +1215,7 @@ export const FamilyLedgerView: React.FC = () => {
                       {member.permissions.canAddExpenses ? (
                         <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
-                        <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+                        <X className="w-3.5 h-3.5 text-ink-faint shrink-0" />
                       )}
                       <span>{isBn ? 'খরচ এন্ট্রি' : 'Add Expenses'}</span>
                     </div>
@@ -1217,7 +1224,7 @@ export const FamilyLedgerView: React.FC = () => {
                       {member.permissions.canEditMasterBudget ? (
                         <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
-                        <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+                        <X className="w-3.5 h-3.5 text-ink-faint shrink-0" />
                       )}
                       <span>{isBn ? 'বাজেট পরিবর্তন' : 'Edit Budgets'}</span>
                     </div>
@@ -1226,7 +1233,7 @@ export const FamilyLedgerView: React.FC = () => {
                       {member.permissions.canApproveExpenses ? (
                         <Check className="w-3.5 h-3.5 text-accent-strong shrink-0" />
                       ) : (
-                        <X className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+                        <X className="w-3.5 h-3.5 text-ink-faint shrink-0" />
                       )}
                       <span>{isBn ? 'খরচ অনুমোদন' : 'Approve Bills'}</span>
                     </div>
@@ -1480,6 +1487,62 @@ export const FamilyLedgerView: React.FC = () => {
                 </Field>
               )}
 
+              {/* UX-9: joint-account balance context (informational) */}
+              {expPaymentSourceType === 'joint' &&
+                (() => {
+                  const selJointAcc = state.jointAccounts.find((a) => a.id === expJointAccountId);
+                  if (!selJointAcc) return null;
+                  const expAmtNum = parseFloat(expAmount) || 0;
+                  const afterBalance = selJointAcc.balance - expAmtNum;
+                  const wouldOverdraw = afterBalance < 0;
+                  return (
+                    <div
+                      className={`rounded-xl border p-3 transition-colors ${
+                        wouldOverdraw ? 'bg-rose-950/40 border-negative/50' : 'bg-canvas border-edge'
+                      }`}
+                    >
+                      <div className="grid grid-cols-3 gap-2 text-center divide-x divide-edge/80 font-mono">
+                        <div>
+                          <div className="text-[10px] uppercase text-ink-faint">
+                            {isBn ? 'বর্তমান ব্যালেন্স' : 'Balance Now'}
+                          </div>
+                          <div className="text-sm sm:text-base font-bold text-sky-300 mt-0.5">
+                            ৳{selJointAcc.balance.toLocaleString()}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase text-ink-faint">
+                            {isBn ? 'এই খরচ' : 'This Expense'}
+                          </div>
+                          <div className="text-sm sm:text-base font-bold text-warning mt-0.5">
+                            ৳{expAmtNum.toLocaleString()}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] uppercase text-ink-faint">
+                            {isBn ? 'খরচের পর থাকবে' : 'After Expense'}
+                          </div>
+                          <div
+                            className={`text-sm sm:text-base font-bold mt-0.5 ${
+                              wouldOverdraw ? 'text-negative' : 'text-ink'
+                            }`}
+                          >
+                            ৳{afterBalance.toLocaleString()}
+                          </div>
+                        </div>
+                      </div>
+                      {wouldOverdraw && (
+                        <p className="mt-2 pt-2 border-t border-negative/30 text-[11px] text-negative leading-relaxed">
+                          ⚠️{' '}
+                          {isBn
+                            ? 'এই খরচে নির্বাচিত যৌথ অ্যাকাউন্টের ব্যালেন্স শূন্যের নিচে নেমে যাবে।'
+                            : 'This expense would take the selected joint account below zero.'}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })()}
+
               {/* Memo & Receipt */}
               <div className="grid grid-cols-2 gap-3">
                 <Field label={isBn ? 'রসিদ / মেমো নম্বর' : 'Receipt / Voucher #'}>
@@ -1656,7 +1719,7 @@ export const FamilyLedgerView: React.FC = () => {
                       type="checkbox"
                       checked={mbrCanAddExp}
                       onChange={(e) => setMbrCanAddExp(e.target.checked)}
-                      className="rounded bg-surface border-slate-700 text-accent focus:ring-0"
+                      className="rounded bg-surface border-edge-strong text-accent focus:ring-0"
                     />
                     <span className="text-ink-soft">{isBn ? 'খরচ এন্ট্রি করতে পারবে' : 'Can Add Expenses'}</span>
                   </label>
@@ -1666,7 +1729,7 @@ export const FamilyLedgerView: React.FC = () => {
                       type="checkbox"
                       checked={mbrReqApproval}
                       onChange={(e) => setMbrReqApproval(e.target.checked)}
-                      className="rounded bg-surface border-slate-700 text-accent focus:ring-0"
+                      className="rounded bg-surface border-edge-strong text-accent focus:ring-0"
                     />
                     <span className="text-ink-soft">{isBn ? 'সীমা অতিক্রম করলে অনুমোদন লাগবে' : 'Require Approval Above Limit'}</span>
                   </label>

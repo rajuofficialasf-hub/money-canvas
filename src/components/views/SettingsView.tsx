@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../../lib/auth-context';
 import { useLedger } from '../../lib/ledger-context';
 import { useTheme } from '../../lib/theme-context';
@@ -60,6 +60,15 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
   } = useBiometrics();
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
   const [bioFeedback, setBioFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+
+  // UX-12: in-page section navigation refs (no reordering — anchors only)
+  const profileSectionRef = useRef<HTMLFormElement>(null);
+  const themeSectionRef = useRef<HTMLDivElement>(null);
+  const securitySectionRef = useRef<HTMLDivElement>(null);
+  const dangerSectionRef = useRef<HTMLDivElement>(null);
+  const scrollToSection = (el: HTMLElement | null) => {
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 
   // Biometric toggle handler
   const handleToggleBiometric = async () => {
@@ -174,13 +183,45 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
         <p className="text-ink-muted text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
           Manage your account profile, base currency (BDT), operational timezone, and ledger profiles.
         </p>
+
+        {/* UX-12: compact in-page section navigation (anchor buttons, scrolls via refs) */}
+        <nav aria-label="Settings sections" className="flex flex-wrap items-center gap-2 mt-4 text-xs">
+          <button
+            type="button"
+            onClick={() => scrollToSection(profileSectionRef.current)}
+            className="px-3 py-1.5 rounded-lg border border-edge bg-surface hover:bg-raised text-ink-soft hover:text-ink font-semibold transition-colors cursor-pointer"
+          >
+            প্রোফাইল (Profile)
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection(themeSectionRef.current)}
+            className="px-3 py-1.5 rounded-lg border border-edge bg-surface hover:bg-raised text-ink-soft hover:text-ink font-semibold transition-colors cursor-pointer"
+          >
+            থিম ও ভাষা (Theme & Language)
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection(securitySectionRef.current)}
+            className="px-3 py-1.5 rounded-lg border border-edge bg-surface hover:bg-raised text-ink-soft hover:text-ink font-semibold transition-colors cursor-pointer"
+          >
+            সিকিউরিটি (Security)
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection(dangerSectionRef.current)}
+            className="px-3 py-1.5 rounded-lg border border-negative/30 bg-surface hover:bg-raised text-negative font-semibold transition-colors cursor-pointer"
+          >
+            ডেঞ্জার জোন (Danger Zone)
+          </button>
+        </nav>
       </div>
 
       {/* Main Settings Form */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Profile & Base Currency */}
         <div className="lg:col-span-7 space-y-6">
-          <form onSubmit={handleSaveProfile} className="rounded-xl border border-edge bg-surface/60 p-6 space-y-5">
+          <form ref={profileSectionRef} onSubmit={handleSaveProfile} className="rounded-xl border border-edge bg-surface/60 p-6 space-y-5 scroll-mt-24">
             <div className="flex items-center justify-between border-b border-edge/80 pb-4">
               <div className="flex items-center gap-2 text-sm font-semibold text-ink">
                 <User className="h-4 w-4 text-accent-strong" />
@@ -216,7 +257,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   disabled
                   className="w-full rounded-lg border border-edge bg-canvas/50 px-3 py-2 text-ink-faint cursor-not-allowed"
                 />
-                <span className="text-[10px] text-slate-600 font-sans">Primary authentication identifier.</span>
+                <span className="text-[10px] text-ink-faint font-sans">Primary authentication identifier.</span>
               </div>
 
               <div>
@@ -257,7 +298,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
               </div>
 
               {/* Language Selection Box (এক ক্লিকে বাংলা / ইংরেজি) */}
-              <div className="rounded-lg bg-canvas p-4 border border-accent/30 space-y-3">
+              <div ref={themeSectionRef} className="rounded-lg bg-canvas p-4 border border-accent/30 space-y-3 scroll-mt-24">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-xs text-ink font-semibold">
                     <Globe className="h-4 w-4 text-accent-strong" />
@@ -279,7 +320,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     className={`px-3 py-2 rounded-lg border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       language === 'bn'
                         ? 'bg-accent/20 border-accent text-accent-strong shadow-sm'
-                        : 'bg-surface border-edge text-ink-muted hover:text-ink hover:border-slate-700'
+                        : 'bg-surface border-edge text-ink-muted hover:text-ink hover:border-edge-strong'
                     }`}
                   >
                     <span>🇧🇩</span>
@@ -293,7 +334,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     className={`px-3 py-2 rounded-lg border text-xs font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                       language === 'en'
                         ? 'bg-accent/20 border-accent text-accent-strong shadow-sm'
-                        : 'bg-surface border-edge text-ink-muted hover:text-ink hover:border-slate-700'
+                        : 'bg-surface border-edge text-ink-muted hover:text-ink hover:border-edge-strong'
                     }`}
                   >
                     <span>🇺🇸</span>
@@ -329,7 +370,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                         className={`rounded-xl border p-2.5 text-left transition-all cursor-pointer ${
                           isActive
                             ? 'border-accent ring-1 ring-accent/40 bg-surface'
-                            : 'border-edge bg-surface/60 hover:border-slate-600'
+                            : 'border-edge bg-surface/60 hover:border-edge-strong'
                         }`}
                       >
                         <div
@@ -371,8 +412,11 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 <div className="text-xl font-bold font-mono text-accent-strong">
                   BDT (৳) — Bangladeshi Taka
                 </div>
-                <p className="text-[11px] text-ink-muted font-sans leading-relaxed">
-                  As specified in Phase 0 Architecture Lock, the canonical base currency for all double-entry accounts, DSE securities, and Net Worth computations is permanently set to BDT. Foreign currency accounts (if added later) are translated against BDT.
+                <p
+                  className="text-[11px] text-ink-muted font-sans truncate"
+                  title="As specified in Phase 0 Architecture Lock, the canonical base currency for all double-entry accounts, DSE securities, and Net Worth computations is permanently set to BDT. Foreign currency accounts (if added later) are translated against BDT."
+                >
+                  Permanently locked to BDT (Phase 0 Architecture) — foreign currency translates against BDT.
                 </p>
               </div>
 
@@ -462,7 +506,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     className={`p-3.5 rounded-lg border transition-all ${
                       isActive
                         ? 'border-accent/50 bg-emerald-950/20'
-                        : 'border-edge/80 bg-canvas/60 hover:border-slate-700'
+                        : 'border-edge/80 bg-canvas/60 hover:border-edge-strong'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -479,7 +523,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                       ) : (
                         <button
                           onClick={() => switchProfile(p.id)}
-                          className="text-[11px] font-mono text-ink-muted hover:text-ink px-2 py-1 rounded bg-surface border border-edge hover:border-slate-700 transition-colors"
+                          className="text-[11px] font-mono text-ink-muted hover:text-ink px-2 py-1 rounded bg-surface border border-edge hover:border-edge-strong transition-colors"
                         >
                           Switch
                         </button>
@@ -492,7 +536,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
           </div>
 
           {/* Biometric Authentication & App Lock Card */}
-          <div className="rounded-xl border border-edge bg-surface/60 p-5 space-y-4">
+          <div ref={securitySectionRef} className="rounded-xl border border-edge bg-surface/60 p-5 space-y-4 scroll-mt-24">
             <div className="flex items-center justify-between border-b border-edge/80 pb-3">
               <div className="flex items-center gap-2 text-ink text-xs sm:text-sm font-bold">
                 <Fingerprint className="h-4 w-4 text-accent-strong" />
@@ -504,7 +548,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                     ? 'bg-accent/10 text-accent-strong border-accent/30'
                     : isAvailable
                     ? 'bg-blue-500/10 text-blue-400 border-blue-500/30'
-                    : 'bg-raised text-ink-muted border-slate-700'
+                    : 'bg-raised text-ink-muted border-edge-strong'
                 }`}
               >
                 {isBiometricEnabled
@@ -551,7 +595,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   disabled={isAuthenticating}
                   onClick={handleToggleBiometric}
                   className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                    isBiometricEnabled ? 'bg-accent' : 'bg-slate-700'
+                    isBiometricEnabled ? 'bg-accent' : 'bg-raised-2'
                   }`}
                   role="switch"
                   aria-checked={isBiometricEnabled}
@@ -571,7 +615,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   type="button"
                   disabled={isAuthenticating}
                   onClick={handleTestBiometric}
-                  className="px-3.5 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
+                  className="px-3.5 py-2 rounded-lg bg-raised hover:bg-raised-2 border border-edge-strong text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
                 >
                   {isAuthenticating ? (
                     <RefreshCw className="h-3.5 w-3.5 animate-spin text-accent-strong" />
@@ -665,7 +709,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 href={GITHUB_RELEASES_URL}
                 target="_blank"
                 rel="noreferrer"
-                className="px-3.5 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-lg bg-raised hover:bg-raised-2 border border-edge-strong text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <ExternalLink className="h-3.5 w-3.5 text-ink-muted" />
                 <span>GitHub রিলিজ পেজ</span>
@@ -706,7 +750,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 localStorage.removeItem('has_seen_wealthfolio_guide_v1');
                 window.location.reload();
               }}
-              className="px-3.5 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors"
+              className="px-3.5 py-2 rounded-lg bg-raised hover:bg-raised-2 border border-edge-strong text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors"
             >
               <BookOpen className="h-3.5 w-3.5 text-warning" />
               <span>Launch Interactive Walkthrough</span>
@@ -753,7 +797,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
               <button
                 type="button"
                 onClick={() => setShowPrivacyPolicy(true)}
-                className="px-3.5 py-2 rounded-lg bg-raised hover:bg-slate-700 border border-slate-700 text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
+                className="px-3.5 py-2 rounded-lg bg-raised hover:bg-raised-2 border border-edge-strong text-ink-soft text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
               >
                 <FileText className="h-3.5 w-3.5 text-accent-strong" />
                 <span>Read Full Privacy Policy</span>
@@ -781,7 +825,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
           </div>
 
           {/* Danger Zone: Local Reset & Account Deletion */}
-          <div className="rounded-2xl border border-rose-900/40 bg-rose-950/10 p-5 sm:p-6 space-y-5">
+          <div ref={dangerSectionRef} className="rounded-2xl border border-rose-900/40 bg-rose-950/10 p-5 sm:p-6 space-y-5 scroll-mt-24">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-negative text-sm font-bold">
                 <AlertTriangle className="h-5 w-5" />
@@ -922,7 +966,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                   value={deletePassword}
                   onChange={(e) => setDeletePassword(e.target.value)}
                   placeholder="Your password"
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs placeholder:text-slate-600 focus:outline-none focus:border-negative"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge-strong text-ink text-xs placeholder:text-ink-faint focus:outline-none focus:border-negative"
                 />
               </div>
             )}
@@ -945,7 +989,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 value={deleteConfirmText}
                 onChange={(e) => setDeleteConfirmText(e.target.value)}
                 placeholder="Type DELETE to confirm"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-slate-700 text-ink text-xs font-mono uppercase placeholder:text-slate-600 focus:outline-none focus:border-negative"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-canvas border border-edge-strong text-ink text-xs font-mono uppercase placeholder:text-ink-faint focus:outline-none focus:border-negative"
               />
             </div>
 
@@ -955,7 +999,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 type="button"
                 disabled={isDeletingAccount}
                 onClick={() => setShowDeleteAccountModal(false)}
-                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-raised hover:bg-slate-700 text-xs font-semibold text-ink-soft transition-colors"
+                className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-raised hover:bg-raised-2 text-xs font-semibold text-ink-soft transition-colors"
               >
                 Cancel / বাতিল
               </button>
@@ -963,7 +1007,7 @@ export const SettingsView: React.FC<{ onNavigate?: (view: string) => void }> = (
                 type="button"
                 disabled={isDeletingAccount || deleteConfirmText.trim().toUpperCase() !== 'DELETE'}
                 onClick={handleDeleteAccount}
-                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-slate-600 disabled:cursor-not-allowed text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
+                className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-negative disabled:bg-rose-950 disabled:text-ink-faint disabled:cursor-not-allowed text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors cursor-pointer shadow-lg shadow-rose-950/50"
               >
                 {isDeletingAccount ? (
                   <span>Deleting Account & Data...</span>

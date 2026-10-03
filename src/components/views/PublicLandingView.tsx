@@ -109,7 +109,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-accent/10 text-accent-strong flex items-center justify-center mb-4">
               <Receipt className="h-6 w-6" />
             </div>
@@ -119,7 +119,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             </p>
           </div>
 
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center mb-4">
               <TrendingUp className="h-6 w-6" />
             </div>
@@ -129,7 +129,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             </p>
           </div>
 
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-4">
               <Building2 className="h-6 w-6" />
             </div>
@@ -139,7 +139,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             </p>
           </div>
 
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-4">
               <PieChart className="h-6 w-6" />
             </div>
@@ -149,7 +149,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             </p>
           </div>
 
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-warning/10 text-warning flex items-center justify-center mb-4">
               <Database className="h-6 w-6" />
             </div>
@@ -159,7 +159,7 @@ export const PublicLandingView: React.FC<{ onLaunchApp: () => void }> = ({ onLau
             </p>
           </div>
 
-          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-slate-700 transition-all">
+          <div className="bg-surface/50 border border-edge rounded-2xl p-6 hover:border-edge-strong transition-all">
             <div className="w-12 h-12 rounded-xl bg-negative/10 text-negative flex items-center justify-center mb-4">
               <Lock className="h-6 w-6" />
             </div>

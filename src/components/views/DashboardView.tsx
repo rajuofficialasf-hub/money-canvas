@@ -305,14 +305,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </button>
             <button
               onClick={() => onNavigate('ledger')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 bg-raised text-ink text-xs font-medium hover:border-slate-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-edge-strong bg-raised text-ink text-xs font-medium hover:border-edge-strong transition-colors"
             >
               <Wallet className="h-4 w-4 text-accent-strong" />
               <span>Record Journal Entry</span>
             </button>
             <button
               onClick={() => onNavigate('stocks')}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-slate-700 bg-raised text-ink text-xs font-medium hover:border-slate-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg border border-edge-strong bg-raised text-ink text-xs font-medium hover:border-edge-strong transition-colors"
             >
               <TrendingUp className="h-4 w-4 text-accent-strong" />
               <span>Add Stock Position</span>
@@ -370,7 +370,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Metric 4: Investment Portfolio */}
         <div
           onClick={() => onNavigate('stocks')}
-          className="rounded-xl border border-edge bg-surface/50 p-5 space-y-3 cursor-pointer hover:border-slate-700 transition-colors"
+          className="rounded-xl border border-edge bg-surface/50 p-5 space-y-3 cursor-pointer hover:border-edge-strong transition-colors"
         >
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono uppercase text-ink-muted">Stock & Broker Cash</span>
@@ -401,7 +401,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Budget Widget */}
           <div
             onClick={() => onNavigate('budgets')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Monthly Budget</span>
@@ -424,7 +424,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Recurring Widget */}
           <div
             onClick={() => onNavigate('recurring')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Recurring Schedules</span>
@@ -445,7 +445,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Goals Widget */}
           <div
             onClick={() => onNavigate('goals')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Financial Goals</span>
@@ -462,7 +462,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* DPS Widget */}
           <div
             onClick={() => onNavigate('dps')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>DPS Sub-Ledger</span>
@@ -516,7 +516,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Peer Debts Widget */}
           <div
             onClick={() => onNavigate('debts')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Peer Lending & Debts</span>
@@ -533,7 +533,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Bank Loans Widget */}
           <div
             onClick={() => onNavigate('loans')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Bank Facilities</span>
@@ -550,7 +550,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Physical Assets Widget */}
           <div
             onClick={() => onNavigate('assets')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Physical Assets</span>
@@ -567,7 +567,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Zakat Assessment Widget */}
           <div
             onClick={() => onNavigate('zakat')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Zakat & Net Worth</span>
@@ -608,7 +608,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Portfolio Valuation */}
           <div
             onClick={() => onNavigate('stocks')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Equity Valuation</span>
@@ -626,7 +626,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Broker Cash Reserves */}
           <div
             onClick={() => onNavigate('brokerage')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Available Broker Cash</span>
@@ -643,7 +643,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Active Positions */}
           <div
             onClick={() => onNavigate('stocks')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Active Securities</span>
@@ -660,7 +660,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           {/* Trade Execution Gateway */}
           <div
             onClick={() => onNavigate('trades')}
-            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-slate-700 cursor-pointer transition-colors space-y-2"
+            className="p-4 rounded-xl border border-edge bg-surface/40 hover:border-edge-strong cursor-pointer transition-colors space-y-2"
           >
             <div className="flex items-center justify-between text-xs text-ink-muted">
               <span>Trade Execution</span>
@@ -819,7 +819,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="rounded-xl border border-edge bg-surface/40 divide-y divide-edge/70 overflow-hidden text-xs font-mono">
             {activeBalances.length === 0 ? (
               <div className="p-8 text-center text-ink-faint">
-                <Building2 className="h-8 w-8 mx-auto text-slate-600 mb-2 stroke-[1.5]" />
+                <Building2 className="h-8 w-8 mx-auto text-ink-faint mb-2 stroke-[1.5]" />
                 <div className="text-ink-muted font-medium">No accounts added yet</div>
                 <button
                   onClick={() => onNavigate('accounts')}
@@ -876,7 +876,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div className="rounded-xl border border-edge bg-surface/40 p-4 space-y-3 text-xs">
             {transactions.length === 0 ? (
               <div className="py-8 text-center text-ink-faint">
-                <Wallet className="h-8 w-8 mx-auto text-slate-600 mb-2 stroke-[1.5]" />
+                <Wallet className="h-8 w-8 mx-auto text-ink-faint mb-2 stroke-[1.5]" />
                 <div className="text-ink-muted font-medium">No ledger entries recorded yet</div>
                 <p className="text-[11px] text-ink-faint mt-1 max-w-xs mx-auto">
                   Post income, expenses, and asset transfers directly with balanced double-entry validation.

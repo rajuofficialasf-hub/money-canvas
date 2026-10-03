@@ -175,16 +175,18 @@ export const GoalsView: React.FC = () => {
         </button>
       </div>
 
-      {/* Lock 3 Educational Architecture Banner */}
-      <div className="rounded-xl border border-edge bg-surface/30 p-4 font-mono text-xs flex items-start gap-3 text-ink-soft">
-        <Lock className="h-4 w-4 text-accent-strong shrink-0 mt-0.5" />
-        <div className="space-y-1">
-          <div className="text-ink font-semibold">Architectural Lock 3 Compliance:</div>
-          <div className="text-ink-muted leading-relaxed text-[11px]">
-            <strong>Mode A (Tracking Goal):</strong> Tracks visual milestones against general liquidity. Contributions do NOT generate an expense or alter double-entry balance sheets.<br />
-            <strong>Mode B (Linked Account Goal):</strong> Backed by a dedicated canonical bank account. Contributions are recorded as balanced double-entry Transfers (-Bank / +Goal Account).
-          </div>
-        </div>
+      {/* Lock 3 Educational Architecture Banner (UX-9: compressed to one line, details in tooltip) */}
+      <div
+        className="rounded-xl border border-edge bg-surface/30 px-4 py-2.5 font-mono text-xs flex items-center gap-3 text-ink-soft"
+        title="Mode A (Tracking Goal): Tracks visual milestones against general liquidity. Contributions do NOT generate an expense or alter double-entry balance sheets. — Mode B (Linked Account Goal): Backed by a dedicated canonical bank account. Contributions are recorded as balanced double-entry Transfers (-Bank / +Goal Account)."
+      >
+        <Lock className="h-4 w-4 text-accent-strong shrink-0" />
+        <span className="truncate">
+          <strong className="text-ink">Architectural Lock 3 Compliance:</strong>{' '}
+          <span className="text-ink-muted">
+            Mode A = visual tracking only · Mode B = real double-entry transfers (hover for details)
+          </span>
+        </span>
       </div>
 
       {/* Goals Grid */}
@@ -197,7 +199,7 @@ export const GoalsView: React.FC = () => {
           return (
             <div
               key={g.id}
-              className="rounded-xl border border-edge bg-surface/40 p-5 space-y-4 hover:border-slate-700 transition-colors flex flex-col justify-between"
+              className="rounded-xl border border-edge bg-surface/40 p-5 space-y-4 hover:border-edge-strong transition-colors flex flex-col justify-between"
             >
               <div className="space-y-3">
                 <div className="flex items-start justify-between gap-3">
@@ -226,6 +228,20 @@ export const GoalsView: React.FC = () => {
                     >
                       {isComplete ? 'Achieved' : 'In Progress'}
                     </span>
+                  </div>
+                </div>
+
+                {/* UX-9: remaining-to-target is the primary number */}
+                <div className="font-mono">
+                  <div className="text-[10px] uppercase tracking-wider text-ink-muted">
+                    আরও জমাতে হবে (Remaining to Target)
+                  </div>
+                  <div
+                    className={`text-2xl font-bold ${
+                      isComplete ? 'text-positive' : 'text-ink'
+                    }`}
+                  >
+                    ৳{remaining.toLocaleString(undefined, { minimumFractionDigits: 2 })}
                   </div>
                 </div>
 
@@ -475,7 +491,7 @@ export const GoalsView: React.FC = () => {
                     className={`p-3 rounded-lg border text-left transition-colors ${
                       goalMode === 'tracking_goal'
                         ? 'border-accent bg-emerald-950/30 text-ink shadow-sm'
-                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                     }`}
                   >
                     <div className="font-semibold text-xs text-accent-strong flex items-center justify-between">
@@ -493,7 +509,7 @@ export const GoalsView: React.FC = () => {
                     className={`p-3 rounded-lg border text-left transition-colors ${
                       goalMode === 'linked_savings_account_goal'
                         ? 'border-accent bg-emerald-950/30 text-ink shadow-sm'
-                        : 'border-edge bg-canvas text-ink-muted hover:border-slate-700'
+                        : 'border-edge bg-canvas text-ink-muted hover:border-edge-strong'
                     }`}
                   >
                     <div className="font-semibold text-xs text-sky-400 flex items-center justify-between">

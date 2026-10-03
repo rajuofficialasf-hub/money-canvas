@@ -53,6 +53,8 @@ import {
   Eye,
   EyeOff,
   ShieldCheck,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { BackupBundle, EncryptedBackupBundle } from '../../types/accounting';
 import {
@@ -98,7 +100,10 @@ export const BackupRestoreView: React.FC = () => {
   } = useSyncStatus();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const restoreSectionRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
+  // UX-12: less-common sections live in a collapsible "Advanced" group — default expanded so nothing is hidden
+  const [showAdvanced, setShowAdvanced] = useState(true);
   const [isDriveBackingUp, setIsDriveBackingUp] = useState(false);
   const [isDriveRestoring, setIsDriveRestoring] = useState(false);
   const [driveMsg, setDriveMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -710,6 +715,110 @@ export const BackupRestoreView: React.FC = () => {
         </p>
       </div>
 
+      {/* UX-12: Primary actions — the 3 most common tasks in one row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Primary 1: Cloud Sync */}
+        <div className="rounded-2xl border border-edge bg-surface p-5 flex flex-col gap-3 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="p-2.5 rounded-xl bg-accent/10 text-accent-strong border border-accent/20">
+              <Cloud className="h-5 w-5" />
+            </div>
+            {isGoogleAuthenticated ? (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-accent/15 text-accent-strong border border-accent/30">
+                সিঙ্ক সক্রিয় (Active)
+              </span>
+            ) : (
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-raised text-ink-muted border border-edge">
+                লোকাল মোড (Local)
+              </span>
+            )}
+          </div>
+          <div className="flex-1">
+            <h3 className="text-sm font-bold text-ink">ক্লাউড সিঙ্ক (Cloud Sync)</h3>
+            <p className="text-[11px] text-ink-muted mt-0.5">
+              {lastCloudSyncAt
+                ? `সর্বশেষ সিঙ্ক (Last sync): ${new Date(lastCloudSyncAt).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}`
+                : 'এখনও সিঙ্ক করা হয়নি (Not synced yet)'}
+            </p>
+          </div>
+          {isGoogleAuthenticated ? (
+            <Button
+              variant="primary"
+              icon={RefreshCw}
+              onClick={handleCloudSync}
+              isLoading={isCloudSyncingManual || cloudSyncStatus === 'syncing'}
+              className="w-full"
+            >
+              এখনই সিঙ্ক করুন
+            </Button>
+          ) : (
+            <Button variant="primary" onClick={signInWithGoogle} className="w-full">
+              Google দিয়ে সাইন-ইন
+            </Button>
+          )}
+        </div>
+
+        {/* Primary 2: Encrypted Backup */}
+        <div className="rounded-2xl border border-edge bg-surface p-5 flex flex-col gap-3 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="p-2.5 rounded-xl bg-accent/10 text-accent-strong border border-accent/20">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-raised text-ink-muted border border-edge">
+              AES-256
+            </span>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-sm font-bold text-ink">এনক্রিপ্টেড ব্যাকআপ (Encrypted Backup)</h3>
+            <p className="text-[11px] text-ink-muted mt-0.5">
+              পাসফ্রেজ-সুরক্ষিত JSON ফাইল ডাউনলোড — Zero-knowledge encrypted file export.
+            </p>
+          </div>
+          <Button
+            variant="primary"
+            icon={Lock}
+            onClick={() => {
+              setShowEncryptedExportModal(true);
+              setExportCryptoError(null);
+            }}
+            className="w-full"
+          >
+            এনক্রিপ্ট ও ডাউনলোড
+          </Button>
+        </div>
+
+        {/* Primary 3: Restore */}
+        <div className="rounded-2xl border border-edge bg-surface p-5 flex flex-col gap-3 shadow-lg">
+          <div className="flex items-center justify-between">
+            <div className="p-2.5 rounded-xl bg-warning/10 text-warning border border-warning/20">
+              <Upload className="h-5 w-5" />
+            </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-raised text-ink-muted border border-edge">
+              JSON / Drive / Cloud
+            </span>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-sm font-bold text-ink">রিস্টোর (Restore)</h3>
+            <p className="text-[11px] text-ink-muted mt-0.5">
+              ব্যাকআপ ফাইল থেকে সমস্ত ডেটা ফিরিয়ে আনুন — Restore your ledger from a backup.
+            </p>
+          </div>
+          <Button
+            variant="secondary"
+            icon={Upload}
+            onClick={() => restoreSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+            className="w-full"
+          >
+            রিস্টোর সেকশনে যান
+          </Button>
+        </div>
+      </div>
+
       {/* Card 1: Real-Time Google Account Cloud Sync (Instant Mobile <-> Web) */}
       <div className="bg-surface border border-accent/30 rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
         <div className="absolute -right-10 -top-10 w-48 h-48 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
@@ -731,7 +840,7 @@ export const BackupRestoreView: React.FC = () => {
                     <span>সিঙ্ক সক্রিয় (Active)</span>
                   </span>
                 ) : (
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-raised text-ink-muted border border-slate-700">
+                  <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-raised text-ink-muted border border-edge-strong">
                     লোকাল মোড
                   </span>
                 )}
@@ -764,7 +873,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleCloudRestore}
                 disabled={isCloudRestoringManual}
-                className="px-3.5 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-raised hover:bg-raised-2 text-ink-soft text-xs font-bold rounded-xl border border-edge-strong flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudDownload className={`h-4 w-4 ${isCloudRestoringManual ? 'animate-spin text-accent-strong' : ''}`} />
                 <span>{isCloudRestoringManual ? 'লোড হচ্ছে...' : 'ক্লাউড থেকে লোড করুন'}</span>
@@ -865,6 +974,42 @@ export const BackupRestoreView: React.FC = () => {
         )}
       </div>
 
+      {restoreSuccess && (
+        <div className="p-4 rounded-xl bg-emerald-950/40 border border-accent/40 text-accent-strong text-xs font-mono flex items-center gap-3">
+          <CheckCircle2 className="h-5 w-5 text-accent-strong shrink-0" />
+          <div>
+            <div className="font-bold text-ink text-sm">Ledger State Restored Successfully!</div>
+            <p className="text-ink-soft mt-0.5">
+              All accounts, journal lines, investment holdings, loans, and audit records have been loaded.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* UX-12: Advanced / উন্নত অপশন — less-common export & file-backup tools (default expanded) */}
+      <div className="rounded-2xl border border-edge bg-surface/30">
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          aria-expanded={showAdvanced}
+          className="w-full flex items-center justify-between gap-3 px-5 py-4 cursor-pointer text-left"
+        >
+          <div className="flex flex-wrap items-center gap-2 text-sm font-bold text-ink">
+            <HardDrive className="h-4 w-4 text-ink-muted" />
+            <span>উন্নত অপশন (Advanced Options)</span>
+            <span className="text-[10px] font-mono font-normal text-ink-faint">
+              Drive ফাইল · CSV · PDF স্টেটমেন্ট · Plain JSON
+            </span>
+          </div>
+          {showAdvanced ? (
+            <ChevronUp className="h-4 w-4 text-ink-muted shrink-0" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-ink-muted shrink-0" />
+          )}
+        </button>
+
+        {showAdvanced && (
+          <div className="px-5 pb-5 space-y-8">
       {/* Card 2: Google Drive File Backup & Restore */}
       <div className="bg-surface border border-edge rounded-2xl p-6 relative overflow-hidden shadow-xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-edge pb-4">
@@ -890,7 +1035,7 @@ export const BackupRestoreView: React.FC = () => {
           {!isGoogleAuthenticated ? (
             <button
               onClick={signInWithGoogle}
-              className="px-5 py-2.5 bg-surface hover:bg-raised text-ink text-xs font-bold rounded-xl border border-slate-700 flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
+              className="px-5 py-2.5 bg-surface hover:bg-raised text-ink text-xs font-bold rounded-xl border border-edge-strong flex items-center justify-center gap-2 shadow-lg transition-all shrink-0 cursor-pointer"
             >
               <GoogleIcon className="h-4 w-4 bg-white p-0.5 rounded-full shrink-0" />
               <span>Sign In with Google</span>
@@ -921,7 +1066,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleRestoreFromDrive}
                 disabled={isDriveRestoring}
-                className="px-3.5 py-2 bg-raised hover:bg-slate-700 text-ink-soft text-xs font-bold rounded-xl border border-slate-700 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+                className="px-3.5 py-2 bg-raised hover:bg-raised-2 text-ink-soft text-xs font-bold rounded-xl border border-edge-strong flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
               >
                 <CloudDownload className={`h-4 w-4 ${isDriveRestoring ? 'animate-spin' : ''}`} />
                 <span>{isDriveRestoring ? 'লোড হচ্ছে...' : 'Restore from Drive'}</span>
@@ -975,18 +1120,6 @@ export const BackupRestoreView: React.FC = () => {
         </div>
       </div>
 
-      {restoreSuccess && (
-        <div className="p-4 rounded-xl bg-emerald-950/40 border border-accent/40 text-accent-strong text-xs font-mono flex items-center gap-3">
-          <CheckCircle2 className="h-5 w-5 text-accent-strong shrink-0" />
-          <div>
-            <div className="font-bold text-ink text-sm">Ledger State Restored Successfully!</div>
-            <p className="text-ink-soft mt-0.5">
-              All accounts, journal lines, investment holdings, loans, and audit records have been loaded.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Grid: JSON Export & CSV Exports */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Complete JSON Backup Export */}
@@ -1002,9 +1135,11 @@ export const BackupRestoreView: React.FC = () => {
               </span>
             </div>
 
-            <p className="text-xs text-ink-soft leading-relaxed">
-              Downloads a unified, portable JSON snapshot containing your entire financial graph — 
-              accounts, double-entry transactions, loans, fixed deposits, stock portfolios, and cryptographic audit hashes.
+            <p
+              className="text-xs text-ink-soft truncate"
+              title="Downloads a unified, portable JSON snapshot containing your entire financial graph — accounts, double-entry transactions, loans, fixed deposits, stock portfolios, and cryptographic audit hashes."
+            >
+              Portable JSON snapshot of your entire financial graph — সম্পূর্ণ ডেটার পোর্টেবল JSON কপি।
             </p>
 
             <div className="rounded-lg bg-canvas p-4 border border-edge text-xs font-mono space-y-2 text-ink-muted">
@@ -1030,7 +1165,7 @@ export const BackupRestoreView: React.FC = () => {
               <button
                 onClick={handleExportFullJson}
                 disabled={isExporting}
-                className="w-full py-2.5 rounded-lg bg-raised hover:bg-slate-700 text-ink-soft font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors border border-slate-700 disabled:opacity-50 cursor-pointer"
+                className="w-full py-2.5 rounded-lg bg-raised hover:bg-raised-2 text-ink-soft font-bold font-mono text-xs flex items-center justify-center gap-2 transition-colors border border-edge-strong disabled:opacity-50 cursor-pointer"
               >
                 <Download className={`h-4 w-4 ${isExporting ? 'animate-bounce' : ''}`} />
                 <span>{isExporting ? 'Packaging...' : 'Plain JSON Backup'}</span>
@@ -1082,7 +1217,7 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleExportCsv('accounts')}
-                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-raised-2 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
@@ -1096,7 +1231,7 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleExportCsv('ledger')}
-                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-raised-2 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
@@ -1110,7 +1245,7 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleExportCsv('trades')}
-                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-raised-2 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
@@ -1124,7 +1259,7 @@ export const BackupRestoreView: React.FC = () => {
                 </div>
                 <button
                   onClick={() => handleExportCsv('dividends')}
-                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-slate-700 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
+                  className="px-3 py-1.5 rounded-md bg-raised hover:bg-raised-2 text-xs font-mono text-ink-soft flex items-center gap-1.5 transition-colors"
                 >
                   <Download className="h-3.5 w-3.5" />
                   <span>CSV</span>
@@ -1224,8 +1359,12 @@ export const BackupRestoreView: React.FC = () => {
         </div>
       </div>
 
+          </div>
+        )}
+      </div>
+
       {/* Restore Section */}
-      <div className="rounded-xl border border-edge bg-surface/40 p-6 space-y-6">
+      <div ref={restoreSectionRef} className="rounded-xl border border-edge bg-surface/40 p-6 space-y-6 scroll-mt-24">
         <div className="flex items-center justify-between border-b border-edge pb-4">
           <div className="flex items-center gap-2 text-sm font-bold text-ink">
             <Upload className="h-5 w-5 text-warning" />
@@ -1245,7 +1384,7 @@ export const BackupRestoreView: React.FC = () => {
             />
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-700 hover:border-accent rounded-xl p-8 text-center cursor-pointer transition-colors bg-canvas/50"
+              className="border-2 border-dashed border-edge-strong hover:border-accent rounded-xl p-8 text-center cursor-pointer transition-colors bg-canvas/50"
             >
               <Upload className="h-8 w-8 text-ink-faint mx-auto mb-3" />
               <div className="text-xs font-semibold text-ink">
@@ -1359,7 +1498,7 @@ export const BackupRestoreView: React.FC = () => {
               </div>
             ) : (
               <div className="rounded-lg bg-canvas/40 border border-edge/60 p-6 text-center text-xs text-ink-faint font-mono flex flex-col items-center justify-center h-full">
-                <Shield className="h-6 w-6 text-slate-600 mb-2" />
+                <Shield className="h-6 w-6 text-ink-faint mb-2" />
                 <span>Select a plain or AES-GCM encrypted backup file to inspect record contents before applying.</span>
               </div>
             )}

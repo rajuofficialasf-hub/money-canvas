@@ -517,7 +517,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                         className="flex-1 flex flex-col items-center gap-1 h-full justify-end group relative"
                       >
                         {/* Tooltip on hover */}
-                        <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center bg-canvas text-ink border border-slate-700 px-2 py-1 rounded text-[10px] font-mono shadow-xl whitespace-nowrap pointer-events-none">
+                        <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center bg-canvas text-ink border border-edge-strong px-2 py-1 rounded text-[10px] font-mono shadow-xl whitespace-nowrap pointer-events-none">
                           <span className="font-bold text-warning">বয়স {p.age} ({p.year})</span>
                           <span>৳{(p.endingNetWorth / 10000000).toFixed(2)} কোটি</span>
                         </div>
@@ -581,7 +581,7 @@ export const RetirementFireView: React.FC<RetirementFireViewProps> = ({ onNaviga
                 className={`p-5 rounded-xl border flex flex-col justify-between transition-all ${
                   m.achieved
                     ? 'border-accent/40 bg-gradient-to-b from-emerald-950/30 to-surface/60 shadow-lg shadow-emerald-950/20'
-                    : 'border-edge bg-surface/50 hover:border-slate-700'
+                    : 'border-edge bg-surface/50 hover:border-edge-strong'
                 }`}
               >
                 <div>

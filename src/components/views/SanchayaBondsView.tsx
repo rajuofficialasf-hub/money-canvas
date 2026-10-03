@@ -623,7 +623,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
               return (
                 <div
                   key={bond.id}
-                  className="rounded-2xl border border-edge bg-surface/70 p-5 space-y-4 hover:border-slate-700 transition-all flex flex-col justify-between"
+                  className="rounded-2xl border border-edge bg-surface/70 p-5 space-y-4 hover:border-edge-strong transition-all flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
@@ -754,7 +754,7 @@ export const SanchayaBondsView: React.FC<{ onNavigate?: (view: string) => void }
 
           {filteredBonds.length === 0 && (
             <div className="text-center py-12 rounded-2xl border border-dashed border-edge bg-surface/30">
-              <Landmark className="h-12 w-12 text-slate-600 mx-auto mb-3" />
+              <Landmark className="h-12 w-12 text-ink-faint mx-auto mb-3" />
               <p className="text-sm font-semibold text-ink-soft">
                 {isBn ? 'কোনো সক্রিয় সঞ্চয়পত্র বা বন্ড পাওয়া যায়নি' : 'No active savings certificates or bonds found'}
               </p>
