@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useLedger } from '../../lib/ledger-context';
 import { StockTransactionType, Stock } from '../../types/accounting';
 import { calculateTradeValues } from '../../lib/accounting-engine';
-import { fetchDseSingleQuote } from '../../lib/dse-market-service';
+import { fetchDseSingleQuote, fetchDseCompanyList, DseCompanyItem } from '../../lib/dse-market-service';
 import {
   ArrowUpRight,
   ArrowDownRight,
@@ -37,14 +37,13 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
     stockHoldings,
     stockTransactions,
     executeStockTrade,
+    addCustomStock,
   } = useLedger();
 
   const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
   const [selectedStockFilter, setSelectedStockFilter] = useState<string>('all');
   const [selectedTypeFilter, setSelectedTypeFilter] = useState<string>('all');
 
-  // Popular high-liquidity DSE stocks for quick 1-tap selection on mobile/desktop
-  const POPULAR_DSE_TICKERS = ['GP', 'BATBC', 'SQURPHARMA', 'BRACBANK', 'ROBI', 'BEXIMCO', 'WALTONHIL', 'RENATA', 'CITYBANK'];
 
   // Trade Form State
   const [tradeType, setTradeType] = useState<StockTransactionType>('buy');
@@ -143,15 +142,78 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
     }
   };
 
+  // Full DSE securities universe for the buy flow: the local catalog is only a
+  // subset, so the search also spans the live DSE company list (cached). A
+  // security picked from the market list is auto-added to the catalog.
+  const [dseCompanies, setDseCompanies] = useState<DseCompanyItem[]>([]);
+  useEffect(() => {
+    fetchDseCompanyList()
+      .then(setDseCompanies)
+      .catch(() => {});
+  }, []);
+
+  interface TradeSecurityOption {
+    stockId: string | null;
+    symbol: string;
+    companyName: string;
+    sector: string;
+    category?: string;
+    currentPrice: number | null;
+  }
+
+  const allTradeOptions = useMemo<TradeSecurityOption[]>(() => {
+    const catalogSymbols = new Set(stocks.map((st) => st.symbol.toUpperCase()));
+    const catalog: TradeSecurityOption[] = stocks.map((st) => ({
+      stockId: st.id,
+      symbol: st.symbol,
+      companyName: st.companyName,
+      sector: st.sector,
+      category: st.category,
+      currentPrice: st.currentPrice,
+    }));
+    const market: TradeSecurityOption[] = dseCompanies
+      .filter((c) => c.symbol && !catalogSymbols.has(c.symbol.toUpperCase()))
+      .map((c) => ({
+        stockId: null,
+        symbol: c.symbol,
+        companyName: c.name,
+        sector: c.sector || 'General',
+        category: c.category || 'A',
+        currentPrice: null,
+      }));
+    return [...catalog, ...market];
+  }, [stocks, dseCompanies]);
+
   const filteredStocksForTrade = useMemo(() => {
     const term = tickerSearchInput.trim().toUpperCase();
-    if (!term) return stocks;
-    return stocks.filter(
-      (s) =>
-        s.symbol.toUpperCase().includes(term) ||
-        s.companyName.toUpperCase().includes(term)
+    if (!term) return allTradeOptions;
+    return allTradeOptions.filter(
+      (o) =>
+        o.symbol.toUpperCase().includes(term) ||
+        o.companyName.toUpperCase().includes(term)
     );
-  }, [stocks, tickerSearchInput]);
+  }, [allTradeOptions, tickerSearchInput]);
+
+  const selectTradeOption = (o: TradeSecurityOption) => {
+    if (o.stockId) {
+      const st = stocks.find((x) => x.id === o.stockId);
+      if (st) selectStockByObj(st);
+      return;
+    }
+    // Market-only security: register it in the catalog, then select it. The
+    // live price is fetched immediately by selectStockByObj.
+    const created = addCustomStock({
+      symbol: o.symbol,
+      companyName: o.companyName,
+      sector: o.sector,
+      exchange: 'DSE',
+      currentPrice: 0,
+      ycp: 0,
+      category: o.category,
+      isActive: true,
+    });
+    selectStockByObj(created);
+  };
 
   const selectStockByObj = (s: Stock) => {
     setSelectedStockId(s.id);
@@ -665,36 +727,6 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                     )}
                   </div>
 
-                  {/* Popular DSE Tickers 1-Tap Chips */}
-                  <div className="flex items-center gap-1.5 flex-wrap">
-                    <span className="text-[10px] font-mono uppercase text-slate-500">Popular:</span>
-                    {POPULAR_DSE_TICKERS.map((sym) => {
-                      const st = stocks.find((s) => s.symbol.toUpperCase() === sym);
-                      const isSel = activeStock?.symbol.toUpperCase() === sym;
-                      return (
-                        <button
-                          key={sym}
-                          type="button"
-                          onClick={() => {
-                            if (st) {
-                              selectStockByObj(st);
-                            } else {
-                              setTickerSearchInput(sym);
-                              setIsTickerDropdownOpen(true);
-                            }
-                          }}
-                          className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-colors ${
-                            isSel
-                              ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500'
-                              : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
-                          }`}
-                        >
-                          {sym}
-                        </button>
-                      );
-                    })}
-                  </div>
-
                   {/* Searchable input */}
                   <div className="relative">
                     <div className="relative flex items-center">
@@ -752,24 +784,30 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                             No matched security found for &quot;{tickerSearchInput}&quot;
                           </div>
                         ) : (
-                          filteredStocksForTrade.map((s) => {
-                            const isSelected = s.id === selectedStockId;
+                          filteredStocksForTrade.map((o) => {
+                            const isSelected = o.stockId !== null && o.stockId === selectedStockId;
                             return (
                               <button
-                                key={s.id}
+                                key={o.stockId || `mkt-${o.symbol}`}
                                 type="button"
-                                onClick={() => selectStockByObj(s)}
+                                onClick={() => selectTradeOption(o)}
                                 className={`w-full px-3 py-2 text-left flex items-center justify-between text-xs transition-colors hover:bg-slate-800/80 ${
                                   isSelected ? 'bg-emerald-500/10 text-emerald-300 font-medium' : 'text-slate-300'
                                 }`}
                               >
                                 <div>
-                                  <span className="font-mono font-bold text-white mr-2">{s.symbol}</span>
-                                  <span className="text-[11px] text-slate-400 truncate">{s.companyName}</span>
+                                  <span className="font-mono font-bold text-white mr-2">{o.symbol}</span>
+                                  <span className="text-[11px] text-slate-400 truncate">{o.companyName}</span>
                                 </div>
-                                <span className="font-mono text-emerald-400 text-[11px] shrink-0 ml-2">
-                                  LTP: ৳{s.currentPrice}
-                                </span>
+                                {o.currentPrice !== null ? (
+                                  <span className="font-mono text-emerald-400 text-[11px] shrink-0 ml-2">
+                                    LTP: ৳{o.currentPrice}
+                                  </span>
+                                ) : (
+                                  <span className="font-mono text-sky-400/80 text-[10px] shrink-0 ml-2 border border-sky-500/30 rounded px-1">
+                                    DSE
+                                  </span>
+                                )}
                               </button>
                             );
                           })
@@ -782,12 +820,21 @@ export const StockTradesView: React.FC<StockTradesViewProps> = ({
                   <Field label="Or select from DSE Securities list:">
                     <Select
                       value={selectedStockId}
-                      onChange={(e) => handleStockChange(e.target.value)}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val.startsWith('mkt:')) {
+                          const sym = val.slice(4);
+                          const opt = allTradeOptions.find((o) => o.stockId === null && o.symbol === sym);
+                          if (opt) selectTradeOption(opt);
+                        } else {
+                          handleStockChange(val);
+                        }
+                      }}
                       className="font-mono"
                     >
-                      {stocks.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.symbol} — {s.companyName} (৳{s.currentPrice})
+                      {allTradeOptions.map((o) => (
+                        <option key={o.stockId || `mkt-${o.symbol}`} value={o.stockId || `mkt:${o.symbol}`}>
+                          {o.symbol} — {o.companyName}{o.currentPrice !== null ? ` (৳${o.currentPrice})` : ''}
                         </option>
                       ))}
                     </Select>
